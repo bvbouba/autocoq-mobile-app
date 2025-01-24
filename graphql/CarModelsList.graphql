@@ -1,0 +1,14 @@
+fragment ModelDetails on CarModel {
+	id
+    name
+}
+
+query CarModelsList($filter:CarModelFilterInput) {
+  carModels(first:50,filter:$filter){
+    edges{
+      node{
+        ...ModelDetails
+      }
+    }
+  }
+}

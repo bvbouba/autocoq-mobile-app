@@ -1,0 +1,15 @@
+fragment YearDetails on CarYear {
+	id
+    name
+    vinSuffix
+}
+
+query CarYearsList {
+  carYears(first:50){
+    edges{
+      node{
+        ...YearDetails
+      }
+    }
+  }
+}
