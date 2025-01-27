@@ -1,4 +1,5 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -8,6 +9,8 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
+import { createSaleorAuthClient } from "@saleor/auth-sdk"
+import {SaleorAuthProvider, useAuthChange} from '@saleor/auth-sdk/react'
 import { LogBox, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { colors } from "../components/Themed";
@@ -23,6 +26,7 @@ import { getConfig } from "../config";
 import SimpleBackHeader from "../components/layout/SimpleBackHeader";
 import * as SplashScreen from 'expo-splash-screen'; // Corrected import
 import { CarFilterProvider } from "@/context/useCarFilterContext";
+import apolloClient from "@/lib/graphql";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -65,10 +69,6 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const apiUrl = getConfig().saleorApi;
 
-  const apolloClient = new ApolloClient({
-    uri: apiUrl,
-    cache: new InMemoryCache(),
-  });
 
   const baseHeaderProps = {
     headerTitle: "",
@@ -77,13 +77,20 @@ function RootLayoutNav() {
 
   const companyName = "AUTOCOQ";
 
+  const saleorAuthClient = createSaleorAuthClient({
+    saleorApiUrl: apiUrl,
+  });
+
+  
+
   return (
-    <ApolloProvider client={apolloClient}>
+    <SaleorAuthProvider client={saleorAuthClient}>
+<ApolloProvider client={apolloClient}>
+      <CarFilterProvider>
       <ProductsProvider>
         <CartProvider>
           <OrderProvider>
             <PaymentProvider>
-            <CarFilterProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <Stack>
@@ -108,16 +115,23 @@ function RootLayoutNav() {
                   <Stack.Screen name="shippingAddress" options={baseHeaderProps} />
                   <Stack.Screen name="billingAddress" options={baseHeaderProps} />
                   <Stack.Screen name="shippingMethods" options={baseHeaderProps} />
+                  <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
                   <Stack.Screen name="orderDetails/[id]" options={baseHeaderProps} />
                   <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+                  <Stack.Screen name="account/profile" options={{...baseHeaderProps}} />
+                  <Stack.Screen name="account/faq" options={baseHeaderProps} />
+                  <Stack.Screen name="account/terms" options={baseHeaderProps} />
+                  <Stack.Screen name="account/auth" options={baseHeaderProps} />
                 </Stack>
               </ThemeProvider>
               </GestureHandlerRootView>
-           </CarFilterProvider>
             </PaymentProvider>
           </OrderProvider>
         </CartProvider>
       </ProductsProvider>
+      </CarFilterProvider>
     </ApolloProvider>
+    </SaleorAuthProvider>
+
   );
 }

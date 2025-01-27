@@ -22,10 +22,10 @@ const ShippingMethodSelector: FC = () => {
                 </View>
                 <View style={styles.titleWrapper}>
                     <Text style={styles.shippingMethodValue} numberOfLines={1}>
-                        {deliveryMethod.toLocaleString(getConfig().locale, {
+                        {deliveryMethod ? deliveryMethod.toLocaleString(getConfig().locale, {
                             style: "currency",
                             currency: cart.shippingPrice.gross.currency
-                         })}
+                         }):<></>}
                     </Text>
                 </View>
             </View>
@@ -50,7 +50,7 @@ export default ShippingMethodSelector
 
 const styles = StyleSheet.create({
     shippingMethodWrapper: {
-        border: "0.5 solid " + colors.dividerGrey,
+        // border: "0.5 solid " + colors.dividerGrey,
         borderRadius: 5,
         margin: 8
     },

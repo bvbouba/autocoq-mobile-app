@@ -72,5 +72,8 @@ export const colors = {
   textInputGrey: '#6C7072',
   greyText: 'rgb(153, 153, 153)',
   blue: "#007AFF",
-  header: "red"
+  header: "red",
+  primary: "#6200EE",
+  errorBackground: "#f8d7da",
+  errorText: "#721c24",  
 }

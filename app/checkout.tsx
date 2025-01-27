@@ -12,20 +12,15 @@ import { useCartContext } from '../context/useCartContext';
 import { usePaymentContext } from '../context/usePaymentContext';
 import { Button } from 'react-native-paper';
 import OrderTotal from '../components/checkout/OrderTotal';
+import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
+import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
 
 const Checkout = () => {
     const { cart } = useCartContext();
+    const { chosenGateway } = usePaymentContext();
     const router = useRouter();
-    const { startCheckout, confirmationData, convertCartToOrder, cancelPayment } = usePaymentContext()
-
-    const buyNowEnabled = cart?.email && cart?.billingAddress && (cart?.isShippingRequired ? cart?.shippingAddress : true)
-
-    useEffect(() => {
-        if (confirmationData) {
-            initializePaymentSheet().then(() => openPaymentSheet())
-        }
-    }, [confirmationData])
-
+    
+    const Component = paymentMethodToComponent[chosenGateway||"dummy"];
 
     if (!cart || cart.lines.length === 0) {
         return <View style={styles.wrapper}>
@@ -45,76 +40,13 @@ const Checkout = () => {
         </View>
     }
 
-    const initializePaymentSheet = async () => {
-        if (!confirmationData || !cart) {
-            return
-        }
-        const { error } = await initPaymentSheet({
-            merchantDisplayName: "Example, Inc.",
-            paymentIntentClientSecret: confirmationData.client_secret,
 
-            defaultBillingDetails: {
-                address: {
-                    city: cart.billingAddress?.city,
-                    postalCode: cart.billingAddress?.postalCode,
-                }
-            }
-
-        });
-        if (error) {
-            if (error.code === PaymentSheetError.Canceled) {
-                cancelPayment()
-            }
-            if (error.code === PaymentSheetError.Failed) {
-                cancelPayment()
-            }
-            Alert.alert(`Error code: ${error.code}`, error.message);
-
-            return false
-        }
-
-        return true
-    };
-
-    const openPaymentSheet = async () => {
-        const { error } = await presentPaymentSheet();
-
-        if (error) {
-            if (error.code === PaymentSheetError.Canceled) {
-                cancelPayment()
-            }
-            if (error.code === PaymentSheetError.Failed) {
-                cancelPayment()
-            }
-            Alert.alert(`Error code: ${error.code}`, error.message);
-        } else {
-            Alert.alert('Success', 'Your order is confirmed!');
-            convertCartToOrder().then((result) => router.push("orderDetails/" + result.orderId + "?orderSuccess=true"))
-        }
-    };
-
-    const buyNow = () => {
-        if (!buyNowEnabled) {
-            Alert.alert("Please fill in required information to contiue");
-            return
-        }
-        if (confirmationData) {
-            openPaymentSheet()
-        } else {
-            startCheckout()
-        }
-    }
-
-
-    return <StripeProvider publishableKey={getConfig().stripePK}>
-        <SafeAreaView style={styles.container} testID="cart-list-safe" >
+    return (<SafeAreaView style={styles.container} testID="cart-list-safe" >
             <ScrollView testID="cart-list-scroll">
                 <PaddedView style={{marginTop: 12}}>
                     <Text style={styles.termsText}>By placing your order you agree to the Saleor App's Terms and Conditions of Awesomeness. Please see our Privacy Lotus, our Cookie Recipes for more details.</Text>
-                    <Button mode="contained" onPress={buyNow}>
-                        Buy Now
-                    </Button>
-                </PaddedView>
+              <Component />
+              </PaddedView>
                 <OrderTotal />
                 <PersonalDetails />
                 <BillingAddress />
@@ -123,9 +55,9 @@ const Checkout = () => {
                     <ShippingAddress />
                     <ShippingMethodSelector />
                 </>}
+                <PaymentMethodSelector />
             </ScrollView >
-        </SafeAreaView >
-    </StripeProvider>
+        </SafeAreaView >)
 }
 
 const styles = StyleSheet.create({

@@ -49,7 +49,7 @@ export default OrderTotal
 
 const styles = StyleSheet.create({
     wrapper: {
-        border: "0.5 solid " + colors.dividerGrey,
+        // border: "0.5 solid " + colors.dividerGrey,
         borderRadius: 5,
         margin: 8,
         paddingTop: 8,

@@ -22,7 +22,7 @@ const SearchHeaderWithBack = () => {
     <>
       <SafeAreaView style={{
         ...styles.container,
-        marginTop: statusBarInset.top
+        marginTop: statusBarInset.top-7
       }}>
         <View style={styles.containerWithBack}>
           <View style={styles.searchBarWrapper}>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     height: 40,
     marginTop: 30,
-    marginBottom: 10,
+    marginBottom: 0,
     display: "flex",
     justifyContent: "center",
     flexDirection: "column",

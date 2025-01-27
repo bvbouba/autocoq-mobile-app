@@ -35,7 +35,11 @@ const ProductImage: React.FC<Props> = ({
     return (
         <View style={[styles.container, style]}>
             <ActivityIndicator size="small" />
-            <Image key={index} style={styles.image} source={source} alt={alt} />
+            <Image key={index} style={styles.image} 
+            source={source} 
+            alt={alt} 
+            resizeMode="contain"
+            />
         </View>
     );
 };

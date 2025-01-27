@@ -70,7 +70,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const addItem = async (variantId: string) => {
         setLoading(true);
         const cart = await checkCheckoutExists();
-
+        console.log(cart)
         if (cart) {
             const updatedCart = await addLineItem({
                 variables: {
@@ -81,6 +81,11 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
                     }]
                 }
             });
+
+            if (updatedCart.errors || (updatedCart.data?.checkoutLinesAdd?.errors && updatedCart.data?.checkoutLinesAdd?.errors.length > 0)) {
+                Alert.alert("Error", "There was an error updating your cart")
+            }
+            
             setCart(updatedCart.data?.checkoutLinesAdd?.checkout as CheckoutFragment);
             setLoading(false);
 
@@ -94,7 +99,9 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
                     }]
                 }
             });
-
+            if (updatedCart.errors || (updatedCart.data?.checkoutCreate?.errors && updatedCart.data?.checkoutCreate?.errors.length > 0)) {
+                Alert.alert("Error", "There was an error creating your cart")
+            }
             await setCheckoutId(updatedCart.data?.checkoutCreate?.checkout?.id as string)
 
             setCart(updatedCart.data?.checkoutCreate?.checkout as CheckoutFragment);
@@ -106,8 +113,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const updateItemQuantity = async (lineId: string, quantity: number) => {
         setLoading(true);
-        console.log(lineId, quantity)
-
+        
         const updatedCart = await updateLineMutation(
             {
                 variables: {

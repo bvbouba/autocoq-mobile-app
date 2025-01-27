@@ -14,12 +14,24 @@ const DashboardScreen = () => {
   const router = useRouter();
   const [filterOpen, setFilterOpen] = useState(false);
   const { selectedCarYear, selectedCarMake, selectedCarModel, clearFilter } = useCarFilter(); // Added clearFilter from context
+  
 
-  const { data, loading, error } = useGetCollectionsQuery();
+  const { data, loading, error } = useGetCollectionsQuery({
+    variables:{
+      filter:{
+        ...(selectedCarYear || selectedCarMake || selectedCarModel
+          ? {
+                ...(selectedCarYear && { carYear: [selectedCarYear.id] }), 
+                ...(selectedCarMake && { carMake: [selectedCarMake.id] }), 
+                ...(selectedCarModel && { carModel: [selectedCarModel.id] }),
+            }
+          : {})
+      }
+    }
+  });
   const { data: categoriesData, error: catError } = useCategoryPathsQuery({
     variables: { channel: getConfig().channel },
   });
-  console.log(data)
   useEffect(() => {
     if (error) Alert.alert("Error loading collections", error.message);
     if (catError) Alert.alert("Error loading categories", catError.message);

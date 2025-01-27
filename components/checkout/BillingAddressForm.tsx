@@ -1,11 +1,12 @@
-import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useCartContext } from '../../context/useCartContext';
 import { useCheckoutBillingAddressUpdateMutation } from '../../saleor/api.generated';
 import { ScrollView } from 'react-native-gesture-handler';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, ActivityIndicator } from 'react-native-paper';
+import { colors } from '../Themed';
 
 interface Props {
     onSubmit: () => void
@@ -33,9 +34,10 @@ const validationSchema = yup.object().shape({
 });
 
 const BillingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
-    const { cart } = useCartContext()
-
-    const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation()
+    const { cart } = useCartContext();
+    const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -49,24 +51,37 @@ const BillingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
         },
         validationSchema: validationSchema,
 
-        onSubmit: (data) => {
-            updateBillingAddress({
-                variables: {
-                    id: cart?.id as string,
-                    billingAddress: {
-                        streetAddress1: data.streetAddress1,
-                        streetAddress2: data.streetAddress2,
-                        country: "GB",
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        postalCode: data.postalCode,
-                        phone: data.phone,
-                        city: data.city,
-
-                    }
+        onSubmit: async (data) => {
+            setLoading(true);
+            setError(null); // Reset error message
+            try {
+                const result = await updateBillingAddress({
+                    variables: {
+                        id: cart?.id as string,
+                        billingAddress: {
+                            streetAddress1: data.streetAddress1,
+                            streetAddress2: data.streetAddress2,
+                            country: "CI",
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            postalCode: data.postalCode,
+                            phone: data.phone,
+                            city: data.city,
+                        },
+                    },
+                });
+                const errors = result.data?.checkoutBillingAddressUpdate?.errors;
+                if (errors && errors.length > 0) {
+                    setError(`Error: ${errors[0].field}`);
+                } else {
+                    onSubmit();
                 }
-            }).then(onSubmit)
-        }
+            } catch (e) {
+                setError("Failed to save billing address. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        },
     });
 
     return (
@@ -76,8 +91,8 @@ const BillingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                 onChangeText={(value) => formik.setFieldValue("firstName", value)}
                 value={formik.values.firstName}
                 placeholder="First Name"
-                label="First Name" />
-
+                label="First Name"
+            />
             <TextInput
                 style={styles.input}
                 onChangeText={(value) => formik.setFieldValue("lastName", value)}
@@ -85,7 +100,6 @@ const BillingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                 placeholder="Last Name"
                 label="Last Name"
             />
-
             <TextInput
                 style={styles.input}
                 onChangeText={(value) => formik.setFieldValue("phone", value)}
@@ -122,14 +136,28 @@ const BillingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                 label="Post Code"
             />
 
-            <Button onPress={() => formik.handleSubmit()} mode="contained">Submit</Button>
-            <Button onPress={() => onCancel()} >Cancel</Button>
+             <Button
+                    onPress={() => formik.handleSubmit()}
+                    mode="contained"
+                    disabled={loading}
+                >
+                    {loading ? <ActivityIndicator color="white" /> : "Submit"}
+                </Button>
+
+                <Button onPress={onCancel} mode="text" style={styles.cancelButton}>
+                    Cancel
+                </Button>
+
+                {error && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.errorText}>{error}</Text>
+                    </View>
+                )}
         </ScrollView>
     );
-}
+};
 
-export default BillingAddressForm
-
+export default BillingAddressForm;
 
 const styles = StyleSheet.create({
     container: {
@@ -137,6 +165,19 @@ const styles = StyleSheet.create({
     },
     input: {
         marginBottom: 16,
-        width: "100%"
+        width: "100%",
+    },
+    cancelButton: {
+        marginTop: 10,
+    },
+    errorContainer: {
+        marginTop: 16,
+        padding: 10,
+        backgroundColor: colors.errorBackground,
+        borderRadius: 4,
+    },
+    errorText: {
+        color: colors.errorText,
+        textAlign: "center",
     },
 });

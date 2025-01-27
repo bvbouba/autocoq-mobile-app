@@ -1,0 +1,14 @@
+
+query FitmentByID($productId: ID!) {
+ tenantProduct(productId:$productId){
+  id
+  isUniversal
+  carMakeRelations{
+    fitmentName
+  }
+  carModelRelations{
+    fitmentName
+  }
+  
+}
+}

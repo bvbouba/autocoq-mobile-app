@@ -4,6 +4,7 @@ import { CategoryPathFragment, CollectionFragment, ProductFragment, useSearchPro
 import {
     handleErrors
 } from "./checkout";
+import { useCarFilter } from "./useCarFilterContext";
 
 interface ProductsContextModel {
     products: ProductFragment[] | undefined;
@@ -31,7 +32,7 @@ export const useProductContext = () => useContext(ProductsContext);
 
 export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [products, setProducts] = useState<ProductFragment[] | undefined>(undefined);
-
+    const {selectedCarYear,selectedCarMake,selectedCarModel} = useCarFilter()
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [categoryFilters, setCategoryFilters] = useState<CategoryPathFragment[]>([]);
     const [collectionFilter, setCollectionFilter] = useState<CollectionFragment | undefined>(undefined);
@@ -39,15 +40,22 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const loading = searchProductsStatus.loading
     const loaded = searchProductsStatus.called
-
+    const variables= {
+        channel: getConfig().channel,
+        search: searchQuery,
+        categories: categoryFilters.map(cat => cat.id),
+        collections: collectionFilter ? [collectionFilter.id] : [],
+        ...(selectedCarYear || selectedCarMake || selectedCarModel
+            ? {
+                  ...(selectedCarYear && { carYear: [selectedCarYear.id] }), 
+                  ...(selectedCarMake && { carMake: [selectedCarMake.id] }), 
+                  ...(selectedCarModel && { carModel: [selectedCarModel.id] }),
+              }
+            : {})
+    }
     useEffect(() => {
         searchProducts({
-            variables: {
-                channel: getConfig().channel,
-                search: searchQuery,
-                categories: categoryFilters.map(cat => cat.id),
-                collections: collectionFilter ? [collectionFilter.id] : []
-            }
+            variables
         }).then(result => {
             handleErrors(result);
             if (result.data?.products?.edges) {
@@ -57,7 +65,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
             }
 
         });
-    }, [searchQuery, categoryFilters, collectionFilter]);
+    }, [searchQuery, categoryFilters, collectionFilter,selectedCarMake,selectedCarModel,selectedCarYear]);
 
     return (
         <ProductsContext.Provider value={{

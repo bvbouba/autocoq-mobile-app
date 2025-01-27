@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import React, { FC, useState } from 'react';
+import { Alert, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { PaddedView, colors } from '../Themed';
@@ -9,18 +9,18 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { TextInput, Button } from 'react-native-paper';
 
 interface Props {
-    onSubmit: () => void
-    onCancel: () => void
+    onSubmit: () => void;
+    onCancel: () => void;
 }
 
 interface Form {
-    firstName: string,
-    lastName: string,
-    phone: string,
-    streetAddress1: string,
-    streetAddress2: string,
-    postalCode: string,
-    city: string,
+    firstName: string;
+    lastName: string;
+    phone: string;
+    streetAddress1: string;
+    streetAddress2: string;
+    postalCode: string;
+    city: string;
 }
 
 const validationSchema = yup.object().shape({
@@ -34,9 +34,10 @@ const validationSchema = yup.object().shape({
 });
 
 const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
-    const { cart } = useCartContext()
-
-    const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation()
+    const { cart } = useCartContext();
+    const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
+    const [loading, setLoading] = useState(false);
+    const [submissionError, setSubmissionError] = useState<string | null>(null);
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -50,31 +51,38 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
         },
         validationSchema: validationSchema,
 
-        onSubmit: (data) => {
-            updateShippingAddress({
-                variables: {
-                    id: cart?.id as string,
-                    shippingAddress: {
-                        streetAddress1: data.streetAddress1,
-                        streetAddress2: data.streetAddress2,
-                        country: "GB",
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        postalCode: data.postalCode,
-                        phone: data.phone,
-                        city: data.city,
+        onSubmit: async (data) => {
+            setLoading(true);
+            setSubmissionError(null); // Reset error on each submission
+            try {
+                const result = await updateShippingAddress({
+                    variables: {
+                        id: cart?.id as string,
+                        shippingAddress: {
+                            streetAddress1: data.streetAddress1,
+                            streetAddress2: data.streetAddress2,
+                            country: "CI",
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            postalCode: data.postalCode,
+                            phone: data.phone,
+                            city: data.city,
+                        },
+                    },
+                });
 
-                    }
+                const errors = result.data?.checkoutShippingAddressUpdate?.errors;
+                if (errors && errors.length > 0) {
+                    setSubmissionError(`Error: ${errors[0].field}`);
+                } else {
+                    onSubmit();
                 }
-            }).then((data) => {
-                const errors = data.data?.checkoutShippingAddressUpdate?.errors
-                if (errors && errors?.length > 0) {
-                    Alert.alert("Error - " + errors[0].code)
-                }
-                console.log()
-                onSubmit()
-            })
-        }
+            } catch (error) {
+                setSubmissionError("An unexpected error occurred. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        },
     });
 
     return (
@@ -85,7 +93,8 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     onChangeText={(value) => formik.setFieldValue("firstName", value)}
                     value={formik.values.firstName}
                     placeholder="First Name"
-                    label="First Name" />
+                    label="First Name"
+                />
 
                 <TextInput
                     style={styles.input}
@@ -102,6 +111,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     placeholder="Phone Number"
                     label="Phone Number"
                 />
+
                 <TextInput
                     style={styles.input}
                     onChangeText={(value) => formik.setFieldValue("streetAddress1", value)}
@@ -109,6 +119,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     placeholder="Address Line 1"
                     label="Address Line 1"
                 />
+
                 <TextInput
                     style={styles.input}
                     onChangeText={(value) => formik.setFieldValue("streetAddress2", value)}
@@ -116,6 +127,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     placeholder="Address Line 2"
                     label="Address Line 2"
                 />
+
                 <TextInput
                     style={styles.input}
                     onChangeText={(value) => formik.setFieldValue("city", value)}
@@ -123,6 +135,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     placeholder="City"
                     label="City"
                 />
+
                 <TextInput
                     style={styles.input}
                     onChangeText={(value) => formik.setFieldValue("postalCode", value)}
@@ -131,26 +144,49 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     label="Post Code"
                 />
 
-                <Button onPress={() => formik.handleSubmit()} mode="contained">Submit</Button>
-                <Button onPress={() => onCancel()} >Cancel</Button>
+                <Button
+                    onPress={() => formik.handleSubmit()}
+                    mode="contained"
+                    disabled={loading}
+                >
+                    {loading ? <ActivityIndicator color="white" /> : "Submit"}
+                </Button>
+
+                <Button onPress={onCancel} mode="text" style={styles.cancelButton}>
+                    Cancel
+                </Button>
+
+                {submissionError && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.errorText}>{submissionError}</Text>
+                    </View>
+                )}
             </PaddedView>
         </ScrollView>
     );
-}
+};
 
-export default ShippingAddressForm
-
+export default ShippingAddressForm;
 
 const styles = StyleSheet.create({
     container: {
         width: "100%",
     },
-    label: {
-        color: colors.greyText,
-        marginLeft: 12,
-    },
     input: {
         marginBottom: 16,
-        width: "100%"
+        width: "100%",
+    },
+    cancelButton: {
+        marginTop: 10,
+    },
+    errorContainer: {
+        marginTop: 16,
+        padding: 10,
+        backgroundColor: colors.errorBackground,
+        borderRadius: 4,
+    },
+    errorText: {
+        color: colors.errorText,
+        textAlign: "center",
     },
 });

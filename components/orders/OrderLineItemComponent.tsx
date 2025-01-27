@@ -11,6 +11,7 @@ interface Props {
 }
 
 const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ variant }) => {
+    const media = variant.product.media || []
     if (variant.media && variant.media.length > 0) {
         return <Image
             style={styles.tinyLogo}
@@ -18,7 +19,15 @@ const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ variant }) 
                 uri: variant.media[0].url
             }}
         />
-    }
+    }else if (media.length>0) {
+        return <Image
+        style={styles.tinyLogo}
+        source={{
+            uri: media[0].url
+        }} 
+           resizeMode="contain"
+        />
+   }
     return <>No Image</>
 }
 
@@ -33,8 +42,7 @@ const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
     if (!lineItem) {
         return <></>
     }
-
-
+    
     return <Pressable onPress={() => router.push("products/details/" + lineItem.variant?.product.id)}>
         <View style={styles.productItem}>
             <View style={styles.imageWrapper} testID="product-image-wrapper">

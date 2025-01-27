@@ -12,6 +12,18 @@ fragment AddressFragment on Address {
   postalCode
 }
 
+fragment DeliveryMethod on ShippingMethod {
+  id
+  name
+  price {
+    currency
+    amount
+  }
+  minimumDeliveryDays
+  maximumDeliveryDays
+}
+
+
 fragment CheckoutFragment on Checkout {
   id
   voucherCode
@@ -75,6 +87,18 @@ fragment CheckoutFragment on Checkout {
   }
   shippingAddress {
     ...AddressFragment
+  }
+  isShippingRequired
+  availableShippingMethods {
+    ...DeliveryMethod
+  }
+  availablePaymentGateways {
+    id
+    name
+    config {
+      field
+      value
+    }
   }
   lines {
     id

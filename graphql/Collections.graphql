@@ -7,21 +7,21 @@ fragment CollectionFragment on Collection {
     url
     alt
   }
-  products(first: 5) {
+  products(first: 5, filter: $filter) {  # Add filter here
     edges {
       node {
         id
         name
         thumbnail {
-         url
-         alt
-       }
+          url
+          alt
+        }
       }
     }
   }
 }
 
-query getCollections {
+query getCollections($filter: ProductFilterInput) {  # Declare the filter variable here
   collections(first: 10, channel: "ci") {
     edges {
       node {

@@ -82,8 +82,8 @@ query getProductById($id: ID!, $channel: String!) {
   }
 }
 
-query getProductsList($channel: String!) {
-  products(first: 10, channel: $channel) {
+query getProductsList($channel: String!,$filter:ProductFilterInput) {
+  products(first: 10, channel: $channel, filter:$filter) {
     edges {
       node {
         ...ProductFragment
@@ -97,6 +97,9 @@ query searchProducts(
   $search: String!
   $categories: [ID!]
   $collections: [ID!]
+  $carMake:[ID!]
+	$carModel:[ID!]
+	$carYear:[ID!]
 ) {
   products(
     first: 100
@@ -105,6 +108,9 @@ query searchProducts(
       search: $search
       categories: $categories
       collections: $collections
+      carMake:$carMake
+      carModel:$carModel
+      carYear:$carYear
     }
   ) {
     edges {

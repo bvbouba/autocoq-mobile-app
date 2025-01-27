@@ -19,7 +19,7 @@ const ProductDetailsId = () => {
                     </View>
 
     if (called && data?.product) {
-        return <View>
+        return <View style={{ flex: 1 }}>
             <ProductDetails product={data.product} />
         </View>
     }

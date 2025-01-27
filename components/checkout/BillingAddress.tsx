@@ -43,7 +43,7 @@ export default BillingAddress
 
 const styles = StyleSheet.create({
     billAddressWrapper: {
-        border: "0.5 solid " + colors.dividerGrey,
+        // border: "0.5 solid " + colors.dividerGrey,
         borderRadius: 5,
         margin: 8
     },

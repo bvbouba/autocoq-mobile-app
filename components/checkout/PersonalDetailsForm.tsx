@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleSheet, ActivityIndicator, View, Text } from 'react-native';
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { PaddedView, colors } from '../Themed';
@@ -17,28 +17,43 @@ interface Form {
 }
 
 const validationSchema = yup.object().shape({
-    email: yup.string().required("Required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
 });
 
 const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
-    const { cart } = useCartContext()
-
-    const [updateEmail] = useCheckoutEmailUpdateMutation()
+    const { cart } = useCartContext();
+    const [updateEmail] = useCheckoutEmailUpdateMutation();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const formik = useFormik<Form>({
         initialValues: {
-            email: "test@gmail.com",
+            email: cart?.email || "",
         },
         validationSchema: validationSchema,
 
-        onSubmit: (data) => {
-            updateEmail({
-                variables: {
-                    id: cart?.id as string,
-                    email: data.email
+        onSubmit: async (data) => {
+            setLoading(true);
+            setError(null); // Reset error state
+            try {
+                const result = await updateEmail({
+                    variables: {
+                        id: cart?.id as string,
+                        email: data.email
+                    },
+                });
+                const errors = result.data?.checkoutEmailUpdate?.errors;
+                if (errors && errors.length > 0) {
+                    setError(`Error: ${errors[0].field}`);
+                } else {
+                    onSubmit();
                 }
-            }).then(onSubmit)
-        }
+            } catch (err) {
+                setError("Failed to update email. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        },
     });
 
     return (
@@ -48,28 +63,56 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
                 onChangeText={(value) => formik.setFieldValue("email", value)}
                 value={formik.values.email}
                 placeholder="Email"
-                label="Email" />
+                label="Email"
+                error={!!formik.errors.email}
+            />
+            {formik.errors.email && <Text style={styles.error}>{formik.errors.email}</Text>}
 
-            <Button mode="contained" onPress={() => formik.handleSubmit()}>Submit</Button>
-            <Button onPress={() => onCancel()} >Cancel</Button>
+            <Button
+                    onPress={() => formik.handleSubmit()}
+                    mode="contained"
+                    disabled={loading}
+                >
+                    {loading ? <ActivityIndicator color="white" /> : "Submit"}
+                </Button>
+
+                <Button onPress={onCancel} mode="text" style={styles.cancelButton}>
+                    Cancel
+                </Button>
+
+                {error && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.errorText}>{error}</Text>
+                    </View>
+                )}
         </PaddedView>
     );
-}
+};
 
-export default PersonalDetailsForm
-
+export default PersonalDetailsForm;
 
 const styles = StyleSheet.create({
-    textInputWrapper: {
-        display: "flex",
-
-    },
-    label: {
-        color: colors.greyText,
-        marginLeft: 12,
-    },
     input: {
         marginBottom: 16,
     },
+    button: {
+        marginTop: 8,
+    },
+    error: {
+        color: "red",
+        marginBottom: 8,
+    },
+    cancelButton: {
+        marginTop: 10,
+    },
+    errorContainer: {
+        marginTop: 16,
+        padding: 10,
+        backgroundColor: colors.errorBackground,
+        borderRadius: 4,
+    },
+    errorText: {
+        color: colors.errorText,
+        textAlign: "center",
+    },
 });
-

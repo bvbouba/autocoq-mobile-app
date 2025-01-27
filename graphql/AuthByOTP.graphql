@@ -1,0 +1,23 @@
+mutation sendCode($phoneNumber: String!) {
+  sendOtp(phoneNumber: $phoneNumber) {
+    error
+    message
+  }
+}
+
+mutation verifyCode($phoneNumber: String!, $otp: String!) {
+  verifyOtp(phoneNumber: $phoneNumber, otp: $otp) {
+    error
+    message
+  }
+}
+
+mutation userRegister($input: AccountRegisterInput!) {
+		accountRegister(input: $input) {
+			errors {
+				message
+				field
+				code
+			}
+		}
+	}

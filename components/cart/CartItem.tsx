@@ -19,13 +19,16 @@ const CartImage: FC<{ line: CheckoutLine }> = ({ line }) => {
             source={{
                 uri: line.variant.media[0].url
             }}
+            resizeMode="contain"
         />
     } else if (line.variant.product.thumbnail) {
          return <Image
          style={styles.tinyLogo}
          source={{
              uri: line.variant.product.thumbnail.url
-         }} />
+         }} 
+            resizeMode="contain"
+         />
     }
     return <Text>No Image</Text>
 }
@@ -37,7 +40,7 @@ const CartItem: FC<Props> = ({ lineItem }) => {
         style: 'currency',
         currency: lineItem.totalPrice?.gross.currency,
     });
-
+    const variants = lineItem.variant.product.variants || []
 
     return <>
         <Pressable onPress={() => router.push("products/details/" + lineItem.variant.product.id)}>
@@ -48,9 +51,9 @@ const CartItem: FC<Props> = ({ lineItem }) => {
                         <Text style={styles.productTitle} >
                             {lineItem.variant.product.name}
                         </Text>
-                        <Text style={styles.productVariant} >
+                        {variants.length>1 && <Text style={styles.productVariant} >
                             {lineItem.variant.name}
-                        </Text>
+                        </Text>}
                         <Text style={styles.productPrice} >
                             {formatter.format(lineItem.undiscountedUnitPrice.amount || 0)}
                         </Text>
