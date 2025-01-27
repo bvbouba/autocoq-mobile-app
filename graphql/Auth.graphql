@@ -21,3 +21,28 @@ mutation userRegister($input: AccountRegisterInput!) {
 			}
 		}
 	}
+
+
+mutation CreateToken($email:String!,$password:String!){
+  tokenCreate(email: $email, password: $password) {
+    token
+    refreshToken
+    errors {
+      field
+      message
+    }
+  }
+}
+
+fragment UserDetails on User {
+	id
+	email
+}
+
+query CurrentUser {
+	me {
+		...UserDetails
+	}
+}
+
+

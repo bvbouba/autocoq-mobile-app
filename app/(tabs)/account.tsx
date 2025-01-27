@@ -1,19 +1,18 @@
-import { StyleSheet, View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Text, Divider, PaddedView } from '../../components/Themed';
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
-import { useCurrentUserQuery } from '@/saleor/api.generated';
-import { useSaleorAuthContext } from '@saleor/auth-sdk/react';
-import { customStorage } from '@/utils/auth/customStorage';
 import { useState } from 'react';
+import { useAuth } from '@/lib/authProvider';
 
 export default function AccountScreen() {
   const router = useRouter();
-  const { signOut } = useSaleorAuthContext();
-  const { data: currentUser, loading } = useCurrentUserQuery();
+  const { user, loading,  resetToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false); 
+  
 
+  console.log(user)
   const handleSignIn = () => {
     router.push('/account/auth');
   };
@@ -21,8 +20,7 @@ export default function AccountScreen() {
   const handleSignOut = async () => {
     setIsLoading(true); // Start loading
     try {
-      signOut();
-      await customStorage.removeItem('authToken');
+      resetToken()
       router.push('/');
     } catch (error) {
       console.error('Error during sign-out:', error);
@@ -45,12 +43,12 @@ export default function AccountScreen() {
         <View style={styles.header}>
           <FontAwesome name="user-circle" size={28} color="#007AFF" />
           <Text style={styles.title}>
-            {currentUser?.me ? 'Welcome back!' : 'Welcome!'}
+            {user?.id ? 'Welcome back!' : 'Welcome!'}
           </Text>
         </View>
 
         <View style={styles.accountButtonContainer}>
-          {currentUser?.me ? (
+          {user?.id ? (
             <View style={styles.myAccount}>
               <FontAwesome name="user" size={20} color="white" />
               <Text style={styles.myAccountText}>My Account</Text>
@@ -63,12 +61,12 @@ export default function AccountScreen() {
         </View>
 
         <PaddedView>
-          {currentUser?.me && <ListItem name="My Profile" url="account/profile" />}
+          {user?.id && <ListItem name="My Profile" url="account/profile" />}
           <ListItem name="My Orders" url="account/orders" />
           <ListItem name="FAQ" url="account/faq" />
           <ListItem name="Terms and Conditions" url="account/terms" />
 
-          {currentUser?.me && (
+          {user?.id && (
             <>
               <Divider />
               <TouchableOpacity

@@ -1,13 +1,12 @@
-import React, { FC, useState } from 'react';
+import  { FC, useState } from 'react';
 import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
 import { PaddedView } from '../Themed'; // Assuming PaddedView is used for padding in your app
-import { useSaleorAuthContext } from '@saleor/auth-sdk/react';
 import { useRouter } from 'expo-router';
-import { customStorage } from '@/utils/auth/customStorage';
-import apolloClient from '@/lib/graphql';
+import { useCreateTokenMutation } from '@/saleor/api.generated';
+import { useAuth } from '@/lib/authProvider';
 
 interface Props {
     onSubmit: () => void;
@@ -26,9 +25,10 @@ const validationSchema = yup.object().shape({
 const LoginForm: FC<Props> = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { signIn } = useSaleorAuthContext();
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false);
+    const [login] = useCreateTokenMutation()
+    const { setToken } = useAuth();
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -38,21 +38,23 @@ const LoginForm: FC<Props> = () => {
         validationSchema: validationSchema,
         validateOnChange: false,
         validateOnBlur: false,
-        onSubmit: async (data) => {
+        onSubmit: async (formData) => {
             setLoading(true);
             setError(null);
             try {
-                const result = await signIn({
-                    email: `${data.identifier}@autocoq.com`,
-                    password: data.password,
+                const {data} = await login({
+                    variables:{
+                    email: `${formData.identifier}@autocoq.com`,
+                    password: formData.password,
+                    }
                 });
-                console.log(result)
-                if (result.data.tokenCreate.errors?.length) {
-                    setError(result.data.tokenCreate.errors[0]?.message || 'Unknown error occurred.');
+                const errors = data?.tokenCreate?.errors || []
+                if (errors.length>0) {
+                    setError(data?.tokenCreate?.errors[0]?.message || 'Unknown error occurred.');
                 } else {
-                    const { token } = result.data.tokenCreate;
+                    const  token  = data?.tokenCreate?.token;
                     if (token) {
-                        await customStorage.setItem('authToken', token);
+                        setToken(token);
                         router.push('/account');
                     } else {
                         setError('Failed to retrieve token. Please try again.');

@@ -1,5 +1,4 @@
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -9,8 +8,6 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { useEffect } from "react";
-import { createSaleorAuthClient } from "@saleor/auth-sdk"
-import {SaleorAuthProvider, useAuthChange} from '@saleor/auth-sdk/react'
 import { LogBox, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { colors } from "../components/Themed";
@@ -26,7 +23,7 @@ import { getConfig } from "../config";
 import SimpleBackHeader from "../components/layout/SimpleBackHeader";
 import * as SplashScreen from 'expo-splash-screen'; // Corrected import
 import { CarFilterProvider } from "@/context/useCarFilterContext";
-import apolloClient from "@/lib/graphql";
+import { AuthProvider } from "@/lib/authProvider";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -69,6 +66,10 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const apiUrl = getConfig().saleorApi;
 
+  const apolloClient = new ApolloClient({
+    uri: apiUrl,
+    cache: new InMemoryCache(),
+  });
 
   const baseHeaderProps = {
     headerTitle: "",
@@ -77,16 +78,10 @@ function RootLayoutNav() {
 
   const companyName = "AUTOCOQ";
 
-  const saleorAuthClient = createSaleorAuthClient({
-    saleorApiUrl: apiUrl,
-  });
-
-  
-
   return (
-    <SaleorAuthProvider client={saleorAuthClient}>
-<ApolloProvider client={apolloClient}>
-      <CarFilterProvider>
+    <AuthProvider>
+    <ApolloProvider client={apolloClient}>
+     <CarFilterProvider>
       <ProductsProvider>
         <CartProvider>
           <OrderProvider>
@@ -131,7 +126,6 @@ function RootLayoutNav() {
       </ProductsProvider>
       </CarFilterProvider>
     </ApolloProvider>
-    </SaleorAuthProvider>
-
+    </AuthProvider>
   );
 }
