@@ -37,6 +37,8 @@ mutation CreateToken($email:String!,$password:String!){
 fragment UserDetails on User {
 	id
 	email
+  firstName
+  lastName
 }
 
 query CurrentUser {

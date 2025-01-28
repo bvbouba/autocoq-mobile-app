@@ -9,6 +9,7 @@ import CollectionBanner from "../Dashboard/collections/CollectionBanner";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { FontAwesome } from "@expo/vector-icons";
 import CarFilterModal from "../car/Modal";
+import AuthPrompt from "../AuthPrompt";
 
 const DashboardScreen = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const DashboardScreen = () => {
   const { selectedCarYear, selectedCarMake, selectedCarModel, clearFilter } = useCarFilter(); // Added clearFilter from context
   
 
-  const { data, loading, error } = useGetCollectionsQuery({
+  const { data, loading, error:colError } = useGetCollectionsQuery({
     variables:{
       filter:{
         ...(selectedCarYear || selectedCarMake || selectedCarModel
@@ -33,9 +34,9 @@ const DashboardScreen = () => {
     variables: { channel: getConfig().channel },
   });
   useEffect(() => {
-    if (error) Alert.alert("Error loading collections", error.message);
+    if (colError) Alert.alert("Error loading collections", colError.message);
     if (catError) Alert.alert("Error loading categories", catError.message);
-  }, [error, catError]);
+  }, [colError, catError]);
 
 
   if (loading) {
@@ -80,6 +81,8 @@ const DashboardScreen = () => {
           categories={categoriesData?.categories?.edges.map((cat) => cat.node) || []}
           onClick={(slug) => router.push("products/results?categories=" + slug)}
         />
+                <AuthPrompt />
+
         <Divider />
 
         {/* Collections */}

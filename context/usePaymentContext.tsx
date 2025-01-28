@@ -48,7 +48,6 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
         });
         handleErrors(checkoutCompleteResult);
         Alert.alert('Success', 'Your order is confirmed!');
-        console.log(checkoutCompleteResult)
         const orderId = checkoutCompleteResult.data?.checkoutComplete?.order?.id;
         router.push("orderDetails/" + orderId + "?orderSuccess=true")
     };

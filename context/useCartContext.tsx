@@ -70,7 +70,6 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const addItem = async (variantId: string) => {
         setLoading(true);
         const cart = await checkCheckoutExists();
-        console.log(cart)
         if (cart) {
             const updatedCart = await addLineItem({
                 variables: {

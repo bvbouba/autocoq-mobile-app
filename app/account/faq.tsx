@@ -1,9 +1,38 @@
-import { StyleSheet, View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import RichText from '@/components/RichText';
+import { usePageQuery } from '@/saleor/api.generated';
 
 export default function FAQScreen() {
+  const { data, loading, error } = usePageQuery({
+    variables: {
+      slug: "faq",
+    },
+  });
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text style={styles.error}>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  const content = data?.page?.content;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>FAQ Screen</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {content ? <RichText jsonStringData={content} /> : <Text>No content available.</Text>}
+      </ScrollView>
     </View>
   );
 }
@@ -11,11 +40,33 @@ export default function FAQScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#f9f9f9",
   },
-  text: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingVertical: 16,
+    backgroundColor: "#007bff",
+    color: "#fff",
+  },
+  scrollContent: {
+    padding: 16,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
+  },
+  loadingText: {
+    marginTop: 8,
+    fontSize: 16,
+    color: "#555",
+  },
+  error: {
+    color: "red",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

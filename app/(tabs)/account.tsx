@@ -11,8 +11,7 @@ export default function AccountScreen() {
   const { user, loading,  resetToken } = useAuth();
   const [isLoading, setIsLoading] = useState(false); 
   
-
-  console.log(user)
+  
   const handleSignIn = () => {
     router.push('/account/auth');
   };
@@ -49,10 +48,10 @@ export default function AccountScreen() {
 
         <View style={styles.accountButtonContainer}>
           {user?.id ? (
-            <View style={styles.myAccount}>
+            <TouchableOpacity style={styles.myAccount} onPress={()=>router.push('/account/profile')}>
               <FontAwesome name="user" size={20} color="white" />
               <Text style={styles.myAccountText}>My Account</Text>
-            </View>
+            </TouchableOpacity>
           ) : (
             <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
               <Text style={styles.signUpButtonText}>Sign In</Text>
@@ -61,8 +60,8 @@ export default function AccountScreen() {
         </View>
 
         <PaddedView>
-          {user?.id && <ListItem name="My Profile" url="account/profile" />}
           <ListItem name="My Orders" url="account/orders" />
+          {user?.id && <ListItem name="My Addresses" url="account/addresses" />}
           <ListItem name="FAQ" url="account/faq" />
           <ListItem name="Terms and Conditions" url="account/terms" />
 
@@ -142,6 +141,7 @@ const styles = StyleSheet.create({
   menuItem: {
     paddingVertical: 15,
     paddingHorizontal: 10,
+    marginLeft:30
   },
   menuText: {
     fontSize: 16,

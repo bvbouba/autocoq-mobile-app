@@ -103,6 +103,8 @@ fragment OrderLineFragment on OrderLine {
 fragment OrderFragment on Order {
   id
   number
+  status
+  paymentStatus
   shippingPrice {
     ...OrderShippingPrice
   }

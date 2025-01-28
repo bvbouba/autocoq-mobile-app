@@ -17,12 +17,12 @@ const OrderSubtotal: FC<Props> = ({ order }) => {
                     style: "currency",
                     currency: order.subtotal.gross.currency
                 })}
-                {"  "}includes{" "}
+                {/* {"  "}includes{" "}
                 {order.total.tax.amount.toLocaleString(getConfig().locale, {
                     style: "currency",
                     currency: order.subtotal.tax.currency,
-                })}{" "}
-                VAT
+                })}{" "} */}
+                {/* VAT */}
             </Text>
         </Text>
         <Text style={styles.row}>

@@ -16,7 +16,8 @@ export interface UserConsumerProps {
   resetToken: () => void;
   user: UserDetailsFragment | undefined | null;
   error: ApolloError | undefined;
-  loading: boolean;
+loading: boolean;
+authenticated:boolean;
 }
 
 const AuthContext = createContext<UserConsumerProps | undefined>(undefined);
@@ -32,12 +33,11 @@ export function useAuth(): UserConsumerProps {
 
 // Provider component
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<ApolloError>();
   const [user, setUser] = useState<UserDetailsFragment|null>();
   const [token, setToken] = useAsyncStorage("authToken", "", { sync: true });
-
+  
   const authLink = setContext(async (_, { headers }) => {
       return {
         headers: {
@@ -80,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const resetToken = () => setToken("");
+  const authenticated = !!user?.id;
 
   useEffect(() => {
     fetchUser();
@@ -92,6 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     error,
     loading,
+    authenticated
   };
 
   return <AuthContext.Provider value={providerValues}>{children}</AuthContext.Provider>;

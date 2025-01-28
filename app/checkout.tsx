@@ -1,24 +1,24 @@
-import { PaymentSheetError, StripeProvider, initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native';
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
-import { Alert, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import {  SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { Divider, PaddedView, Text, View, colors } from '../components/Themed';
 import BillingAddress from '../components/checkout/BillingAddress';
 import PersonalDetails from '../components/checkout/PersonalDetails';
 import ShippingAddress from '../components/checkout/ShippingAddress';
 import ShippingMethodSelector from '../components/checkout/ShippingMethodSelector';
-import { getConfig } from '../config';
 import { useCartContext } from '../context/useCartContext';
 import { usePaymentContext } from '../context/usePaymentContext';
 import { Button } from 'react-native-paper';
 import OrderTotal from '../components/checkout/OrderTotal';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
 import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
+import AuthPrompt from '@/components/AuthPrompt';
+import { useAuth } from '@/lib/authProvider';
 
 const Checkout = () => {
     const { cart } = useCartContext();
     const { chosenGateway } = usePaymentContext();
     const router = useRouter();
+    const {authenticated} = useAuth()
     
     const Component = paymentMethodToComponent[chosenGateway||"dummy"];
 
@@ -48,6 +48,7 @@ const Checkout = () => {
               <Component />
               </PaddedView>
                 <OrderTotal />
+                {!authenticated && <AuthPrompt />}
                 <PersonalDetails />
                 <BillingAddress />
 
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        paddingBottom:50
     },
     checkoutButton: {
         width: "100%",

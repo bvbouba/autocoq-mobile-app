@@ -16,6 +16,7 @@ const PaymentMethodSelector: FC = () => {
     const paymentMethods = cart && cart.availablePaymentGateways || []
     const paymentMethod = paymentMethods.find(p=>p.id===chosenGateway)
 
+
     if (paymentMethods && paymentMethods?.length > 0) {
         return <Pressable onPress={() => router.push("/paymentMethods")}>
             <View style={styles.paymentMethodWrapper}>

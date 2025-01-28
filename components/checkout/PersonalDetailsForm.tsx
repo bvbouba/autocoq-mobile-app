@@ -6,6 +6,7 @@ import { PaddedView, colors } from '../Themed';
 import { useCartContext } from '../../context/useCartContext';
 import { useCheckoutEmailUpdateMutation } from '../../saleor/api.generated';
 import { TextInput, Button } from 'react-native-paper';
+import { useAuth } from '@/lib/authProvider';
 
 interface Props {
     onSubmit: () => void
@@ -13,33 +14,39 @@ interface Props {
 }
 
 interface Form {
-    email: string,
+    phoneNumber: string,
 }
 
 const validationSchema = yup.object().shape({
-    email: yup.string().email("Invalid email").required("Email is required"),
+    phoneNumber: yup.string().matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
 });
 
 const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
     const { cart } = useCartContext();
+    const {user,authenticated} = useAuth()
     const [updateEmail] = useCheckoutEmailUpdateMutation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    
+    const email = user?.email || cart?.email
+    const phoneNumber = user?.email.split("@")[0];
 
     const formik = useFormik<Form>({
         initialValues: {
-            email: cart?.email || "",
+            phoneNumber: phoneNumber || "",
         },
         validationSchema: validationSchema,
-
+        validateOnChange: false,
+        validateOnBlur: false,
         onSubmit: async (data) => {
             setLoading(true);
             setError(null); // Reset error state
+            console.log(data)
             try {
                 const result = await updateEmail({
                     variables: {
                         id: cart?.id as string,
-                        email: data.email
+                        email: `${data.phoneNumber}@autocoq.com`
                     },
                 });
                 const errors = result.data?.checkoutEmailUpdate?.errors;
@@ -60,13 +67,13 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
         <PaddedView>
             <TextInput
                 style={styles.input}
-                onChangeText={(value) => formik.setFieldValue("email", value)}
-                value={formik.values.email}
-                placeholder="Email"
-                label="Email"
-                error={!!formik.errors.email}
+                onChangeText={(value) => formik.setFieldValue("phoneNumber", value)}
+                value={formik.values.phoneNumber}
+                placeholder="Phone Number"
+                label="Phone Number"
+                error={!!formik.errors.phoneNumber}
             />
-            {formik.errors.email && <Text style={styles.error}>{formik.errors.email}</Text>}
+            {formik.errors.phoneNumber && <Text style={styles.error}>{formik.errors.phoneNumber}</Text>}
 
             <Button
                     onPress={() => formik.handleSubmit()}

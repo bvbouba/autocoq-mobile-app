@@ -10,7 +10,6 @@ const DummyPayment = () => {
     const buyNowEnabled = cart?.email && cart?.billingAddress && (cart?.isShippingRequired ? cart?.shippingAddress : true)  && (cart.deliveryMethod) && (chosenGateway)
 
     const buyNow = () => {
-        console.log(buyNowEnabled)
         if (!buyNowEnabled) {
             Alert.alert("Please fill in required information to contiue");
             return

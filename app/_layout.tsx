@@ -105,7 +105,7 @@ function RootLayoutNav() {
                     }}
                   />
                   <Stack.Screen name="products/details/[id]" options={baseHeaderProps} />
-                  <Stack.Screen name="checkout" options={{ ...baseHeaderProps, headerTitle: "Checkout" }} />
+                  <Stack.Screen name="checkout" options={{ headerTitle: "Checkout" }} />
                   <Stack.Screen name="personalDetails" options={baseHeaderProps} />
                   <Stack.Screen name="shippingAddress" options={baseHeaderProps} />
                   <Stack.Screen name="billingAddress" options={baseHeaderProps} />
@@ -113,10 +113,12 @@ function RootLayoutNav() {
                   <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
                   <Stack.Screen name="orderDetails/[id]" options={baseHeaderProps} />
                   <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="account/profile" options={{...baseHeaderProps}} />
-                  <Stack.Screen name="account/faq" options={baseHeaderProps} />
-                  <Stack.Screen name="account/terms" options={baseHeaderProps} />
+                  <Stack.Screen name="account/profile" options={{ headerTitle: "My profile"}} />
+                  <Stack.Screen name="account/faq" options={{ headerTitle: "FAQ"}} />
+                  <Stack.Screen name="account/terms" options={{ headerTitle: "Terms and conditions"}} />
                   <Stack.Screen name="account/auth" options={baseHeaderProps} />
+                  <Stack.Screen name="account/addresses" options={{ headerTitle: "Addresses"}} />
+                  <Stack.Screen name="account/orders" options={{ headerTitle: "My orders"}} />
                 </Stack>
               </ThemeProvider>
               </GestureHandlerRootView>

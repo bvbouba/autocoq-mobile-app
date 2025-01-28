@@ -9,7 +9,9 @@ const PersonalDetails = () => {
     const { cart } = useCartContext()
     const router = useRouter();
 
-    const email = cart && cart.email
+    const email = cart && cart.email || ""
+
+    const phoneNumber = email.split("@")[0];
 
     if (email) {
         return <Pressable onPress={() => router.push("/personalDetails")}>
@@ -20,7 +22,7 @@ const PersonalDetails = () => {
                 </View>
                 <View style={styles.titleWrapper}>
                     <Text style={styles.personalDetailsValue} numberOfLines={1}>
-                        {email}
+                        {phoneNumber}
                     </Text>
                 </View>
             </View>
