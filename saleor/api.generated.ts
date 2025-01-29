@@ -34293,6 +34293,7 @@ export type CheckoutFragment = { __typename?: 'Checkout', id: string, voucherCod
 export type CreateCheckoutMutationVariables = Exact<{
   channel: Scalars['String']['input'];
   lines: Array<CheckoutLineInput> | CheckoutLineInput;
+  email?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -34410,14 +34411,30 @@ export type OrderLineVariantFragment = { __typename?: 'ProductVariant', id: stri
 
 export type OrderLineFragment = { __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null };
 
-export type OrderFragment = { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }> };
+export type OrderFragment = { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, created: string, updatedAt: string, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }> };
 
 export type GetOrderByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetOrderByIdQuery = { __typename?: 'Query', order?: { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }> } | null };
+export type GetOrderByIdQuery = { __typename?: 'Query', order?: { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, created: string, updatedAt: string, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }> } | null };
+
+export type OrdersQueryVariables = Exact<{
+  before?: InputMaybe<Scalars['String']['input']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type OrdersQuery = { __typename?: 'Query', me?: { __typename?: 'User', orders?: { __typename?: 'OrderCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'OrderCountableEdge', cursor: string, node: { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, created: string, updatedAt: string, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null } | null };
+
+export type UpdateOrderMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: OrderUpdateInput;
+}>;
+
+
+export type UpdateOrderMutation = { __typename?: 'Mutation', orderUpdate?: { __typename?: 'OrderUpdate', errors: Array<{ __typename?: 'OrderError', code: OrderErrorCode, message?: string | null, field?: string | null }> } | null };
 
 export type PageQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -34846,6 +34863,8 @@ export const OrderFragmentDoc = gql`
   number
   status
   paymentStatus
+  created
+  updatedAt
   shippingPrice {
     ...OrderShippingPrice
   }
@@ -35476,8 +35495,8 @@ export type CategoryPathsLazyQueryHookResult = ReturnType<typeof useCategoryPath
 export type CategoryPathsSuspenseQueryHookResult = ReturnType<typeof useCategoryPathsSuspenseQuery>;
 export type CategoryPathsQueryResult = Apollo.QueryResult<CategoryPathsQuery, CategoryPathsQueryVariables>;
 export const CreateCheckoutDocument = gql`
-    mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!) {
-  checkoutCreate(input: {channel: $channel, lines: $lines}) {
+    mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!, $email: String) {
+  checkoutCreate(input: {channel: $channel, lines: $lines, email: $email}) {
     checkout {
       ...CheckoutFragment
     }
@@ -35506,6 +35525,7 @@ export type CreateCheckoutMutationFn = Apollo.MutationFunction<CreateCheckoutMut
  *   variables: {
  *      channel: // value for 'channel'
  *      lines: // value for 'lines'
+ *      email: // value for 'email'
  *   },
  * });
  */
@@ -36100,6 +36120,99 @@ export type GetOrderByIdQueryHookResult = ReturnType<typeof useGetOrderByIdQuery
 export type GetOrderByIdLazyQueryHookResult = ReturnType<typeof useGetOrderByIdLazyQuery>;
 export type GetOrderByIdSuspenseQueryHookResult = ReturnType<typeof useGetOrderByIdSuspenseQuery>;
 export type GetOrderByIdQueryResult = Apollo.QueryResult<GetOrderByIdQuery, GetOrderByIdQueryVariables>;
+export const OrdersDocument = gql`
+    query Orders($before: String, $after: String) {
+  me {
+    orders(first: 10, before: $before, after: $after) {
+      edges {
+        cursor
+        node {
+          ...OrderFragment
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      totalCount
+    }
+  }
+}
+    ${OrderFragmentDoc}`;
+
+/**
+ * __useOrdersQuery__
+ *
+ * To run a query within a React component, call `useOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrdersQuery({
+ *   variables: {
+ *      before: // value for 'before'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useOrdersQuery(baseOptions?: Apollo.QueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
+      }
+export function useOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
+        }
+export function useOrdersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
+        }
+export type OrdersQueryHookResult = ReturnType<typeof useOrdersQuery>;
+export type OrdersLazyQueryHookResult = ReturnType<typeof useOrdersLazyQuery>;
+export type OrdersSuspenseQueryHookResult = ReturnType<typeof useOrdersSuspenseQuery>;
+export type OrdersQueryResult = Apollo.QueryResult<OrdersQuery, OrdersQueryVariables>;
+export const UpdateOrderDocument = gql`
+    mutation updateOrder($id: ID!, $input: OrderUpdateInput!) {
+  orderUpdate(id: $id, input: $input) {
+    errors {
+      code
+      message
+      field
+    }
+  }
+}
+    `;
+export type UpdateOrderMutationFn = Apollo.MutationFunction<UpdateOrderMutation, UpdateOrderMutationVariables>;
+
+/**
+ * __useUpdateOrderMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrderMutation, { data, loading, error }] = useUpdateOrderMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderMutation, UpdateOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrderMutation, UpdateOrderMutationVariables>(UpdateOrderDocument, options);
+      }
+export type UpdateOrderMutationHookResult = ReturnType<typeof useUpdateOrderMutation>;
+export type UpdateOrderMutationResult = Apollo.MutationResult<UpdateOrderMutation>;
+export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<UpdateOrderMutation, UpdateOrderMutationVariables>;
 export const PageDocument = gql`
     query Page($slug: String!) {
   page(slug: $slug) {

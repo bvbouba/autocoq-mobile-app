@@ -23,7 +23,7 @@ import { getConfig } from "../config";
 import SimpleBackHeader from "../components/layout/SimpleBackHeader";
 import * as SplashScreen from 'expo-splash-screen'; // Corrected import
 import { CarFilterProvider } from "@/context/useCarFilterContext";
-import { AuthProvider } from "@/lib/authProvider";
+import { AuthProvider } from "@/lib/providers/authProvider";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",

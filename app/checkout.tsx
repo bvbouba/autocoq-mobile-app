@@ -12,7 +12,7 @@ import OrderTotal from '../components/checkout/OrderTotal';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
 import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
 import AuthPrompt from '@/components/AuthPrompt';
-import { useAuth } from '@/lib/authProvider';
+import { useAuth } from '@/lib/providers/authProvider';
 
 const Checkout = () => {
     const { cart } = useCartContext();

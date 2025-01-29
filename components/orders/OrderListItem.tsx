@@ -4,6 +4,8 @@ import { PaddedView, Text, View } from "../Themed";
 import { StyleSheet, Pressable } from "react-native";
 import { IconButton } from "react-native-paper";
 import { useRouter } from "expo-router";
+import { getStatusBackgroundColor, getStatusLabel } from "@/utils/status";
+
 
 interface Props {
   order: OrderFragment;
@@ -12,52 +14,6 @@ interface Props {
 const OrderListItem: FC<Props> = ({ order }) => {
   const router = useRouter();
   const onPress = () => router.push("/orderDetails/" + order.id);
-
-  const getStatusLabel = (status: string): string => {
-    switch (status) {
-      case "FULFILLED":
-        return "Delivered";
-      case "CANCELED":
-        return "Cancelled";
-      case "PARTIALLY_FULFILLED":
-        return "Partially Fulfilled";
-      case "UNFULFILLED":
-        return "Unfulfilled";
-      case "UNCONFIRMED":
-        return "Unconfirmed";
-      case "DRAFT":
-        return "Draft";
-      case "PENDING":
-        return "Pending";
-      case "EXPIRED":
-        return "Expired";
-      default:
-        return "Unknown";
-    }
-  };
-
-  const getStatusBackgroundColor = (status: string): string => {
-    switch (status) {
-      case "FULFILLED":
-        return "#d4edda"; // Light green
-      case "CANCELED":
-        return "#f8d7da"; // Light red
-      case "PARTIALLY_FULFILLED":
-        return "#fff3cd"; // Light yellow
-      case "UNFULFILLED":
-        return "#e2e3e5"; // Light gray
-      case "UNCONFIRMED":
-        return "#d1ecf1"; // Light blue
-      case "DRAFT":
-        return "#e7d8f6"; // Light purple
-      case "PENDING":
-        return "#fff8e1"; // Light gold
-      case "EXPIRED":
-        return "#fbe5d6"; // Light brown
-      default:
-        return "#f5f5f5"; // Default light gray
-    }
-  };
 
   return (
     <Pressable onPress={onPress}>
@@ -76,6 +32,11 @@ const OrderListItem: FC<Props> = ({ order }) => {
           >
             <Text style={styles.statusText}>{getStatusLabel(order.status)}</Text>
           </View>
+        </View>
+        {/* Add order date below the status */}
+        <View style={styles.dateWrapper}>
+          <Text style={styles.dateLabel}>Ordered on</Text>
+          <Text style={styles.dateText}>{new Date(order.created).toLocaleDateString()}</Text>
         </View>
       </PaddedView>
     </Pressable>
@@ -119,7 +80,20 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 14,
-    color: "black", // Text remains black
-    // fontWeight: "bold",
+    color: "black",
+  },
+  dateWrapper: {
+    marginTop: 8,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dateLabel: {
+    fontSize: 12,
+    color: "#555",
+    marginRight: 4,
+  },
+  dateText: {
+    fontSize: 12,
+    color: "#000",
   },
 });

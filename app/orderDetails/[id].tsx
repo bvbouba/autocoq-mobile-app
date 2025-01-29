@@ -1,83 +1,23 @@
-import { Link, Stack, usePathname, useLocalSearchParams } from "expo-router";
-import { StyleSheet, View } from "react-native";
-import { Text } from "../../components/Themed";
-import OrderContent from "../../components/orders/OrderContent";
-import { useOrderContext } from "../../context/useOrderContext";
+import {  usePathname } from "expo-router";
+import { StyleSheet } from "react-native";
+
 import { useEffect, useState } from "react";
-import { OrderFragment } from "../../saleor/api.generated";
-import { useCartContext } from "../../context/useCartContext";
+import OrderDetails from "@/components/orders/OrderDetails";
 
-const NotFoundScreen = () => {
-    return (
-        <>
-            <Stack.Screen options={{ title: 'Oops!' }} />
-            <View style={styles.container}>
-                <Text style={styles.title}>This order doesn't exist.</Text>
-
-                <Link href="/" style={styles.link}>
-                    <Text style={styles.linkText}>Go to home screen!</Text>
-                </Link>
-            </View>
-        </>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    link: {
-        marginTop: 15,
-        paddingVertical: 15,
-    },
-    linkText: {
-        fontSize: 14,
-        color: '#2e78b7',
-    },
-});
 
 const OrderDetailsPage = () => {
     const pathname = usePathname();
-    const { orderSuccess } = useLocalSearchParams();
-    const { removeCart } = useCartContext();
-    const [orderCache, setOrderCache] = useState<OrderFragment | undefined>(undefined)
-    const [loading, setLoading] = useState<boolean>(true)
-    const { orders } = useOrderContext();
+    const [orderId, setOrderId] = useState<string>();
 
     useEffect(() => {
-        setLoading(true)
-        if (pathname.indexOf("order") !== -1) {
-            const orderId = pathname.split("/")[pathname.split("/").length - 1]
-            const order = orders.find(o => o.id === orderId)
-
-            setOrderCache(order)
+        if (pathname.includes("order")) {
+            setOrderId(pathname.split("/").pop());
         }
-        if (orderSuccess) {
-            removeCart()
-        }
+    }, [pathname]);
 
-        setLoading(false)
-    }, [pathname, orders])
+    if (!orderId) return null;
 
-    useEffect(() => {
-        setTimeout(() => setLoading(false), 1000)
-    }, [])
+    return <OrderDetails orderId={orderId} />;
+};
 
-    if (loading) {
-        return <Text>Loading</Text>
-    }
-    if (!orderCache) {
-        return <NotFoundScreen />
-    }
-
-    return <OrderContent order={orderCache} />
-
-}
-export default OrderDetailsPage
+export default OrderDetailsPage;

@@ -8,7 +8,7 @@ import { colors } from "../Themed";
 import { useCartContext } from "../../context/useCartContext";
 import { useCheckoutShippingAddressUpdateMutation } from "../../saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
-import { useAuth } from "@/lib/authProvider";
+import { useAuth } from "@/lib/providers/authProvider";
 
 interface Props {
   onSubmit: () => void;
@@ -30,7 +30,7 @@ const validationSchema = yup.object().shape({
   lastName: yup.string().required("Required"),
   phone: yup.string().required("Required"),
   streetAddress1: yup.string().required("Required"),
-  streetAddress2: yup.string().required("Required"),
+  streetAddress2: yup.string(),
   postalCode: yup.string().required("Required"),
   city: yup.string().required("Required"),
 });
@@ -62,15 +62,18 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
     return data?.checkoutShippingAddressUpdate?.errors
   };
 
+
+  const phoneNumber = cart?.email?.split('@')[0]
+
   const formik = useFormik<Form>({
     initialValues: {
-      firstName: cart?.shippingAddress?.firstName || "",
-      lastName: cart?.shippingAddress?.lastName || "",
-      phone: cart?.shippingAddress?.phone || "",
-      streetAddress1: cart?.shippingAddress?.streetAddress1 || "",
-      streetAddress2: cart?.shippingAddress?.streetAddress2 || "",
-      postalCode: cart?.shippingAddress?.postalCode || "",
-      city: cart?.shippingAddress?.city || "",
+      firstName: cart?.shippingAddress?.firstName || cart?.billingAddress?.firstName || "",
+      lastName: cart?.shippingAddress?.lastName || cart?.billingAddress?.lastName || "",
+      phone: cart?.shippingAddress?.phone || cart?.billingAddress?.phone || phoneNumber || "",
+      streetAddress1: cart?.shippingAddress?.streetAddress1 || cart?.billingAddress?.streetAddress1 || "",
+      streetAddress2: cart?.shippingAddress?.streetAddress2 || cart?.billingAddress?.streetAddress2 || "" ,
+      postalCode: cart?.shippingAddress?.postalCode ||  "225",
+      city: cart?.shippingAddress?.city || cart?.billingAddress?.city || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -146,7 +149,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
       <Button onPress={() => formik.handleSubmit()} mode="contained" disabled={loading}>
         {loading ? <ActivityIndicator color="white" /> : "Submit"}
       </Button>
-      <Button onPress={onCancel} mode="text" style={styles.cancelButton}>
+      <Button onPress={()=>setShowForm(false)} mode="text" style={styles.cancelButton}>
         Cancel
       </Button>
       {error && (

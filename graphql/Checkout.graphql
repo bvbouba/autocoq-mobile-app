@@ -180,8 +180,8 @@ fragment CheckoutFragment on Checkout {
   }
 }
 
-mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!) {
-  checkoutCreate(input: { channel: $channel, lines: $lines }) {
+mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!, $email:String) {
+  checkoutCreate(input: { channel: $channel, lines: $lines, email:$email }) {
     checkout {
       ...CheckoutFragment
     }

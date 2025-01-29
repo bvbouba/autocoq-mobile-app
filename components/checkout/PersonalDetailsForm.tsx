@@ -6,7 +6,7 @@ import { PaddedView, colors } from '../Themed';
 import { useCartContext } from '../../context/useCartContext';
 import { useCheckoutEmailUpdateMutation } from '../../saleor/api.generated';
 import { TextInput, Button } from 'react-native-paper';
-import { useAuth } from '@/lib/authProvider';
+import { useAuth } from '@/lib/providers/authProvider';
 
 interface Props {
     onSubmit: () => void
@@ -41,7 +41,6 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
         onSubmit: async (data) => {
             setLoading(true);
             setError(null); // Reset error state
-            console.log(data)
             try {
                 const result = await updateEmail({
                     variables: {

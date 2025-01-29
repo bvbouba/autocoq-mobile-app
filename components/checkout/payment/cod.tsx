@@ -1,42 +1,40 @@
 import { colors } from "@/components/Themed";
-import { handleErrors } from "@/context/checkout";
 import { useCartContext } from "@/context/useCartContext";
 import { usePaymentContext } from "@/context/usePaymentContext";
-import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "@/saleor/api.generated";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect } from "react";
 import { ActivityIndicator, Alert, View,StyleSheet,Text } from "react-native";
 import { Button } from "react-native-paper";
 
 export const codGatewayId = "cash.on.delivery"
 const CodPayment = () => {
     const { cart } = useCartContext();
-    const { chosenGateway,onCheckoutComplete,error } = usePaymentContext();
+    const { startCheckout,convertCartToOrder,confirmationData,error,loading } = usePaymentContext();
     const router = useRouter();
-    const [createPayment] = useCheckoutPaymentCreateMutation();
-    const [completeCheckout,createPaymentStatus] = useCheckoutCompleteMutation();
-    const [loading,setLoading]=useState(false)
 
-    const buyNow = async () => {    
-        setLoading(true)
-        try {
-            const createPaymentResult = await createPayment({
-                variables: {
-                    checkoutId: cart?.id as string,
-                    paymentInput: {
-                        amount: cart?.totalPrice.gross.amount,
-                        gateway: chosenGateway
-                    }
-                }
-            });
-            
-            handleErrors(createPaymentResult);
-            
-            await onCheckoutComplete()
-        } catch (e) {
-            console.error(e);
-        } finally{
-            setLoading(false)
+    useEffect(() => {
+        if (confirmationData) {
+            initializePaymentSheet().then(() => openPaymentSheet())
+        }
+    }, [confirmationData])
+
+    const initializePaymentSheet = async () => {
+        if (!confirmationData || !cart) {
+            return
+        }
+        return true
+    };
+
+    const openPaymentSheet = async () => {
+        Alert.alert('Success', 'Your order is confirmed!');
+        convertCartToOrder().then((result) => router.push("orderDetails/" + result.orderId + "?orderSuccess=true"))
+    };
+
+    const buyNow = () => {
+        if (confirmationData) {
+            openPaymentSheet()
+        } else {
+            startCheckout()
         }
     }
 

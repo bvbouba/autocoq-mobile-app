@@ -8,7 +8,6 @@ import { useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } f
 import { useRouter } from 'expo-router';
 
 interface Props {
-    onSubmit: () => void;
 }
 
 interface Form {

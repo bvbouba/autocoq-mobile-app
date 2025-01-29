@@ -4,7 +4,7 @@ import { Text, Divider, PaddedView } from '../../components/Themed';
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
 import { useState } from 'react';
-import { useAuth } from '@/lib/authProvider';
+import { useAuth } from '@/lib/providers/authProvider';
 
 export default function AccountScreen() {
   const router = useRouter();

@@ -8,16 +8,6 @@ const AuthScreen = () => {
 
     const toggleForm = () => setIsLogin(!isLogin);
 
-    const handleLoginSubmit = () => {
-        console.log('Logged in!');
-        // Handle successful login here
-    };
-
-    const handleSignUpSubmit = () => {
-        console.log('Signed up!');
-        // Handle successful sign up here
-    };
-
     return (
         <View style={{ paddingTop: 20 }}>
             <View style={styles.titleContainer}>
@@ -40,9 +30,9 @@ const AuthScreen = () => {
             </View>
             <View>
             {isLogin ? (
-                <LoginForm onSubmit={handleLoginSubmit}  />
+                <LoginForm  />
             ) : (
-                <SignUpForm onSubmit={handleSignUpSubmit}  />
+                <SignUpForm  />
             )}
             </View>
         </View>

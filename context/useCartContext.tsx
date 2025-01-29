@@ -6,6 +6,7 @@ import { getCheckoutId, removeCheckoutId, setCheckoutId } from "./basketStore";
 import {
     handleErrors,
 } from "./checkout";
+import { useAuth } from "@/lib/providers/authProvider";
 
 interface CartContextModel {
     cart: CheckoutFragment | undefined;
@@ -40,6 +41,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const [createCheckout] = useCreateCheckoutMutation();
     const [addLineItem] = useCheckoutLinesAddMutation();
     const [updateLineMutation] = useCheckoutLinesUpdateMutation();
+    const {user} = useAuth()
 
     const getCheckout = async () => {
         const result = await getCheckoutById({ variables: { id: (await getCheckoutId()) || "none" } });
@@ -68,6 +70,11 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     };
 
     const addItem = async (variantId: string) => {
+
+        if (!variantId) {
+            return;
+          }
+
         setLoading(true);
         const cart = await checkCheckoutExists();
         if (cart) {
@@ -91,6 +98,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         } else {
             const updatedCart = await createCheckout({
                 variables: {
+                    email:user?.email,
                     channel: getConfig().channel,
                     lines: [{
                         variantId,

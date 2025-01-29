@@ -1,5 +1,5 @@
 import { Divider } from '@/components/Themed';
-import { useAuth } from '@/lib/authProvider';
+import { useAuth } from '@/lib/providers/authProvider';
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 

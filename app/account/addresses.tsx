@@ -1,5 +1,5 @@
 import AddressBookCard from "@/components/address/addressBookCard";
-import { useAuth } from "@/lib/authProvider";
+import { useAuth } from "@/lib/providers/authProvider";
 import {  useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { View, Text, StyleSheet, ActivityIndicator, FlatList } from "react-native";
 

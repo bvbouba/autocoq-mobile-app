@@ -6,10 +6,9 @@ import { Button, TextInput } from 'react-native-paper';
 import { PaddedView } from '../Themed'; // Assuming PaddedView is used for padding in your app
 import { useRouter } from 'expo-router';
 import { useCreateTokenMutation } from '@/saleor/api.generated';
-import { useAuth } from '@/lib/authProvider';
+import { useAuth } from '@/lib/providers/authProvider';
 
 interface Props {
-    onSubmit: () => void;
 }
 
 interface Form {

@@ -2,10 +2,10 @@ import { createContext, useContext, ReactNode, useState, useEffect } from "react
 import { ApolloClient, ApolloError, createHttpLink, InMemoryCache } from "@apollo/client";
 import { useRouter } from "expo-router";
 import { CurrentUserDocument, useCurrentUserQuery, UserDetailsFragment } from "@/saleor/api.generated";
-import { useAsyncStorage } from "./hooks/useLocalStorage";
 import { customStorage } from "@/utils/auth/customStorage";
 import { setContext } from "@apollo/client/link/context";
 import { getConfig } from "@/config";
+import { useAsyncStorage } from "../hooks/useLocalStorage";
 
 const apiUrl = getConfig().saleorApi;
 

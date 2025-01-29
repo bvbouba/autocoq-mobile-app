@@ -3,17 +3,19 @@ import { StyleSheet, View } from 'react-native';
 import { Divider, PaddedView, Text } from '../../components/Themed';
 import OrdersList from '../../components/orders/OrdersList';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useAuth } from '@/lib/providers/authProvider';
 
 export default function Orders() {
+  const {authenticated} = useAuth()
   return (
     <View style={styles.scrollContainer}>
       <ScrollView style={styles.scroll}>
         <PaddedView>
-          <Text style={styles.title}>Your Orders</Text>
-          <Text style={styles.subTitle}>View and manage your orders</Text>
+          {/* <Text style={styles.title}>Your Orders</Text> */}
+          <Text style={styles.subTitle}>View and manage orders</Text>
         </PaddedView>
         <Divider />
-        <OrdersList />
+        <OrdersList /> 
       </ScrollView>
     </View>
   );

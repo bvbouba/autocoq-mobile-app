@@ -1,6 +1,6 @@
 import { ApolloError } from "@apollo/client";
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
-import { OrderFragment, useGetOrderByIdLazyQuery } from "../saleor/api.generated";
+import { OrderFragment, useGetOrderByIdLazyQuery, useUpdateOrderMutation } from "../saleor/api.generated";
 import {
     handleErrors
 } from "./checkout";
@@ -33,7 +33,7 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
     const [savedOrders, setSavedOrders] = useState<OrderFragment[]>([])
     const [recentOrderId, setRecentOrderId] = useState<string | undefined>(undefined);
     const [recentOrder, setRecentOrder] = useState<OrderFragment | undefined>(undefined);
-
+    const [updateOrder] = useUpdateOrderMutation()
     const [getOrderById, getOrderByIdStatus] = useGetOrderByIdLazyQuery()
     const loading = getOrderByIdStatus.loading
     const loaded = getOrderByIdStatus.called
@@ -61,6 +61,7 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
         handleLoad()
     }, [])
 
+
     const handleLoad = async () => {
         const ordersListString = await AsyncStorage.getItem("@SaleorApp:orders")
         if (ordersListString) {
@@ -80,7 +81,6 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
         AsyncStorage.setItem("@SaleorApp:orders", [orderId, ...savedOrders.map(s => s.id)].join(","))
         setRecentOrderId(orderId)
     }
-
     return (
         <OrdersContext.Provider value={{
             recentOrder: recentOrder,
@@ -89,7 +89,7 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
             orders: savedOrders,
             error,
             loading: loading,
-            loaded
+            loaded,
         }}>
             {children}
         </OrdersContext.Provider>

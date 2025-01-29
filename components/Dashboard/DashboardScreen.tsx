@@ -10,12 +10,13 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 import { FontAwesome } from "@expo/vector-icons";
 import CarFilterModal from "../car/Modal";
 import AuthPrompt from "../AuthPrompt";
+import { useAuth } from "@/lib/providers/authProvider";
 
 const DashboardScreen = () => {
   const router = useRouter();
   const [filterOpen, setFilterOpen] = useState(false);
   const { selectedCarYear, selectedCarMake, selectedCarModel, clearFilter } = useCarFilter(); // Added clearFilter from context
-  
+  const {authenticated} = useAuth()
 
   const { data, loading, error:colError } = useGetCollectionsQuery({
     variables:{
@@ -81,7 +82,7 @@ const DashboardScreen = () => {
           categories={categoriesData?.categories?.edges.map((cat) => cat.node) || []}
           onClick={(slug) => router.push("products/results?categories=" + slug)}
         />
-                <AuthPrompt />
+               {!authenticated &&  <AuthPrompt />}
 
         <Divider />
 

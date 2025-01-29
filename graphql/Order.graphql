@@ -105,6 +105,8 @@ fragment OrderFragment on Order {
   number
   status
   paymentStatus
+  created
+  updatedAt
   shippingPrice {
     ...OrderShippingPrice
   }
@@ -137,5 +139,36 @@ fragment OrderFragment on Order {
 query getOrderById($id: ID!) {
   order(id: $id) {
     ...OrderFragment
+  }
+}
+
+query Orders($before: String, $after: String) {
+  me {
+    orders(first: 10, before: $before, after: $after) {
+      edges {
+        cursor
+        node {
+          ...OrderFragment
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      totalCount
+    }
+  }
+}
+
+
+mutation updateOrder($id: ID!, $input: OrderUpdateInput!){
+  orderUpdate(id:$id,input:$input){
+    errors{
+      code
+      message
+      field
+    }
   }
 }
