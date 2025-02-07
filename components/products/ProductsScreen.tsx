@@ -1,17 +1,18 @@
 import { useCallback, useState } from "react";
-import { StyleSheet, TouchableOpacity,Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Portal, Provider } from "react-native-paper";
 import { View } from "../Themed";
 import ProductListComponent from "./ProductListComponent";
 import ProductFilter from "./filter/ProductFilter";
 import ProductFilterBottomSheet from "./filter/ProductFilterBottomSheet";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import CarFilterModal from "../car/Modal";
-import { useCarFilter } from "@/context/useCarFilterContext";
-import { FontAwesome } from "@expo/vector-icons";
-import AddVehicleBasic from "../car/AddVehicleBasic";
+import { ProductFragment } from "@/saleor/api.generated";
 
-const ProductsScreen = () => {
+interface props {
+   products:ProductFragment[]
+}
+
+const ProductsScreen = ({products}:props) => {
     const {
         search: searchQueryString,
         collection: collectionsQueryString,
@@ -19,7 +20,6 @@ const ProductsScreen = () => {
     } = useLocalSearchParams();
     const router = useRouter()
     
-
     const [filterOpen, setFilterOpen] = useState(false);
 
     const changeCollectionAndCategories = useCallback((collectionValue: string | undefined | null, categories: string[]) => {
@@ -42,6 +42,8 @@ const ProductsScreen = () => {
         router.push("/products/results?" + params.toString())
     }, [categoriesQueryString, searchQueryString, collectionsQueryString]);
 
+    
+
     return <>
         <Provider>
             <Portal>
@@ -53,7 +55,7 @@ const ProductsScreen = () => {
          
             <View style={styles.container}>
             <ProductFilter openFilters={() => setFilterOpen(true)} />
-                <ProductListComponent  />
+                <ProductListComponent  products={products}/>
             </View>
         </Provider>
     </>

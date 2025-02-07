@@ -1,0 +1,13 @@
+query ProductListByCategory($slug: String!, $channel: String!,$filter:ProductFilterInput, $zoneName: String) {
+	category(slug: $slug,) {
+		name
+		description
+		products(first: 100, channel: $channel, filter:$filter) {
+			edges {
+				node {
+					...ProductFragment
+				}
+			}
+		}
+	}
+}

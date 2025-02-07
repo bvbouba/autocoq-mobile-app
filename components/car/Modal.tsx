@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   button:{
-    backgroundColor: colors.back,
+    backgroundColor: colors.secondary,
     marginTop:10,
     borderRadius: 15,
     alignItems: "center",

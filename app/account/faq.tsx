@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
+import Loading from '@/components/Loading';
 
 export default function FAQScreen() {
   const { data, loading, error } = usePageQuery({
@@ -11,9 +12,7 @@ export default function FAQScreen() {
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.loadingText}>Chargement...</Text>
-      </View>
+      <Loading />
     );
   }
 

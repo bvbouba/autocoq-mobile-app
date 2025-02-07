@@ -18,6 +18,7 @@ import { ActivityIndicator, Button } from "react-native-paper";
 import { getConfig } from "@/config";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useState } from "react";
+import Loading from "../Loading";
 
 const CartScreen = () => {
     const { cart, loading } = useCartContext();
@@ -133,9 +134,7 @@ const CartScreen = () => {
 
     if (aloading) {
         return (
-            <View style={styles.scrollContainer}>
-                <Text>Chargement...</Text>
-            </View>
+           <Loading />
         );
     }
 
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
         width: "100%",
         paddingHorizontal: 20,
         paddingVertical: 10,
-        borderTopColor: colors.gray,
+        borderTopColor: colors.border,
         borderTopWidth: 1,
     },
     subtotalRow: {
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     checkoutButton: {
-        backgroundColor: colors.orange,
+        backgroundColor: colors.primary,
         borderRadius: 2,
         width: "100%",
     },

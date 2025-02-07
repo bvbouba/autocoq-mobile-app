@@ -99,7 +99,16 @@ function RootLayoutNav() {
                     name="products/results"
                     options={{
                       headerStyle: {
-                        backgroundColor: colors.header,
+                        backgroundColor: colors.background,
+                      },
+                      header: () => <SearchHeader withBack />,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="categories/[slug]"
+                    options={{
+                      headerStyle: {
+                        backgroundColor: colors.background,
                       },
                       header: () => <SearchHeader withBack />,
                     }}

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { OrderFragment, useGetOrderByIdQuery } from "../../saleor/api.generated";
 import { useCartContext } from "../../context/useCartContext";
 import { useAuth } from "@/lib/providers/authProvider";
+import Loading from "../Loading";
 
 const EcranNonTrouve = () => {
     return (
@@ -56,7 +57,7 @@ export const DetailsCommande = ({ orderId }: { orderId: string }) => {
     }, [orderSuccess]);
 
     if (loading || dbLoading) {
-        return <View style={styles.container}><Text>Chargement...</Text></View>;
+        return <Loading />
     }
 
     if (!order) {

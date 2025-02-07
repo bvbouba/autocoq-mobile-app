@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/providers/authProvider";
 import { useOrdersQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import { useState, useEffect } from "react";
+import Loading from "../Loading";
 
 const OrdersList = () => {
     const { authenticated, token, checkAndRefreshToken } = useAuth();
@@ -40,9 +41,7 @@ const OrdersList = () => {
     });
     
     if (loading || isValidatingToken) {
-        <View style={styles.container}>
-        <Text>Chargement...</Text>
-        </View>
+        <Loading />
     }
 
     if (error) {

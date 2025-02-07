@@ -12,7 +12,7 @@ interface props {
   style?: object;
 }
 
-export const PrimaryButton: React.FC<props> = ({
+export const SecondaryButton: React.FC<props> = ({
   onPress,
   title,
   loading = false,
@@ -34,14 +34,13 @@ export const PrimaryButton: React.FC<props> = ({
   );
 };
 
-export default PrimaryButton;
+export default SecondaryButton;
 
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.secondary, 
     paddingVertical: 0,
     margin:10,
-    borderRadius: 5,
-    fontWeight:"bold"
+    borderRadius: 30,
   },
 });

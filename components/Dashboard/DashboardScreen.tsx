@@ -9,6 +9,7 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 import AuthPrompt from "../AuthPrompt";
 import { useAuth } from "@/lib/providers/authProvider";
 import AddVehicleSection from "../car/AddVehicle";
+import Loading from "../Loading";
 
 
 const DashboardScreen = () => {
@@ -18,17 +19,16 @@ const DashboardScreen = () => {
   const { data: categoriesData, error: catError, loading } = useGetHomepageQuery({
     variables: { channel: getConfig().channel },
   });
-
   useEffect(() => {
+    console.log("hello")
+
     if (catError) Alert.alert("Erreur lors du chargement des catégories", catError.message);
   }, [
     catError]);
 
   if (loading) {
     return (
-      <View style={styles.scrollContainer}>
-        <Text>Chargement...</Text>
-      </View>
+      <Loading />
     );
   }
 
@@ -44,7 +44,7 @@ const DashboardScreen = () => {
         {/* Catégories */}
         <CategoriesScroll
           menus={categoriesData?.menu?.items || []}
-          onClick={(slug) => router.push("products/results?categories=" + slug)}
+          onClick={(slug) => router.push(`categories/${slug}`)}
         />
         <Divider />
         {!authenticated && (
@@ -62,11 +62,9 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     marginTop: 0,
-    width: "100%",
-    paddingBottom: 16,
+    margin:15,
+    paddingBottom: 10,
   },
   scroll: {
     width: "100%",

@@ -1,4 +1,4 @@
-fragment CollectionFragment on Collection {
+fragment CollectionDetailFragment on Collection {
   id
   name
   description
@@ -35,7 +35,7 @@ query getCollections($filter: ProductFilterInput) {  # Declare the filter variab
   collections(first: 10, channel: "ci") {
     edges {
       node {
-        ...CollectionFragment
+        ...CollectionDetailFragment
       }
     }
   }

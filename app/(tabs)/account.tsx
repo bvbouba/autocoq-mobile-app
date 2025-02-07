@@ -6,6 +6,7 @@ import ListItem from '@/components/ListItem';
 import { useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
 import BannerAds from '@/components/layout/BannerAds';
+import Loading from '@/components/Loading';
 
 export default function AccountScreen() {
   const router = useRouter();
@@ -29,11 +30,7 @@ export default function AccountScreen() {
   };
 
   if (loading) {
-    return (
-      <View style={styles.scrollContainer}>
-        <Text>Chargement...</Text>
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
@@ -45,7 +42,7 @@ export default function AccountScreen() {
               onPress={() => router.push('/account/profile')}
               disabled={!authenticated}
             >
-          <FontAwesome name="user-circle" size={20} color={colors.orange} />
+          <FontAwesome name="user-circle" size={20} color={colors.primary} />
           <View style={{flexDirection:"column"}}>
           <View style={styles.titleWrapper}>
           <Text style={styles.title}>Bienvenue</Text>
@@ -134,7 +131,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   signUpButton: {
-    backgroundColor: colors.back,
+    backgroundColor: colors.secondary,
     padding: 10,
     borderRadius: 15,
     alignItems: "center",

@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
@@ -11,9 +12,7 @@ export default function TermsScreen() {
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.loadingText}>Chargement...</Text>
-      </View>
+      <Loading />
     );
   }
 

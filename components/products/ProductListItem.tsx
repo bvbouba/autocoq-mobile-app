@@ -70,7 +70,7 @@ const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
                             {product.name}
                         </Text>
                         {product.externalReference && (
-                            <Text style={{ fontSize: 12, color: colors.greyText }}>
+                            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
                                 Référence # {product.externalReference}
                             </Text>
                             )}
@@ -88,7 +88,7 @@ const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
                                 fontSize: 12,
                                 fontWeight:"bold"
                             }}>Notes: </Text>
-                            <Text style={{ fontSize: 12, color: colors.textInputGrey }}>
+                            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
                             {product.category.name}
                         </Text></View>
                         )}
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
       },
     button: {
-        backgroundColor: colors.back,
+        backgroundColor: colors.secondary,
         borderRadius: 15,
         alignItems: "center",
         width: "95%",

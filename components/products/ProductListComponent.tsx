@@ -5,17 +5,16 @@ import { useProductContext } from '../../context/useProductContext';
 import { Text, View } from './../Themed';
 import ProductListItem from './ProductListItem';
 import CarFilterModal from '../car/Modal';
+import { ProductFragment } from '@/saleor/api.generated';
 
 
 interface Props {
+    products:ProductFragment[]
 }
 
-const ProductListComponent: FC<Props> = ({  }) => {
+const ProductListComponent: FC<Props> = ({ products }) => {
     const [filterOpen, setFilterOpen] = useState(false);
-    const { products, loading } = useProductContext()
-    if (loading) {
-        return <></>
-    }
+  
     if (products && products.length === 0) {
         return <View style={styles.noProductsContainer} testID="prod-list-safe">
             <View style={styles.noProductsTextWrapper}>

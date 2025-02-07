@@ -1,4 +1,5 @@
 import AddressBookCard from "@/components/address/addressBookCard";
+import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useState } from "react";
@@ -30,9 +31,7 @@ const CarnetDAdressesScreen = () => {
 
   if (loading || isValidatingToken) {
     return (
-      <View style={styles.container}>
-        <Text>Chargement...</Text>
-      </View>
+      <Loading />
     );
   }
 

@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { colors } from "./Themed";
-import { PrimaryButton } from "./button";
+import SecondaryButton from "./button/SecondaryButton";
 
 interface props {
   redirectUrl:string
@@ -22,7 +21,7 @@ const AuthPrompt = ({redirectUrl}:props) => {
       </Text>
       </View>
       <View style={{width:"100%"}}>
-      <PrimaryButton 
+      <SecondaryButton
                 title={`SE CONNECTER OU CRÉER UN COMPTE`}
                 onPress={handleSignIn}
                 />    
