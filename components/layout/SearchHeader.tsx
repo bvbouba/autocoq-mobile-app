@@ -41,7 +41,7 @@ const SearchHeaderWithBack = () => {
             <IconButton
               icon="arrow-left"
               onPress={() => router.back()}
-              iconColor={colors.orange}
+              iconColor={colors.primary}
             />
             <ProductSearch />
           </View>
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   backButton: {
-    color: colors.orange,
+    color: colors.primary,
   },
   companyName: {
     fontSize: 25,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   bannerText: {
-    color: colors.orange,
+    color: colors.primary,
     fontSize: 12,
     fontWeight: "bold",
   },

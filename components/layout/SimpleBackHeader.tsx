@@ -23,7 +23,7 @@ const SimpleBackHeader = ({ title,hasLogo }: { title?: string,hasLogo?:boolean }
             icon="arrow-left"
             onPress={() => router.back()}
             style={{ marginLeft: Platform.OS === "android" ? -10 : 0 }}
-            iconColor={colors.orange}
+            iconColor={colors.primary}
           />
           {title && <Text style={styles.title}>{title}</Text>}
         </View>
@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    color: colors.orange,
+    color: colors.primary,
     marginLeft: 10,
   },
   backButton: {
-    color: colors.orange,
+    color: colors.primary,
   },
   logo: {
     width: 150,

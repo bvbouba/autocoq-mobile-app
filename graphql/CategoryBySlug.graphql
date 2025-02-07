@@ -1,0 +1,21 @@
+fragment CategoryDetailsFragment on Category {
+  id
+  name
+  slug
+  children(first: 10) {
+    edges {
+      node {
+        id
+        name
+        slug
+      }
+    }
+  }
+}
+
+
+query CategoryBySlug($slug: String!) {
+  category(slug: $slug) {
+    ...CategoryDetailsFragment
+  }
+}

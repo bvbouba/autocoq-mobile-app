@@ -5,7 +5,7 @@ import { colors } from "../Themed";
 
 const HeaderBack = () => {
     const router = useRouter();
-    return <IconButton icon="chevron-left" onPress={() => router.back()} iconColor={colors.blue} />
+    return <IconButton icon="chevron-left" onPress={() => router.back()} iconColor={colors.primary} />
 }
 
 export default HeaderBack

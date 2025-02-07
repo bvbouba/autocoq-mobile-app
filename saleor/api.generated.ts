@@ -34267,6 +34267,15 @@ export type CompatibilityCheckQueryVariables = Exact<{
 
 export type CompatibilityCheckQuery = { __typename?: 'Query', checkProductCompatibility?: boolean | null };
 
+export type CategoryDetailsFragment = { __typename?: 'Category', id: string, name: string, slug: string, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string } }> } | null };
+
+export type CategoryBySlugQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type CategoryBySlugQuery = { __typename?: 'Query', category?: { __typename?: 'Category', id: string, name: string, slug: string, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string } }> } | null } | null };
+
 export type CategoryPathFragment = { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null };
 
 export type CategoryPathsQueryVariables = Exact<{
@@ -34551,6 +34560,22 @@ export const YearDetailsFragmentDoc = gql`
   id
   name
   vinSuffix
+}
+    `;
+export const CategoryDetailsFragmentDoc = gql`
+    fragment CategoryDetailsFragment on Category {
+  id
+  name
+  slug
+  children(first: 10) {
+    edges {
+      node {
+        id
+        name
+        slug
+      }
+    }
+  }
 }
     `;
 export const AddressFragmentDoc = gql`
@@ -35786,6 +35811,46 @@ export type CompatibilityCheckQueryHookResult = ReturnType<typeof useCompatibili
 export type CompatibilityCheckLazyQueryHookResult = ReturnType<typeof useCompatibilityCheckLazyQuery>;
 export type CompatibilityCheckSuspenseQueryHookResult = ReturnType<typeof useCompatibilityCheckSuspenseQuery>;
 export type CompatibilityCheckQueryResult = Apollo.QueryResult<CompatibilityCheckQuery, CompatibilityCheckQueryVariables>;
+export const CategoryBySlugDocument = gql`
+    query CategoryBySlug($slug: String!) {
+  category(slug: $slug) {
+    ...CategoryDetailsFragment
+  }
+}
+    ${CategoryDetailsFragmentDoc}`;
+
+/**
+ * __useCategoryBySlugQuery__
+ *
+ * To run a query within a React component, call `useCategoryBySlugQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoryBySlugQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoryBySlugQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useCategoryBySlugQuery(baseOptions: Apollo.QueryHookOptions<CategoryBySlugQuery, CategoryBySlugQueryVariables> & ({ variables: CategoryBySlugQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CategoryBySlugQuery, CategoryBySlugQueryVariables>(CategoryBySlugDocument, options);
+      }
+export function useCategoryBySlugLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoryBySlugQuery, CategoryBySlugQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CategoryBySlugQuery, CategoryBySlugQueryVariables>(CategoryBySlugDocument, options);
+        }
+export function useCategoryBySlugSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CategoryBySlugQuery, CategoryBySlugQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CategoryBySlugQuery, CategoryBySlugQueryVariables>(CategoryBySlugDocument, options);
+        }
+export type CategoryBySlugQueryHookResult = ReturnType<typeof useCategoryBySlugQuery>;
+export type CategoryBySlugLazyQueryHookResult = ReturnType<typeof useCategoryBySlugLazyQuery>;
+export type CategoryBySlugSuspenseQueryHookResult = ReturnType<typeof useCategoryBySlugSuspenseQuery>;
+export type CategoryBySlugQueryResult = Apollo.QueryResult<CategoryBySlugQuery, CategoryBySlugQueryVariables>;
 export const CategoryPathsDocument = gql`
     query CategoryPaths($channel: String!) {
   categories(first: 100) {

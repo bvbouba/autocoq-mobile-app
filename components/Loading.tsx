@@ -3,7 +3,9 @@ import { View,Text,StyleSheet } from "react-native"
 
 const Loading =()=>{
     return(
-        <Loading />
+      <View style={styles.scrollContainer}>
+      <Text>Chargement...</Text>
+  </View>
     )
 }
 

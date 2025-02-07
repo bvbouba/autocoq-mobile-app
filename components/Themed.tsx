@@ -59,7 +59,7 @@ export function Divider(props: DividerProps) {
     style={{
       marginTop: 10,
       marginBottom: 10,
-      borderBottomColor: colors.background,
+      borderBottomColor: colors.border,
       borderBottomWidth: 0.5,
       ...(props.style || {})
     }}

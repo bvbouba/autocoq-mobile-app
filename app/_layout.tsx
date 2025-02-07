@@ -92,7 +92,7 @@ function RootLayoutNav() {
                   <Stack.Screen
                     name="(tabs)"
                     options={{
-                      header: () => <SearchHeader withBack={false} cleanSearch companyName={companyName}/>,
+                      headerShown:false
                     }}
                   />
                   <Stack.Screen

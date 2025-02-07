@@ -35,10 +35,9 @@ const AddVehicleBasic = () => {
                 source={{ uri: selectedCar.model.imageUrl }}
               />
             ) : (
-              <FontAwesome name="car" size={24} color={colors.back} />
+              <FontAwesome name="car" size={18} color={colors.secondary} />
             )}
           </TouchableOpacity>
-
           <Text style={styles.vehicleText}>
             {isFiltered && selectedCar ? selectedCar.name : "What are you working on?"}
           </Text>
@@ -46,7 +45,9 @@ const AddVehicleBasic = () => {
 
         {/* Right Section: Button */}
         <TouchableOpacity style={styles.button} onPress={() => setFilterOpen(true)}>
-          <Text style={styles.buttonText}>
+          <Text style={[styles.buttonText,(isFiltered && selectedCar)&&{
+                    borderWidth: 1,
+          }]}>
             {isFiltered && selectedCar ? "Change" : "Select a vehicle"}
           </Text>
         </TouchableOpacity>
@@ -90,14 +91,14 @@ const styles = StyleSheet.create({
         flex: 1, 
         flexShrink: 1, 
         maxWidth: "80%",
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: "500",
+        marginLeft:10
       },
       button: {
         paddingVertical: 6,
         paddingHorizontal: 12,
         borderRadius: 5,
-        borderWidth: 1,
       },
       buttonText: {
         fontSize: 12,
