@@ -7,7 +7,6 @@ import Colors from '../../constants/Colors';
 import { useCartContext } from '../../context/useCartContext';
 import HeaderBack from '@/components/layout/HeaderBack';
 import SearchHeader from '@/components/layout/SearchHeader';
-import SimpleBackHeader from '@/components/layout/SimpleBackHeader';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -59,7 +58,7 @@ export default function TabLayout() {
         options={{
           title: '',
           headerShown: true,
-          header: () => <SimpleBackHeader />,
+          header: () => <SearchHeader withBack={true}  cleanSearch companyName={companyName}/>,
           tabBarIcon: ({ color }) => <TabBarIcon name="shopping-bag" color={color} />,
           tabBarLabel: 'Boutique',
         }}

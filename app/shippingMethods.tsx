@@ -19,7 +19,6 @@ const ShippingMethods = () => {
     const [loading, setLoading] = React.useState(false); // State to manage loading
 
     const updateShippingMethod = async () => {
-        console.log("hello")
         setLoading(true); // Start loading
         try {
             const res = await shippingAddressUpdate({
@@ -28,7 +27,6 @@ const ShippingMethods = () => {
                     shippingMethodId: checked,
                 },
             });
-            console.log(res)
             await refreshCart();
             router.back();
         } catch (error) {

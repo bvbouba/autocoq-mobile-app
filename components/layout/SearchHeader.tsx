@@ -1,14 +1,14 @@
-import { useRouter } from "expo-router";
+import {  useRouter } from "expo-router";
 import { View, colors } from "../Themed";
 import { IconButton } from "react-native-paper";
 import ProductSearch from "../products/ProductsSearch";
 import { SafeAreaView, StyleSheet, Text, Image } from "react-native";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LoadingIndicator from "./LoadingIndicator";
-import { usePageQuery } from "@/saleor/api.generated";
 import Banner from "./BannerSimple";
 import AddVehicleBasic from "../car/AddVehicleBasic";
+import { useLocalSearchParams, usePathname } from "expo-router/build/hooks";
 
 interface Props {
   withBack?: boolean;
@@ -19,12 +19,23 @@ interface Props {
 
 const SearchHeaderWithBack = () => {
   const router = useRouter();
+  const {slug}    = useLocalSearchParams()
+  const pathname = usePathname()
   const statusBarInset = useSafeAreaInsets();
-  const { data, loading, error } = usePageQuery({
-    variables: {
-      slug: "banner",
-    },
-  });
+  const goBack = () => {
+    if (pathname.includes('shop') && slug) {
+      router.push(`/shop/${slug}`);
+    } else {
+      router.back();
+    }
+  };
+
+  useEffect(() => {
+    // Log pathname and slug to see if they are updating correctly
+    console.log('Updated pathname:', pathname);
+    console.log('Updated slug:', slug);
+  }, [pathname, slug]);  // Re-run on pathname or slug change
+
 
   return (
     <>
@@ -40,7 +51,7 @@ const SearchHeaderWithBack = () => {
           <View style={styles.searchBarWrapper}>
             <IconButton
               icon="arrow-left"
-              onPress={() => router.back()}
+              onPress={() => goBack()}
               iconColor={colors.primary}
             />
             <ProductSearch />

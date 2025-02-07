@@ -20,8 +20,6 @@ const DashboardScreen = () => {
     variables: { channel: getConfig().channel },
   });
   useEffect(() => {
-    console.log("hello")
-
     if (catError) Alert.alert("Erreur lors du chargement des catégories", catError.message);
   }, [
     catError]);
