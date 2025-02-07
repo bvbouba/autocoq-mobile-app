@@ -9,6 +9,7 @@ import LoadingIndicator from "./LoadingIndicator";
 import Banner from "./BannerSimple";
 import AddVehicleBasic from "../car/AddVehicleBasic";
 import { useLocalSearchParams, usePathname } from "expo-router/build/hooks";
+import { usePath } from "@/context/backUrl";
 
 interface Props {
   withBack?: boolean;
@@ -18,24 +19,9 @@ interface Props {
 }
 
 const SearchHeaderWithBack = () => {
-  const router = useRouter();
-  const {slug}    = useLocalSearchParams()
-  const pathname = usePathname()
   const statusBarInset = useSafeAreaInsets();
-  const goBack = () => {
-    if (pathname.includes('shop') && slug) {
-      router.push(`/shop/${slug}`);
-    } else {
-      router.back();
-    }
-  };
-
-  useEffect(() => {
-    // Log pathname and slug to see if they are updating correctly
-    console.log('Updated pathname:', pathname);
-    console.log('Updated slug:', slug);
-  }, [pathname, slug]);  // Re-run on pathname or slug change
-
+  const {goBack} = usePath()
+ 
 
   return (
     <>

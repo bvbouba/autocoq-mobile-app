@@ -8,6 +8,13 @@ fragment CategoryDetailsFragment on Category {
         id
         name
         slug
+        children(first:1){
+          edges{
+            node{
+              id
+            }
+          }
+        }
       }
     }
   }

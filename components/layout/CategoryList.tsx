@@ -1,9 +1,8 @@
-import { View, Text, colors, PaddedView, Divider } from "../Themed";
+import { View, Text, PaddedView, Divider } from "../Themed";
 import { StyleSheet, Pressable } from "react-native";
 import {  useCategoryBySlugQuery } from "@/saleor/api.generated";
-import { useLocalSearchParams, usePathname, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
-import { useEffect, useState } from "react";
 import Loading from "../Loading";
 import { mapEdgesToItems } from "@/utils/map";
 import ListItem from "../ListItem";
@@ -24,8 +23,8 @@ const CategoryList = () => {
       }
 
   if (!data?.category) return null;
-  
-  const childrens = mapEdgesToItems(data.category.children)
+  const category = data.category
+  const childrens = mapEdgesToItems(category.children)
 
   return (
     <>
@@ -41,7 +40,7 @@ const CategoryList = () => {
               <View style={{
 
               }} key={children.id}>
-                <ListItem name={children.name} url={`/shop/?slug=${children.slug}`}/>
+                <ListItem name={children.name} url={`/shop/?slug=${children.slug}`} slug={category.slug}/>
                 <Divider />
               </View>
              ))

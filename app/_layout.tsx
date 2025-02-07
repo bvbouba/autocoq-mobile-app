@@ -25,7 +25,7 @@ import * as SplashScreen from 'expo-splash-screen'; // Corrected import
 import { CarFilterProvider } from "@/context/useCarFilterContext";
 import { AuthProvider } from "@/lib/providers/authProvider";
 import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
-import { BackUrlProvider } from "@/context/backUrl";
+import { PathProvider } from "@/context/backUrl";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -81,7 +81,7 @@ function RootLayoutNav() {
   return (
     <ApolloProvider client={apolloClient}>
     <AuthProvider>
-    <BackUrlProvider>
+    <PathProvider>
      <CarFilterProvider>
       <ProductsProvider>
         <CartProvider>
@@ -154,7 +154,7 @@ function RootLayoutNav() {
         </CartProvider>
       </ProductsProvider>
       </CarFilterProvider>
-      </BackUrlProvider>
+      </PathProvider>
       </AuthProvider>
     </ApolloProvider>
   );

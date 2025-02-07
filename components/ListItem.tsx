@@ -3,16 +3,23 @@ import { PaddedView, Text, View } from "./Themed"
 import { StyleSheet, Pressable } from "react-native"
 import { IconButton } from "react-native-paper"
 import { useRouter } from "expo-router"
+import { usePath } from "@/context/backUrl"
 
 interface Props {
     name: string,
     url:string
+    slug?:string
 }
 
-const ListItem: FC<Props> = ({ name,url }) => {
-
+const ListItem: FC<Props> = ({ name,url,slug="" }) => {
+     const {addPath} = usePath()
     const router = useRouter();
-    const onPress = () => router.push(url)
+    const onPress = () => {
+        if(slug){
+        addPath(slug)
+         }
+        router.push(url)
+    }
 
     return <Pressable onPress={onPress}>
         <View style={styles.wrapper}>
