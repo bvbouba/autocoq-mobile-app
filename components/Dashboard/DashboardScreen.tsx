@@ -10,8 +10,7 @@ import { useAuth } from "@/lib/providers/authProvider";
 import AddVehicleSection from "../car/AddVehicle";
 import Loading from "../Loading";
 import { useLoading } from "@/context/Loading";
-import { useCarFilter } from "@/context/useCarFilterContext";
-import CarFilterModal from "../car/Modal";
+
 
 
 const DashboardScreen = () => {

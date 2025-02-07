@@ -3,7 +3,6 @@ import {
   Modal,
   View,
   Image,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   StyleSheet,
   Dimensions,
@@ -11,6 +10,17 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"; // Close button icon
 import { colors } from "./Themed";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 
 interface ProductMediaFragment {
   url: string;
@@ -22,7 +32,62 @@ interface ImageExpandProps {
   onRemoveExpand: () => void;
 }
 
+function clamp(val:number, min:number, max:number) {
+  return Math.min(Math.max(val, min), max);
+}
+
 const ImageExpand: React.FC<ImageExpandProps> = ({ image, onRemoveExpand }) => {
+  const scale = useSharedValue(1);
+  const startScale = useSharedValue(1);
+  const offsetX = useSharedValue(0); // For panning X
+  const offsetY = useSharedValue(0); // For panning Y
+  const panStartX = useSharedValue(0); // Start of pan in X direction
+  const panStartY = useSharedValue(0); // Start of pan in Y direction
+
+  const pinch = Gesture.Pinch()
+    .onStart(() => {
+      startScale.value = scale.value;
+    })
+    .onUpdate((event) => {
+      scale.value = clamp(
+        startScale.value * event.scale,
+        0.5,
+        Math.min(width / 100, height / 100)
+      );
+    })
+    .runOnJS(true);
+
+  const pan = Gesture.Pan()
+    .onStart((event) => {
+      // Record the initial pan position
+      panStartX.value = offsetX.value;
+      panStartY.value = offsetY.value;
+    })
+    .onUpdate((event) => {
+      // Limit the pan speed and make sure the offset moves accordingly
+      const x = panStartX.value + event.translationX / scale.value; // Adjust pan with scale
+      const y = panStartY.value + event.translationY / scale.value; // Adjust pan with scale
+      offsetX.value = x;
+      offsetY.value = y;
+    })
+    .runOnJS(true);
+
+  // Double-tap gesture
+  const doubleTap = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd(() => {
+      const newScale = scale.value === 1 ? 2 : 1; // Toggle between scale 1 and 2
+      scale.value = newScale;
+    });
+
+  const boxAnimatedStyles = useAnimatedStyle(() => ({
+    transform: [
+      { scale: scale.value },
+      { translateX: withSpring(offsetX.value) },
+      { translateY: withSpring(offsetY.value) },
+    ],
+  }));
+
   if (!image) return null;
 
   return (
@@ -43,14 +108,20 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image, onRemoveExpand }) => {
           </TouchableOpacity>
 
           {/* Image Container */}
-          <TouchableWithoutFeedback>
-            <View style={styles.imageWrapper}>
-              <View style={styles.imageContainer}>
-                <Image source={{ uri: image.url }} 
-                style={styles.image} resizeMode="contain" />
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
+          <GestureHandlerRootView style={styles.container}>
+            <GestureDetector gesture={Gesture.Simultaneous(pinch, pan, doubleTap)}>
+              <TouchableWithoutFeedback>
+                <Animated.View style={[styles.box, boxAnimatedStyles]}>
+                  <View style={styles.imageWrapper}>
+                    <View style={styles.imageContainer}>
+                      <Image source={{ uri: image.url }} 
+                        style={styles.image} resizeMode="contain" />
+                    </View>
+                  </View>
+                </Animated.View>
+              </TouchableWithoutFeedback>
+            </GestureDetector>
+          </GestureHandlerRootView>
         </View>
       </TouchableWithoutFeedback>
     </Modal>
@@ -97,14 +168,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    width: "80%",
-    height: "80%",
+    width: "100%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
   image: {
     width: "100%",
     height: "100%",
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  box: {
+    borderRadius: 20,
+    backgroundColor: '#b58df1',
+  },
+  dot: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#ccc',
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    pointerEvents: 'none',
   },
 });
 
