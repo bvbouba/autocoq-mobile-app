@@ -1,34 +1,57 @@
 import AddressBookCard from "@/components/address/addressBookCard";
 import { useAuth } from "@/lib/providers/authProvider";
-import {  useCurrentUserAddressesQuery } from "@/saleor/api.generated";
-import { View, Text, StyleSheet, ActivityIndicator, FlatList } from "react-native";
+import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
+import { useState } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 
+const CarnetDAdressesScreen = () => {
+  const { authenticated, token, checkAndRefreshToken } = useAuth();
+  const [isValidatingToken, setIsValidatingToken] = useState(true);
 
-const AddressBookScreen = ()=> {
-  const {authenticated} = useAuth()
+  // Requête pour les adresses de l'utilisateur actuel
   const { loading, error, data, refetch } = useCurrentUserAddressesQuery({
     skip: !authenticated,
     fetchPolicy: "network-only",
+    context: {
+      headers: {
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    },
+    onCompleted: () => {
+      setIsValidatingToken(false);
+    },
+    onError: async (error) => {
+      if (error.message.includes("Signature has expired")) {
+        await checkAndRefreshToken();
+      }
+      setIsValidatingToken(false);
+    },
   });
 
-
-  if (loading) {
+  if (loading || isValidatingToken) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text>Chargement...</Text>
       </View>
     );
   }
 
   if (error) {
-    return <View style={styles.container}><Text style={styles.error}>Error: {error.message}</Text>
+    return (
+      <View style={styles.container}>
+        <Text style={styles.error}>Erreur : {error.message}</Text>
       </View>
+    );
   }
 
   const addresses = data?.me?.addresses || [];
 
   if (addresses.length === 0) {
-    return <View style={styles.container}><Text>No address data available</Text></View>;
+    return (
+      <View style={styles.container}>
+        <Text>Aucune adresse disponible</Text>
+      </View>
+    );
   }
 
   return (
@@ -36,20 +59,19 @@ const AddressBookScreen = ()=> {
       data={addresses}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <AddressBookCard address={item} onRefreshBook={()=>refetch()} />
+        <AddressBookCard address={item} onRefreshBook={() => refetch()} />
       )}
       contentContainerStyle={styles.container}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   error: {
     color: "red",
     fontSize: 16,
@@ -58,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddressBookScreen;
+export default CarnetDAdressesScreen;

@@ -18,14 +18,18 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.row}> 
+        <Text style={styles.title}>About Me</Text></View>
       <View style={styles.row}>
         <Text style={styles.label}>Username: </Text>
         <Text style={styles.value}>{user?.firstName}</Text>
       </View>
+      <Divider/>
       <View style={styles.row}>
         <Text style={styles.label}>Phone Number: </Text>
         <Text style={styles.value}>{phoneNumber}</Text>
       </View>
+      <Divider/>
     </View>
   );
 }
@@ -33,16 +37,16 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    paddingTop: 50, // Align content to the top
+    backgroundColor:"white",
+    padding:10
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15, // Space between rows
+
+    flexDirection: 'column',
+
   },
   label: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: '600',
     color: '#555',
   },
@@ -50,5 +54,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     color: '#000',
+    textTransform: "uppercase"
   },
+  title:{
+    fontSize:16,
+    fontWeight:"bold",
+    marginBottom:10
+  }
 });

@@ -1,0 +1,59 @@
+fragment ProductCardFragment on Product {
+  id
+  slug
+  name
+  thumbnail {
+    url
+    alt
+  }
+  category {
+    id
+    name
+  }
+  media {
+    url
+    alt
+    type
+  }
+  attributes {
+    attribute {
+      slug
+    }
+    values {
+      name
+    }
+  }
+}
+
+
+query ProductCollection(
+  $before: String
+  $after: String
+  $first: Int = 4
+  $filter: ProductFilterInput
+  $sortBy: ProductOrder
+  $channel: String!
+) {
+  products(
+    first: $first
+    channel: $channel
+    after: $after
+    before: $before
+    filter: $filter
+    sortBy: $sortBy
+  ) {
+    totalCount
+    edges {
+      cursor
+      node {
+        ...ProductCardFragment
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

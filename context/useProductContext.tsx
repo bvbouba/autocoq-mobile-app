@@ -32,7 +32,7 @@ export const useProductContext = () => useContext(ProductsContext);
 
 export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [products, setProducts] = useState<ProductFragment[] | undefined>(undefined);
-    const {selectedCarYear,selectedCarMake,selectedCarModel} = useCarFilter()
+    const {selectedCar,isFiltered} = useCarFilter()
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [categoryFilters, setCategoryFilters] = useState<CategoryPathFragment[]>([]);
     const [collectionFilter, setCollectionFilter] = useState<CollectionFragment | undefined>(undefined);
@@ -45,11 +45,12 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
         search: searchQuery,
         categories: categoryFilters.map(cat => cat.id),
         collections: collectionFilter ? [collectionFilter.id] : [],
-        ...(selectedCarYear || selectedCarMake || selectedCarModel
+        ...(selectedCar && isFiltered
             ? {
-                  ...(selectedCarYear && { carYear: [selectedCarYear.id] }), 
-                  ...(selectedCarMake && { carMake: [selectedCarMake.id] }), 
-                  ...(selectedCarModel && { carModel: [selectedCarModel.id] }),
+                  ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }), 
+                  ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }), 
+                  ...(selectedCar?.model && { carModel: [selectedCar?.model.id] }),
+                  ...(selectedCar?.engine && { carEngine: [selectedCar?.engine.id] }),
               }
             : {})
     }
@@ -65,7 +66,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
             }
 
         });
-    }, [searchQuery, categoryFilters, collectionFilter,selectedCarMake,selectedCarModel,selectedCarYear]);
+    }, [searchQuery, categoryFilters, collectionFilter,selectedCar,isFiltered??false]);
 
     return (
         <ProductsContext.Provider value={{

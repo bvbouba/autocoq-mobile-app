@@ -8,21 +8,21 @@ import { OrderFragment, useGetOrderByIdQuery } from "../../saleor/api.generated"
 import { useCartContext } from "../../context/useCartContext";
 import { useAuth } from "@/lib/providers/authProvider";
 
-const NotFoundScreen = () => {
+const EcranNonTrouve = () => {
     return (
         <>
-            <Stack.Screen options={{ title: "Oops!" }} />
+            <Stack.Screen options={{ title: "Oups !" }} />
             <View style={styles.container}>
-                <Text style={styles.title}>This order doesn't exist.</Text>
+                <Text style={styles.title}>Cette commande n'existe pas.</Text>
                 <Link href="/" style={styles.link}>
-                    <Text style={styles.linkText}>Go to home screen!</Text>
+                    <Text style={styles.linkText}>Aller à l'écran d'accueil !</Text>
                 </Link>
             </View>
         </>
     );
 };
 
-export const OrderDetails = ({ orderId }: { orderId: string }) => {
+export const DetailsCommande = ({ orderId }: { orderId: string }) => {
     const { orderSuccess } = useLocalSearchParams();
     const { removeCart } = useCartContext();
     const { authenticated } = useAuth();
@@ -56,11 +56,11 @@ export const OrderDetails = ({ orderId }: { orderId: string }) => {
     }, [orderSuccess]);
 
     if (loading || dbLoading) {
-        return <View style={styles.container}><Text>Loading...</Text></View>;
+        return <View style={styles.container}><Text>Chargement...</Text></View>;
     }
 
     if (!order) {
-        return <NotFoundScreen />;
+        return <EcranNonTrouve />;
     }
 
     return <OrderContent order={order} />;
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OrderDetails;
+export default DetailsCommande;

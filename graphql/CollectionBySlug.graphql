@@ -1,0 +1,17 @@
+fragment CollectionFragment on Collection {
+  id
+  name
+  slug
+  description
+}
+
+
+query CollectionBySlug($slug: String!, $channel: String!) {
+  collection(slug: $slug, channel: $channel) {
+    ...CollectionFragment
+    backgroundImage {
+      url
+      alt
+    }
+  }
+}

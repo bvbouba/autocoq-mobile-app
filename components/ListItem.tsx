@@ -15,12 +15,12 @@ const ListItem: FC<Props> = ({ name,url }) => {
     const onPress = () => router.push(url)
 
     return <Pressable onPress={onPress}>
-        <PaddedView style={styles.wrapper}>
+        <View style={styles.wrapper}>
             <View style={styles.titleWrapper}>
                 <Text style={styles.title}>{name}</Text>
                 <IconButton icon="chevron-right" onPress={onPress} style={styles.icon} />
             </View>
-        </PaddedView>
+        </View>
     </Pressable>
 }
 
@@ -30,17 +30,14 @@ const styles = StyleSheet.create({
     wrapper: {
         // border: "0.5 solid " + colors.dividerGrey,
         borderRadius: 5,
-        margin: 8
     },
     title: {
-        fontWeight: "bold",
         fontSize: 14,
-        padding: 8,
-        marginTop: 8,
+        marginTop: 10,
         marginLeft: 8,
     },
     icon: {
-        marginTop: 5,
+        marginTop: 0,
         marginRight: 5,
     },
     titleWrapper: {

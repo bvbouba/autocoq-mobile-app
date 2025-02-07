@@ -5,8 +5,9 @@ import { useProductContext } from '../../../context/useProductContext';
 import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '../../../config';
 import { CategoryPathFragment, CollectionFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '../../../saleor/api.generated';
-import { Divider, Text, View } from '../../Themed';
+import { colors, Divider, Text, View } from '../../Themed';
 import { Button } from 'react-native-paper';
+import { FontAwesome } from '@expo/vector-icons';
 
 interface Props {
     openFilters: () => void
@@ -65,11 +66,28 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
         <View style={styles.wrapper}>
 
             <Divider />
-            <View style={styles.filterWrapper}>
+            <View style={[styles.filterWrapper, (numberOfFilters !== 0) && {
+                backgroundColor:"white"
+            }]}>
                 {numberOfFilters !== 0 && <Text style={styles.filterLabel}>{numberOfFilters} filters applied</Text>}
                 {numberOfFilters === 0 && <Text style={styles.filterLabel}>No Filters</Text>}
-                <Button style={styles.filterButton} onPress={() => openFilters()} icon="chevron-down"
-                    contentStyle={{ flexDirection: 'row-reverse' }}> Filters </Button>
+                <View style={{
+                    flexDirection:"row",
+                    alignItems:"center",
+                    backgroundColor:colors.textInputGreyBackground,
+                }}>
+                
+                <Button style={[styles.filterButton,(numberOfFilters !== 0)&&{
+                    backgroundColor:"black",
+                    borderRadius:3,
+                }]} onPress={() => openFilters()} icon="chevron-down"
+                    contentStyle={{ flexDirection: 'row-reverse' }} labelStyle={(numberOfFilters !== 0)&&{color:"white"}}> 
+                     <FontAwesome name="filter" size={15} color={(numberOfFilters !== 0) ? "white" : colors.back} />
+                    <Text style={[styles.filterText,
+                     (numberOfFilters !== 0) && {color:"white"}
+                    ]}>Filters</Text> </Button>
+
+                </View>
             </View>
             <Divider />
         </View>
@@ -79,9 +97,11 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
 const styles = StyleSheet.create({
     filterLabel: {
         paddingTop: 12,
+        fontSize:12
     },
     filterButton: {
         paddingTop: 0,
+        borderWidth:1,
     },
     wrapper: {
         width: "100%",
@@ -94,7 +114,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row",
         paddingBottom: 4,
+        backgroundColor:colors.textInputGreyBackground
     },
+    filterText:{
+        margin:2,
+        fontSize:12
+    }
 });
 
 export default ProductFilter

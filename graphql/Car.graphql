@@ -1,0 +1,68 @@
+fragment MakeDetails on CarMake {
+  id
+  name
+}
+
+query CarMakesList {
+  carMakes(first: 50) {
+    edges {
+      node {
+        ...MakeDetails
+      }
+    }
+  }
+}
+
+fragment ModelDetails on CarModel {
+  id
+  name
+  imageUrl
+}
+
+query CarModelsList($filter: CarModelFilterInput) {
+  carModels(first: 50, filter: $filter) {
+    edges {
+      node {
+        ...ModelDetails
+      }
+    }
+  }
+}
+
+fragment EngineDetails on CarEngine {
+  id
+  name
+}
+
+query CarEnginesList($filter: CarEngineFilterInput) {
+  carEngines(first: 50, filter: $filter) {
+    edges {
+      node {
+        ...EngineDetails
+      }
+    }
+  }
+}
+
+fragment YearDetails on CarYear {
+  id
+  name
+  vinSuffix
+}
+
+query CarYearsList {
+  carYears(first: 50) {
+    edges {
+      node {
+        ...YearDetails
+      }
+    }
+  }
+}
+
+query compatibilityCheck(
+  $productId: ID!
+  $car: CarInput!
+) {
+  checkProductCompatibility(productId: $productId, car: $car)
+}

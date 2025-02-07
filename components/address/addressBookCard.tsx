@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     marginBottom: 8,
   },

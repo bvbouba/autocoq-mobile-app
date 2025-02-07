@@ -1,7 +1,7 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { getConfig } from "../../config";
 import { useCartContext } from "../../context/useCartContext"
-import { PaddedView, Text } from "../Themed"
+import { Divider, PaddedView, Text } from "../Themed"
 
 const CartSubtotal = () => {
     const { cart } = useCartContext();
@@ -10,46 +10,83 @@ const CartSubtotal = () => {
         return <></>
     }
 
-    return <PaddedView style={styles.subtotalContainer}>
-        <Text  >
-            <Text style={styles.title}>Subtotal: </Text>
-            <Text style={styles.subtotalPrice}>
-                {(cart.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
-                    style: "currency",
-                    currency: cart.subtotalPrice.gross.currency
-                })}
-            </Text>
-        </Text>
-
-        <Text>
-            includes{" "}
-            {cart.totalPrice.tax.amount.toLocaleString(getConfig().locale, {
-                style: "currency",
-                currency: cart.subtotalPrice.tax.currency,
-            })}{" "}
-            VAT
-        </Text>
-    </PaddedView>
-}
+    return (
+        <PaddedView style={styles.subtotalContainer}>
+            <View>
+                <Text style={styles.title}>Résumé de la commande</Text>
+            </View>
+            <Divider />
+            <View style={styles.subtotalRow}>
+                <Text>Sous-total: </Text>
+                <Text>
+                    {(cart.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
+                        style: "currency",
+                        currency: cart.subtotalPrice.gross.currency
+                    })}
+                </Text>
+            </View>
+            <View style={styles.shippingTextContainer}>
+                <Text style={styles.shippingText}>
+                    Frais de Livraison calculée à la caisse
+                    {/* includes{" "}
+                    {cart.totalPrice.tax.amount.toLocaleString(getConfig().locale, {
+                        style: "currency",
+                        currency: cart.subtotalPrice.tax.currency,
+                    })}{" "}
+                    TVA */}
+                </Text>
+            </View>
+            <Divider />
+            <View style={styles.totalRow}>
+                <Text style={styles.totalText}>Total</Text>
+                <Text style={styles.totalAmount}>
+                    {(cart.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
+                        style: "currency",
+                        currency: cart.subtotalPrice.gross.currency
+                    })}
+                </Text>
+            </View>
+        </PaddedView>
+    );
+};
 
 const styles = StyleSheet.create({
     subtotalContainer: {
         width: "100%",
         maxWidth: 600,
         marginTop: 8,
-        marginBottom: 8
+        marginBottom: 8,
+        padding: 10,
     },
     title: {
         textAlign: "left",
         fontWeight: 'bold',
         fontSize: 18,
-        marginBottom: 8
+        marginBottom: 8,
     },
-    subtotalPrice: {
-        textAlign: "left",
-        marginLeft: 8,
+    subtotalRow: {
+        justifyContent: "space-between",
+        flexDirection: "row",
+    },
+    shippingTextContainer: {
+        marginTop: 5,
+    },
+    shippingText: {
+        fontSize: 11,
+    },
+    totalRow: {
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    totalText: {
         fontSize: 16,
+        fontWeight: "bold",
     },
-})
+    totalAmount: {
+        fontSize: 25,
+        fontWeight: "bold",
+    },
+});
 
-export default CartSubtotal
+export default CartSubtotal;

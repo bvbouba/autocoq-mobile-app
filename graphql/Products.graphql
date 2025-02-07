@@ -1,3 +1,23 @@
+fragment ShippingMethodFragment on ShippingMethod {
+  id
+    name
+    metadata {
+    key
+    value
+     }
+    description
+    price {
+      amount
+      currency
+    }
+    minimumOrderPrice {
+      amount
+      currency
+    }
+    minimumDeliveryDays
+    maximumDeliveryDays
+}
+
 fragment ProductVariantFragment on ProductVariant {
   id
   sku
@@ -28,6 +48,11 @@ fragment ProductVariantFragment on ProductVariant {
       boolean
       plainText
     }
+  }
+
+ 
+  availableShippingMethods(zoneName: $zoneName) {
+    ...ShippingMethodFragment
   }
 }
 
@@ -74,16 +99,25 @@ fragment ProductFragment on Product {
   variants {
     ...ProductVariantFragment
   }
+  externalReference
+  isUniversal
+  fitments {
+    carMakeName
+    carModelName
+    carEngineName
+    carStartYear
+    carEndYear
+  }
 }
 
-query getProductById($id: ID!, $channel: String!) {
+query getProductById($id: ID!, $channel: String!, $zoneName: String) {
   product(id: $id, channel: $channel) {
     ...ProductFragment
   }
 }
 
-query getProductsList($channel: String!,$filter:ProductFilterInput) {
-  products(first: 10, channel: $channel, filter:$filter) {
+query getProductsList($channel: String!, $filter: ProductFilterInput, $zoneName: String) {
+  products(first: 10, channel: $channel, filter: $filter) {
     edges {
       node {
         ...ProductFragment
@@ -91,6 +125,7 @@ query getProductsList($channel: String!,$filter:ProductFilterInput) {
     }
   }
 }
+
 
 query searchProducts(
   $channel: String!
@@ -100,6 +135,7 @@ query searchProducts(
   $carMake:[ID!]
 	$carModel:[ID!]
 	$carYear:[ID!]
+  $zoneName: String
 ) {
   products(
     first: 100

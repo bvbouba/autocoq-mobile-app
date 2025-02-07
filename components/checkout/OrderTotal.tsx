@@ -12,8 +12,13 @@ const OrderTotal = () => {
         : undefined
 
     return <View style={styles.wrapper}>
+        <Text style={{
+            fontSize:18,
+            fontWeight:"900"
+        }}>Order Summary</Text>
+        <Divider/>
         <PaddedView style={styles.rowWrapper}>
-            <Text>Items:</Text>
+            <Text>{`Items(s) Subtotal`}</Text>
             <Text>
                 {cart?.subtotalPrice.gross.amount.toLocaleString(getConfig().locale, {
                     style: "currency",
@@ -33,8 +38,8 @@ const OrderTotal = () => {
         </PaddedView>
         <Divider />
         <PaddedView style={styles.rowWrapper}>
-            <Text style={styles.title}>Order Total:</Text>
-            <Text style={styles.title}>
+            <Text style={styles.title}>Total:</Text>
+            <Text style={styles.price}>
                 {cart?.totalPrice.gross.amount.toLocaleString(getConfig().locale, {
                     style: "currency",
                     currency: cart?.totalPrice.gross.currency
@@ -52,7 +57,6 @@ const styles = StyleSheet.create({
         // border: "0.5 solid " + colors.dividerGrey,
         borderRadius: 5,
         margin: 8,
-        paddingTop: 8,
         paddingBottom: 8,
     },
     icon: {
@@ -64,9 +68,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         borderRadius: 5,
+        alignItems:"center"
     },
     title: {
         fontWeight: "bold",
         fontSize: 16
+    },
+    price:{
+        fontWeight: "bold",
+        fontSize: 25
     }
 })

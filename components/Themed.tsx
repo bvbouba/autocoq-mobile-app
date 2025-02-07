@@ -59,7 +59,7 @@ export function Divider(props: DividerProps) {
     style={{
       marginTop: 10,
       marginBottom: 10,
-      borderBottomColor: colors.dividerGrey,
+      borderBottomColor: colors.background,
       borderBottomWidth: 0.5,
       ...(props.style || {})
     }}
@@ -67,13 +67,38 @@ export function Divider(props: DividerProps) {
 }
 
 export const colors = {
-  dividerGrey: 'rgb(216, 216, 216)',
-  textInputGreyBackground: '#F2F4F5',
-  textInputGrey: '#6C7072',
-  greyText: 'rgb(153, 153, 153)',
-  blue: "#007AFF",
-  header: "red",
-  primary: "#6200EE",
-  errorBackground: "#f8d7da",
-  errorText: "#721c24",  
+  primary: "#ff6633",
+  secondary:"#202124",
+  background:"#F2F4F5",
+  surface:"#ffffff",
+  textPrimary: "#202124",
+  textSecondary: "#878484",
+  error: "#D32F2F",
+  errorBg: "#FFE6E8",
+  success: "#16B616",
+  successBg:"#F6FFEF",
+  warning: "#FFFF00",
+  warningBg:"FFFFD2",
+  info: "#1976D2",
+  border: "#E0E0E0",
+  disabled: "#BDBDBD",
 }
+
+export const fonts = {
+  h1: 25, 
+  h2: 18,
+  body:14,
+  caption:12,
+  button:14,
+} 
+
+export const spacing = {
+  small: 4,
+  medium: 8,
+  large: 12,
+};
+export const borderRadius = {
+  small: 2,
+  medium: 4,
+  large: 8,
+};

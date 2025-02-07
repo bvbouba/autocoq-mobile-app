@@ -1,37 +1,56 @@
 import { parseEditorJSData } from "@/utils/parseJsonEditor";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import RenderHtml from "react-native-render-html";
 
 export interface RichTextProps {
   jsonStringData?: string;
+  stylesOverride?: {
+    paragraph?: object;
+    header?: object;
+    list?: object;
+    listItem?: object;
+  };
 }
 
-export function RichText({ jsonStringData }: RichTextProps) {
+export function RichText({ jsonStringData, stylesOverride = {} }: RichTextProps) {
+  const { width } = useWindowDimensions();
   const data = parseEditorJSData(jsonStringData);
 
   if (!data) {
     return null;
   }
 
+  // Merge default styles with passed styles
+  const mergedStyles = {
+    paragraph: { ...styles.paragraph, ...stylesOverride.paragraph },
+    header: { ...styles.header, ...stylesOverride.header },
+    list: { ...styles.list, ...stylesOverride.list },
+    listItem: { ...styles.listItem, ...stylesOverride.listItem },
+  };
+
   // Define a function to render blocks based on the type
   const renderBlock = (block: any, index: number) => {
     switch (block.type) {
       case "paragraph":
         return (
-          <Text key={index} style={styles.paragraph}>
-            {block.data.text}
-          </Text>
+          <RenderHtml
+            key={index}
+            contentWidth={width}
+            source={{ html: block.data.text }}
+            baseStyle={mergedStyles.paragraph}
+          />
         );
       case "header":
         return (
-          <Text key={index} style={[styles.header, { fontSize: block.data.level * 6 }]}>
+          <Text key={index} style={[mergedStyles.header, { fontSize: block.data.level * 6 }]}>
             {block.data.text}
           </Text>
         );
       case "list":
         return (
-          <View key={index} style={styles.list}>
+          <View key={index} style={mergedStyles.list}>
             {block.data.items.map((item: string, itemIndex: number) => (
-              <Text key={itemIndex} style={styles.listItem}>
+              <Text key={itemIndex} style={mergedStyles.listItem}>
                 • {item}
               </Text>
             ))}
@@ -47,7 +66,7 @@ export function RichText({ jsonStringData }: RichTextProps) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    width: "100%",
   },
   paragraph: {
     fontSize: 14,

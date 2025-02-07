@@ -1,3 +1,4 @@
+import { colors } from '@/components/Themed';
 import * as React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Checkbox } from 'react-native-paper';
@@ -13,7 +14,7 @@ const CheckBoxWithLabel: React.FC<Props> = ({ label, status, onPress }) => {
         <TouchableOpacity onPress={onPress}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between" }}>
                 <Text >{label}</Text>
-                <Checkbox status={status} />
+                <Checkbox status={status} color={colors.orange}/>
             </View>
         </TouchableOpacity>
     );

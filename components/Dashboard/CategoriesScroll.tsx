@@ -1,20 +1,19 @@
 import { FC } from "react";
 import { Image, Pressable, StyleSheet } from "react-native";
-import { PaddedView, Text, View } from "../Themed";
-import { CategoryPathFragment } from "../../saleor/api.generated";
+import { colors, PaddedView, Text, View } from "../Themed";
+import { CategoryPathFragment, MenuItem, MenuItemFragment } from "../../saleor/api.generated";
 
 interface Props {
-    categories: CategoryPathFragment[];
+    menus: MenuItemFragment[];
     onClick: (category: string) => void;
 }
 
-const CategoriesScroll: FC<Props> = ({ categories, onClick }) => {
-    const categoryItems = categories.filter(cat=>cat.level===0)
-        ?.map((cat) => {
-            const media = cat?.backgroundImage;
+const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
+    const items = menus.map((menu) => {
+            const media = menu.category?.backgroundImage;
             const product =
-                cat.products?.edges && cat.products.edges.length > 0
-                    ? cat.products.edges[0]
+                menu.category?.products?.edges && menu.category.products.edges.length > 0
+                    ? menu.category.products.edges[0]
                     : undefined;
             const productMedia =
                 product &&
@@ -26,8 +25,8 @@ const CategoriesScroll: FC<Props> = ({ categories, onClick }) => {
             return {
                 url: media?.url || productMedia?.url,
                 alt: media?.alt || productMedia?.alt,
-                name: cat.name,
-                slug: cat.slug,
+                name: menu.name,
+                slug: menu.category?.slug||"",
             };
         })
         .filter((item) => !!item.url) || [];
@@ -35,10 +34,12 @@ const CategoriesScroll: FC<Props> = ({ categories, onClick }) => {
     return (
         <View style={styles.container}>
             <View style={styles.paddedTitle}>
-                <Text style={styles.collectionListTitle}>Categories</Text>
+                <Text style={styles.collectionListTitle}>{"Catégories Populaires"}</Text>
+                {/* <Text style={styles.viewAll}>Tout voir</Text> */}
             </View>
+            
             <View style={styles.gridContainer}>
-                {categoryItems.map((item, index) => (
+                {items.map((item, index) => (
                     <Pressable
                         key={index}
                         onPress={() => onClick(item.slug)}
@@ -67,9 +68,11 @@ const styles = StyleSheet.create({
     paddedTitle: {
         paddingTop: 8,
         paddingHorizontal: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     collectionListTitle: {
-        fontSize: 18,
+        fontSize: 16,
         lineHeight: 34,
         fontWeight: "bold",
         textAlign: "left",
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     imageContainer: {
-        width: "100%", // Take the full width of the grid item
+        width: "60%", // Take the full width of the grid item
         aspectRatio: 1, // Ensures a square container
         marginBottom: 8, // Space between image and text
     },
@@ -96,8 +99,15 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     itemText: {
-        fontWeight: "bold",
+        fontSize:13,
+        fontWeight:400,
         textAlign: "center",
+    },
+    viewAll: {
+        fontSize: 13,
+        color: colors.primary,
+        textDecorationLine: 'underline', 
+        verticalAlign:'middle'
     },
 });
 

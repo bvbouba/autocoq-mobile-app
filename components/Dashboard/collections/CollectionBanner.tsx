@@ -17,8 +17,7 @@ interface Props {
 const CollectionImageBanner: FC<Props> = ({ collection, onClick, onProductClick }) => {
     const image = { uri: collection.backgroundImage?.url }
     const description = parseDescription(collection?.description)
-
-
+    
     return <View style={styles.collectionImageBanner}>
         <Pressable onPress={() => onClick(collection)}>
             <ImageBackground source={image} resizeMode="cover" style={styles.carouselBannerImage}>
@@ -92,7 +91,7 @@ const CollectionBanner: FC<Props> = ({ collection, onClick, onProductClick }) =>
                     maxIndicators={4}
                     interpolateOpacityAndColor={true}
                     activeIndicatorConfig={{
-                        color: colors.blue,
+                        color: colors.orange,
                         margin: 3,
                         opacity: 1,
                         size: 6,
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
         marginRight: 96,
     },
     carouselItemImageContainer: {
-        width: "100%",
+        width: "80%",
         display: "flex",
         flexDirection: "row",
         justifyContent: "center"
@@ -148,8 +147,8 @@ const styles = StyleSheet.create({
         height: 200,
     },
     carouselImage: {
-        width: 150,
-        height: 150,
+        width: 100,
+        height: 100,
     },
     collectionImageInnerWrapper: {
         position: "absolute",
@@ -165,7 +164,7 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     collectionListTitle: {
-        fontSize: 18,
+        fontSize: 16,
         lineHeight: 34,
         fontWeight: 'bold',
         textAlign: 'left',

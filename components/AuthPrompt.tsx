@@ -1,64 +1,51 @@
-import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { colors } from "./Themed";
+import { PrimaryButton } from "./button";
 
-const AuthPrompt = () => {
+interface props {
+  redirectUrl:string
+}
+
+const AuthPrompt = ({redirectUrl}:props) => {
   const router = useRouter();
 
   const handleSignIn = () => {
-    router.push('/account/auth');
+    router.push(`/account/auth?redirectUrl=${redirectUrl}`);
   };
 
   return (
     <View style={styles.wrapper}>
+      <View>
       <Text style={styles.promptText}>
-        Login to receive more offers and rewards!
+      Rejoignez Autocoq et commencez à économiser dès aujourd'hui.
       </Text>
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={handleSignIn}
-      >
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
+      </View>
+      <View style={{width:"100%"}}>
+      <PrimaryButton 
+                title={`SE CONNECTER OU CRÉER UN COMPTE`}
+                onPress={handleSignIn}
+                />    
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    borderRadius: 5,
-    margin: 8,
-    flexDirection: "row",
-    // borderWidth: 1,
-    // borderColor: 'red',
+    flexDirection:"column",
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,  
+    backgroundColor: "#ffffff",
+    padding: 16,
   },
 
   promptText: {
-    fontSize: 14,
-    color: "#333",
-    width:"50%",
-    paddingLeft: 20,
-    marginBottom: 10,  
+    fontSize: 13,
+    color: "#666",
+    marginBottom: 10,
   },
 
-  loginButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 25,
-    paddingVertical: 10, 
-    paddingHorizontal: 30,
-    margin: 10,
-    alignItems: 'center',  
-    justifyContent: 'center', 
-  },
-
-  loginButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
 });
 
 export default AuthPrompt;

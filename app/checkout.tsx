@@ -1,24 +1,20 @@
 import { useRouter } from 'expo-router';
-import {  SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { Divider, PaddedView, Text, View, colors } from '../components/Themed';
-import BillingAddress from '../components/checkout/BillingAddress';
-import PersonalDetails from '../components/checkout/PersonalDetails';
-import ShippingAddress from '../components/checkout/ShippingAddress';
-import ShippingMethodSelector from '../components/checkout/ShippingMethodSelector';
-import { useCartContext } from '../context/useCartContext';
-import { usePaymentContext } from '../context/usePaymentContext';
+import {  SafeAreaView, ScrollView, StyleSheet, View,Text, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
-import OrderTotal from '../components/checkout/OrderTotal';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
 import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
-import AuthPrompt from '@/components/AuthPrompt';
-import { useAuth } from '@/lib/providers/authProvider';
+import { useCartContext } from '@/context/useCartContext';
+import { usePaymentContext } from '@/context/usePaymentContext';
+import { colors, Divider, PaddedView } from '@/components/Themed';
+import OrderTotal from '@/components/checkout/OrderTotal';
+import ShippingMethodSelector from '@/components/checkout/ShippingMethodSelector';
+import ShippingAddress from '@/components/checkout/ShippingAddress';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Checkout = () => {
     const { cart } = useCartContext();
     const { chosenGateway } = usePaymentContext();
     const router = useRouter();
-    const {authenticated} = useAuth()
     
     const Component = paymentMethodToComponent[chosenGateway||"dummy"];
 
@@ -43,37 +39,90 @@ const Checkout = () => {
 
     return (<SafeAreaView style={styles.container} testID="cart-list-safe" >
             <ScrollView testID="cart-list-scroll">
-                <PaddedView style={{marginTop: 12}}>
-                    <Text style={styles.termsText}>By placing your order you agree to the Saleor App's Terms and Conditions of Awesomeness. Please see our Privacy Lotus, our Cookie Recipes for more details.</Text>
-              <Component />
-              </PaddedView>
-                <OrderTotal />
-                {!authenticated && <AuthPrompt />}
-                <PersonalDetails />
-                <BillingAddress />
+                <View>
+                <View style={{margin: 12, flexDirection:"row"}}>
+                   <View>
+                   <FontAwesome name="gift" size={20} color="black" />
+                    </View>
+                    <View
+                    style={{
+                        marginLeft:5
+                       }}
+                    ><Text
+                    style={{
+                        fontSize:16,
+                        fontWeight:"500"
 
-                {cart?.isShippingRequired && <>
-                    <ShippingAddress />
+                       }}
+                    >Delivery</Text></View>
+              </View>
+              {cart?.isShippingRequired && <>
+            
+                <ShippingAddress />
+        
                     <ShippingMethodSelector />
+                    
                 </>}
+                <Divider style={{ borderBottomWidth: 10 }} />
                 <PaymentMethodSelector />
+
+                <Divider style={{ borderBottomWidth: 10 }} />
+
+                </View>
+                <OrderTotal />
+
+                
             </ScrollView >
+            <View
+            style={{
+                borderTopColor:colors.secondary,
+                borderTopWidth:1
+            }}
+            >
+            <View style={{
+                 alignItems:"center",
+                 margin:10
+            }}>
+            {chosenGateway ? 
+            <View style={{
+                flexDirection:"row"
+            }}>
+            <Text style={{
+                fontSize:12
+            }}>By placing an order, I agree to </Text>
+            <TouchableOpacity onPress={()=>router.push("/account/terms")}>
+             <Text style={{
+                 fontSize:12,
+                textDecorationLine:"underline",
+                color:"blue"
+             }}>
+                Terms and Privacy Policy
+             </Text>
+            </TouchableOpacity>
+            </View>
+            :<Text style={{
+                color:colors.secondary,
+                fontSize:12
+                
+            }}> Please enter payment to submit your order </Text>}
+            </View>
+            <Component />
+            </View>
         </SafeAreaView >)
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom:50
+        paddingBottom:50,
+        backgroundColor:"white"
     },
     checkoutButton: {
         width: "100%",
     },
     termsText: {
         fontSize: 12,
-        color: colors.greyText,
+        color: colors.secondary,
         marginBottom: 16
     },
     wrapper: {

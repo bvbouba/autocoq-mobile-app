@@ -7,7 +7,7 @@ import CheckBoxWithLabel from "../../../utils/CheckboxWithLabel";
 import { getConfig } from "../../../config";
 import { useProductContext } from "../../../context/useProductContext";
 import { CategoryPathFragment, CollectionFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "../../../saleor/api.generated";
-import { Text, View } from "../../Themed";
+import { colors, Divider, Text, View } from "../../Themed";
 
 interface Props {
     open: boolean
@@ -105,6 +105,10 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
 
     return (<Modal visible={open} onDismiss={onClose} contentContainerStyle={containerStyle}>
         <ScrollView>
+        <Text style={styles.bigTitle}>Filter & Sort</Text>
+                  <Divider style={{ borderBottomWidth: 5 }} />
+
+
             <View style={styles.filterTypeContainer}>
                 <Text style={styles.filterTypeTitle}>Collections</Text>
                 {collectionsData?.collections?.edges.map(edge => edge.node) && <CollectionForm
@@ -129,19 +133,26 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
                                     formik.setFieldValue("categories", [...formik.values.categories, cat.node.slug])
                                 }
                             }}
-                            label={cat.node.name} />
+                            label={cat.node.name}
+                            
+                        />
                     )}
             </View>
         </ScrollView>
         <View style={styles.buttonGroup}>
-            <Button mode="contained" onPress={submitForm}>Apply</Button>
-            <Button mode="text" onPress={() => formik.resetForm()}>Reset</Button>
+            <Button style={styles.primaryButton} mode="contained" onPress={submitForm}>Apply</Button>
+            <Button style={styles.secondaryButton} mode="text"  textColor="black" onPress={() => formik.resetForm()}>Reset</Button>
         </View>
     </Modal >
     );
 };
 
 const styles = StyleSheet.create({
+    bigTitle: {
+        fontWeight: "bold",
+        marginBottom: 8,
+        fontSize:25
+    },
     filterTypeTitle: {
         fontWeight: "bold",
         marginBottom: 8
@@ -164,6 +175,22 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         marginTop: 16
 
+    },
+    primaryButton:{
+    backgroundColor: colors.back,
+    marginTop:10,
+    borderRadius: 3,
+    alignItems: "center",
+    width:"45%"
+    },
+    secondaryButton: {
+        marginTop:10,
+        borderRadius: 3,
+        alignItems: "center",
+        backgroundColor:"white",
+        borderWidth:1,
+        borderColor:"black",
+        width:"45%",
     }
 })
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { router, useRouter } from "expo-router";
 import { AddressDetailsFragment, CheckoutError, useCurrentUserAddressesQuery } from "@/saleor/api.generated";
+import { useAuth } from "@/lib/providers/authProvider";
 
 
 // Mock AddressFormData type
@@ -22,13 +23,32 @@ interface SavedAddressSelectionListProps {
 }
 
 const SavedAddressSelectionList = ({ updateAddressMutation,onSubmit }: SavedAddressSelectionListProps) => {
-    const { loading, error, data } = useCurrentUserAddressesQuery();
+    const {authenticated,token,checkAndRefreshToken} = useAuth()
+    const [isValidatingToken, setIsValidatingToken] = useState(true);
+    const { loading, error, data } = useCurrentUserAddressesQuery({
+      skip: !authenticated, 
+      context: {
+          headers: {
+              authorization: token ? `Bearer ${token}` : "",
+          },
+      },
+      onCompleted: () => {
+          setIsValidatingToken(false);
+      },
+      onError: async (error) => {
+          if (error.message.includes("Signature has expired")) {
+            await checkAndRefreshToken();
+            }
+          setIsValidatingToken(false);
+
+      },
+    });
     const [selectedSavedAddress, setSelectedSavedAddress] =
       React.useState<AddressDetailsFragment | null>();
   const [isUpdating, setIsUpdating] = useState(false);
   const [uError, setUError] = useState<string | null>(null);
 
-  if (loading) {
+  if (loading && isValidatingToken) {
     return <ActivityIndicator size="large" color="#007AFF" />;
   }
 

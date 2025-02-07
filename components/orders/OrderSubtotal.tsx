@@ -1,40 +1,44 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 import { getConfig } from "../../config";
-import { Text, View } from "../Themed"
+import { Text, View } from "../Themed";
 import { OrderFragment } from "../../saleor/api.generated";
 import { FC } from "react";
 
 interface Props {
     order: OrderFragment
 }
+
 const OrderSubtotal: FC<Props> = ({ order }) => {
 
     return <View style={styles.subtotalContainer}>
-        <Text style={styles.row}>
-            <Text style={styles.subtotalTitle}>Subtotal: </Text>
+        <View style={styles.row}>
+            <Text style={styles.subtotalTitle}>Sous-total: </Text>
             <Text style={styles.subtotalPrice}>
                 {(order.subtotal.gross.amount).toLocaleString(getConfig().locale, {
                     style: "currency",
                     currency: order.subtotal.gross.currency
                 })}
-                {/* {"  "}includes{" "}
-                {order.total.tax.amount.toLocaleString(getConfig().locale, {
-                    style: "currency",
-                    currency: order.subtotal.tax.currency,
-                })}{" "} */}
-                {/* VAT */}
             </Text>
-        </Text>
-        <Text style={styles.row}>
-            <Text style={styles.subtotalTitle}>Shipping: </Text>
+        </View>
+        <View style={styles.row}>
+            <Text style={styles.subtotalTitle}>Livraison: </Text>
             <Text style={styles.subtotalPrice}>
                 {(order.shippingPrice.gross.amount).toLocaleString(getConfig().locale, {
                     style: "currency",
                     currency: order.shippingPrice.gross.currency
                 })}
-
             </Text>
-        </Text>
+        </View>
+
+        <View style={styles.row}>
+            <Text style={styles.totalTitle}>Total: </Text>
+            <Text style={styles.totalPrice}>
+                {(order.total.gross.amount).toLocaleString(getConfig().locale, {
+                    style: "currency",
+                    currency: order.total.gross.currency
+                })}
+            </Text>
+        </View>
 
     </View>
 }
@@ -57,9 +61,22 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         fontSize: 14,
     },
+    totalTitle: {
+        textAlign: "left",
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginBottom: 8
+    },
+    totalPrice: {
+        textAlign: "left",
+        marginLeft: 8,
+        fontSize: 16,
+    },
     row: {
         marginBottom: 8,
+        justifyContent: "space-between",
+        flexDirection:"row"
     }
 })
 
-export default OrderSubtotal
+export default OrderSubtotal;

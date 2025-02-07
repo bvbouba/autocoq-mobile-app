@@ -1,0 +1,18 @@
+
+fragment MenuItemFragment on MenuItem {
+      name
+      id
+      category{
+        ...CategoryPathFragment
+      }
+}
+
+query getHomepage($channel: String!) {
+  menu(slug:"homepage",channel:$channel){
+    name
+    items{
+      ...MenuItemFragment
+    }
+  }
+}
+

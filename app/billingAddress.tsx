@@ -15,7 +15,6 @@ const BillingAddressScreen = () => {
     }
 
     return <PaddedView>
-        <Text style={styles.title}>Edit billing address</Text>
         <BillingAddressForm onSubmit={async () => {
                 await refreshCart()
                 router.back()
@@ -23,12 +22,6 @@ const BillingAddressScreen = () => {
     </PaddedView>
 }
 
-const styles = StyleSheet.create({
-    title: {
-        fontWeight: "bold",
-        marginTop: 8,
-        marginBottom: 16
-    },
-});
+
 
 export default BillingAddressScreen

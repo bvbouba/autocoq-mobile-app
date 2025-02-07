@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, RadioButton, ActivityIndicator } from 'react-native-paper';
-import { PaddedView, Text } from '../components/Themed';
+import { colors, PaddedView, Text } from '../components/Themed';
 import { useCartContext } from '../context/useCartContext';
 import { useRouter } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
@@ -49,8 +49,10 @@ const paymentMethods = () => {
                 onPress={updatePaymentMethod}
                 mode="contained"
                 disabled={loading}
+                style={styles.submitButton}
+               labelStyle={styles.submitButtonText}
             >
-                {loading ? <ActivityIndicator color="white" /> : "Submit"}
+                {loading ? <ActivityIndicator color="white" /> : "CONTINUE"}
             </Button>
         </PaddedView>
     );
@@ -79,4 +81,15 @@ const styles = StyleSheet.create({
     methodPrice: {
         color: "gray",
     },
+    submitButton: {
+        backgroundColor: "black",
+        marginHorizontal: 10,
+        borderRadius:5,
+        padding:5
+      },
+      submitButtonText: {
+        fontWeight:"bold",
+        color: "white", 
+      },
 });
+

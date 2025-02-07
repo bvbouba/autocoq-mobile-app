@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { useColorScheme, StyleSheet } from 'react-native';
 
-import { Text, View } from './../../components/Themed';
+import { colors, Text, View } from './../../components/Themed';
 import Colors from '../../constants/Colors';
 import { useCartContext } from '../../context/useCartContext';
 
@@ -15,7 +15,7 @@ function TabBarIcon(props: {
   number?: number
 }) {
   return <View style={{ position: "relative" }}>
-    <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
+    <FontAwesome size={25} style={{ marginBottom: -3 }} {...props} />
     {props.number && <Text style={styles.cartCountIcon}>{props.number}</Text>}
   </View>
 
@@ -27,40 +27,53 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        tabBarStyle: {
+          height: 70, 
+          paddingBottom: 10,
+          paddingTop: 5, 
+        },
+        tabBarIconStyle: {
+          marginBottom: 2, 
+        },
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerStyle: {
-        }
+        },
+        tabBarInactiveTintColor: '#555555',
       }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: '',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="shopping-bag" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="cart"
-        options={{
-          title: '',
-          headerShown: false,
-          tabBarIcon: ({ color }) => {
-            const { cart } = useCartContext()
-            return <TabBarIcon name="shopping-cart"
-              color={color}
-              number={cart && cart.lines.length > 0 ? cart.lines.map(line => line.quantity).reduce((prev, curr) => prev + curr, 0) : undefined}
-            />
-          },
-        }}
-      />
-      <Tabs.Screen
-        name="account"
-        options={{
-          title: '',
-          headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-        }}
-      />
+     <Tabs.Screen
+  name="index"
+  options={{
+    title: '',
+    headerShown: false,
+    tabBarIcon: ({ color }) => <TabBarIcon name="shopping-bag" color={color} />,
+    tabBarLabel: 'Boutique',
+  }}
+/>
+<Tabs.Screen
+  name="cart"
+  options={{
+    title: '',
+    headerShown: false,
+    tabBarIcon: ({ color }) => {
+      const { cart } = useCartContext();
+      return <TabBarIcon 
+        name="shopping-cart"
+        color={color}
+        number={cart && cart.lines.length > 0 ? cart.lines.map(line => line.quantity).reduce((prev, curr) => prev + curr, 0) : undefined}
+      />;
+    },
+    tabBarLabel: 'Panier',
+  }}
+/>
+<Tabs.Screen
+  name="account"
+  options={{
+    title: '',
+    headerShown: false,
+    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+    tabBarLabel: 'Compte',
+  }}
+/>
     </Tabs>
   );
 }

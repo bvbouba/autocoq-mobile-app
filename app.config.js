@@ -22,7 +22,7 @@ module.exports = {
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-        "image": "./assets/images/saleor-splash.png",
+        "image": "./assets/images/splash.png",
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
     },
@@ -30,13 +30,15 @@ module.exports = {
         "**/*"
     ],
     "ios": {
-        "supportsTablet": true
+        "supportsTablet": true,
+            "bundleIdentifier": "com.anonymous.exposhop"
     },
     "android": {
         "adaptiveIcon": {
             "foregroundImage": "./assets/images/adaptive-icon.png",
-            "backgroundColor": "#ffffff"
-        }
+            "backgroundColor": "#ffffff",
+        },
+        "package": "com.anonymous.exposhop"
     },
     "web": {
         "bundler": "metro",

@@ -22,20 +22,10 @@ const ShippingAddressScreen = () => {
     }
 
     return <>
-        <PaddedView>
-            <Text style={styles.title}>Edit shipping address</Text>
-        </PaddedView>
+ 
 
         <ShippingAddressForm onSubmit={complete} onCancel={() => router.back()} />
     </>
 }
-
-
-const styles = StyleSheet.create({
-    title: {
-        fontWeight: "bold",
-        marginTop: 8
-    }
-})
 
 export default ShippingAddressScreen

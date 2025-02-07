@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
@@ -13,7 +12,7 @@ export default function FAQScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={styles.loadingText}>Chargement...</Text>
       </View>
     );
   }
@@ -21,7 +20,7 @@ export default function FAQScreen() {
   if (error) {
     return (
       <View style={styles.center}>
-        <Text style={styles.error}>Error: {error.message}</Text>
+        <Text style={styles.error}>Erreur : {error.message}</Text>
       </View>
     );
   }
@@ -31,7 +30,7 @@ export default function FAQScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {content ? <RichText jsonStringData={content} /> : <Text>No content available.</Text>}
+        {content ? <RichText jsonStringData={content} /> : <Text>Aucun contenu disponible.</Text>}
       </ScrollView>
     </View>
   );

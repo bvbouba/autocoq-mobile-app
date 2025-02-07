@@ -1,15 +1,16 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import {
   ProductFragment,
   ProductVariantFragment,
-  useFitmentByIdQuery,
 } from "../../saleor/api.generated";
 import {
+  colors,
+  Divider,
   PaddedView,
   Text,
   View,
 } from "../Themed";
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
 import { useCartContext } from "../../context/useCartContext";
 import ProductImageCarousel from "./details/ProductImageCarousel";
 import { getConfig } from "../../config";
@@ -17,6 +18,9 @@ import { useRouter } from "expo-router";
 import VariantSelector from "./details/VariantSelector";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
+import CompatibilityCheck from "../car/CompatibilityCheck";
+import Fitment from "../car/Fitment";
+import DeliveryMethod from "../DeliveryMethod";
 
 interface Props {
   product: ProductFragment;
@@ -25,15 +29,8 @@ interface Props {
 const ProductDetails: FC<Props> = ({ product }) => {
   const router = useRouter();
 
-  const { data, loading: fitmentLoading } = useFitmentByIdQuery({
-    variables: {
-      productId: product.id,
-    },
-  });
-
-  const carMakeRelations = data?.tenantProduct?.carMakeRelations || [];
-  const carModelRelations = data?.tenantProduct?.carModelRelations || [];
-  const isUniversal = data?.tenantProduct?.isUniversal;
+  const isUniversal = product.isUniversal || true;
+  const fitments = product.fitments || [];
 
   const { addItem, loading } = useCartContext();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantFragment>(
@@ -47,34 +44,43 @@ const ProductDetails: FC<Props> = ({ product }) => {
       currency: product.defaultVariant?.pricing?.price?.gross.currency,
     }
   );
-    const renderDescription = () => {
+
+  const renderDescription = () => {
     if (!product.description) return null;
-  
+
     const parsedDescription = JSON.parse(product.description);
     const blocks = parsedDescription.blocks || [];
-  
+
     return blocks.map((block: any) => {
       if (block.type === "list") {
         return (
           <View key={block.id} style={styles.listBlock}>
             {block.data.items.map((item: string, index: number) => (
               <Text key={index} style={styles.listItem}>
-                • {item.replace(/&nbsp;/g, " ")}  {/* Replace &nbsp; with space */}
+                • {item.replace(/&nbsp;/g, " ")} {/* Remplace &nbsp; par un espace */}
               </Text>
             ))}
           </View>
         );
       }
-      // Handle other block types here if necessary
       return null;
     });
   };
-  
 
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.productTitle}>{product.name}</Text>
+        <View>
+          <View style={{ flexDirection: "column", marginBottom: 15, padding: 8 }}>
+            <Text style={styles.productTitle}>{product.name}</Text>
+            {product.externalReference && (
+              <Text style={{ fontSize: 12, color: colors.greyText }}>
+                Référence # {product.externalReference}
+              </Text>
+            )}
+          </View>
+        </View>
+
         <View>
           <ProductImageCarousel
             images={
@@ -82,21 +88,38 @@ const ProductDetails: FC<Props> = ({ product }) => {
             }
           />
         </View>
-        <VariantSelector
-          product={product}
-          selectedVariant={selectedVariant}
-          onSelect={setSelectedVariant}
-        />
 
-        <PaddedView style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Description</Text>
-          {renderDescription()}
-        </PaddedView>
+        <CompatibilityCheck product={product} />
 
-        <PaddedView>
-          <Text style={styles.priceTitle}>Price</Text>
+        <Divider style={{ borderBottomWidth: 5 }} />
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: 10,
+          }}
+        >
+          <Text style={styles.priceTitle}>Prix</Text>
           <Text style={styles.productPrice}>{price}</Text>
+        </View>
+        <Divider style={{ borderBottomWidth: 5 }} />
+
+        <DeliveryMethod variant={product.defaultVariant} />
+
+        <Divider style={{ borderBottomWidth: 5 }} />
+        <View style={styles.buttonContainer}>
+          <View style={{ marginVertical: 5 }}>
+            <VariantSelector
+              product={product}
+              selectedVariant={selectedVariant}
+              onSelect={setSelectedVariant}
+            />
+          </View>
+
           <Button
+            style={styles.button}
             mode="contained"
             onPress={async () => {
               await addItem(selectedVariant?.id);
@@ -104,73 +127,46 @@ const ProductDetails: FC<Props> = ({ product }) => {
             }}
             disabled={loading}
           >
-            {loading ? "Adding..." : "Add to cart"}
+            <Text style={styles.buttonText}>
+              {loading ? <ActivityIndicator color="white" /> : "AJOUTER AU PANIER"}
+            </Text>
           </Button>
+        </View>
+
+        <Divider style={{ borderBottomWidth: 5 }} />
+
+        <PaddedView style={styles.descriptionContainer}>
+          <Text style={styles.descriptionTitle}>Description du produit</Text>
+          {renderDescription()}
         </PaddedView>
 
-        {/* Fitment Information */}
-        {!fitmentLoading && data && (
-          <PaddedView style={styles.fitmentContainer}>
-            <Text style={styles.fitmentTitle}>Fitment Information</Text>
-            {isUniversal ? (
-              <Text style={styles.fitmentText}>
-                This product is universal and fits all vehicles.
-              </Text>
-            ) : (
-              <>
-                {carMakeRelations?.length > 0 && (
-                  <View style={styles.fitmentSection}>
-                    <Text style={styles.subtitle}>Compatible Makes:</Text>
-                    {carMakeRelations.map((rel, index) => (
-                      <View key={index} style={styles.listItem}>
-                        <Text style={styles.listText}>{rel?.fitmentName}</Text>
-                      </View>
-                    ))}
-                  </View>
-                )}
-                {carModelRelations?.length > 0 && (
-                  <View style={styles.fitmentSection}>
-                    <Text style={styles.subtitle}>Compatible Models:</Text>
-                    {carModelRelations.map((rel, index) => (
-                      <View key={index} style={styles.listItem}>
-                        <Text style={styles.listText}>{rel?.fitmentName}</Text>
-                      </View>
-                    ))}
-                  </View>
-                )}
-              </>
-            )}
-          </PaddedView>
-        )}
+        <Divider style={{ borderBottomWidth: 5 }} />
+
+        <Fitment fitmentData={fitments} isUniversal={isUniversal} />
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 16,
-},
-scrollView: {
-    flex:1,
-    flexGrow: 1, 
-},
+  container: {},
+  scrollView: {
+    flex: 1,
+    flexGrow: 1,
+  },
   productTitle: {
-    textAlign: "left",
-    fontWeight: "bold",
-    fontSize: 18,
-    marginBottom: 8,
-    padding: 8,
+    fontWeight: "500",
+    fontSize: 15,
   },
   productPrice: {
-    textAlign: "left",
+    fontWeight: "bold",
     fontSize: 20,
-    marginBottom: 16,
   },
   descriptionContainer: {
     paddingHorizontal: 16,
   },
   descriptionTitle: {
+    fontSize: 17,
     fontWeight: "bold",
     marginBottom: 8,
   },
@@ -178,32 +174,15 @@ scrollView: {
     marginBottom: 8,
   },
   listItem: {
-    fontSize: 14,
-    marginBottom: 4,
-  },
-  fitmentContainer: {
-    marginTop: 16,
-    padding: 8,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-  },
-  fitmentTitle: {
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  fitmentText: {
-    fontSize: 14,
+    fontSize: 12,
     marginBottom: 4,
   },
   priceTitle: {
+    fontSize: 15,
     fontWeight: "bold",
     marginBottom: 8,
   },
-  fitmentSection: {
-    marginBottom: 16,
-  },
   subtitle: {
-    fontWeight: "bold",
     fontSize: 16,
     marginBottom: 4,
   },
@@ -211,8 +190,27 @@ scrollView: {
     fontSize: 14,
   },
   scrollContainer: {
-    paddingBottom: 16, 
-},
+    paddingBottom: 16,
+  },
+  buttonContainer: {
+    padding: 5,
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: colors.back,
+    borderRadius: 15,
+    alignItems: "center",
+    width: "95%",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "400",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
 });
 
 export default ProductDetails;

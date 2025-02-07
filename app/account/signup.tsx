@@ -1,0 +1,330 @@
+import React, { FC, useState } from 'react';
+import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { Button, TextInput } from 'react-native-paper';
+import { useCreateTokenMutation, useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { colors, PaddedView } from '@/components/Themed';
+import { useAuth } from '@/lib/providers/authProvider';
+
+interface Props {
+    phoneNumber: string;
+}
+
+interface Form {
+    phone: string;
+    verificationCode: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+}
+
+const validationSchema = yup.object().shape({
+    phone: yup
+        .string()
+        .required("Le numéro de téléphone est requis")
+        .matches(/^\d{10}$/, "Le numéro de téléphone doit contenir exactement 10 chiffres"),
+    verificationCode: yup.string().required("Le code de vérification est requis"),
+    username: yup.string().required("Le nom d'utilisateur est requis"),
+    password: yup
+        .string()
+        .min(6, "Le mot de passe doit contenir au moins 6 caractères")
+        .required("Le mot de passe est requis"),
+    confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password'), ''], "Les mots de passe doivent correspondre")
+        .required("La confirmation du mot de passe est requise"),
+});
+
+const SignUp: FC<Props> = ({ phoneNumber }) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [currentStep, setCurrentStep] = useState(1);
+    const [showPassword, setShowPassword] = useState(false);
+    const [sendCode] = useSendCodeMutation();
+    const [verifyCode] = useVerifyCodeMutation();
+    const [userRegister] = useUserRegisterMutation();
+    const { phone,redirectUrl } = useLocalSearchParams();
+    const route = useRouter();
+   const { login,error:loginError} = useAuth()
+
+    const formik = useFormik<Form>({
+        initialValues: {
+            phone: phone ? String(phone) : '',
+            verificationCode: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
+        },
+        validationSchema,
+        validateOnChange: false,
+        validateOnBlur: false,
+        onSubmit: async (data) => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const { data: response, errors } = await userRegister({
+                    variables: {
+                        input: {
+                            email: `${data.phone}@autocoq.com`,
+                            password: data.password,
+                            firstName: data.username,
+                        },
+                    },
+                });
+
+                const errorMsg = response?.accountRegister?.errors?.[0]?.message || errors?.[0]?.message || '';
+                
+                if (errorMsg) {
+                    setError(errorMsg);
+                } else {
+                    try {
+                        await login({
+                            email: `${data.phone}@autocoq.com`,
+                            password: data.password,
+                        });
+                        if (!loginError) {
+                            const redirect = Array.isArray(redirectUrl) ? redirectUrl[0] : redirectUrl;
+                                if (redirect) {
+                                    route.push(redirect);
+                                }
+                        } 
+                    } catch (err) {
+                        console.error('Login error:', err);
+                    } 
+                }
+            } catch {
+                setError("L'inscription a échoué. Veuillez réessayer.");
+            } finally {
+                setLoading(false);
+            }
+        },
+    });
+
+    const handleNext = async () => {
+        setError(null);
+        setLoading(true);
+
+        try {
+            const formErrors = await formik.validateForm();
+
+            if (currentStep === 1) {
+                if (formErrors.phone) {
+                    setError(formErrors.phone);
+                    setLoading(false);
+                    return;
+                }
+                const { data, errors } = await sendCode({
+                    variables: { phoneNumber: `+225${formik.values.phone}` },
+                });
+
+                const errorMsg = data?.sendOtp?.error || errors?.[0]?.message || '';
+
+                if (errorMsg) {
+                    setError(errorMsg);
+                } else {
+                    setCurrentStep(2);
+                }
+            } else if (currentStep === 2) {
+                if (formErrors.verificationCode) {
+                    setError(formErrors.verificationCode);
+                    setLoading(false);
+                    return;
+                }
+                const { data, errors } = await verifyCode({
+                    variables: {
+                        phoneNumber: `+225${formik.values.phone}`,
+                        otp: formik.values.verificationCode,
+                    },
+                });
+
+                const errorMsg = data?.verifyOtp?.error || errors?.[0]?.message || '';
+
+                if (errorMsg) {
+                    setError(errorMsg);
+                } else {
+                    setCurrentStep(3);
+                }
+            }
+        } catch {
+            setError("Une erreur s'est produite. Veuillez réessayer.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <PaddedView>
+            <View style={styles.container}>
+                <Text style={styles.title}>Créer un compte Autocoq</Text>
+                {currentStep === 1 && (
+                    <>
+                        <Text style={styles.subtitle}>
+                            Nous n'avons pas trouvé de compte associé à l'email que vous avez saisi.
+                            Créez un nouveau compte dès aujourd'hui !
+                        </Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={formik.handleChange('phone')}
+                                value={formik.values.phone}
+                                placeholder="Numéro de téléphone"
+                                label="Entrez votre numéro de téléphone"
+                                keyboardType="phone-pad"
+                                error={!!formik.errors.phone}
+                                outlineColor={colors.gray}
+                                underlineColor={colors.gray}
+                            />
+                            <Button style={styles.button} onPress={handleNext} mode="contained" disabled={loading}>
+                                {loading ? <ActivityIndicator color="white" /> : 'Continuer'}
+                            </Button>
+                        </View>
+                    </>
+                )}
+
+                {currentStep === 2 && (
+                    <>
+                        <Text style={styles.subtitle}>
+                            Veuillez entrer le code de vérification envoyé à{' '}
+                            <Text style={styles.phoneNumber}>
+                                +225{formik.values.phone.slice(0, 8).replace(/\d/g, '*')}{formik.values.phone.slice(8)}
+                            </Text>
+                        </Text>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={formik.handleChange('verificationCode')}
+                                value={formik.values.verificationCode}
+                                placeholder="Code de vérification"
+                                label="Code de vérification"
+                                error={!!formik.errors.verificationCode}
+                                outlineColor={colors.gray}
+                                underlineColor={colors.gray}
+                            />
+
+                            <Button style={styles.button} onPress={handleNext} mode="contained" disabled={loading}>
+                                {loading ? <ActivityIndicator color="white" /> : 'Vérifier'}
+                            </Button>
+                        </View>
+                    </>
+                )}
+
+                {currentStep === 3 && (
+                    <>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={formik.handleChange('username')}
+                                value={formik.values.username}
+                                placeholder="Nom d'utilisateur"
+                                label="Nom d'utilisateur"
+                                error={!!formik.errors.username}
+                                outlineColor={colors.gray}
+                                underlineColor={colors.gray}
+                            />
+                            {formik.errors.username && <Text style={styles.error}>{formik.errors.username}</Text>}
+
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={formik.handleChange('password')}
+                                value={formik.values.password}
+                                placeholder="Mot de passe"
+                                label="Mot de passe"
+                                secureTextEntry={!showPassword}
+                                error={!!formik.errors.password}
+                                right={<TextInput.Icon icon={showPassword ? 'eye-off' : 'eye'} onPress={() => setShowPassword(!showPassword)} />}
+                                outlineColor={colors.gray}
+                                underlineColor={colors.gray}
+                            />
+                            {formik.errors.password && <Text style={styles.error}>{formik.errors.password}</Text>}
+
+                            <TextInput
+                                style={styles.input}
+                                onChangeText={formik.handleChange('confirmPassword')}
+                                value={formik.values.confirmPassword}
+                                placeholder="Confirmer le mot de passe"
+                                label="Confirmer le mot de passe"
+                                secureTextEntry={!showPassword}
+                                error={!!formik.errors.confirmPassword}
+                                right={<TextInput.Icon icon={showPassword ? 'eye-off' : 'eye'} onPress={() => setShowPassword(!showPassword)} />}
+                                outlineColor={colors.gray}
+                                underlineColor={colors.gray}
+                            />
+                            {formik.errors.confirmPassword && <Text style={styles.error}>{formik.errors.confirmPassword}</Text>}
+
+                            <Button style={styles.button} onPress={() => formik.handleSubmit()} mode="contained" disabled={loading}>
+                                {loading ? <ActivityIndicator color="white" /> : "S'inscrire"}
+                            </Button>
+                        </View>
+                    </>
+                )}
+
+                {error && <Text style={styles.errorText}>{error}</Text>}
+            </View>
+        </PaddedView>
+    );
+};
+
+export default SignUp;
+
+const styles = StyleSheet.create({
+
+    container: {
+        height: "100%",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        paddingHorizontal: 20,
+        marginTop: 5,
+        backgroundColor: "white"
+    },
+    input: {
+        width: "100%",
+        borderWidth: 1,
+        borderColor: "#ccc",
+        backgroundColor: "white",
+        borderRadius: 5,
+        marginBottom: 15,
+        fontSize: 16,
+    },
+    button: {
+        backgroundColor: colors.back,
+        borderRadius: 5,
+        alignItems: "center",
+        width: "100%",
+    },
+    buttonText: {
+        color: "white",
+        fontWeight: "400",
+        fontSize: 13,
+    },
+    error: {
+        color: 'red',
+        marginBottom: 8,
+    },
+    errorText: {
+        color: 'red',
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    inputContainer: {
+        alignItems: "center",
+        width: "100%",
+    },
+    title: {
+        fontSize: 15,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 13,
+        color: "#666",
+        marginBottom: 20,
+        textAlign: "left",
+    },
+
+    phoneNumber: { fontWeight: 'bold', color: 'black' },
+
+
+});

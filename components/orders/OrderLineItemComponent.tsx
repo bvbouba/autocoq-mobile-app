@@ -7,7 +7,6 @@ import { useRouter } from "expo-router";
 
 interface Props {
     lineItem: OrderLineFragment
-
 }
 
 const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ variant }) => {
@@ -19,16 +18,16 @@ const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ variant }) 
                 uri: variant.media[0].url
             }}
         />
-    }else if (media.length>0) {
+    } else if (media.length > 0) {
         return <Image
-        style={styles.tinyLogo}
-        source={{
-            uri: media[0].url
-        }} 
-           resizeMode="contain"
+            style={styles.tinyLogo}
+            source={{
+                uri: media[0].url
+            }} 
+            resizeMode="contain"
         />
-   }
-    return <>No Image</>
+    }
+    return <>Aucune image</>
 }
 
 const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
@@ -58,7 +57,7 @@ const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
                         {formatter.format(lineItem.undiscountedUnitPrice.gross.amount || 0)}
                     </Text>
                     <Text >
-                        Quantity: {lineItem.quantity}
+                        Quantité : {lineItem.quantity}
                     </Text>
                 </View>
             </View>
@@ -66,20 +65,19 @@ const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
     </Pressable>
 }
 
-
 const styles = StyleSheet.create({
     productItem: {
         width: "100%",
         maxWidth: 600,
-        marginBottom: 16
+        marginBottom: 16,
     },
     tinyLogo: {
-        width: 140,
-        height: 140,
+        width: 70,
+        height: 70,
     },
     productVariant: {
         textAlign: "left",
-        fontSize: 16,
+        fontSize: 15,
         marginBottom: 16,
         overflow: "hidden",
         width: "90%"
@@ -87,12 +85,13 @@ const styles = StyleSheet.create({
     productTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 15,
         marginBottom: 8
     },
     productPrice: {
         textAlign: "left",
         fontSize: 20,
+        fontWeight: 'bold',
         marginBottom: 8
     },
     productDescription: {
@@ -101,15 +100,14 @@ const styles = StyleSheet.create({
     imageWrapper: {
         display: "flex",
         flexDirection: "row",
-        justifyContent: "flex-start"
+        justifyContent: "flex-start",
     },
     productDetailWrapper: {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
         margin: 8,
-        padding: 8
     }
 });
 
-export default OrderLineItemComponent
+export default OrderLineItemComponent;

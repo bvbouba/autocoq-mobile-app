@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native";
 const ProductsResults = () => {
     const { search: searchQueryString } = useLocalSearchParams();
     const { search } = useProductContext();
-
     useEffect(() => {
         if (searchQueryString) {
             search(searchQueryString as string)

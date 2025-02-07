@@ -1,27 +1,26 @@
 import { View, Text, StyleSheet, Alert, ScrollView, Dimensions } from "react-native";
-import { Modal, Button } from "react-native-paper";
-import { useCarMakesListQuery, useCarModelsListQuery, useCarYearsListQuery } from "@/saleor/api.generated";
+import { Modal, Button, IconButton } from "react-native-paper";
+import { useCarEnginesListQuery, useCarMakesListQuery, useCarModelsListQuery, useCarYearsListQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import { Picker } from "@react-native-picker/picker";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { useState } from "react";
+import { colors } from "../Themed";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const {
-    selectedCarYear,
-    setSelectedCarYear,
-    selectedCarMake,
-    setSelectedCarMake,
-    selectedCarModel,
-    setSelectedCarModel,
+    selectedCar,
+    setSelectedCar,
+    setIsFiltered,
   } = useCarFilter();
 
-  // Temporary states for modal selections
-  const [tempCarYear, setTempCarYear] = useState(selectedCarYear);
-  const [tempCarMake, setTempCarMake] = useState(selectedCarMake);
-  const [tempCarModel, setTempCarModel] = useState(selectedCarModel);
+  // États temporaires pour les sélections du modal
+  const [tempCarYear, setTempCarYear] = useState(selectedCar?.year);
+  const [tempCarMake, setTempCarMake] = useState(selectedCar?.make);
+  const [tempCarModel, setTempCarModel] = useState(selectedCar?.model);
+  const [tempCarEngine, setTempCarEngine] = useState(selectedCar?.engine);
 
   const { data: yearsData, loading: loadingYears } = useCarYearsListQuery();
   const carYears = mapEdgesToItems(yearsData?.carYears);
@@ -35,15 +34,30 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
   });
   const carModels = mapEdgesToItems(modelsData?.carModels);
 
+  const { data: enginesData, loading: loadingEngines } = useCarEnginesListQuery({
+    skip: !tempCarModel,
+    variables: { filter: { modelIds: [tempCarModel?.id || ""] } },
+  });
+  const carEngines = mapEdgesToItems(enginesData?.carEngines);
+
+
+
   const handleFilter = () => {
-    if (tempCarYear && tempCarMake && tempCarModel) {
-      // Update context with temporary state
-      setSelectedCarYear(tempCarYear);
-      setSelectedCarMake(tempCarMake);
-      setSelectedCarModel(tempCarModel);
+    if (tempCarYear && tempCarMake && tempCarModel && (carEngines.length === 0 || tempCarEngine)) {
+      const carNameParts = [tempCarMake?.name, tempCarModel?.name, tempCarEngine?.name, tempCarYear?.name].filter(Boolean);
+      const carName = carNameParts.length > 0 ? carNameParts.join(" ") : null;
+      // Mettre à jour le contexte avec l'état temporaire
+      setSelectedCar({
+        make:tempCarMake,
+        year:tempCarYear,
+        model:tempCarModel,
+        engine:tempCarEngine,
+        name:carName,
+      });
+      setIsFiltered(true)
       onClose();
     } else {
-      Alert.alert("Please select all filter options.");
+      Alert.alert("Veuillez sélectionner toutes les options de filtrage.");
     }
   };
 
@@ -54,7 +68,19 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
           <Modal visible={open} onDismiss={() => onClose()} contentContainerStyle={styles.modalContainer}>
             <ScrollView>
               <View style={styles.filterContainer}>
-                <Text style={styles.filterText}>Filter by Car:</Text>
+                <View style={{alignItems:"flex-end"}}>
+                <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={onClose}
+                    style={styles.closeButton}
+                  />
+                </View>
+                <View style={styles.headerContainer}>
+                  <Text style={styles.filterText}>Filtrer par véhicule</Text>
+                </View>
+
+                <Text style={styles.instructionText}>Veuillez sélectionner par année, marque, modèle et moteur</Text>
 
                 <Picker
                   selectedValue={tempCarYear?.id || ""}
@@ -63,7 +89,7 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
                   }
                   enabled={!loadingYears}
                 >
-                  <Picker.Item label="Year" value="" />
+                  <Picker.Item label="Année" value="" />
                   {carYears?.map((year) => (
                     <Picker.Item key={year.id} label={`${year.name}`} value={year.id} />
                   ))}
@@ -76,7 +102,7 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
                   }
                   enabled={!!tempCarYear && !loadingMakes}
                 >
-                  <Picker.Item label="Make" value="" />
+                  <Picker.Item label="Marque" value="" />
                   {carMakes?.map((make) => (
                     <Picker.Item key={make.id} label={make.name} value={make.id} />
                   ))}
@@ -89,21 +115,58 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
                   }
                   enabled={!!tempCarMake && !loadingModels}
                 >
-                  <Picker.Item label="Model" value="" />
+                  <Picker.Item label="Modèle" value="" />
                   {carModels?.map((model) => (
                     <Picker.Item key={model.id} label={model.name} value={model.id} />
                   ))}
                 </Picker>
+                {carEngines.length > 0 && 
+                <Picker
+                  selectedValue={tempCarEngine?.id || ""}
+                  onValueChange={(itemValue) =>
+                    setTempCarEngine(carEngines.find((engine) => engine.id === itemValue) || null)
+                  }
+                  enabled={!!tempCarModel && !loadingEngines}
+                >
+                  <Picker.Item label="Type" value="" />
+                  {carEngines?.map((engine) => (
+                    <Picker.Item key={engine.id} label={engine.name} value={engine.id} />
+                  ))}
+                </Picker>}
+              </View>
+
+              <View style={styles.buttonGroup}>
+                <Button style={styles.button} mode="contained" onPress={handleFilter}
+                disabled={loadingEngines}
+                >
+                  AJOUTER
+                </Button>
+              </View>
+              <View style={[styles.buttonGroup,{
+                marginTop:25
+              }]}>
+                <Button style={[styles.button,
+                  {
+                    backgroundColor:"white",
+                    borderWidth:1,
+                    borderColor:"black"
+                  }
+                ]} mode="contained" onPress={()=>{
+                  setIsFiltered(false)
+                  setSelectedCar({})
+                  onClose()
+                }
+              }
+                disabled={loadingEngines}
+                >
+                  <Text
+                  style={{
+                    color:"black"
+                  }}>
+                    CHERCHER SANS VÉHICULE</Text>
+                </Button>
               </View>
             </ScrollView>
-            <View style={styles.buttonGroup}>
-              <Button mode="contained" onPress={handleFilter}>
-                Apply
-              </Button>
-              <Button mode="text" onPress={() => onClose()}>
-                Cancel
-              </Button>
-            </View>
           </Modal>
         </View>
       )}
@@ -113,24 +176,40 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
 
 const styles = StyleSheet.create({
   modalContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    height: "90%", 
     backgroundColor: "white",
     padding: 20,
-    marginHorizontal: 20,
-    borderRadius: 10,
-    zIndex: 1000,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    elevation: 5, 
   },
   filterContainer: {
     marginBottom: 20,
+    width: "100%",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   filterText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
+  },
+  closeButton: {
+    top: 0,
+    right: 0,
+  },
+  instructionText: {
+    fontSize: 12,
+    color: "gray",
     marginBottom: 10,
   },
   buttonGroup: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 20,
+    width:"100%"
   },
   overlay: {
     position: "absolute",
@@ -142,6 +221,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 1000,
   },
+  button:{
+    backgroundColor: colors.back,
+    marginTop:10,
+    borderRadius: 15,
+    alignItems: "center",
+  }
 });
 
 export default CarFilterModal;

@@ -1,0 +1,115 @@
+import { TouchableOpacity, View, Text, StyleSheet, Image } from "react-native";
+import CarFilterModal from "./Modal";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useState } from "react";
+import { useCarFilter } from "@/context/useCarFilterContext";
+import ImageExpand from "../ImageExpand";
+import { colors } from "../Themed";
+
+interface ImageProps {
+  url: string;
+  alt: string;
+}
+
+const AddVehicleBasic = () => {
+  const [filterOpen, setFilterOpen] = useState(false);
+  const { isFiltered, selectedCar } = useCarFilter();
+  const [expandedImage, setExpandedImage] = useState<ImageProps | null>(null);
+
+  return (
+    <>
+      <View style={styles.selectVehicleContainer}>
+        <View style={styles.leftSection}>
+          <TouchableOpacity
+            onPress={() =>
+              selectedCar?.model?.imageUrl &&
+              setExpandedImage({
+                url: selectedCar.model.imageUrl,
+                alt: "",
+              })
+            }
+          >
+            {selectedCar?.model?.imageUrl ? (
+              <Image
+                style={styles.vehicleImage}
+                source={{ uri: selectedCar.model.imageUrl }}
+              />
+            ) : (
+              <FontAwesome name="car" size={24} color={colors.back} />
+            )}
+          </TouchableOpacity>
+
+          <Text style={styles.vehicleText}>
+            {isFiltered && selectedCar ? selectedCar.name : "What are you working on?"}
+          </Text>
+        </View>
+
+        {/* Right Section: Button */}
+        <TouchableOpacity style={styles.button} onPress={() => setFilterOpen(true)}>
+          <Text style={styles.buttonText}>
+            {isFiltered && selectedCar ? "Change" : "Select a vehicle"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Expanded Image Modal */}
+      {expandedImage && (
+        <View style={styles.modalContainer}>
+          <ImageExpand image={expandedImage} onRemoveExpand={() => setExpandedImage(null)} />
+        </View>
+      )}
+
+      {/* Car Filter Modal */}
+      {filterOpen && <CarFilterModal onClose={() => setFilterOpen(false)} open={filterOpen} />}
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+    selectVehicleContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        backgroundColor: "white",
+        padding: 15,
+        borderRadius: 8,
+      },
+      leftSection: {
+        flexDirection: "row",
+        alignItems: "center",
+        flex: 1,
+        margin:2
+      },
+      vehicleImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        marginRight: 10,
+      },
+      vehicleText: {
+        flex: 1, 
+        flexShrink: 1, 
+        maxWidth: "80%",
+        fontSize: 14,
+        fontWeight: "500",
+      },
+      button: {
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 5,
+        borderWidth: 1,
+      },
+      buttonText: {
+        fontSize: 12,
+        textDecorationLine: "underline",
+      },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+});
+
+export default AddVehicleBasic;

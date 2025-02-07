@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     selectedVariantBox: {
         borderStyle: "solid",
         borderWidth: 1,
-        borderColor: colors.blue,
+        borderColor: colors.orange,
         marginRight: 4,
         marginBottom: 4,
         padding: 8

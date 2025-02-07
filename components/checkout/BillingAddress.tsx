@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router"
-import { Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useCartContext } from "../../context/useCartContext"
 import { colors, Text, View } from "../Themed"
 import { IconButton } from "react-native-paper"
@@ -11,19 +11,28 @@ const BillingAddress = () => {
 
     const billingDetails = cart && cart.billingAddress
     if (billingDetails) {
-        return <Pressable onPress={() => router.push("/billingAddress")}>
+        return <>
             <View style={styles.billAddressWrapper}>
                 <View style={styles.titleWrapper}>
                     <Text style={styles.billingAddressTitle}>Billing Address</Text>
-                    <IconButton icon="chevron-down" onPress={() => router.push("/billingAddress")} style={styles.icon} />
+                    <TouchableOpacity onPress={() => router.push("/billingAddress")}>
+                    <Text style={styles.icon}>Edit Billing</Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.titleWrapper}>
+                <View style={styles.detailWrapper}>
+    
+                    <Text style={styles.billingAddressValue}>
+                        {billingDetails.lastName}, {billingDetails.firstName}
+                    </Text>
+                    <Text style={styles.billingAddressValue}>
+                        {billingDetails.streetAddress1}, {billingDetails.streetAddress2},{" "}
+                    </Text>
                     <Text style={styles.billingAddressValue} numberOfLines={1}>
-                        {billingDetails.streetAddress1}{", "}{billingDetails.streetAddress2}{", "}{billingDetails.city}{", "}{billingDetails.postalCode}
+                        {billingDetails.city}, {billingDetails.postalCode}
                     </Text>
                 </View>
             </View>
-        </Pressable >
+        </>
     }
 
     return <Pressable onPress={() => router.push("/billingAddress")}>
@@ -49,21 +58,27 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginTop: 5,
-        marginRight: 5,
+        marginRight: 10,
+        fontSize:14,
+        textDecorationLine:"underline"
     },
     titleWrapper: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems:"center",
         borderRadius: 5,
+        backgroundColor: 'inherit',
     },
+    detailWrapper: {
+        flexDirection: "column",
+        backgroundColor: 'inherit',
+      },
     billingAddressValue: {
         overflow: "hidden",
         fontStyle: "italic",
         width: 300,
-        marginTop: 8,
         marginLeft: 16,
-        marginBottom: 16,
     },
     billingAddressTitle: {
         fontWeight: "bold",

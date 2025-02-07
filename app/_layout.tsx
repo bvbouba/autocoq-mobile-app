@@ -24,6 +24,7 @@ import SimpleBackHeader from "../components/layout/SimpleBackHeader";
 import * as SplashScreen from 'expo-splash-screen'; // Corrected import
 import { CarFilterProvider } from "@/context/useCarFilterContext";
 import { AuthProvider } from "@/lib/providers/authProvider";
+import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -35,23 +36,23 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Handle error during font loading
+  // Gérer l'erreur lors du chargement des polices
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
     if (!loaded) {
-      SplashScreen.preventAutoHideAsync(); // Prevent splash screen from hiding
+      SplashScreen.preventAutoHideAsync(); // Empêcher l'écran de démarrage de se cacher
     } else {
-      SplashScreen.hideAsync(); // Hide splash screen after fonts are loaded
+      SplashScreen.hideAsync(); // Masquer l'écran de démarrage après le chargement des polices
     }
   }, [loaded]);
 
   return (
     <>
       {!loaded ? (
-        // No need to explicitly render SplashScreen as a component
+        // Pas besoin de rendre explicitement SplashScreen en tant que composant
         <></>
       ) : (
         <RootLayoutNav />
@@ -65,7 +66,7 @@ LogBox.ignoreAllLogs();
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const apiUrl = getConfig().saleorApi;
-
+  
   const apolloClient = new ApolloClient({
     uri: apiUrl,
     cache: new InMemoryCache(),
@@ -77,10 +78,9 @@ function RootLayoutNav() {
   };
 
   const companyName = "AUTOCOQ";
-
   return (
-    <AuthProvider>
     <ApolloProvider client={apolloClient}>
+    <AuthProvider>
      <CarFilterProvider>
       <ProductsProvider>
         <CartProvider>
@@ -105,20 +105,37 @@ function RootLayoutNav() {
                     }}
                   />
                   <Stack.Screen name="products/details/[id]" options={baseHeaderProps} />
-                  <Stack.Screen name="checkout" options={{ headerTitle: "Checkout" }} />
+                  <Stack.Screen name="checkout" options={{
+                    header:()=><SimpleCloseHeader  title="Commande" subTitle="Paiement et Révision"/>
+                    }}  />
                   <Stack.Screen name="personalDetails" options={baseHeaderProps} />
-                  <Stack.Screen name="shippingAddress" options={baseHeaderProps} />
-                  <Stack.Screen name="billingAddress" options={baseHeaderProps} />
+                  <Stack.Screen name="shippingAddress" options={{
+                    header:()=><SimpleCloseHeader  title="Commande" subTitle="Addresse de Livraison"/>
+                    }} />
+                  <Stack.Screen name="billingAddress" options={{
+                    header:()=><SimpleCloseHeader  title="Commande" subTitle="Addresse de Facturation"/>
+                    }}  />
                   <Stack.Screen name="shippingMethods" options={baseHeaderProps} />
                   <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
                   <Stack.Screen name="orderDetails/[id]" options={baseHeaderProps} />
                   <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="account/profile" options={{ headerTitle: "My profile"}} />
+                  <Stack.Screen name="account/profile" options={{ headerTitle: "Mon profil"}} />
                   <Stack.Screen name="account/faq" options={{ headerTitle: "FAQ"}} />
-                  <Stack.Screen name="account/terms" options={{ headerTitle: "Terms and conditions"}} />
-                  <Stack.Screen name="account/auth" options={baseHeaderProps} />
-                  <Stack.Screen name="account/addresses" options={{ headerTitle: "Addresses"}} />
-                  <Stack.Screen name="account/orders" options={{ headerTitle: "My orders"}} />
+                  <Stack.Screen name="account/terms" options={{ headerTitle: "Termes et conditions"}} />
+                  <Stack.Screen name="account/auth" options={{
+                                                      headerTitle: "",
+                                                      header: () => <SimpleBackHeader hasLogo={true} />,
+                                                    }} />
+                  <Stack.Screen name="account/signup" options={{
+                                                      headerTitle: "",
+                                                      header: () => <SimpleBackHeader hasLogo={true} />,
+                                                    }} />
+                  <Stack.Screen name="account/signin" options={{
+                                                      headerTitle: "",
+                                                      header: () => <SimpleBackHeader hasLogo={true} />,
+                                                    }} />
+                  <Stack.Screen name="account/addresses" options={{ headerTitle: "Adresses"}} />
+                  <Stack.Screen name="account/orders" options={{ headerTitle: "Mes commandes"}} />
                 </Stack>
               </ThemeProvider>
               </GestureHandlerRootView>
@@ -127,7 +144,7 @@ function RootLayoutNav() {
         </CartProvider>
       </ProductsProvider>
       </CarFilterProvider>
+      </AuthProvider>
     </ApolloProvider>
-    </AuthProvider>
   );
 }

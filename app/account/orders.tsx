@@ -1,18 +1,15 @@
 import { StyleSheet, View } from 'react-native';
-
 import { Divider, PaddedView, Text } from '../../components/Themed';
 import OrdersList from '../../components/orders/OrdersList';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useAuth } from '@/lib/providers/authProvider';
 
 export default function Orders() {
-  const {authenticated} = useAuth()
   return (
     <View style={styles.scrollContainer}>
       <ScrollView style={styles.scroll}>
         <PaddedView>
-          {/* <Text style={styles.title}>Your Orders</Text> */}
-          <Text style={styles.subTitle}>View and manage orders</Text>
+          {/* <Text style={styles.title}>Vos commandes</Text> */}
+          <Text style={styles.subTitle}>Afficher et gérer vos commandes</Text>
         </PaddedView>
         <Divider />
         <OrdersList /> 
@@ -26,7 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:50
+    backgroundColor: "white"
   },
   scroll: {
     width: "100%",
@@ -35,7 +32,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8
   },
   subTitle: {
     marginBottom: 16

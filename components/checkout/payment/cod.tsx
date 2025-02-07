@@ -37,16 +37,18 @@ const CodPayment = () => {
             startCheckout()
         }
     }
-
     return (
         <>
+        <View>
         <Button
                     onPress={buyNow}
                     mode="contained"
-                    disabled={loading}
+                    style={styles.submitButton}
+                    labelStyle={styles.submitButtonText}
                 >
-                    {(loading) ? <ActivityIndicator color="white" /> : "Buy Now"}
+                    {(loading) ? <ActivityIndicator color="white" /> : "Checkout and pay after delivery"}
                 </Button>
+                </View>
 
                 {error && (
                     <View style={styles.errorContainer}>
@@ -70,13 +72,23 @@ const styles = StyleSheet.create({
     errorContainer: {
         marginTop: 16,
         padding: 10,
-        backgroundColor: colors.errorBackground,
+        backgroundColor: colors.errorBg,
         borderRadius: 4,
     },
     errorText: {
-        color: colors.errorText,
+        color: colors.error,
         textAlign: "center",
     },
+    submitButton: {
+        backgroundColor: "#daa520",
+        marginHorizontal: 10,
+        borderRadius:5,
+        padding:5
+      },
+      submitButtonText: {
+        fontWeight:"bold",
+        color: "black", 
+      },
 });
 
 

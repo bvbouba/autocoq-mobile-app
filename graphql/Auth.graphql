@@ -47,4 +47,26 @@ query CurrentUser {
 	}
 }
 
+mutation verifyToken($token:String!){
+  tokenVerify(token: $token) {
+    isValid
+    errors {
+      field
+      code
+    }
+  }
+}
 
+mutation refreshToken($refreshToken:String!){
+  tokenRefresh(refreshToken: $refreshToken) {
+    token
+  }
+}
+
+
+query checkPhoneNumber ($phoneNumber:String!){
+  checkPhoneExists(phoneNumber:$phoneNumber){
+    error
+    exists
+  }
+}

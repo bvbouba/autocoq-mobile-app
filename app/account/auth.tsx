@@ -1,66 +1,123 @@
-import LoginForm from '@/components/auth/loginForm';
-import SignUpForm from '@/components/auth/signupForm';
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { useLazyQuery } from "@apollo/client";
+import { useLocalSearchParams, useRouter } from "expo-router"; // Used for navigation
+import { colors } from "@/components/Themed";
+import { CheckPhoneNumberDocument } from "@/saleor/api.generated";
 
 const AuthScreen = () => {
-    const [isLogin, setIsLogin] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // Router for navigation
+  const { redirectUrl } = useLocalSearchParams();
 
-    const toggleForm = () => setIsLogin(!isLogin);
+  // Apollo useLazyQuery for checking phone number
+  const [checkPhoneExists, { loading }] = useLazyQuery(CheckPhoneNumberDocument, {
+    onCompleted: (data) => {
+      if (data?.checkPhoneExists?.error) {
+        setError(data.checkPhoneExists.error);
+      } else {
+        // Redirect user based on phone number existence
+        if (data.checkPhoneExists.exists) {
+          router.push(`/account/signin?phone=${phoneNumber}&redirectUrl=${redirectUrl}`);
+        } else {
+          router.push(`/account/signup?phone=${phoneNumber}&redirectUrl=${redirectUrl}`);
+        }
+      }
+    },
+    onError: (err) => {
+      setError("Une erreur est survenue. Veuillez réessayer.");
+      console.error(err);
+    },
+  });
 
-    return (
-        <View style={{ paddingTop: 20 }}>
-            <View style={styles.titleContainer}>
-                <TouchableOpacity
-                    onPress={toggleForm}
-                    style={[styles.titleButton, isLogin && styles.activeButton]}
-                >
-                    <Text style={[styles.title, isLogin && styles.activeText]}>
-                        Login
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={toggleForm}
-                    style={[styles.titleButton, !isLogin && styles.activeButton]}
-                >
-                    <Text style={[styles.title, !isLogin && styles.activeText]}>
-                        Sign Up
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <View>
-            {isLogin ? (
-                <LoginForm  />
-            ) : (
-                <SignUpForm  />
-            )}
-            </View>
+  // Function to check phone number existence
+  const handleCheckNumber = () => {
+    setError(null);
+
+    // Validate phone number length (must be 10 digits)
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      setError("Le numéro de téléphone doit comporter exactement 10 chiffres.");
+      return;
+    }
+
+    checkPhoneExists({
+      variables: { phoneNumber },
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Se connecter ou créer un compte</Text>
+      <Text style={styles.subtitle}>
+        Entrez votre numéro de téléphone ci-dessous pour commencer
+      </Text>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Numéro de téléphone"
+            keyboardType="phone-pad"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+          />
+          {error && <Text style={styles.errorText}>{error}</Text>}
+          <TouchableOpacity onPress={handleCheckNumber} style={styles.button} disabled={loading}>
+            {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>CONTINUER</Text>}
+          </TouchableOpacity>
         </View>
-    );
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  titleContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: 10,
-      width: '100%', 
-  },
-  titleButton: {
-      flex: 1,
-      paddingVertical: 10, 
-      justifyContent: 'center', 
-      alignItems: 'center',
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    paddingHorizontal: 20,
+    marginTop:5,
+    backgroundColor:"white"
   },
   title: {
-      fontSize: 24,
+    fontSize:15,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
-  activeButton: {
-      backgroundColor: 'white',
+  subtitle: {
+    fontSize: 13,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "left",
   },
-  activeText: {
-      textDecorationLine: 'underline',
+  inputContainer: {
+    alignItems: "center",
+    width: "100%",
+  },
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 12,
+    borderRadius: 5,
+    marginBottom: 15,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: colors.back,
+    padding: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "100%",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "400",
+    fontSize: 13,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
   },
 });
 

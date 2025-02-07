@@ -1,39 +1,39 @@
-import { MakeDetailsFragment, ModelDetailsFragment, YearDetailsFragment } from "@/saleor/api.generated";
+import { EngineDetailsFragment, MakeDetailsFragment, ModelDetailsFragment, YearDetailsFragment } from "@/saleor/api.generated";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type CarFilterContextType = {
-  selectedCarYear?: YearDetailsFragment|null;
-  setSelectedCarYear: (year?: YearDetailsFragment|null) => void;
-  selectedCarMake?: MakeDetailsFragment|null;
-  setSelectedCarMake: (make?: MakeDetailsFragment|null) => void;
-  selectedCarModel?: ModelDetailsFragment|null;
-  setSelectedCarModel: (model?: ModelDetailsFragment|null) => void;
-  clearFilter: () => void; // Added clearFilter
+  setSelectedCar: (car?: car) => void;
+  clearFilter: () => void; 
+  isFiltered:boolean,
+  setIsFiltered:(isFiltered:boolean)=>void,
+  selectedCar?:car
 };
 
+interface car {
+  make?: MakeDetailsFragment|null,
+  model?:ModelDetailsFragment|null,
+  engine?:EngineDetailsFragment|null,
+  year?:YearDetailsFragment|null,
+  name?:string|null,
+}
 const CarFilterContext = createContext<CarFilterContextType | null>(null);
 
 export const CarFilterProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedCarYear, setSelectedCarYear] = useState<YearDetailsFragment|null>();
-  const [selectedCarMake, setSelectedCarMake] = useState<MakeDetailsFragment|null>();
-  const [selectedCarModel, setSelectedCarModel] = useState<ModelDetailsFragment|null>();
+  const [selectedCar, setSelectedCar] = useState<{}>()
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
   // Function to clear all selected filters
   const clearFilter = () => {
-    setSelectedCarYear(null);
-    setSelectedCarMake(null);
-    setSelectedCarModel(null);
+    setIsFiltered(false);
   };
 
   return (
     <CarFilterContext.Provider
       value={{
-        selectedCarYear,
-        setSelectedCarYear,
-        selectedCarMake,
-        setSelectedCarMake,
-        selectedCarModel,
-        setSelectedCarModel,
+        selectedCar,
+        setSelectedCar,
+        isFiltered,
+        setIsFiltered,
         clearFilter, // Provide clearFilter in the context
       }}
     >

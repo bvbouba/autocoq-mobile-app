@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router"
-import { Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useCartContext } from "../../context/useCartContext"
 import { colors, Text, View } from "../Themed"
 import { IconButton } from "react-native-paper"
@@ -15,12 +15,21 @@ const ShippingAddress = () => {
         return <Pressable onPress={() => router.push("/shippingAddress")}>
             <View style={styles.shippingAddressWrapper}>
                 <View style={styles.titleWrapper}>
-                    <Text style={styles.shippingAddressTitle}>Shipping Address</Text>
-                    <IconButton icon="chevron-down" onPress={() => router.push("/shippingAddress")} style={styles.icon} />
+                    <Text style={styles.shippingAddressTitle}>Shipping To </Text>
+                    <TouchableOpacity onPress={() => router.push("/shippingAddress")}>
+                    <Text style={styles.icon}>Change</Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.titleWrapper}>
+                <View style={styles.detailWrapper}>
+    
+                    <Text style={styles.shippingAddressValue}>
+                        {shippingDetails.lastName}, {shippingDetails.firstName}
+                    </Text>
+                    <Text style={styles.shippingAddressValue}>
+                        {shippingDetails.streetAddress1}, {shippingDetails.streetAddress2},{" "}
+                    </Text>
                     <Text style={styles.shippingAddressValue} numberOfLines={1}>
-                        {shippingDetails.streetAddress1}{", "}{shippingDetails.streetAddress2}{", "}{shippingDetails.city}{", "}{shippingDetails.postalCode}
+                        {shippingDetails.city}, {shippingDetails.postalCode}
                     </Text>
                 </View>
             </View>
@@ -46,27 +55,34 @@ export default ShippingAddress
 
 const styles = StyleSheet.create({
     shippingAddressWrapper: {
-        // border: "0.5 solid " + colors.dividerGrey,
         borderRadius: 5,
-        margin: 8
+        margin: 8,
+        backgroundColor:colors.background,
+        paddingBottom:10
     },
     icon: {
         marginTop: 5,
-        marginRight: 5,
+        marginRight: 10,
+        fontSize:14,
+        textDecorationLine:"underline"
     },
     titleWrapper: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems:"center",
         borderRadius: 5,
+        backgroundColor: 'inherit',
     },
+    detailWrapper: {
+        flexDirection: "column",
+        backgroundColor: 'inherit',
+      },
     shippingAddressValue: {
         overflow: "hidden",
         fontStyle: "italic",
         width: 300,
-        marginTop: 8,
         marginLeft: 16,
-        marginBottom: 16,
     },
     shippingAddressTitle: {
         fontWeight: "bold",

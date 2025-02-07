@@ -52,6 +52,8 @@ fragment CheckoutFragment on Checkout {
       amount
     }
     active
+    minimumDeliveryDays
+    maximumDeliveryDays
   }
   totalPrice {
     tax {
@@ -157,6 +159,7 @@ fragment CheckoutFragment on Checkout {
         media {
           url
         }
+        externalReference
       }
       attributes {
         values {
@@ -335,6 +338,22 @@ mutation checkoutEmailUpdate($id: ID!, $email: String!) {
     errors {
       field
       code
+      message
+    }
+  }
+}
+
+
+mutation RemoveProductFromCheckout(
+  $checkoutToken: UUID!
+  $lineId: ID!
+) {
+  checkoutLineDelete(token: $checkoutToken, lineId: $lineId) {
+    checkout {
+      ...CheckoutFragment
+    }
+    errors {
+      field
       message
     }
   }

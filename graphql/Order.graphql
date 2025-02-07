@@ -54,6 +54,7 @@ fragment OrderLineVariant on ProductVariant {
     media {
       url
     }
+  externalReference
   }
   attributes {
     attribute {
@@ -134,6 +135,13 @@ fragment OrderFragment on Order {
   lines {
     ...OrderLineFragment
   }
+
+  shippingAddress {
+      ...AddressDetailsFragment
+    }
+    billingAddress {
+      ...AddressDetailsFragment
+    }
 }
 
 query getOrderById($id: ID!) {

@@ -12,6 +12,16 @@ fragment CollectionFragment on Collection {
       node {
         id
         name
+        pricing{
+          priceRange{
+            start{
+              gross{
+                amount
+                currency
+              }
+            }
+          }
+        }
         thumbnail {
           url
           alt
@@ -27,6 +37,21 @@ query getCollections($filter: ProductFilterInput) {  # Declare the filter variab
       node {
         ...CollectionFragment
       }
+    }
+  }
+}
+
+query CollectionBySlug($slug: String!) {
+  collection(slug: $slug, channel: "ci") {
+    id
+    name
+    slug
+    seoTitle
+    seoDescription
+    description
+    backgroundImage {
+      url
+      alt
     }
   }
 }

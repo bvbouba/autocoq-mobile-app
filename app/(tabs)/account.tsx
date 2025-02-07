@@ -1,37 +1,37 @@
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Text, Divider, PaddedView } from '../../components/Themed';
+import { Text, Divider, PaddedView, colors } from '../../components/Themed';
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
 import { useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
+import BannerAds from '@/components/layout/BannerAds';
 
 export default function AccountScreen() {
   const router = useRouter();
-  const { user, loading,  resetToken } = useAuth();
-  const [isLoading, setIsLoading] = useState(false); 
-  
-  
+  const { user, loading, logout,authenticated } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSignIn = () => {
-    router.push('/account/auth');
+    router.push(`/account/auth?redirectUrl=${"/account"}`);
   };
 
   const handleSignOut = async () => {
-    setIsLoading(true); // Start loading
+    setIsLoading(true); // Commence le chargement
     try {
-      resetToken()
-      router.push('/');
+      logout();
+      router.push('/account');
     } catch (error) {
-      console.error('Error during sign-out:', error);
+      console.error("Erreur lors de la déconnexion :", error);
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false); // Arrête le chargement
     }
   };
 
   if (loading) {
     return (
       <View style={styles.scrollContainer}>
-        <Text>Loading...</Text>
+        <Text>Chargement...</Text>
       </View>
     );
   }
@@ -40,47 +40,63 @@ export default function AccountScreen() {
     <View style={styles.scrollContainer}>
       <ScrollView style={styles.scroll}>
         <View style={styles.header}>
-          <FontAwesome name="user-circle" size={28} color="#007AFF" />
-          <Text style={styles.title}>
-            {user?.id ? 'Welcome back!' : 'Welcome!'}
-          </Text>
+        <TouchableOpacity
+              style={{flexDirection:"row"}}
+              onPress={() => router.push('/account/profile')}
+              disabled={!authenticated}
+            >
+          <FontAwesome name="user-circle" size={20} color={colors.orange} />
+          <View style={{flexDirection:"column"}}>
+          <View style={styles.titleWrapper}>
+          <Text style={styles.title}>Bienvenue</Text>
+          <Text style={styles.title}>{authenticated ? `,${user?.firstName}` : ""}</Text>
+          </View>
+          {authenticated && <View style={{}}>
+           <Text> Voir le Profil</Text>
+          </View>
+          }
+          </View>
+          </TouchableOpacity>
         </View>
+        {!user?.id && <View>
+          <BannerAds slug="banner-pub-account" />
+        </View>}
 
         <View style={styles.accountButtonContainer}>
-          {user?.id ? (
-            <TouchableOpacity style={styles.myAccount} onPress={()=>router.push('/account/profile')}>
-              <FontAwesome name="user" size={20} color="white" />
-              <Text style={styles.myAccountText}>My Account</Text>
-            </TouchableOpacity>
-          ) : (
+          {!user?.id && (
             <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
-              <Text style={styles.signUpButtonText}>Sign In</Text>
+              <Text style={styles.signUpButtonText}>
+                SE CONNECTER OU CRÉER UN COMPTE
+              </Text>
             </TouchableOpacity>
           )}
         </View>
 
-        <PaddedView>
-          <ListItem name="My Orders" url="account/orders" />
-          {user?.id && <ListItem name="My Addresses" url="account/addresses" />}
+        <View style={styles.list}>
+          <ListItem name="Mes commandes" url="account/orders" />
+          <Divider />
+          {user?.id && <><ListItem name="Mes adresses" url="account/addresses" />
+                        <Divider />
+                        </>
+          }
           <ListItem name="FAQ" url="account/faq" />
-          <ListItem name="Terms and Conditions" url="account/terms" />
+          <Divider />
+          <ListItem name="Conditions générales" url="account/terms" />
 
           {user?.id && (
-            <>
-              <Divider />
+            <View style={{marginTop:50}}>
               <TouchableOpacity
-                style={[styles.menuItem, isLoading && styles.disabledButton]}
+                style={[styles.signUpButton, isLoading && styles.disabledButton]}
                 onPress={handleSignOut}
-                disabled={isLoading} // Disable button while loading
+                disabled={isLoading} // Désactiver le bouton pendant le chargement
               >
-                <Text style={[styles.menuText, styles.signOutText]}>
-                  {isLoading ? 'Signing out...' : 'Sign Out'}
-                </Text>
-           
+                {loading ? <ActivityIndicator color="white" /> : <Text style={styles.signUpButtonText}>{'SE DÉCONNECTER'}</Text>}
               </TouchableOpacity>
-            </>
+
+
+            </View>
           )}
-        </PaddedView>
+        </View>
       </ScrollView>
     </View>
   );
@@ -89,72 +105,78 @@ export default function AccountScreen() {
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 70,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    paddingHorizontal: 15,
   },
   scroll: {
-    width: '100%',
+    width: "100%",
+  },
+  titleWrapper: {
+    marginLeft: 8,
+    flexDirection:"row",
+    textAlign: "center",
   },
   title: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 8,
+    fontSize: 18,
+    fontWeight: "500",
+    textTransform: "capitalize"
   },
   subTitle: {
     marginBottom: 16,
   },
   header: {
-    alignItems: 'center',
-    marginBottom: 20,
+    flexDirection: "row",
   },
   accountButtonContainer: {
-    alignItems: 'center',
     marginVertical: 15,
+    width: "100%",
   },
   signUpButton: {
-    backgroundColor: '#007AFF',
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 40,
+    backgroundColor: colors.back,
+    padding: 10,
+    borderRadius: 15,
+    alignItems: "center",
   },
   signUpButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
+    color: "#fff",
+    fontWeight: "400",
   },
   myAccount: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#007AFF',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#007AFF",
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 40,
   },
   myAccountText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     fontSize: 16,
     marginLeft: 10,
   },
   menuItem: {
     paddingVertical: 15,
     paddingHorizontal: 10,
-    marginLeft:30
+    marginLeft: 30,
   },
   menuText: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   signOutText: {
-    color: '#FF3B30',
-    fontWeight: 'bold',
+    color: "#FF3B30",
+    fontWeight: "bold",
   },
   disabledButton: {
-    opacity: 0.6, // Dim the button to indicate it is disabled
+    opacity: 0.6, // Atténuer le bouton pour indiquer qu'il est désactivé
   },
   loadingIndicator: {
     marginLeft: 10,
+  },
+  list: {
+    marginTop: 20,
   },
 });

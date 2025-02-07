@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import {TextInput} from 'react-native-paper'
 import { colors } from '../Themed';
 
 import { useRouter, useGlobalSearchParams } from 'expo-router';  // Correct import
@@ -79,14 +80,24 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true }) => {
         <SafeAreaView style={styles.container}>
             <View style={styles.textInputWrapper}>
                 <TextInput
-                    placeholderTextColor={colors.textInputGrey}
+                   mode="outlined"
                     onChangeText={onChange}
                     onSubmitEditing={() => {
                         runSearch(formik.values.search);
                     }}
                     value={formik.values.search}
                     style={styles.searchBar}
-                    placeholder="Search" />
+                    placeholder="Rechercher des pièces" 
+                    outlineColor={colors.gray}
+                    placeholderTextColor={colors.textInputGrey}
+                    
+                    left={
+                        <TextInput.Icon
+                        icon="magnify"
+                    />
+                    }
+                    />
+                    
             </View>
         </SafeAreaView>
     );
@@ -96,7 +107,7 @@ export default ProductSearch;
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
+        width: "100%",        
     },
     textInputWrapper: {
         display: "flex",
