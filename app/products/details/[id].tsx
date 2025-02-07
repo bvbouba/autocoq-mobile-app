@@ -1,8 +1,9 @@
 import { usePathname } from "expo-router";
 import ProductDetails from "../../../components/products/ProductDetails"
 import { useGetProductByIdQuery } from "../../../saleor/api.generated";
-import { View,Text,StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { getConfig } from "../../../config";
+import {Text, View } from "@/components/Themed"
 
 const ProductDetailsId = () => {
     const pathname = usePathname();

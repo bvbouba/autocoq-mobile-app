@@ -1,8 +1,8 @@
 import { AddressDetailsFragment, useAddressDeleteMutation, useSetAddressDefaultMutation } from "@/saleor/api.generated";
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, TouchableOpacity, Alert } from "react-native";
 import AddressDisplay from "./addressDisplay";
 import { Ionicons } from "@expo/vector-icons"; // Use FontAwesome if preferred
+import {Text, View  } from "@/components/Themed"
 
 export interface AddressBookCardProps {
   address: AddressDetailsFragment;

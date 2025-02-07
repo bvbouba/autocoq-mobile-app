@@ -1,10 +1,11 @@
 import { useLocalSearchParams, usePathname } from "expo-router";
 import { useEffect, useState } from "react";
 import ProductsScreen from "../../components/products/ProductsScreen";
-import { SafeAreaView, View,Text,StyleSheet } from "react-native";
+import { SafeAreaView,StyleSheet } from "react-native";
 import { useProductListByCategoryQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import Loading from "@/components/Loading";
+
 
 const CategoryProductScreen = () => {
     const pathname = usePathname();

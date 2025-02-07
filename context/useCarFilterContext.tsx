@@ -7,6 +7,8 @@ type CarFilterContextType = {
   isFiltered:boolean,
   setIsFiltered:(isFiltered:boolean)=>void,
   selectedCar?:car
+  filterOpen:boolean,
+  setFilterOpen:(filterOpen:boolean)=>void
 };
 
 interface car {
@@ -21,6 +23,7 @@ const CarFilterContext = createContext<CarFilterContextType | null>(null);
 export const CarFilterProvider = ({ children }: { children: ReactNode }) => {
   const [selectedCar, setSelectedCar] = useState<{}>()
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   // Function to clear all selected filters
   const clearFilter = () => {
@@ -34,6 +37,8 @@ export const CarFilterProvider = ({ children }: { children: ReactNode }) => {
         setSelectedCar,
         isFiltered,
         setIsFiltered,
+        setFilterOpen,
+        filterOpen,
         clearFilter, // Provide clearFilter in the context
       }}
     >

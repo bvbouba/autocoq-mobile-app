@@ -88,8 +88,8 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true }) => {
                     value={formik.values.search}
                     style={styles.searchBar}
                     placeholder="Rechercher des pièces" 
-                    outlineColor={colors.gray}
-                    placeholderTextColor={colors.textInputGrey}
+                    outlineColor={colors.border}
+                    placeholderTextColor={colors.textSecondary}
                     
                     left={
                         <TextInput.Icon
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
         paddingRight: 8,
         borderRadius: 1,
-        backgroundColor: colors.textInputGreyBackground,
-        color: colors.textInputGrey,
+        backgroundColor: colors.background,
+        color: colors.secondary,
     },
 });

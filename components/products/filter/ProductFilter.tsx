@@ -4,7 +4,7 @@ import { useProductContext } from '../../../context/useProductContext';
 
 import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '../../../config';
-import { CategoryPathFragment, CollectionFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '../../../saleor/api.generated';
+import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '../../../saleor/api.generated';
 import { colors, Divider, Text, View } from '../../Themed';
 import { Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
@@ -23,19 +23,8 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
         }
     })
 
-    const { setCategoryFilters, selectedCategories, collectionFilter, setCollectionFilter } = useProductContext();
+    const { setCategoryFilters, selectedCategories,  } = useProductContext();
 
-    useEffect(() => {
-        if (collectionsQueryString && collectionsCalled) {
-            const foundCollection: CollectionFragment | undefined = collectionsData?.collections?.edges.map(edge => edge.node)
-                .find(collection => collection.slug === collectionsQueryString);
-
-            setCollectionFilter(foundCollection)
-        }
-        if (!collectionsQueryString) {
-            setCollectionFilter(undefined)
-        }
-    }, [collectionsQueryString, collectionsData])
 
     useEffect(() => {
         if (categoriesQueryString && categoriesData) {
@@ -60,7 +49,7 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
         }
     }, [categoriesQueryString, categoriesData])
 
-    const numberOfFilters = selectedCategories.length + (collectionFilter ? 1 : 0);
+    const numberOfFilters = selectedCategories.length ;
 
     return (
         <View style={styles.wrapper}>
@@ -74,7 +63,7 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
                 <View style={{
                     flexDirection:"row",
                     alignItems:"center",
-                    backgroundColor:colors.textInputGreyBackground,
+                    backgroundColor:colors.background,
                 }}>
                 
                 <Button style={[styles.filterButton,(numberOfFilters !== 0)&&{
@@ -82,7 +71,7 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
                     borderRadius:3,
                 }]} onPress={() => openFilters()} icon="chevron-down"
                     contentStyle={{ flexDirection: 'row-reverse' }} labelStyle={(numberOfFilters !== 0)&&{color:"white"}}> 
-                     <FontAwesome name="filter" size={15} color={(numberOfFilters !== 0) ? "white" : colors.back} />
+                     <FontAwesome name="filter" size={15} color={(numberOfFilters !== 0) ? "white" : colors.secondary} />
                     <Text style={[styles.filterText,
                      (numberOfFilters !== 0) && {color:"white"}
                     ]}>Filters</Text> </Button>
@@ -114,7 +103,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         flexDirection: "row",
         paddingBottom: 4,
-        backgroundColor:colors.textInputGreyBackground
+        backgroundColor:colors.background
     },
     filterText:{
         margin:2,

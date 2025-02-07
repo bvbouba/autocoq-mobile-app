@@ -1,6 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import SecondaryButton from "./button/SecondaryButton";
+import {Text, View  } from "@/components/Themed"
 
 interface props {
   redirectUrl:string

@@ -1,6 +1,7 @@
 import { parseEditorJSData } from "@/utils/parseJsonEditor";
-import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import {  StyleSheet, useWindowDimensions } from "react-native";
 import RenderHtml from "react-native-render-html";
+import {Text, View ,} from "@/components/Themed"
 
 export interface RichTextProps {
   jsonStringData?: string;

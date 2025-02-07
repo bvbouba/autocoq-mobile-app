@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Image, Pressable, StyleSheet } from "react-native";
-import { colors, PaddedView, Text, View } from "../Themed";
-import { CategoryPathFragment, MenuItem, MenuItemFragment } from "../../saleor/api.generated";
+import { colors, Text, View } from "../Themed";
+import {  MenuItemFragment } from "../../saleor/api.generated";
 
 interface Props {
     menus: MenuItemFragment[];

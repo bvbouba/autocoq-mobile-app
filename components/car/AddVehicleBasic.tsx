@@ -1,10 +1,11 @@
-import { TouchableOpacity, View, Text, StyleSheet, Image } from "react-native";
+import { TouchableOpacity, StyleSheet, Image } from "react-native";
+import {Text, View ,colors } from "@/components/Themed"
+
 import CarFilterModal from "./Modal";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import ImageExpand from "../ImageExpand";
-import { colors } from "../Themed";
 
 interface ImageProps {
   url: string;

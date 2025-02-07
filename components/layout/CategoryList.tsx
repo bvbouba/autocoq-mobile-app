@@ -1,5 +1,5 @@
 import { View, Text, PaddedView, Divider } from "../Themed";
-import { StyleSheet, Pressable } from "react-native";
+import { StyleSheet } from "react-native";
 import {  useCategoryBySlugQuery } from "@/saleor/api.generated";
 import { useLocalSearchParams } from "expo-router";
 
@@ -36,14 +36,16 @@ const CategoryList = () => {
           flexDirection:"column"
         }}>
           {
-             childrens.map(children=>(
+             childrens.map(children=>{
+              const child = mapEdgesToItems(children.children)
+              return(
               <View style={{
 
               }} key={children.id}>
-                <ListItem name={children.name} url={`/shop/?slug=${children.slug}`} slug={category.slug}/>
+                <ListItem name={children.name} url={(child.length>0) ? `/shop/?slug=${children.slug}` : `/categories/${children.slug}`} slug={category.slug}/>
                 <Divider />
               </View>
-             ))
+             )})
           }
         </PaddedView>
       

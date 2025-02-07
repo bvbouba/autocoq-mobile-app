@@ -1,11 +1,11 @@
 import { useRouter } from 'expo-router';
-import {  SafeAreaView, ScrollView, StyleSheet, View,Text, TouchableOpacity } from 'react-native';
+import {  SafeAreaView, ScrollView, StyleSheet,TouchableOpacity } from 'react-native';
+import {Text, View , Divider, PaddedView, colors } from "@/components/Themed"
 import { Button } from 'react-native-paper';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
 import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
 import { useCartContext } from '@/context/useCartContext';
 import { usePaymentContext } from '@/context/usePaymentContext';
-import { colors, Divider, PaddedView } from '@/components/Themed';
 import OrderTotal from '@/components/checkout/OrderTotal';
 import ShippingMethodSelector from '@/components/checkout/ShippingMethodSelector';
 import ShippingAddress from '@/components/checkout/ShippingAddress';

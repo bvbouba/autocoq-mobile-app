@@ -1,7 +1,8 @@
 import Loading from '@/components/Loading';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
+import {Text, View  } from "@/components/Themed"
 
 export default function TermsScreen() {
   const { data, loading, error } = usePageQuery({

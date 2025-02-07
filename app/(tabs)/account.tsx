@@ -1,6 +1,6 @@
-import { StyleSheet, View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Text, Divider, PaddedView, colors } from '../../components/Themed';
+import {Text, View , Divider,colors } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
 import { useState } from 'react';

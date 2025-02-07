@@ -1,7 +1,9 @@
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
 import Loading from '@/components/Loading';
+import {Text, View  } from "@/components/Themed"
+
 
 export default function FAQScreen() {
   const { data, loading, error } = usePageQuery({

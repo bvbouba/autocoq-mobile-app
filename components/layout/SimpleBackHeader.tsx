@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
-import { Platform, SafeAreaView, StyleSheet, Text,Image } from "react-native";
+import { Platform, SafeAreaView, StyleSheet,Image } from "react-native";
+import {Text, View ,colors } from "@/components/Themed"
+
 import { IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { View, colors } from "../Themed";
 import LoadingIndicator from "./LoadingIndicator";
 
 const SimpleBackHeader = ({ title,hasLogo }: { title?: string,hasLogo?:boolean }) => {

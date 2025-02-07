@@ -1,15 +1,13 @@
-import {  useRouter } from "expo-router";
 import { View, colors } from "../Themed";
 import { IconButton } from "react-native-paper";
 import ProductSearch from "../products/ProductsSearch";
 import { SafeAreaView, StyleSheet, Text, Image } from "react-native";
-import { FC, useEffect } from "react";
+import { FC, } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LoadingIndicator from "./LoadingIndicator";
 import Banner from "./BannerSimple";
 import AddVehicleBasic from "../car/AddVehicleBasic";
-import { useLocalSearchParams, usePathname } from "expo-router/build/hooks";
-import { usePath } from "@/context/backUrl";
+import { usePath } from "@/context/path";
 
 interface Props {
   withBack?: boolean;
@@ -102,6 +100,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     backgroundColor:"white",
+    elevation:2,
+    shadowColor: "#000", // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Moves shadow downwards
+    shadowOpacity: 0.2, // Adjust transparency
+    shadowRadius: 2, // Blur effect
+    
   },
   containerWithBack: {
     width: "100%",

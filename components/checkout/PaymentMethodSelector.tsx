@@ -3,7 +3,6 @@ import { FC } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { useCartContext } from "../../context/useCartContext";
 import { Text, View } from "../Themed";
-import { IconButton } from "react-native-paper";
 import { usePaymentContext } from "@/context/usePaymentContext";
 import BillingAddress from "./BillingAddress";
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import for payment icon

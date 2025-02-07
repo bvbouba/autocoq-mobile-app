@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { getConfig } from "../config";
-import { CategoryPathFragment, CollectionFragment, ProductFragment, useSearchProductsLazyQuery } from "../saleor/api.generated";
+import { CategoryPathFragment, ProductFragment, useSearchProductsLazyQuery } from "../saleor/api.generated";
 import {
     handleErrors
 } from "./checkout";
@@ -9,12 +9,10 @@ import { useCarFilter } from "./useCarFilterContext";
 interface ProductsContextModel {
     products: ProductFragment[] | undefined;
     selectedCategories: CategoryPathFragment[],
-    collectionFilter: CollectionFragment | undefined,
     loaded: boolean | undefined;
     loading: boolean | undefined;
     search: (searchString: string) => void;
     setCategoryFilters: (categories: CategoryPathFragment[]) => void
-    setCollectionFilter: (collection: CollectionFragment | undefined) => void
 }
 
 const ProductsContext = createContext<ProductsContextModel>({
@@ -22,10 +20,8 @@ const ProductsContext = createContext<ProductsContextModel>({
     selectedCategories: [],
     loading: undefined,
     loaded: undefined,
-    collectionFilter: undefined,
     search: () => { },
     setCategoryFilters: () => { },
-    setCollectionFilter: () => { },
 });
 
 export const useProductContext = () => useContext(ProductsContext);
@@ -35,7 +31,6 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
     const {selectedCar,isFiltered} = useCarFilter()
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [categoryFilters, setCategoryFilters] = useState<CategoryPathFragment[]>([]);
-    const [collectionFilter, setCollectionFilter] = useState<CollectionFragment | undefined>(undefined);
     const [searchProducts, searchProductsStatus] = useSearchProductsLazyQuery();
 
     const loading = searchProductsStatus.loading
@@ -44,7 +39,6 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
         channel: getConfig().channel,
         search: searchQuery,
         categories: categoryFilters.map(cat => cat.id),
-        collections: collectionFilter ? [collectionFilter.id] : [],
         ...(selectedCar && isFiltered
             ? {
                   ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }), 
@@ -66,7 +60,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
             }
 
         });
-    }, [searchQuery, categoryFilters, collectionFilter,selectedCar,isFiltered??false]);
+    }, [searchQuery, categoryFilters,selectedCar,isFiltered??false]);
 
     return (
         <ProductsContext.Provider value={{
@@ -74,8 +68,6 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
             setCategoryFilters: (cats) => {
                 setCategoryFilters(cats)
             },
-            setCollectionFilter: (col) => setCollectionFilter(col),
-            collectionFilter,
             products,
             selectedCategories: categoryFilters,
             loading: loading,

@@ -1,4 +1,5 @@
-import { View,Text,StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
+import {Text, View } from "@/components/Themed"
 
 
 const Loading =()=>{
@@ -17,6 +18,7 @@ const styles = StyleSheet.create({
       marginTop: 0,
       width: "100%",
       paddingBottom: 16,
+      minHeight: 400,
     },
     scroll: {
       width: "100%",

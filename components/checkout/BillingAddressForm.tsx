@@ -1,14 +1,15 @@
 import React, { FC, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { colors } from "../Themed";
 import { useCartContext } from "../../context/useCartContext";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation } from "../../saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
+import {Text, View ,colors } from "@/components/Themed"
+
 
 interface Props {
   onSubmit: () => void;
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white", // White background
     borderWidth: 1, // 1px border
-    borderColor: colors.greyText, // Black border
+    borderColor: colors.textSecondary, // Black border
     borderRadius: 4,
     paddingHorizontal: 10,
     color: "black",
@@ -282,11 +283,11 @@ const styles = StyleSheet.create({
   errorContainer: {
     marginTop: 16,
     padding: 10,
-    backgroundColor: colors.errorBackground,
+    backgroundColor: colors.errorBg,
     borderRadius: 4,
   },
   errorText: {
-    color: colors.errorText,
+    color: colors.error,
     textAlign: "center",
   },
 });

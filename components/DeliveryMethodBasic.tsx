@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { ProductVariantFragment, ShippingMethodFragment } from "@/saleor/api.generated";
+import { ProductVariantFragment } from "@/saleor/api.generated";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
-import RichText from "./RichText";
 import { formatDuration } from "@/utils/dateformat";
+import {Text, View } from "@/components/Themed"
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
 

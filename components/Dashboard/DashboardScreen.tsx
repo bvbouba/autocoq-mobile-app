@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Alert, ScrollView, StyleSheet, View, Text } from "react-native";
-import { useRouter } from "expo-router";
-import { useCategoryPathsQuery, useGetHomepageQuery } from "../../saleor/api.generated";
-import { colors, Divider } from "../Themed";
+import {  useRouter } from "expo-router";
+import {  useGetHomepageQuery } from "../../saleor/api.generated";
+import { Divider } from "../Themed";
 import { getConfig } from "../../config";
 import CategoriesScroll from "../Dashboard/CategoriesScroll";
-import { useCarFilter } from "@/context/useCarFilterContext";
 import AuthPrompt from "../AuthPrompt";
 import { useAuth } from "@/lib/providers/authProvider";
 import AddVehicleSection from "../car/AddVehicle";
 import Loading from "../Loading";
+import { useLoading } from "@/context/Loading";
+import { useCarFilter } from "@/context/useCarFilterContext";
+import CarFilterModal from "../car/Modal";
 
 
 const DashboardScreen = () => {
   const router = useRouter();
   const { authenticated } = useAuth();
+  const {setIsLoading} = useLoading()
 
   const { data: categoriesData, error: catError, loading } = useGetHomepageQuery({
     variables: { channel: getConfig().channel },
@@ -23,6 +26,12 @@ const DashboardScreen = () => {
     if (catError) Alert.alert("Erreur lors du chargement des catégories", catError.message);
   }, [
     catError]);
+
+    // Set loading state globally
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
+  
 
   if (loading) {
     return (
@@ -37,6 +46,7 @@ const DashboardScreen = () => {
         
         <AddVehicleSection 
         />
+        
         
         <Divider />
         {/* Catégories */}
@@ -61,8 +71,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     marginTop: 0,
-    margin:15,
-    paddingBottom: 10,
+    marginHorizontal:15,
   },
   scroll: {
     width: "100%",

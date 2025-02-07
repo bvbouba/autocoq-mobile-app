@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet } from "react-native"
 import { useCartContext } from "../../context/useCartContext"
-import { colors, Text, View } from "../Themed"
+import {  Text, View } from "../Themed"
 import { IconButton } from "react-native-paper"
 
 

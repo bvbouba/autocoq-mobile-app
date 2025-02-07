@@ -1,8 +1,8 @@
 import { ProductFragment, useCompatibilityCheckQuery } from "@/saleor/api.generated"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
-import { colors } from "../Themed"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { useCarFilter } from "@/context/useCarFilterContext"
+import {Text, View ,colors } from "@/components/Themed"
 
 
 interface props {
@@ -49,7 +49,7 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
               flexDirection: "row",
               alignItems:"center"
             }}>
-              <FontAwesome name="car" size={15} color={colors.back} />
+              <FontAwesome name="car" size={15} color={colors.secondary} />
               <Text style={styles.vehicleText}>
                 {selectedCar?.name
                   ? isCompatible
@@ -116,8 +116,8 @@ const styles = StyleSheet.create({
 
   vehicleContainer: {
     borderWidth: 1,
-    borderColor: colors.yellowBorder,
-    backgroundColor: colors.yellowBg,
+    borderColor: colors.warning,
+    backgroundColor: colors.warningBg,
     marginVertical: 15,
     width: "100%",
     borderRadius: 5,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   vehicleCheck: {
     flexDirection: "column",
-    backgroundColor: colors.yellowBg,
+    backgroundColor: colors.warningBg,
     alignItems: "center",
     width: "100%",
   },
@@ -146,12 +146,12 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   compatible: {
-    backgroundColor: colors.greenBg,
-    borderColor: colors.greenBorder,
+    backgroundColor: colors.successBg,
+    borderColor: colors.successBg,
   },
   compatibleVehicleCheck: {
-    backgroundColor: colors.greenBg,
-    borderColor: colors.greenBorder,
+    backgroundColor: colors.successBg,
+    borderColor: colors.success,
     width: "100%"
   },
   noCompatible: {

@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '@/lib/providers/authProvider';
-import { colors, PaddedView } from '@/components/Themed';
+import {Text, View , PaddedView,colors } from "@/components/Themed"
 
 interface Form {
     identifier: string;
@@ -75,8 +75,8 @@ const SignIn: FC = () => {
                     label="Mot de passe"
                     error={!!formik.errors.password}
                     secureTextEntry={!showPassword}
-                    outlineColor={colors.gray}
-                    underlineColor={colors.gray}
+                    outlineColor={colors.border}
+                    underlineColor={colors.border}
                     right={
                         <TextInput.Icon
                             icon={showPassword ? 'eye-off' : 'eye'}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
       },
     button: {
-        backgroundColor: colors.back,
+        backgroundColor: colors.background,
         borderRadius: 5,
         alignItems: "center",
         width: "100%",

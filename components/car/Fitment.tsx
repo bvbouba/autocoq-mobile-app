@@ -1,7 +1,8 @@
-import { View,Text,StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { IconButton } from "react-native-paper"
-import { PaddedView } from "../Themed"
 import { useState } from "react";
+import {Text, View , PaddedView } from "@/components/Themed"
+
 
 interface car {
     carMakeName?: string | null;

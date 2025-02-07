@@ -74,7 +74,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <View style={{ flexDirection: "column", marginBottom: 15, padding: 8 }}>
             <Text style={styles.productTitle}>{product.name}</Text>
             {product.externalReference && (
-              <Text style={{ fontSize: 12, color: colors.greyText }}>
+              <Text style={{ fontSize: 12, color: colors.textSecondary }}>
                 Référence # {product.externalReference}
               </Text>
             )}
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    backgroundColor: colors.back,
+    backgroundColor: colors.secondary,
     borderRadius: 15,
     alignItems: "center",
     width: "95%",

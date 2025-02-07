@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import {   TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useLazyQuery } from "@apollo/client";
 import { useLocalSearchParams, useRouter } from "expo-router"; // Used for navigation
-import { colors } from "@/components/Themed";
 import { CheckPhoneNumberDocument } from "@/saleor/api.generated";
+import {Text, View,colors } from "@/components/Themed"
+
 
 const AuthScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    backgroundColor: colors.back,
+    backgroundColor: colors.secondary,
     padding: 12,
     borderRadius: 5,
     alignItems: "center",

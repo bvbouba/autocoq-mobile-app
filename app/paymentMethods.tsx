@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, RadioButton, ActivityIndicator } from 'react-native-paper';
-import { colors, PaddedView, Text } from '../components/Themed';
+import {  PaddedView, Text } from '../components/Themed';
 import { useCartContext } from '../context/useCartContext';
 import { useRouter } from 'expo-router';
 import { View, StyleSheet } from 'react-native';

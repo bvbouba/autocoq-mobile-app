@@ -5,9 +5,9 @@ import {
     useCurrentUserAddressesQuery 
 } from "../../saleor/api.generated";
 
-import { 
-    colors, Divider, PaddedView, Text, View 
-} from "../Themed";
+
+import {Text, View ,  PaddedView,colors } from "@/components/Themed"
+
 
 import { ScrollView, StyleSheet } from 'react-native';
 import { useCartContext } from "../../context/useCartContext";

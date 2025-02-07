@@ -37,6 +37,7 @@ export function Text(props: TextProps) {
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
 }
 
+
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
@@ -49,6 +50,36 @@ export function PaddedView(props: ViewProps) {
 
   return <View style={[{ paddingLeft: 16, paddingRight: 16, paddingTop: 8, paddingBottom: 8 }, style]} {...otherProps} />;
 }
+
+export function SurfaceView(props: ViewProps) {
+  const { style, ...otherProps } = props;
+  
+  return (
+    <View
+      style={[
+        {
+          padding: 10,
+          alignItems: "center",
+          width: "100%",
+          backgroundColor: "white",
+          borderRadius: 8, 
+          
+          // iOS Shadow
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 3 }, // Moves shadow down
+          shadowOpacity: 0.12, // Makes shadow more visible
+          shadowRadius: 3, // Increases spread
+          
+          // Android Shadow
+          elevation: 2, // Stronger shadow on Android
+        },
+        style
+      ]}
+      {...otherProps}
+    />
+  );
+}
+
 
 interface DividerProps {
   style?: any

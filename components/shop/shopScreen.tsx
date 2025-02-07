@@ -20,6 +20,7 @@ const ShopScreen = () => {
 
             </View>
            <CategoryShortList  />
+       
            <CategoryList  />
            </ScrollView>
             

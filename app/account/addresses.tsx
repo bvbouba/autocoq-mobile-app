@@ -3,7 +3,9 @@ import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {  StyleSheet, FlatList } from "react-native";
+import {Text, View } from "@/components/Themed"
+
 
 const CarnetDAdressesScreen = () => {
   const { authenticated, token, checkAndRefreshToken } = useAuth();

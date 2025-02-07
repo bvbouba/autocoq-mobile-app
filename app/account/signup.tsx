@@ -1,12 +1,13 @@
 import React, { FC, useState } from 'react';
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { StyleSheet, ActivityIndicator,  } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
-import { useCreateTokenMutation, useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
+import {  useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { colors, PaddedView } from '@/components/Themed';
+import {Text, View , PaddedView,colors } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
+
 
 interface Props {
     phoneNumber: string;
@@ -174,8 +175,8 @@ const SignUp: FC<Props> = ({ phoneNumber }) => {
                                 label="Entrez votre numéro de téléphone"
                                 keyboardType="phone-pad"
                                 error={!!formik.errors.phone}
-                                outlineColor={colors.gray}
-                                underlineColor={colors.gray}
+                                outlineColor={colors.border}
+                                underlineColor={colors.border}
                             />
                             <Button style={styles.button} onPress={handleNext} mode="contained" disabled={loading}>
                                 {loading ? <ActivityIndicator color="white" /> : 'Continuer'}
@@ -200,8 +201,8 @@ const SignUp: FC<Props> = ({ phoneNumber }) => {
                                 placeholder="Code de vérification"
                                 label="Code de vérification"
                                 error={!!formik.errors.verificationCode}
-                                outlineColor={colors.gray}
-                                underlineColor={colors.gray}
+                                outlineColor={colors.border}
+                                underlineColor={colors.border}
                             />
 
                             <Button style={styles.button} onPress={handleNext} mode="contained" disabled={loading}>
@@ -221,8 +222,8 @@ const SignUp: FC<Props> = ({ phoneNumber }) => {
                                 placeholder="Nom d'utilisateur"
                                 label="Nom d'utilisateur"
                                 error={!!formik.errors.username}
-                                outlineColor={colors.gray}
-                                underlineColor={colors.gray}
+                                outlineColor={colors.border}
+                                underlineColor={colors.border}
                             />
                             {formik.errors.username && <Text style={styles.error}>{formik.errors.username}</Text>}
 
@@ -235,8 +236,8 @@ const SignUp: FC<Props> = ({ phoneNumber }) => {
                                 secureTextEntry={!showPassword}
                                 error={!!formik.errors.password}
                                 right={<TextInput.Icon icon={showPassword ? 'eye-off' : 'eye'} onPress={() => setShowPassword(!showPassword)} />}
-                                outlineColor={colors.gray}
-                                underlineColor={colors.gray}
+                                outlineColor={colors.border}
+                                underlineColor={colors.border}
                             />
                             {formik.errors.password && <Text style={styles.error}>{formik.errors.password}</Text>}
 
@@ -249,8 +250,8 @@ const SignUp: FC<Props> = ({ phoneNumber }) => {
                                 secureTextEntry={!showPassword}
                                 error={!!formik.errors.confirmPassword}
                                 right={<TextInput.Icon icon={showPassword ? 'eye-off' : 'eye'} onPress={() => setShowPassword(!showPassword)} />}
-                                outlineColor={colors.gray}
-                                underlineColor={colors.gray}
+                                outlineColor={colors.border}
+                                underlineColor={colors.border}
                             />
                             {formik.errors.confirmPassword && <Text style={styles.error}>{formik.errors.confirmPassword}</Text>}
 
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        backgroundColor: colors.back,
+        backgroundColor: colors.border,
         borderRadius: 5,
         alignItems: "center",
         width: "100%",

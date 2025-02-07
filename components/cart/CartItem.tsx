@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { CheckoutLine, useRemoveProductFromCheckoutMutation } from "../../saleor/api.generated";
-import { colors, Divider, Text, View } from './../Themed';
+import { CheckoutLine } from "../../saleor/api.generated";
+import {Text, View , Divider,colors } from "@/components/Themed"
+
 import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "../../config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
 import { useCartContext } from "../../context/useCartContext";
-import { getCheckoutId } from "@/context/basketStore";
 
 interface Props {
     lineItem: CheckoutLine;
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     },
     partNo: {
         fontSize: 12,
-        color: colors.greyText
+        color: colors.textSecondary
     },
 
     picker: {

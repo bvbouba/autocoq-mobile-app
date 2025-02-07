@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { useColorScheme, StyleSheet } from 'react-native';
 
-import { colors, Text, View } from '@/components/Themed';
+import {  Text, View } from '@/components/Themed';
 import Colors from '../../constants/Colors';
 import { useCartContext } from '../../context/useCartContext';
 import HeaderBack from '@/components/layout/HeaderBack';

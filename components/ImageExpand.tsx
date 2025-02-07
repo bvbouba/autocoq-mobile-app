@@ -39,7 +39,7 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image, onRemoveExpand }) => {
             onPress={onRemoveExpand}
             activeOpacity={0.7}
           >
-            <MaterialIcons name="close" size={28} color={colors.orange} />
+            <MaterialIcons name="close" size={28} color={colors.primary} />
           </TouchableOpacity>
 
           {/* Image Container */}

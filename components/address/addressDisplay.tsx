@@ -1,6 +1,6 @@
 import { AddressDetailsFragment } from "@/saleor/api.generated";
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import {Text, View  } from "@/components/Themed"
 
 export interface AddressDisplayProps {
   address: AddressDetailsFragment;

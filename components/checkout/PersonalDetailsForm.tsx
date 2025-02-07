@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
-import { StyleSheet, ActivityIndicator, View, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { PaddedView, colors } from '../Themed';
+import {Text, View , PaddedView,colors } from "@/components/Themed"
+
 import { useCartContext } from '../../context/useCartContext';
 import { useCheckoutEmailUpdateMutation } from '../../saleor/api.generated';
 import { TextInput, Button } from 'react-native-paper';
@@ -114,11 +115,11 @@ const styles = StyleSheet.create({
     errorContainer: {
         marginTop: 16,
         padding: 10,
-        backgroundColor: colors.errorBackground,
+        backgroundColor: colors.errorBg,
         borderRadius: 4,
     },
     errorText: {
-        color: colors.errorText,
+        color: colors.error,
         textAlign: "center",
     },
 });

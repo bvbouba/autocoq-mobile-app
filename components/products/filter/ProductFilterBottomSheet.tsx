@@ -6,14 +6,13 @@ import * as yup from "yup";
 import CheckBoxWithLabel from "../../../utils/CheckboxWithLabel";
 import { getConfig } from "../../../config";
 import { useProductContext } from "../../../context/useProductContext";
-import { CategoryPathFragment, CollectionFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "../../../saleor/api.generated";
+import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "../../../saleor/api.generated";
 import { colors, Divider, Text, View } from "../../Themed";
 
 interface Props {
     open: boolean
     onClose: () => void
     onApply: (data: {
-        collection: CollectionFragment | undefined,
         categories: CategoryPathFragment[]
     }) => void
 }
@@ -28,35 +27,7 @@ const validationSchema = yup.object().shape({
     categories: yup.array().required("Required"),
 });
 
-const CollectionForm: FC<{ value: string | undefined, collections: CollectionFragment[], onChange: (value: string | undefined) => void }> = ({ collections, value: collectionFilter, onChange }) => {
-    const selectedCollection = collections?.filter(edge => edge.slug === collectionFilter);
-    const unselectedCollections = collections?.filter(edge => edge.slug !== collectionFilter);
 
-
-    return <View style={styles.collectionsContainer}>
-        {selectedCollection && selectedCollection.length > 0 &&
-            <Chip
-                key={selectedCollection[0].id}
-                selected={true}
-                mode={"flat"}
-                onClose={() => onChange(undefined)}
-                style={styles.collectionsChip}
-                onPress={() => onChange(undefined)}
-            >
-                {selectedCollection[0].name}
-            </Chip>}
-        {unselectedCollections && unselectedCollections.map(edge => (
-            <Chip
-                key={edge.id}
-                selected={false}
-                style={styles.collectionsChip}
-                mode={"outlined"}
-                onPress={() => onChange(edge.slug)}>
-                {edge.name}
-            </Chip>)
-        )}
-    </View>
-}
 
 const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
 
@@ -67,7 +38,7 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
         }
     });
 
-    const { collectionFilter, selectedCategories } = useProductContext();
+    const {  selectedCategories } = useProductContext();
     const containerStyle = { backgroundColor: 'white', padding: 20, maxHeight: 500 };
 
     const formik = useFormik<Form>({
@@ -86,15 +57,9 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
             categories: categoriesData?.categories?.edges
                 .filter(cat => formData.categories.findIndex(formCat => formCat === cat.node.slug) !== -1)
                 .map(edge => edge.node) || [],
-            collection: collectionsData?.collections?.edges.find(collection => collection.node.slug === formData.collection)?.node
         })
     }
 
-    useEffect(() => {
-        if (collectionFilter && collectionsData) {
-            formik.setFieldValue("collection", collectionFilter.slug)
-        }
-    }, [collectionFilter, collectionsData])
 
     useEffect(() => {
         if (selectedCategories && categoriesData) {
@@ -109,14 +74,6 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
                   <Divider style={{ borderBottomWidth: 5 }} />
 
 
-            <View style={styles.filterTypeContainer}>
-                <Text style={styles.filterTypeTitle}>Collections</Text>
-                {collectionsData?.collections?.edges.map(edge => edge.node) && <CollectionForm
-                    onChange={(value) => formik.setFieldValue("collection", value)}
-                    value={formik.values.collection}
-                    collections={collectionsData?.collections?.edges.map(edge => edge.node)}
-                />}
-            </View>
 
             <View style={styles.filterTypeContainer}>
                 <Text style={styles.filterTypeTitle}>Categories</Text>
@@ -177,7 +134,7 @@ const styles = StyleSheet.create({
 
     },
     primaryButton:{
-    backgroundColor: colors.back,
+    backgroundColor: colors.secondary,
     marginTop:10,
     borderRadius: 3,
     alignItems: "center",

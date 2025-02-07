@@ -1,5 +1,5 @@
-import { View, TouchableOpacity, Text, Image,StyleSheet } from "react-native";
-import { colors } from "../Themed";
+import {  TouchableOpacity, Image,StyleSheet } from "react-native";
+import {SurfaceView, Text, View , colors, fonts } from "@/components/Themed"
 import { FontAwesome } from "@expo/vector-icons";
 import ImageExpand from "../ImageExpand";
 import { EngineDetailsFragment, MakeDetailsFragment, ModelDetailsFragment, YearDetailsFragment } from "@/saleor/api.generated";
@@ -7,6 +7,7 @@ import { useState } from "react";
 import CarFilterModal from "./Modal";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { PrimaryButton } from "../button";
+import MyGarage from "../commun/MyGarage";
 
 interface props {
     carMake?:MakeDetailsFragment|null,
@@ -23,14 +24,17 @@ interface props {
   }
 
 const AddVehicleSection =()=>{
-    const { selectedCar, clearFilter, isFiltered } = useCarFilter();
+    const { selectedCar, clearFilter, isFiltered,setFilterOpen } = useCarFilter();
     const [expandedImage, setExpandedImage] = useState<ImageProps | null | undefined>(null);
-    const [filterOpen, setFilterOpen] = useState(false);
     
    
-    return(<><View style={styles.addVehicleContainer}>
+    return(<>
+     <SurfaceView>
+      <MyGarage />
           {isFiltered && selectedCar ? (
-            <View style={{ flexDirection: "row" }}>
+            <View style={{
+              flexDirection:"row"
+            }}>
               <View style={styles.currentFilterContainer}>
                 <Text style={styles.currentFilterText}>
                   {`Les pièces affichées sont pour`}
@@ -45,7 +49,7 @@ const AddVehicleSection =()=>{
                 </View>
               </View>
               <View style={{ alignContent: "center", padding: 5, marginLeft: 10 }}>
-                {(selectedCar.model?.imageUrl) ?
+                {(selectedCar.model?.imageUrl) && 
                   <>
                     <TouchableOpacity
                       onPress={() => setExpandedImage({
@@ -66,12 +70,10 @@ const AddVehicleSection =()=>{
                         <ImageExpand image={expandedImage} onRemoveExpand={() => setExpandedImage(null)} />
                       </View>
                     )}
-                  </>
-                  :
-                  <FontAwesome name="car" size={40} color={colors.secondary} />
+               </>
                 }
               </View>
-            </View>
+              </View>
           ) : (
             <>
               <View style={{ alignItems: "flex-start" }}>
@@ -88,11 +90,9 @@ const AddVehicleSection =()=>{
               </View>
             </>
           )}
-        </View>   
+          </SurfaceView>
     
-        {filterOpen && (
-            <CarFilterModal onClose={() => setFilterOpen(false)} open={filterOpen} />
-          )}
+       
     
     </>)
 }
@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
       width: "100%",
     },
     noVehicleText: {
-      fontSize: 14,
+      fontSize: fonts.body,
       fontWeight: "bold",
       color: "#333",
       marginBottom: 4,
     },
     vehicleDescription: {
-      fontSize: 13,
+      fontSize: fonts.body,
       color: "#666",
       marginBottom: 10,
     },
