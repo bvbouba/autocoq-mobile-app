@@ -36,7 +36,19 @@ const AddVehicleBasic = () => {
                 source={{ uri: selectedCar.model.imageUrl }}
               />
             ) : (
-              <FontAwesome name="car" size={18} color={colors.secondary} />
+              <View style={{ position: "relative" }}>
+                <FontAwesome name="car" size={18} color={colors.secondary} />
+                  <FontAwesome
+                    name="exclamation-circle"
+                    size={13}
+                    color={colors.warning}
+                    style={{
+                      position: "absolute",
+                      bottom: -4,
+                      right: -6,
+                    }}
+                  />
+              </View>
             )}
           </TouchableOpacity>
           <Text style={styles.vehicleText}>

@@ -52,7 +52,9 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
               backgroundColor: "inherent"
             }}>
               <View style={{ position: "relative" }}>
-                <FontAwesome name="car" size={15} color={colors.secondary} />
+                <FontAwesome name="car" size={15} color={colors.secondary} style={{
+                  backgroundColor:colors.warningBg
+                }} />
                   <FontAwesome
                     name="exclamation-circle"
                     size={10}

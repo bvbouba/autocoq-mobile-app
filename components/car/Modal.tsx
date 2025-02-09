@@ -1,4 +1,4 @@
-import { StyleSheet, Alert, ScrollView, Dimensions, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, Alert, ScrollView, Dimensions, TouchableOpacity, FlatList, Animated } from "react-native";
 import { Modal, Button, IconButton } from "react-native-paper";
 import { useCarEnginesListQuery, useCarMakesListQuery, useCarModelsListQuery, useCarYearsListQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
@@ -116,136 +116,132 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
   return (
     <>
       {open && (
-        <View style={styles.overlay}>
           <Modal visible={open} onDismiss={onClose} contentContainerStyle={styles.modalContainer}>
-            <ScrollView>
-              <View style={styles.filterContainer}>
-                <View style={{ alignItems: "flex-end" }}>
-                  <IconButton icon="close" size={20} onPress={onClose} style={styles.closeButton} />
-                </View>
 
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <FontAwesome name="car" size={20} color={colors.secondary} style={styles.carIcon} />
+              {
+                (!modalVisible) ?
+                  <>
+                    <View style={styles.filterContainer}>
+                      <View style={{ alignItems: "flex-end" }}>
+                        <IconButton icon="close" size={20} onPress={onClose} style={styles.closeButton} />
+                      </View>
+
+                      <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <FontAwesome name="car" size={20} color={colors.secondary} style={styles.carIcon} />
+                        <View>
+                          <Text style={styles.filterText}>Filtrer par véhicule</Text>
+                          <Text style={styles.instructionText}>Veuillez sélectionner par année, marque, modèle et moteur</Text>
+                        </View>
+                      </View>
+
+                      <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("year")}>
+                        {loadingYears ? (
+                          <ActivityIndicator size="small" color={colors.textPrimary} />
+                        ) : (
+                          <Text style={{ color: getLoadingTextColor(loadingYears, (!!tempCarYear?.name)) }}>
+                            {tempCarYear?.name || "Sélectionner une année"}
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+
+                      <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("make")} disabled={!tempCarYear}>
+                        {loadingMakes ? (
+                          <ActivityIndicator size="small" color={colors.textPrimary} />
+                        ) : (
+                          <Text style={{ color: getLoadingTextColor(loadingMakes, !!tempCarMake?.name) }}>
+                            {tempCarMake?.name || "Sélectionner une marque"}
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+
+                      <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("model")} disabled={!tempCarMake}>
+                        {loadingModels ? (
+                          <ActivityIndicator size="small" color={colors.textPrimary} />
+                        ) : (
+                          <Text style={{ color: getLoadingTextColor(loadingModels, !!tempCarModel?.name) }}>
+                            {tempCarModel?.name || "Sélectionner un modèle"}
+                          </Text>
+                        )}
+                      </TouchableOpacity>
+
+                      {carEngines.length > 0 && (
+                        <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("engine")} disabled={!tempCarModel}>
+                          {loadingEngines ? (
+                            <ActivityIndicator size="small" color={colors.textPrimary} />
+                          ) : (
+                            <Text style={{ color: getLoadingTextColor(loadingEngines, !!tempCarEngine?.name) }}>
+                              {tempCarEngine?.name || "Sélectionner un moteur"}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                      )}
+                    </View>
+
+                    <PrimaryButton title={`AJOUTER`}
+                      style={styles.button} mode="contained" onPress={handleFilter} disabled={loadingEngines} />
+
+
+                    <View style={[styles.buttonGroup, {
+                      marginTop: 0
+                    }]}>
+                      <Button style={[styles.button,
+                      {
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: "black"
+                      }
+                      ]} mode="contained" onPress={() => {
+                        setIsFiltered(false)
+                        setSelectedCar({})
+                        onClose()
+                      }
+                      }
+                        disabled={loadingEngines}
+                      >
+                        <Text
+                          style={{
+                            color: "black"
+                          }}>
+                          CHERCHER SANS VÉHICULE</Text>
+                      </Button>
+                    </View>
+                  </> :
+
                   <View>
-                    <Text style={styles.filterText}>Filtrer par véhicule</Text>
-                    <Text style={styles.instructionText}>Veuillez sélectionner par année, marque, modèle et moteur</Text>
+                    <View style={{ alignItems: "flex-end" }}>
+                      <IconButton icon="close" size={20} onPress={() => setModalVisible(false)} style={styles.closeButton} />
+                    </View>
+                    <Animated.FlatList
+                      data={getCurrentOptions()}
+                      keyExtractor={(item) => item.id}
+                      renderItem={({ item }) => (
+                        <TouchableOpacity style={styles.option} onPress={() => {
+                          handleSelect(item);
+                          setModalVisible(false);
+                        }}>
+                          <Text>{item.name}</Text>
+                        </TouchableOpacity>
+                      )}
+                      keyboardShouldPersistTaps="handled"
+                    />
                   </View>
-                </View>
 
-                <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("year")}>
-                  {loadingYears ? (
-                    <ActivityIndicator size="small" color={colors.textPrimary} />
-                  ) : (
-                    <Text style={{ color: getLoadingTextColor(loadingYears, (!!tempCarYear?.name)) }}>
-                      {tempCarYear?.name || "Sélectionner une année"}
-                    </Text>
-                  )}
-                </TouchableOpacity>
+              }
 
-                <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("make")} disabled={!tempCarYear}>
-                  {loadingMakes ? (
-                    <ActivityIndicator size="small" color={colors.textPrimary} />
-                  ) : (
-                    <Text style={{ color: getLoadingTextColor(loadingMakes, !!tempCarMake?.name) }}>
-                      {tempCarMake?.name || "Sélectionner une marque"}
-                    </Text>
-                  )}
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("model")} disabled={!tempCarMake}>
-                  {loadingModels ? (
-                    <ActivityIndicator size="small" color={colors.textPrimary} />
-                  ) : (
-                    <Text style={{ color: getLoadingTextColor(loadingModels, !!tempCarModel?.name) }}>
-                      {tempCarModel?.name || "Sélectionner un modèle"}
-                    </Text>
-                  )}
-                </TouchableOpacity>
-
-                {carEngines.length > 0 && (
-                  <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("engine")} disabled={!tempCarModel}>
-                    {loadingEngines ? (
-                      <ActivityIndicator size="small" color={colors.textPrimary} />
-                    ) : (
-                      <Text style={{ color: getLoadingTextColor(loadingEngines, !!tempCarEngine?.name) }}>
-                        {tempCarEngine?.name || "Sélectionner un moteur"}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                )}
-              </View>
-
-              <PrimaryButton title={`AJOUTER`}
-                style={styles.button} mode="contained" onPress={handleFilter} disabled={loadingEngines} />
-
-
-              <View style={[styles.buttonGroup, {
-                marginTop: 0
-              }]}>
-                <Button style={[styles.button,
-                {
-                  backgroundColor: "white",
-                  borderWidth: 1,
-                  borderColor: "black"
-                }
-                ]} mode="contained" onPress={() => {
-                  setIsFiltered(false)
-                  setSelectedCar({})
-                  onClose()
-                }
-                }
-                  disabled={loadingEngines}
-                >
-                  <Text
-                    style={{
-                      color: "black"
-                    }}>
-                    CHERCHER SANS VÉHICULE</Text>
-                </Button>
-              </View>
-
-            </ScrollView>
           </Modal>
-        </View>
       )}
 
-      <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={styles.selectionModal}>
-        <FlatList
-          data={getCurrentOptions()}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.option} onPress={() => handleSelect(item)}>
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </Modal>
+
     </>
   );
 };
 
 const styles = StyleSheet.create({
 
-  modalContainer: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    height: "90%",
-    backgroundColor: "white",
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    elevation: 5,
-  },
-  overlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: SCREEN_HEIGHT,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
+  modalContainer: { backgroundColor: 'white', padding: 20, height: "100%",
+    top:SCREEN_HEIGHT/2
+   },
+
   dropdown: {
     padding: 15,
     borderWidth: 1,
@@ -258,6 +254,8 @@ const styles = StyleSheet.create({
     padding: 20,
     marginHorizontal: 20,
     borderRadius: 10,
+    position: "absolute",
+    zIndex: 10, // Bring the dropdown above other modal content
   },
   option: {
     padding: 15,
@@ -284,7 +282,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   filterText: {
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     fontWeight: "bold",
   },
   closeButton: {
@@ -292,7 +290,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   instructionText: {
-    fontSize:fonts.caption,
+    fontSize: fonts.caption,
     color: "gray",
     marginBottom: 10,
     flexWrap: "wrap",

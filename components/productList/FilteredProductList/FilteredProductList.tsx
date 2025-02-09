@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { AttributeFilterFragment, OrderDirection, ProductFilterInput, ProductOrderField } from "@/saleor/api.generated";
+import { View, StyleSheet } from "react-native";
+import { AttributeFilterFragment, ProductFilterInput,} from "@/saleor/api.generated";
 
-import { getFilterOptions, getPillsData, parseQueryAttributeFilters, serializeQueryAttributeFilters, UrlFilter } from "./attributes";
-import { FilterDropdown } from "./FilterDropdown";
-import { FilterPill, FilterPills } from "./FilterPills";
+import {  getPillsData,  UrlFilter } from "./attributes";
+import { FilterPill, } from "./FilterPills";
 import { ProductCollection } from "@/components/ProductCollection";
-import SortingDropdown from "./SortingDropdown";
-import StockToggle from "./StockToggle";
 import { UrlSorting } from "./sorting";
 import FilterBar from "./FilterBar";
 import ProductFilterBottomSheet from "./ProductFilterBottomSheet";
@@ -67,7 +64,7 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
 
   return (
     <>
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
 
       
       <View style={styles.filterContainer}>
@@ -84,7 +81,7 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
       setCounter={setItemsCounter} 
       itemsCounter={itemsCounter}
       />
-    </ScrollView>
+    </View>
     <ProductFilterBottomSheet onClose={() => setFilterOpen(false)} open={filterOpen} onApply={(data) => {
                     setFilterOpen(false)
                 }} 

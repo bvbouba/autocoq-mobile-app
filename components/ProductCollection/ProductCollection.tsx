@@ -71,7 +71,8 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   const onLoadMore = async () => {
     if (!hasNextPage) {
       return;
-    }  
+    }
+  
     try {
       const result = await fetchMore({
         variables: {
@@ -80,10 +81,18 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       });
   
       if (result.data?.products?.edges) {
-        setAllProducts((prev) => [...prev, ...mapEdgesToItems(result.data.products)]);
-        setHasNextPage(result.data.products.pageInfo.hasNextPage)
-      }
+        const newProducts = mapEdgesToItems(result.data.products);
+        
+        // Avoid duplicates by checking slug
+        setAllProducts((prev) => {
+          const existingSlugs = new Set(prev.map((p) => p.slug));
+          const uniqueNewProducts = newProducts.filter((p) => !existingSlugs.has(p.slug));
   
+          return [...prev, ...uniqueNewProducts];
+        });
+  
+        setHasNextPage(result.data.products.pageInfo.hasNextPage);
+      }
     } catch (error) {
       console.error("❌ Error fetching more:", error);
     }
@@ -108,12 +117,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
 
   return (
     <SafeAreaView style={styles.container} testID="prod-list-safe">
-      <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
-        <Text style={{ fontSize: fonts.caption }}>
-          {itemsCounter < 2 ? " Résultat" : " Résultats"}
-        </Text>
-      </View>
+     
 
       <Animated.FlatList
         data={allProducts}
@@ -121,6 +125,14 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         renderItem={({ item }) => <ProductListItem product={item} />}
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.3}
+        ListHeaderComponent={ // Add the header inside FlatList
+          <View style={styles.header}>
+            <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
+            <Text style={{ fontSize: fonts.caption }}>
+              {itemsCounter < 2 ? " Résultat" : " Résultats"}
+            </Text>
+          </View>
+        }
         ListFooterComponent={allowMore && hasNextPage ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
