@@ -33,6 +33,7 @@ query ProductCollection(
   $filter: ProductFilterInput
   $sortBy: ProductOrder
   $channel: String!
+  $zoneName:String
 ) {
   products(
     first: $first
@@ -46,7 +47,7 @@ query ProductCollection(
     edges {
       cursor
       node {
-        ...ProductCardFragment
+        ...ProductFragment
       }
     }
     pageInfo {

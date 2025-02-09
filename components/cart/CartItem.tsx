@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { CheckoutLine } from "../../saleor/api.generated";
-import {Text, View , Divider,colors } from "@/components/Themed"
+import {Text, View , Divider,colors, fonts } from "@/components/Themed"
 
 import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "../../config";
@@ -118,18 +118,18 @@ const styles = StyleSheet.create({
     productTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 12,
+        fontSize:fonts.caption,
         marginBottom: 8
     },
     productVariant: {
         textAlign: "left",
-        fontSize: 16,
+        fontSize:fonts.h2,
         marginBottom: 16
     },
     productPrice: {
         textAlign: "left",
         fontWeight: "bold",
-        fontSize: 20,
+        fontSize:fonts.h2,
         marginBottom: 16
     },
     productDescription: {
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     partNo: {
-        fontSize: 12,
+        fontSize:fonts.caption,
         color: colors.textSecondary
     },
 

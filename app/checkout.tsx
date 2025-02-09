@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import {  SafeAreaView, ScrollView, StyleSheet,TouchableOpacity } from 'react-native';
-import {Text, View , Divider, PaddedView, colors } from "@/components/Themed"
+import {Text, View , Divider, PaddedView, colors, fonts } from "@/components/Themed"
 import { Button } from 'react-native-paper';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
 import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
@@ -50,7 +50,7 @@ const Checkout = () => {
                        }}
                     ><Text
                     style={{
-                        fontSize:16,
+                        fontSize:fonts.h2,
                         fontWeight:"500"
 
                        }}
@@ -88,11 +88,11 @@ const Checkout = () => {
                 flexDirection:"row"
             }}>
             <Text style={{
-                fontSize:12
+                fontSize:fonts.caption
             }}>By placing an order, I agree to </Text>
             <TouchableOpacity onPress={()=>router.push("/account/terms")}>
              <Text style={{
-                 fontSize:12,
+                 fontSize:fonts.caption,
                 textDecorationLine:"underline",
                 color:"blue"
              }}>
@@ -102,7 +102,7 @@ const Checkout = () => {
             </View>
             :<Text style={{
                 color:colors.secondary,
-                fontSize:12
+                fontSize:fonts.caption
                 
             }}> Please enter payment to submit your order </Text>}
             </View>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     termsText: {
-        fontSize: 12,
+        fontSize:fonts.caption,
         color: colors.secondary,
         marginBottom: 16
     },
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: "bold",
-        fontSize: 16
+        fontSize:fonts.h2
     }
 });
 

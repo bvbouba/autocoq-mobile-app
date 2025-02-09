@@ -1,6 +1,6 @@
 import { StyleSheet, ActivityIndicator, View } from "react-native";
 import { useOrderContext } from "../../context/useOrderContext";
-import { Text } from "../Themed";
+import { fonts, Text } from "../Themed";
 import OrderListItem from "./OrderListItem";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useOrdersQuery } from "@/saleor/api.generated";
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     noOrdersText: {
-        fontSize: 14,
+        fontSize:fonts.body,
         marginBottom: 20,
     },
     errorText: {

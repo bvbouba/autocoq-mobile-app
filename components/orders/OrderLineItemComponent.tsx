@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { OrderLineVariantFragment, OrderLineFragment } from "../../saleor/api.generated";
-import { Text, View } from '../Themed';
+import { fonts, Text, View } from '../Themed';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import { getConfig } from "../../config";
 import { useRouter } from "expo-router";
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     },
     productVariant: {
         textAlign: "left",
-        fontSize: 15,
+        fontSize:fonts.body,
         marginBottom: 16,
         overflow: "hidden",
         width: "90%"
@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
     productTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize:fonts.body,
         marginBottom: 8
     },
     productPrice: {
         textAlign: "left",
-        fontSize: 20,
+        fontSize:fonts.h2,
         fontWeight: 'bold',
         marginBottom: 8
     },

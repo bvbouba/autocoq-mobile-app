@@ -4,7 +4,7 @@ import { useCarEnginesListQuery, useCarMakesListQuery, useCarModelsListQuery, us
 import { mapEdgesToItems } from "@/utils/map";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { useState } from "react";
-import { Text, View, colors } from "@/components/Themed";
+import { Text, View, colors, fonts } from "@/components/Themed";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PrimaryButton } from "../button";
 import { ActivityIndicator } from "react-native-paper";
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   filterText: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     fontWeight: "bold",
   },
   closeButton: {
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   instructionText: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     color: "gray",
     marginBottom: 10,
     flexWrap: "wrap",

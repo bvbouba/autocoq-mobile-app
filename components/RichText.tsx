@@ -1,7 +1,7 @@
 import { parseEditorJSData } from "@/utils/parseJsonEditor";
 import {  StyleSheet, useWindowDimensions } from "react-native";
 import RenderHtml from "react-native-render-html";
-import {Text, View ,} from "@/components/Themed"
+import {fonts, Text, View ,} from "@/components/Themed"
 
 export interface RichTextProps {
   jsonStringData?: string;
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   paragraph: {
-    fontSize: 14,
+    fontSize:fonts.body,
     marginBottom: 8,
     lineHeight: 22,
   },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   listItem: {
-    fontSize: 14,
+    fontSize:fonts.body,
     marginBottom: 4,
     marginLeft: 16,
   },

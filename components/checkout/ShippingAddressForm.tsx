@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { StyleSheet,  } from "react-native";
 import { useFormik } from "formik";
-import {Text, View ,colors } from "@/components/Themed"
+import {Text, View ,colors, fonts } from "@/components/Themed"
 
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   mandatory: {
     color: "red",
     marginLeft: 5,
-    fontSize: 16,
+    fontSize:fonts.h2,
   },
   submitButton: {
     backgroundColor: "black", // Black button background

@@ -9,7 +9,7 @@ import {
   Text,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons"; // Close button icon
-import { colors } from "./Themed";
+import { colors, fonts } from "./Themed";
 import {
   Gesture,
   GestureDetector,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   productName: {
     position: "absolute",
     top: 20,
-    fontSize: 18,
+    fontSize:fonts.h2,
     fontWeight: "bold",
     color: "white",
   },

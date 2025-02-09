@@ -2,7 +2,7 @@ import { ProductFragment, useCompatibilityCheckQuery } from "@/saleor/api.genera
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { useState } from "react"
 import {  StyleSheet, TouchableOpacity } from "react-native"
-import {Text, View , colors } from "@/components/Themed"
+import {Text, View , colors, fonts } from "@/components/Themed"
 
 import { Button } from "react-native-paper"
 import CarFilterModal from "./Modal"
@@ -69,7 +69,7 @@ const CompatibilityCheck = ({ product }: props) => {
                       <Text style={{
                         fontWeight: "bold"
                       }}> Non compatible </Text>avec votre véhicule {selectedCar?.name} </>
-                  : "Vérifiez si ce produit est compatible"}
+                  : "Vérifiez si votre véhicule est compatible"}
               </Text>
             </View>
             <View style={{
@@ -116,7 +116,6 @@ const CompatibilityCheck = ({ product }: props) => {
         </View>
       </View>
 
-      {filterOpen && <CarFilterModal onClose={() => setFilterOpen(false)} open={filterOpen} />}
     </>
   );
 };
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   vehicleText: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     marginLeft: 5
   },
   vehicleButton: {

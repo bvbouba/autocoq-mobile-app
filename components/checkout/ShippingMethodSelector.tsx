@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { FC } from "react";
 import { Pressable, StyleSheet, TouchableOpacity,Image } from "react-native";
 import { useCartContext } from "../../context/useCartContext";
-import {Text, View ,colors } from "@/components/Themed"
+import {Text, View ,colors, fonts } from "@/components/Themed"
 import { IconButton } from "react-native-paper";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { ProductFragment } from "@/saleor/api.generated";
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginTop: 5,
-    fontSize: 14,
+    fontSize:fonts.body,
     textDecorationLine: "underline",
   },
   titleWrapper: {
@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     backgroundColor: "inherit",
-    fontSize:12
+    fontSize:fonts.caption
   },
   shippingMethodValue: {
     overflow: "hidden",
     color:colors.textSecondary,
-    fontSize:14,
+    fontSize:fonts.body,
     width: 300,
     marginLeft: 16,
   },

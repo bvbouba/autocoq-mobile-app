@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { OrderFragment } from "../../saleor/api.generated";
-import { PaddedView, Text, View } from "../Themed";
+import { fonts, PaddedView, Text, View } from "../Themed";
 import { StyleSheet, Pressable } from "react-native";
 import { IconButton } from "react-native-paper";
 import { useRouter } from "expo-router";
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     fontWeight: "bold",
   },
   icon: {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   statusText: {
-    fontSize: 14,
+    fontSize:fonts.body,
     color: "black",
   },
   dateWrapper: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dateLabel: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     color: "#555",
     marginRight: 4,
   },
@@ -114,11 +114,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   subtotalLabel: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     color: "#333",
   },
   subtotalAmount: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     fontWeight:"bold"
   },
 });

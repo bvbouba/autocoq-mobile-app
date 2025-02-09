@@ -164,21 +164,21 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     collectionListTitle: {
-        fontSize: 16,
+        fontSize:fonts.h2,
         lineHeight: 34,
         fontWeight: 'bold',
         textAlign: 'left',
     },
     collectionImageBannerTitle: {
         color: 'white',
-        fontSize: 14,
+        fontSize:fonts.body,
         lineHeight: 34,
         fontWeight: 'bold',
         textAlign: 'left',
     },
     collectionImageBannerDescription: {
         color: 'white',
-        fontSize: 12,
+        fontSize:fonts.caption,
         textAlign: 'left',
     },
     dotsContainer: {

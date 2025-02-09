@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import SecondaryButton from "./button/SecondaryButton";
-import {Text, View  } from "@/components/Themed"
+import {fonts, SurfaceView, Text, View  } from "@/components/Themed"
 
 interface props {
   redirectUrl:string
@@ -15,7 +15,7 @@ const AuthPrompt = ({redirectUrl}:props) => {
   };
 
   return (
-    <View style={styles.wrapper}>
+    <SurfaceView style={styles.wrapper}>
       <View>
       <Text style={styles.promptText}>
       Rejoignez Autocoq et commencez à économiser dès aujourd'hui.
@@ -27,7 +27,7 @@ const AuthPrompt = ({redirectUrl}:props) => {
                 onPress={handleSignIn}
                 />    
       </View>
-    </View>
+    </SurfaceView>
   );
 };
 
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 
   promptText: {
-    fontSize: 13,
+    fontSize:fonts.body,
     color: "#666",
     marginBottom: 10,
   },

@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { StyleSheet } from 'react-native';
 import { Portal, Provider } from "react-native-paper";
-import { View } from "../Themed";
+import { fonts, View } from "../Themed";
 import ProductListComponent from "./ProductListComponent";
 import ProductFilter from "./filter/ProductFilter";
 import ProductFilterBottomSheet from "./filter/ProductFilterBottomSheet";
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     title: {
-        fontSize: 20,
+        fontSize:fonts.h2,
         fontWeight: 'bold',
     },
     separator: {

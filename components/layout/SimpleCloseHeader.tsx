@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { Platform, SafeAreaView, StyleSheet, Text } from "react-native";
 import { Divider, IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import {  View, colors } from "../Themed";
+import {  View, colors, fonts } from "../Themed";
 import LoadingIndicator from "./LoadingIndicator";
 
 const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: string }) => {
@@ -17,7 +17,7 @@ const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: str
             icon="close"
             onPress={() => router.back()}
             style={styles.closeButton}
-            iconColor={colors.orange}
+            iconColor={colors.primary}
           />
 
           {/* Title and Subtitle Centered */}
@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
     left:-15
   },
   title: {
-    fontSize: 18,
+    fontSize:fonts.h2,
     fontWeight: "bold",
     textAlign: "center",
   },
   subTitle: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     textAlign: "center",
   },
 });

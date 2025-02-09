@@ -67,9 +67,7 @@ const DeliveryMethodBasic = ({ variant }: Props) => {
     homeDelivery && {
       id: "homeDelivery",
       title: homeDelivery.name,
-      description: homeDelivery.description?.replace("{{orderValue}}", convertMoneyToString(homeDelivery?.maximumOrderPrice) )
-        .replace("{{time}}", formatDuration("fr", diffMs))
-        .replace("{{date}}", formattedDate),
+      description: homeDelivery.description,
       icon: "truck",
     },
   ].filter(Boolean) as OptionProps[];
@@ -85,7 +83,7 @@ const DeliveryMethodBasic = ({ variant }: Props) => {
                 <Text style={styles.title}>{option.title}</Text>
                 {/* <RichText jsonStringData={option.description} stylesOverride={{
                   paragraph:{
-                  fontSize: 12,
+                  fontSize:fonts.caption,
                   lineHeight: 20,
                   }
                 }}/> */}
@@ -101,6 +99,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 0,
     backgroundColor: "#fff",
+    gap:2
   },
   
   optionContent: {

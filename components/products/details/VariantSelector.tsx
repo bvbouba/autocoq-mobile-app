@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { ProductFragment, ProductVariantFragment } from "../../../saleor/api.generated";
-import { PaddedView, View, Text, colors } from "../../Themed";
+import { PaddedView, View, Text, colors, fonts } from "../../Themed";
 import { getConfig } from "../../../config";
 import { Pressable, StyleSheet } from "react-native";
 
@@ -63,12 +63,12 @@ const styles = StyleSheet.create({
         padding: 8
     },
     variantName: {
-        fontSize: 12,
+        fontSize:fonts.caption,
         fontWeight: "bold",
         marginBottom: 4
     },
     variantPrice: {
-        fontSize: 14,
+        fontSize:fonts.body,
     }
 })
 

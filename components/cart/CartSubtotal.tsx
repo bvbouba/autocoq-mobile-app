@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native"
 import { getConfig } from "../../config";
 import { useCartContext } from "../../context/useCartContext"
-import { Divider, PaddedView, Text } from "../Themed"
+import { Divider, fonts, PaddedView, Text } from "../Themed"
 
 const CartSubtotal = () => {
     const { cart } = useCartContext();
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     title: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize:fonts.h2,
         marginBottom: 8,
     },
     subtotalRow: {
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     totalText: {
-        fontSize: 16,
+        fontSize:fonts.h2,
         fontWeight: "bold",
     },
     totalAmount: {
-        fontSize: 25,
+        fontSize:fonts.h1,
         fontWeight: "bold",
     },
 });

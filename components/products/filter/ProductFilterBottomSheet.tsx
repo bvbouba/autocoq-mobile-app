@@ -7,7 +7,7 @@ import CheckBoxWithLabel from "../../../utils/CheckboxWithLabel";
 import { getConfig } from "../../../config";
 import { useProductContext } from "../../../context/useProductContext";
 import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "../../../saleor/api.generated";
-import { colors, Divider, Text, View } from "../../Themed";
+import { colors, Divider, fonts, Text, View } from "../../Themed";
 
 interface Props {
     open: boolean
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     bigTitle: {
         fontWeight: "bold",
         marginBottom: 8,
-        fontSize:25
+        fontSize:fonts.h1
     },
     filterTypeTitle: {
         fontWeight: "bold",

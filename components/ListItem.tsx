@@ -1,5 +1,5 @@
 import { FC } from "react"
-import {  Text, View } from "./Themed"
+import {  fonts, Text, View } from "./Themed"
 import { StyleSheet, Pressable } from "react-native"
 import { IconButton } from "react-native-paper"
 import { useRouter } from "expo-router"
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     title: {
-        fontSize: 14,
+        fontSize:fonts.body,
         marginTop: 10,
         marginLeft: 8,
     },

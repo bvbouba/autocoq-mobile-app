@@ -1,6 +1,6 @@
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { Text } from "../../components/Themed";
+import { fonts, Text } from "../../components/Themed";
 import OrderContent from "../../components/orders/OrderContent";
 import { useOrderContext } from "../../context/useOrderContext";
 import { useEffect, useState } from "react";
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 20,
+        fontSize:fonts.h2,
         fontWeight: "bold",
     },
     link: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
     },
     linkText: {
-        fontSize: 14,
+        fontSize:fonts.body,
         color: "#2e78b7",
     },
 });

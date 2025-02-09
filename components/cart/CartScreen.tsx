@@ -6,7 +6,7 @@ import {
 } from "../../saleor/api.generated";
 
 
-import {Text, View ,  PaddedView,colors } from "@/components/Themed"
+import {Text, View ,  PaddedView,colors, fonts } from "@/components/Themed"
 
 
 import { ScrollView, StyleSheet } from 'react-native';
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     emptyCartText: {
         textAlign: "center",
         fontWeight: "bold",
-        fontSize: 16
+        fontSize:fonts.h2
     },
     scroll: {
         width: "100%",

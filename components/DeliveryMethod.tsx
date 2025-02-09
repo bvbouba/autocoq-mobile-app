@@ -5,7 +5,7 @@ import { ProductVariantFragment } from "@/saleor/api.generated";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import RichText from "./RichText";
 import { formatDuration } from "@/utils/dateformat";
-import {Text, View  } from "@/components/Themed"
+import {fonts, Text, View  } from "@/components/Themed"
 
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
@@ -91,7 +91,7 @@ const DeliveryMethod = ({ variant }: Props) => {
                 <Text style={styles.title}>{option.title}</Text>
                 <RichText jsonStringData={option.description} stylesOverride={{
                   paragraph:{
-                  fontSize: 12,
+                  fontSize:fonts.caption,
                   lineHeight: 20,
                   }
                 }}/>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     width: "70%",
   },
   title: {
-    fontSize: 13,
+    fontSize:fonts.body,
     fontWeight: "bold",
   },
   description: {

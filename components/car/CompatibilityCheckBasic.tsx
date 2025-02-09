@@ -2,7 +2,8 @@ import { ProductFragment, useCompatibilityCheckQuery } from "@/saleor/api.genera
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { useCarFilter } from "@/context/useCarFilterContext"
-import {Text, View ,colors } from "@/components/Themed"
+import { Text, View, colors } from "@/components/Themed"
+import SkeletonContent from "react-native-skeleton-content"
 
 
 interface props {
@@ -47,18 +48,31 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
           >
             <View style={{
               flexDirection: "row",
-              alignItems:"center"
+              alignItems: "center",
+              backgroundColor: "inherent"
             }}>
-              <FontAwesome name="car" size={15} color={colors.secondary} />
+              <View style={{ position: "relative" }}>
+                <FontAwesome name="car" size={15} color={colors.secondary} />
+                  <FontAwesome
+                    name="exclamation-circle"
+                    size={10}
+                    color={colors.warning}
+                    style={{
+                      position: "absolute",
+                      bottom: -2,
+                      right: -5,
+                    }}
+                  />
+              </View>
               <Text style={styles.vehicleText}>
                 {selectedCar?.name
                   ? isCompatible
                     ? <>
                       <TouchableOpacity onPress={() => setFilterOpen(true)}>
-                        <Text style={[styles.vehicleButtonText,{
+                        <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold"
                         }]}>Compatible avec votre </Text>
-                        <Text style={[styles.vehicleButtonText,{
+                        <Text style={[styles.vehicleButtonText, {
                           textDecorationLine: "underline"
                         }]}>{selectedCar?.name}</Text>
                       </TouchableOpacity>
@@ -67,17 +81,17 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
 
                     : <>
                       <TouchableOpacity onPress={() => setFilterOpen(true)}>
-                        <Text style={[styles.vehicleButtonText,{
+                        <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold",
                           textDecorationLine: "underline"
                         }]}> Non compatible </Text>
                         <Text
-                        style={[styles.vehicleButtonText,{
-                          textDecorationLine: "underline"
-                        }
+                          style={[styles.vehicleButtonText, {
+                            textDecorationLine: "underline"
+                          }
 
-                          
-                        ]}
+
+                          ]}
                         >avec votre véhicule {selectedCar?.name}</Text>
                       </TouchableOpacity>
 
@@ -88,7 +102,7 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
                     <Text style={[styles.vehicleText, {
                       textDecorationLine: "underline"
                     }]}>
-                      {`Vérifiez si ce produit est compatible`}
+                      {`Vérifiez si votre véhicule est compatible`}
                     </Text>
                   </TouchableOpacity>
 
@@ -118,13 +132,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.warning,
     backgroundColor: colors.warningBg,
-    marginVertical: 15,
+    marginVertical: 10,
     width: "100%",
     borderRadius: 5,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 15
+    padding: 10
   },
   vehicleCheck: {
     flexDirection: "column",
@@ -147,7 +161,7 @@ const styles = StyleSheet.create({
   },
   compatible: {
     backgroundColor: colors.successBg,
-    borderColor: colors.successBg,
+    borderColor: colors.success,
   },
   compatibleVehicleCheck: {
     backgroundColor: colors.successBg,

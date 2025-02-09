@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import {Text, View , Divider,colors } from "@/components/Themed"
+import {Text, View , Divider,colors, fonts } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
 import { useState } from 'react';
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   title: {
-    fontSize: 18,
+    fontSize:fonts.h2,
     fontWeight: "500",
     textTransform: "capitalize"
   },
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   myAccountText: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize:fonts.h2,
     marginLeft: 10,
   },
   menuItem: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   menuText: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     color: "#333",
   },
   signOutText: {

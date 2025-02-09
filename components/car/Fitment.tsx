@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
 import { IconButton } from "react-native-paper"
 import { useState } from "react";
-import {Text, View , PaddedView } from "@/components/Themed"
+import {Text, View , PaddedView, fonts } from "@/components/Themed"
 
 
 interface car {
@@ -69,12 +69,12 @@ const Fitment = ({isUniversal,fitmentData}:props) => {
 
 const styles = StyleSheet.create({
     descriptionTitle: {
-      fontSize: 18,
+      fontSize:fonts.h2,
       fontWeight: "bold",
       marginBottom: 8,
     },
     listItem: {
-      fontSize: 14,
+      fontSize:fonts.body,
       marginBottom: 4,
     },
     fitmentContainer: {
@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
     fitmentTitle: {
       fontWeight: "bold",
       marginBottom: 8,
-      fontSize: 16,
+      fontSize:fonts.h2,
     },
     fitmentText: {
-      fontSize: 12,
+      fontSize:fonts.caption,
       marginBottom: 4,
     },
 
@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
       marginBottom: 16,
     },
     subtitle: {
-      fontSize: 16,
+      fontSize:fonts.h2,
       marginBottom: 4,
     },
     listText: {
-      fontSize: 14,
+      fontSize:fonts.body,
     },
 
  

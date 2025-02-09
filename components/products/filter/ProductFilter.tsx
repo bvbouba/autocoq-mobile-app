@@ -5,7 +5,7 @@ import { useProductContext } from '../../../context/useProductContext';
 import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '../../../config';
 import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '../../../saleor/api.generated';
-import { colors, Divider, Text, View } from '../../Themed';
+import { colors, Divider, fonts, Text, View } from '../../Themed';
 import { Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -86,7 +86,7 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
 const styles = StyleSheet.create({
     filterLabel: {
         paddingTop: 12,
-        fontSize:12
+        fontSize:fonts.caption
     },
     filterButton: {
         paddingTop: 0,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     },
     filterText:{
         margin:2,
-        fontSize:12
+        fontSize:fonts.caption
     }
 });
 

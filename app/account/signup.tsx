@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
 import {  useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import {Text, View , PaddedView,colors } from "@/components/Themed"
+import {Text, View , PaddedView,colors, fonts } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
 
 
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 5,
         marginBottom: 15,
-        fontSize: 16,
+        fontSize:fonts.h2,
     },
     button: {
         backgroundColor: colors.border,
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "white",
         fontWeight: "400",
-        fontSize: 13,
+        fontSize:fonts.body,
     },
     error: {
         color: 'red',
@@ -314,12 +314,12 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     title: {
-        fontSize: 15,
+        fontSize:fonts.body,
         fontWeight: "bold",
         marginBottom: 10,
     },
     subtitle: {
-        fontSize: 13,
+        fontSize:fonts.body,
         color: "#666",
         marginBottom: 20,
         textAlign: "left",

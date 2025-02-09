@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { getConfig } from "../../config";
-import { Text, View } from "../Themed";
+import { fonts, Text, View } from "../Themed";
 import { OrderFragment } from "../../saleor/api.generated";
 import { FC } from "react";
 
@@ -53,24 +53,24 @@ const styles = StyleSheet.create({
     subtotalTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 14,
+        fontSize:fonts.body,
         marginBottom: 8
     },
     subtotalPrice: {
         textAlign: "left",
         marginLeft: 8,
-        fontSize: 14,
+        fontSize:fonts.body,
     },
     totalTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize:fonts.h2,
         marginBottom: 8
     },
     totalPrice: {
         textAlign: "left",
         marginLeft: 8,
-        fontSize: 16,
+        fontSize:fonts.h2,
     },
     row: {
         marginBottom: 8,

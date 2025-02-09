@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { View, colors } from "../Themed";
+import { View, colors, fonts } from "../Themed";
 import {  StyleSheet, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePageQuery } from "@/saleor/api.generated";
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
 
     },
     title: {
-        color: colors.orange,
-        fontSize: 14,
+        color: colors.primary,
+        fontSize:fonts.body,
         fontWeight: "bold",
     },
     description: {

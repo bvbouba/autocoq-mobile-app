@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {  TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { AddressDetailsFragment, CheckoutError, useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useAuth } from "@/lib/providers/authProvider";
-import {Text, View } from "@/components/Themed"
+import {fonts, Text, View } from "@/components/Themed"
 
 
 // Mock AddressFormData type
@@ -137,12 +137,12 @@ const styles = StyleSheet.create({
     borderColor: "#007AFF",
   },
   nameText: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     fontWeight: "bold",
     marginBottom: 5,
   },
   detailsText: {
-    fontSize: 14,
+    fontSize:fonts.body,
     color: "#666",
   },
   errorText: {

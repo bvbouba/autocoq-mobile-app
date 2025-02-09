@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
 import { useCartContext } from "../../context/useCartContext"
-import { colors, Divider, PaddedView, Text, View } from "../Themed"
+import { colors, Divider, fonts, PaddedView, Text, View } from "../Themed"
 import { getConfig } from "../../config"
 
 
@@ -13,7 +13,7 @@ const OrderTotal = () => {
 
     return <View style={styles.wrapper}>
         <Text style={{
-            fontSize:18,
+            fontSize:fonts.h2,
             fontWeight:"900"
         }}>Order Summary</Text>
         <Divider/>
@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: "bold",
-        fontSize: 16
+        fontSize:fonts.h2
     },
     price:{
         fontWeight: "bold",
-        fontSize: 25
+        fontSize:fonts.h1
     }
 })

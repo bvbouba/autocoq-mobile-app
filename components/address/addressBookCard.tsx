@@ -2,7 +2,7 @@ import { AddressDetailsFragment, useAddressDeleteMutation, useSetAddressDefaultM
 import { StyleSheet, TouchableOpacity, Alert } from "react-native";
 import AddressDisplay from "./addressDisplay";
 import { Ionicons } from "@expo/vector-icons"; // Use FontAwesome if preferred
-import {Text, View  } from "@/components/Themed"
+import {fonts, Text, View  } from "@/components/Themed"
 
 export interface AddressBookCardProps {
   address: AddressDetailsFragment;
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    fontSize: 14,
+    fontSize:fonts.body,
     fontWeight: "bold",
     marginBottom: 8,
   },
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 13,
+    fontSize:fonts.body,
   },
 });
 

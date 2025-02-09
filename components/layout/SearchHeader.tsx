@@ -1,4 +1,4 @@
-import { View, colors } from "../Themed";
+import { View, colors, fonts } from "../Themed";
 import { IconButton } from "react-native-paper";
 import ProductSearch from "../products/ProductsSearch";
 import { SafeAreaView, StyleSheet, Text, Image } from "react-native";
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 }, // Moves shadow downwards
     shadowOpacity: 0.2, // Adjust transparency
     shadowRadius: 2, // Blur effect
-    
   },
   containerWithBack: {
     width: "100%",
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   companyName: {
-    fontSize: 25,
+    fontSize:fonts.h1,
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
   },
   bannerText: {
     color: colors.primary,
-    fontSize: 12,
+    fontSize:fonts.caption,
     fontWeight: "bold",
   },
 });

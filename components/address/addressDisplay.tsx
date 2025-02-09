@@ -1,6 +1,6 @@
 import { AddressDetailsFragment } from "@/saleor/api.generated";
 import { StyleSheet } from "react-native";
-import {Text, View  } from "@/components/Themed"
+import {fonts, Text, View  } from "@/components/Themed"
 
 export interface AddressDisplayProps {
   address: AddressDetailsFragment;
@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   text: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     marginBottom: 4,
   },
   phone: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     fontWeight: "bold",
   },
 });

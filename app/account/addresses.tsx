@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/providers/authProvider";
 import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useState } from "react";
 import {  StyleSheet, FlatList } from "react-native";
-import {Text, View } from "@/components/Themed"
+import {fonts, Text, View } from "@/components/Themed"
 
 
 const CarnetDAdressesScreen = () => {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    fontSize: 16,
+    fontSize:fonts.h2,
     textAlign: "center",
     marginTop: 20,
   },

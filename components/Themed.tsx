@@ -59,7 +59,6 @@ export function SurfaceView(props: ViewProps) {
       style={[
         {
           padding: 10,
-          alignItems: "center",
           width: "100%",
           backgroundColor: "white",
           borderRadius: 8, 
@@ -108,8 +107,8 @@ export const colors = {
   errorBg: "#FFE6E8",
   success: "#16B616",
   successBg:"#F6FFEF",
-  warning: "#FFFF00",
-  warningBg:"FFFFD2",
+  warning: "#ffc800",
+  warningBg:"#fff9e0",
   info: "#1976D2",
   border: "#E0E0E0",
   disabled: "#BDBDBD",

@@ -3,7 +3,7 @@ import {   TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "re
 import { useLazyQuery } from "@apollo/client";
 import { useLocalSearchParams, useRouter } from "expo-router"; // Used for navigation
 import { CheckPhoneNumberDocument } from "@/saleor/api.generated";
-import {Text, View,colors } from "@/components/Themed"
+import {Text, View,colors, fonts } from "@/components/Themed"
 
 
 const AuthScreen = () => {
@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
     backgroundColor:"white"
   },
   title: {
-    fontSize:15,
+    fontSize:fonts.body,
     fontWeight: "bold",
     marginBottom: 10,
   },
   subtitle: {
-    fontSize: 13,
+    fontSize:fonts.body,
     color: "#666",
     marginBottom: 20,
     textAlign: "left",
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 5,
     marginBottom: 15,
-    fontSize: 16,
+    fontSize:fonts.h2,
   },
   button: {
     backgroundColor: colors.secondary,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "400",
-    fontSize: 13,
+    fontSize:fonts.body,
   },
   errorText: {
     color: "red",

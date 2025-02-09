@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Divider, PaddedView, Text } from '../../components/Themed';
+import { Divider, fonts, PaddedView, Text } from '../../components/Themed';
 import OrdersList from '../../components/orders/OrdersList';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "left",
-    fontSize: 20,
+    fontSize:fonts.h2,
     fontWeight: 'bold',
   },
   subTitle: {

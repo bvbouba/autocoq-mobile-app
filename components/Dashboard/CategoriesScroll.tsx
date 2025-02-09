@@ -1,7 +1,8 @@
 import { FC } from "react";
-import { Image, Pressable, StyleSheet } from "react-native";
-import { colors, Text, View } from "../Themed";
+import { Image, Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import { colors, fonts, SurfaceView, Text, View } from "../Themed";
 import {  MenuItemFragment } from "../../saleor/api.generated";
+import { useRouter } from "expo-router";
 
 interface Props {
     menus: MenuItemFragment[];
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
+    const router = useRouter()
     const items = menus.map((menu) => {
             const media = menu.category?.backgroundImage;
             const product =
@@ -32,10 +34,13 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
         .filter((item) => !!item.url) || [];
 
     return (
-        <View style={styles.container}>
+        <SurfaceView style={styles.container}>
             <View style={styles.paddedTitle}>
                 <Text style={styles.collectionListTitle}>{"Catégories Populaires"}</Text>
-                {/* <Text style={styles.viewAll}>Tout voir</Text> */}
+               <TouchableOpacity 
+               onPress={()=>router.push("/shop?slug=pieces-auto")}
+               >
+                <Text style={styles.viewAll}>Tout voir</Text></TouchableOpacity> 
             </View>
             
             <View style={styles.gridContainer}>
@@ -56,7 +61,7 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
                     </Pressable>
                 ))}
             </View>
-        </View>
+        </SurfaceView>
     );
 };
 
@@ -72,9 +77,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     collectionListTitle: {
-        fontSize: 16,
+        fontSize: fonts.h2,
         lineHeight: 34,
-        fontWeight: "bold",
+        fontWeight: "600",
         textAlign: "left",
     },
     gridContainer: {
@@ -99,12 +104,12 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     itemText: {
-        fontSize:13,
+        fontSize:fonts.body,
         fontWeight:400,
         textAlign: "center",
     },
     viewAll: {
-        fontSize: 13,
+        fontSize:fonts.body,
         color: colors.primary,
         textDecorationLine: 'underline', 
         verticalAlign:'middle'

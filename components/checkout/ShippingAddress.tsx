@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useCartContext } from "../../context/useCartContext"
-import {Text, View ,colors } from "@/components/Themed"
+import {Text, View ,colors, fonts } from "@/components/Themed"
 import { IconButton } from "react-native-paper"
 
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     icon: {
         marginTop: 5,
         marginRight: 10,
-        fontSize:14,
+        fontSize:fonts.body,
         textDecorationLine:"underline"
     },
     titleWrapper: {

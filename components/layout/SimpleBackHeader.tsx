@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { Platform, SafeAreaView, StyleSheet,Image } from "react-native";
-import {Text, View ,colors } from "@/components/Themed"
+import {Text, View ,colors, fonts } from "@/components/Themed"
 
 import { IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   title: {
-    fontSize: 18,
+    fontSize:fonts.h2,
     fontWeight: "bold",
     color: colors.primary,
     marginLeft: 10,

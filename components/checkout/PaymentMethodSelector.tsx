@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { FC } from "react";
 import { Pressable, StyleSheet } from "react-native";
 import { useCartContext } from "../../context/useCartContext";
-import { Text, View } from "../Themed";
+import { fonts, Text, View } from "../Themed";
 import { usePaymentContext } from "@/context/usePaymentContext";
 import BillingAddress from "./BillingAddress";
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import for payment icon
@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     flexDirection: "row",
     alignItems: "center",
-    fontSize:16
+    fontSize:fonts.h2
   },
   paymentMethodTitle: {
     fontWeight: "bold",
     padding: 8,
     marginTop: 8,
     marginLeft: 8,
-    fontSize: 18,
+    fontSize:fonts.h2,
   },
   paymentMethodSummary: {
     overflow: "hidden",

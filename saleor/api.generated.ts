@@ -34410,6 +34410,18 @@ export type CollectionBySlugQueryVariables = Exact<{
 
 export type CollectionBySlugQuery = { __typename?: 'Query', collection?: { __typename?: 'Collection', id: string, name: string, slug: string, seoTitle?: string | null, seoDescription?: string | null, description?: string | null, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null };
 
+export type AttributeFilterChoiceFragment = { __typename?: 'AttributeValue', id: string, name?: string | null, slug?: string | null };
+
+export type AttributeFilterFragment = { __typename?: 'Attribute', id: string, inputType?: AttributeInputTypeEnum | null, name?: string | null, slug?: string | null, withChoices: boolean, choices?: { __typename?: 'AttributeValueCountableConnection', edges: Array<{ __typename?: 'AttributeValueCountableEdge', cursor: string, node: { __typename?: 'AttributeValue', id: string, name?: string | null, slug?: string | null } }> } | null };
+
+export type FilteringAttributesQueryVariables = Exact<{
+  filter: AttributeFilterInput;
+  channel: Scalars['String']['input'];
+}>;
+
+
+export type FilteringAttributesQuery = { __typename?: 'Query', attributes?: { __typename?: 'AttributeCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'AttributeCountableEdge', node: { __typename?: 'Attribute', id: string, inputType?: AttributeInputTypeEnum | null, name?: string | null, slug?: string | null, withChoices: boolean, choices?: { __typename?: 'AttributeValueCountableConnection', edges: Array<{ __typename?: 'AttributeValueCountableEdge', cursor: string, node: { __typename?: 'AttributeValue', id: string, name?: string | null, slug?: string | null } }> } | null } }> } | null };
+
 export type OrderShippingPriceFragment = { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } };
 
 export type OrderShippingMethodFragment = { __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } };
@@ -34461,10 +34473,11 @@ export type ProductCollectionQueryVariables = Exact<{
   filter?: InputMaybe<ProductFilterInput>;
   sortBy?: InputMaybe<ProductOrder>;
   channel: Scalars['String']['input'];
+  zoneName?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, slug: string, name: string, thumbnail?: { __typename?: 'Image', url: string, alt?: string | null } | null, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }>, availableShippingMethods?: Array<{ __typename?: 'ShippingMethod', id: string, name: string, description?: string | null, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, price: { __typename?: 'Money', amount: number, currency: string }, minimumOrderPrice?: { __typename?: 'Money', amount: number, currency: string } | null }> | null } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }>, availableShippingMethods?: Array<{ __typename?: 'ShippingMethod', id: string, name: string, description?: string | null, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, price: { __typename?: 'Money', amount: number, currency: string }, minimumOrderPrice?: { __typename?: 'Money', amount: number, currency: string } | null }> | null }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
 export type ProductListByCategoryQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -34805,6 +34818,30 @@ export const CollectionDetailFragmentDoc = gql`
   }
 }
     `;
+export const AttributeFilterChoiceFragmentDoc = gql`
+    fragment AttributeFilterChoiceFragment on AttributeValue {
+  id
+  name
+  slug
+}
+    `;
+export const AttributeFilterFragmentDoc = gql`
+    fragment AttributeFilterFragment on Attribute {
+  id
+  inputType
+  name
+  slug
+  withChoices
+  choices(first: 20) {
+    edges {
+      node {
+        ...AttributeFilterChoiceFragment
+      }
+      cursor
+    }
+  }
+}
+    ${AttributeFilterChoiceFragmentDoc}`;
 export const OrderShippingPriceFragmentDoc = gql`
     fragment OrderShippingPrice on TaxedMoney {
   currency
@@ -36530,6 +36567,52 @@ export type CollectionBySlugQueryHookResult = ReturnType<typeof useCollectionByS
 export type CollectionBySlugLazyQueryHookResult = ReturnType<typeof useCollectionBySlugLazyQuery>;
 export type CollectionBySlugSuspenseQueryHookResult = ReturnType<typeof useCollectionBySlugSuspenseQuery>;
 export type CollectionBySlugQueryResult = Apollo.QueryResult<CollectionBySlugQuery, CollectionBySlugQueryVariables>;
+export const FilteringAttributesQueryDocument = gql`
+    query FilteringAttributesQuery($filter: AttributeFilterInput!, $channel: String!) {
+  attributes(filter: $filter, first: 100, channel: $channel) {
+    totalCount
+    edges {
+      node {
+        ...AttributeFilterFragment
+      }
+    }
+  }
+}
+    ${AttributeFilterFragmentDoc}`;
+
+/**
+ * __useFilteringAttributesQuery__
+ *
+ * To run a query within a React component, call `useFilteringAttributesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFilteringAttributesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFilteringAttributesQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      channel: // value for 'channel'
+ *   },
+ * });
+ */
+export function useFilteringAttributesQuery(baseOptions: Apollo.QueryHookOptions<FilteringAttributesQuery, FilteringAttributesQueryVariables> & ({ variables: FilteringAttributesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FilteringAttributesQuery, FilteringAttributesQueryVariables>(FilteringAttributesQueryDocument, options);
+      }
+export function useFilteringAttributesQueryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FilteringAttributesQuery, FilteringAttributesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FilteringAttributesQuery, FilteringAttributesQueryVariables>(FilteringAttributesQueryDocument, options);
+        }
+export function useFilteringAttributesQuerySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FilteringAttributesQuery, FilteringAttributesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FilteringAttributesQuery, FilteringAttributesQueryVariables>(FilteringAttributesQueryDocument, options);
+        }
+export type FilteringAttributesQueryHookResult = ReturnType<typeof useFilteringAttributesQuery>;
+export type FilteringAttributesQueryLazyQueryHookResult = ReturnType<typeof useFilteringAttributesQueryLazyQuery>;
+export type FilteringAttributesQuerySuspenseQueryHookResult = ReturnType<typeof useFilteringAttributesQuerySuspenseQuery>;
+export type FilteringAttributesQueryQueryResult = Apollo.QueryResult<FilteringAttributesQuery, FilteringAttributesQueryVariables>;
 export const GetOrderByIdDocument = gql`
     query getOrderById($id: ID!) {
   order(id: $id) {
@@ -36710,7 +36793,7 @@ export type PageLazyQueryHookResult = ReturnType<typeof usePageLazyQuery>;
 export type PageSuspenseQueryHookResult = ReturnType<typeof usePageSuspenseQuery>;
 export type PageQueryResult = Apollo.QueryResult<PageQuery, PageQueryVariables>;
 export const ProductCollectionDocument = gql`
-    query ProductCollection($before: String, $after: String, $first: Int = 4, $filter: ProductFilterInput, $sortBy: ProductOrder, $channel: String!) {
+    query ProductCollection($before: String, $after: String, $first: Int = 4, $filter: ProductFilterInput, $sortBy: ProductOrder, $channel: String!, $zoneName: String) {
   products(
     first: $first
     channel: $channel
@@ -36723,7 +36806,7 @@ export const ProductCollectionDocument = gql`
     edges {
       cursor
       node {
-        ...ProductCardFragment
+        ...ProductFragment
       }
     }
     pageInfo {
@@ -36734,7 +36817,7 @@ export const ProductCollectionDocument = gql`
     }
   }
 }
-    ${ProductCardFragmentDoc}`;
+    ${ProductFragmentDoc}`;
 
 /**
  * __useProductCollectionQuery__
@@ -36754,6 +36837,7 @@ export const ProductCollectionDocument = gql`
  *      filter: // value for 'filter'
  *      sortBy: // value for 'sortBy'
  *      channel: // value for 'channel'
+ *      zoneName: // value for 'zoneName'
  *   },
  * });
  */

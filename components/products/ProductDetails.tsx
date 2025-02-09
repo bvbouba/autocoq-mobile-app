@@ -6,6 +6,7 @@ import {
 import {
   colors,
   Divider,
+  fonts,
   PaddedView,
   Text,
   View,
@@ -74,7 +75,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <View style={{ flexDirection: "column", marginBottom: 15, padding: 8 }}>
             <Text style={styles.productTitle}>{product.name}</Text>
             {product.externalReference && (
-              <Text style={{ fontSize: 12, color: colors.textSecondary }}>
+              <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
                 Référence # {product.externalReference}
               </Text>
             )}
@@ -156,17 +157,17 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontWeight: "500",
-    fontSize: 15,
+    fontSize:fonts.body,
   },
   productPrice: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize:fonts.h2,
   },
   descriptionContainer: {
     paddingHorizontal: 16,
   },
   descriptionTitle: {
-    fontSize: 17,
+    fontSize:fonts.h2,
     fontWeight: "bold",
     marginBottom: 8,
   },
@@ -174,20 +175,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   listItem: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     marginBottom: 4,
   },
   priceTitle: {
-    fontSize: 15,
+    fontSize:fonts.body,
     fontWeight: "bold",
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     marginBottom: 4,
   },
   listText: {
-    fontSize: 14,
+    fontSize:fonts.body,
   },
   scrollContainer: {
     paddingBottom: 16,

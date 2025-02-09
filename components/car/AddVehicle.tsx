@@ -31,9 +31,9 @@ const AddVehicleSection =()=>{
       <MyGarage />
           {isFiltered && selectedCar ? (
             <View style={{
-              flexDirection:"row"
+              flexDirection: "row",
             }}>
-              <View style={styles.currentFilterContainer}>
+              <View style={[styles.currentFilterContainer]}>
                 <Text style={styles.currentFilterText}>
                   {`Les pièces affichées sont pour`}
                 </Text>
@@ -46,7 +46,7 @@ const AddVehicleSection =()=>{
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{ alignContent: "center", padding: 5, marginLeft: 10 }}>
+              <View style={{ alignContent: "center", }}>
                 {(selectedCar.model?.imageUrl) && 
                   <>
                     <TouchableOpacity
@@ -56,10 +56,11 @@ const AddVehicleSection =()=>{
                       })}
                     >
                       <Image
-                        style={styles.tinyLogo}
+                        style={[styles.tinyLogo]}
                         source={{
                           uri: selectedCar.model?.imageUrl
                         }}
+                        resizeMode="contain"
                       />
                     </TouchableOpacity>
                     {/* Modal for Expanded Image */}
@@ -100,13 +101,15 @@ const styles = StyleSheet.create({
     currentFilterContainer: {
       flexDirection: "column",
       alignItems: "flex-start",
+      paddingHorizontal:10,
+      width:"60%",
     },
     currentFilterText: {
-      fontSize: 12,
+      fontSize:fonts.caption,
       color: "#333",
     },
     currentFilterCar: {
-      fontSize: 14,
+      fontSize:fonts.body,
       fontWeight: "bold",
       color: "#333",
     },
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
       marginTop: 10,
     },
     showWithoutVehicleText: {
-      fontSize: 14,
+      fontSize:fonts.body,
       textDecorationLine: "underline",
     },
     addVehicleContainer: {
@@ -147,8 +150,8 @@ const styles = StyleSheet.create({
       fontWeight: "400",
     },
     tinyLogo: {
-      width: 70,
-      height: 70,
+      width:150,
+      height: 80,
     },
     modalContainer: {
       flex: 1,

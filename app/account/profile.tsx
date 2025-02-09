@@ -1,4 +1,4 @@
-import { Divider } from '@/components/Themed';
+import { Divider, fonts } from '@/components/Themed';
 import { useAuth } from '@/lib/providers/authProvider';
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
@@ -46,18 +46,18 @@ const styles = StyleSheet.create({
 
   },
   label: {
-    fontSize: 12,
+    fontSize:fonts.caption,
     fontWeight: '600',
     color: '#555',
   },
   value: {
-    fontSize: 16,
+    fontSize:fonts.h2,
     fontWeight: '400',
     color: '#000',
     textTransform: "uppercase"
   },
   title:{
-    fontSize:16,
+    fontSize:fonts.h2,
     fontWeight:"bold",
     marginBottom:10
   }

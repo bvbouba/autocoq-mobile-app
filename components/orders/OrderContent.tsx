@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { OrderFragment } from "../../saleor/api.generated";
-import { Divider, PaddedView, Text, View } from "../Themed";
+import { Divider, fonts, PaddedView, Text, View } from "../Themed";
 import OrderLineItemComponent from "./OrderLineItemComponent";
 import OrderSubtotal from "./OrderSubtotal";
 import { formatDate } from "@/utils/dateformat";
@@ -108,13 +108,13 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     orderNumberText: {
-        fontSize: 18,
+        fontSize:fonts.h2,
         fontWeight: "bold",
         marginTop: 16,
         marginBottom: 8
     },
     orderNumberLabel: {
-        fontSize: 16,
+        fontSize:fonts.h2,
         fontWeight: "normal",
         color: "#333"
     },
@@ -130,26 +130,26 @@ const styles = StyleSheet.create({
         marginLeft: 4,
     },
     statusText: {
-        fontSize: 14,
+        fontSize:fonts.body,
         color: "black",
     },
     statusLabel: {
-        fontSize: 14,
+        fontSize:fonts.body,
         fontWeight: "bold",
         color: "#555"
     },
     updateLabel: {
-        fontSize: 14,
+        fontSize:fonts.body,
         color: "#888"
     },
     addressTitle: {
-        fontSize: 16,
+        fontSize:fonts.h2,
         fontWeight: "bold",
         color: "#444",
         marginBottom:10,
     },
     noOrderText: {
-        fontSize: 16,
+        fontSize:fonts.h2,
         color: "#555",
         textAlign: "center",
         marginTop: 20

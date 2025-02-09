@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
 import { useCartContext } from "../../context/useCartContext"
 import { IconButton } from "react-native-paper"
-import {Text, View  } from "@/components/Themed"
+import {fonts, Text, View  } from "@/components/Themed"
 
 
 const BillingAddress = () => {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     icon: {
         marginTop: 5,
         marginRight: 10,
-        fontSize:14,
+        fontSize:fonts.body,
         textDecorationLine:"underline"
     },
     titleWrapper: {

@@ -2,7 +2,7 @@ import { StyleSheet, ScrollView } from 'react-native';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
 import Loading from '@/components/Loading';
-import {Text, View  } from "@/components/Themed"
+import {fonts, Text, View  } from "@/components/Themed"
 
 
 export default function FAQScreen() {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   header: {
-    fontSize: 24,
+    fontSize:fonts.h1,
     fontWeight: "bold",
     textAlign: "center",
     paddingVertical: 16,
@@ -61,12 +61,12 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 8,
-    fontSize: 16,
+    fontSize:fonts.h2,
     color: "#555",
   },
   error: {
     color: "red",
-    fontSize: 16,
+    fontSize:fonts.h2,
     textAlign: "center",
   },
 });

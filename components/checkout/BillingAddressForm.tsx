@@ -8,7 +8,7 @@ import { useCartContext } from "../../context/useCartContext";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation } from "../../saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
-import {Text, View ,colors } from "@/components/Themed"
+import {Text, View ,colors, fonts } from "@/components/Themed"
 
 
 interface Props {
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   mandatory: {
     color: "red",
     marginLeft: 5,
-    fontSize: 16,
+    fontSize:fonts.h2,
   },
   submitButton: {
     backgroundColor: "black", // Black button background

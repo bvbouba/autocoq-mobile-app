@@ -3,15 +3,15 @@ import { FC, useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet } from 'react-native';
 import { getConfig } from "../../config";
 import { ProductFragment } from "../../saleor/api.generated";
-import { colors, Divider, Text, View } from './../Themed';
+import { colors, Divider, fonts, Text, View } from './../Themed';
 import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
 import DeliveryMethodBasic from "../DeliveryMethodBasic";
 import { Button } from "react-native-paper";
 import { useCartContext } from "@/context/useCartContext";
+import { useCarFilter } from "@/context/useCarFilterContext";
 
 interface Props {
     product: ProductFragment
-    setFilterOpen: (filterOpen:boolean)=>void,
 
 }
 
@@ -29,9 +29,10 @@ const ProductImage: FC<{ product: ProductFragment }> = ({ product }) => {
     return <>No Image</>
 }
 
-const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
+const ProductListItem: FC<Props> = ({ product }) => {
     const { addItem } = useCartContext();
     const [loading, setLoading] = useState(false);
+    const {setFilterOpen} = useCarFilter()
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',
@@ -66,15 +67,16 @@ const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
                     <View><ProductImage product={product} />
                     </View>
                     <View style={styles.productDetailWrapper}>
+                        <View>
                         <Text style={styles.productTitle} numberOfLines={2} >
                             {product.name}
                         </Text>
                         {product.externalReference && (
-                            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
+                            <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
                                 Référence # {product.externalReference}
                             </Text>
                             )}
-                        
+                        </View>
                         <Text style={styles.productPrice} >
                             {formatter.format(product.defaultVariant?.pricing?.price?.gross.amount || 0)}
                         </Text>
@@ -85,10 +87,10 @@ const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
                                 marginTop:5
                             }}>
                             <Text style={{
-                                fontSize: 12,
+                                fontSize:fonts.caption,
                                 fontWeight:"bold"
                             }}>Notes: </Text>
-                            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
+                            <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
                             {product.category.name}
                         </Text></View>
                         )}
@@ -110,7 +112,7 @@ const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
 
                 </View>
             </View>
-            <Divider style={{ borderBottomWidth: 5 }} />
+            <Divider style={{ borderBottomWidth: 5, marginTop:0, marginBottom:0 }} />
         </Pressable>
 
     </>
@@ -120,7 +122,8 @@ const ProductListItem: FC<Props> = ({ product,setFilterOpen }) => {
 const styles = StyleSheet.create({
     productItem: {
         width: "100%",
-        marginVertical: 16,
+        padding:10,
+        paddingTop:20
     },
     imageWrapper: {
         width: "100%",  
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     },
     productDetailWrapper: {
         flex: 1, 
-        paddingHorizontal: 10,
+        gap:10
     },
     tinyLogo: {
         width: 100,  
@@ -141,31 +144,29 @@ const styles = StyleSheet.create({
     productTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize:fonts.body,
     },
     productPrice: {
         textAlign: "left",
-        marginTop:8,
-        fontSize: 20,
+        fontSize:fonts.h2,
         fontWeight:"bold"
     },
     productDescription: {
         textAlign: "left",
     },
     buttonContainer: {
-        padding: 5,
         alignItems: "center",
       },
     button: {
         backgroundColor: colors.secondary,
-        borderRadius: 15,
+        borderRadius: 30,
         alignItems: "center",
         width: "95%",
       },
       buttonText: {
         color: "#fff",
         fontWeight: "400",
-        fontSize:12
+        fontSize:fonts.caption
       },
     
 });
