@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: "row",
     alignItems: "center",
+    padding:10
   },
   closeButton: {
     marginLeft: Platform.OS === "android" ? -10 : 0,

@@ -9,6 +9,8 @@ import DeliveryMethodBasic from "../DeliveryMethodBasic";
 import { Button } from "react-native-paper";
 import { useCartContext } from "@/context/useCartContext";
 import { useCarFilter } from "@/context/useCarFilterContext";
+import { useModal } from "@/context/useModal";
+import AddedToCart from "../cart/AddToTheCart";
 
 interface Props {
     product: ProductFragment
@@ -31,6 +33,7 @@ const ProductImage: FC<{ product: ProductFragment }> = ({ product }) => {
 
 const ProductListItem: FC<Props> = ({ product }) => {
     const { addItem } = useCartContext();
+    const {openModal}= useModal()
     const [loading, setLoading] = useState(false);
     const {setFilterOpen} = useCarFilter()
 
@@ -54,6 +57,9 @@ const ProductListItem: FC<Props> = ({ product }) => {
         setLoading(true);
         try {
             await addItem(variants[0].id);
+            openModal("CartPreview",
+                <AddedToCart />
+            )
         } finally {
             setLoading(false);
         }

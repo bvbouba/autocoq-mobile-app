@@ -55,7 +55,10 @@ const AddedToCart: React.FC = () => {
       <Divider />
 
       {/* Bouton Voir le panier & Commander */}
-      <TouchableOpacity style={styles.checkoutButton} onPress={() => router.push("/cart")}>
+      <TouchableOpacity style={styles.checkoutButton} onPress={() =>{ 
+        closeModal()
+        router.push("/cart")}
+        }>
         <Text style={styles.checkoutText}>VOIR LE PANIER ET COMMANDER</Text>
       </TouchableOpacity>
 

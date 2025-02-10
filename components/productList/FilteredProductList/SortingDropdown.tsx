@@ -64,9 +64,9 @@ const SortingDropdown: React.FC<SortingDropdownProps> = ({ optionToggle, chosen 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    alignItems: "center", // Aligner les éléments horizontalement
+    alignItems: "center", 
     marginVertical: 10,
-    width: '100%', // Assurez-vous que le conteneur occupe toute la largeur du parent
+    width: '100%',
   },
   labelContainer: {
     flexDirection: "row",

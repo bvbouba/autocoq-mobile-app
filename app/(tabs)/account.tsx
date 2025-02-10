@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import {Text, View , Divider,colors, fonts } from "@/components/Themed"
+import {Text, View , Divider,colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
 import { useState } from 'react';
@@ -36,7 +36,7 @@ export default function AccountScreen() {
   return (
     <View style={styles.scrollContainer}>
       <ScrollView style={styles.scroll}>
-        <View style={styles.header}>
+        <PaddedView style={styles.header}>
         <TouchableOpacity
               style={{flexDirection:"row"}}
               onPress={() => router.push('/account/profile')}
@@ -54,10 +54,10 @@ export default function AccountScreen() {
           }
           </View>
           </TouchableOpacity>
-        </View>
-        {!user?.id && <View>
+        </PaddedView>
+        {/* {!user?.id && <View>
           <BannerAds slug="banner-pub-account" />
-        </View>}
+        </View>} */}
 
         <View style={styles.accountButtonContainer}>
           {!user?.id && (

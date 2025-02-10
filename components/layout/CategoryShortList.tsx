@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.secondary,
     padding: 5,
+    fontSize:fonts.caption
   }
 });
 

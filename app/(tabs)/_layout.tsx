@@ -7,6 +7,8 @@ import Colors from '../../constants/Colors';
 import { useCartContext } from '../../context/useCartContext';
 import HeaderBack from '@/components/layout/HeaderBack';
 import SearchHeader from '@/components/layout/SearchHeader';
+import SimpleBackHeader from '@/components/layout/SimpleBackHeader';
+import SimpleCloseHeader from '@/components/layout/SimpleCloseHeader';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -67,7 +69,8 @@ export default function TabLayout() {
         name="cart"
         options={{
           title: '',
-          headerShown: false,
+          headerShown: true,
+          header:()=><SimpleCloseHeader  title="Panier" />,
           tabBarIcon: ({ color }) => {
             const { cart } = useCartContext();
             return <TabBarIcon

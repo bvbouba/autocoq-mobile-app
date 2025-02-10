@@ -156,10 +156,12 @@ const CartScreen = () => {
     return (
         <View style={styles.scrollContainer} testID="cart-list-safe">
             <ScrollView style={styles.scroll} testID="cart-list-scroll">
+                <PaddedView>
                 {cart.lines.map(line => (
                     <CartItem lineItem={line as CheckoutLine} key={line.id} />
                 ))}
                 <CartSubtotal />
+                </PaddedView>
             </ScrollView>
 
             <PaddedView style={styles.footerContainer}>

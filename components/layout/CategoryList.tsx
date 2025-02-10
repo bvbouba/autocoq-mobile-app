@@ -30,11 +30,13 @@ const CategoryList = () => {
     const category = data.category;
     const childrens = mapEdgesToItems(category.children);
 
+    const categoryName = (category.children) ? category.name: "Voir par catégorie"
+
     return (
         <>
             <View style={styles.container}>
                 <PaddedView>
-                    <Text style={styles.categoryListTitle}>{`Voir par catégorie`}</Text>
+                    <Text style={styles.categoryListTitle}>{categoryName}</Text>
                 </PaddedView>
                 <PaddedView style={{ flexDirection: "column" }}>
                     {
