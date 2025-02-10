@@ -5,7 +5,7 @@ import { ProductVariantFragment } from "@/saleor/api.generated";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import RichText from "./RichText";
 import { formatDuration } from "@/utils/dateformat";
-import {fonts, Text, View  } from "@/components/Themed"
+import {colors, fonts, Text, View  } from "@/components/Themed"
 
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
@@ -48,6 +48,7 @@ const DeliveryMethod = ({ variant }: Props) => {
   const diffMs = Math.max(targetTime.getTime() - currentTime.getTime(), 0);
 
   
+  console.log(homeDelivery?.minimumOrderPrice)
   
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -91,13 +92,16 @@ const DeliveryMethod = ({ variant }: Props) => {
                 <Text style={styles.title}>{option.title}</Text>
                 <RichText jsonStringData={option.description} stylesOverride={{
                   paragraph:{
-                  fontSize:fonts.caption,
+                  fontSize:fonts.sm,
                   lineHeight: 20,
                   }
                 }}/>
               </View>
             </View>
-            <View style={[styles.radio, selectedOption === option.id && styles.radioSelected]} />
+            <View style={[styles.radio, selectedOption === option.id && styles.radioSelected]} >
+              
+              {(selectedOption === option.id) && <View style={styles.innerCircle} />}
+              </View>
           </View>
         </TouchableOpacity>
       ))}
@@ -116,11 +120,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 5,
     borderWidth: 1,
+    borderColor:colors.border,
     borderRadius: 5,
     marginBottom: 5,
   },
   selectedOption: {
-    backgroundColor: "#f0f8ff",
+    borderColor: colors.secondary,
   },
   optionContent: {
     flexDirection: "row",
@@ -132,10 +137,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    width: "70%",
+    width: "80%",
   },
   title: {
-    fontSize:fonts.body,
+    fontSize:fonts.caption,
     fontWeight: "bold",
   },
   description: {
@@ -152,6 +157,20 @@ const styles = StyleSheet.create({
   radioSelected: {
     borderColor: "black",
     backgroundColor: "black",
+    width: 18,  // Adjust size
+    height: 18, 
+    borderRadius: 12, // Makes it a circle
+    alignItems: "center",
+    justifyContent: "center", 
+  },
+  
+  innerCircle: {
+    width: 12,  // Smaller size for inner circle
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.secondary,
+    borderWidth:2,
+    borderColor:"white"
   },
 });
 

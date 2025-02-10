@@ -14,22 +14,28 @@ interface ImageProps {
 }
 
 const AddVehicleBasic = () => {
-  const [filterOpen, setFilterOpen] = useState(false);
   const { isFiltered, selectedCar } = useCarFilter();
   const [expandedImage, setExpandedImage] = useState<ImageProps | null>(null);
-  const {openModal} = useModal()
+  const { openModal } = useModal()
 
   return (
     <>
       <View style={styles.selectVehicleContainer}>
         <View style={styles.leftSection}>
           <TouchableOpacity
-            onPress={() =>
-              selectedCar?.model?.imageUrl &&
-              setExpandedImage({
-                url: selectedCar.model.imageUrl,
-                alt: "",
-              })
+            onPress={() => {
+              if (selectedCar?.model?.imageUrl) {
+                setExpandedImage({
+                  url: selectedCar.model.imageUrl,
+                  alt: "",
+                })
+                if (expandedImage) {
+                  openModal("ImageExpand",
+                    <ImageExpand image={expandedImage} />
+                  )
+                }
+              }
+            }
             }
           >
             {selectedCar?.model?.imageUrl ? (
@@ -40,16 +46,16 @@ const AddVehicleBasic = () => {
             ) : (
               <View style={{ position: "relative" }}>
                 <FontAwesome name="car" size={18} color={colors.secondary} />
-                  <FontAwesome
-                    name="exclamation-circle"
-                    size={13}
-                    color={colors.warning}
-                    style={{
-                      position: "absolute",
-                      bottom: -4,
-                      right: -6,
-                    }}
-                  />
+                <FontAwesome
+                  name="exclamation-circle"
+                  size={13}
+                  color={colors.warning}
+                  style={{
+                    position: "absolute",
+                    bottom: -4,
+                    right: -6,
+                  }}
+                />
               </View>
             )}
           </TouchableOpacity>
@@ -58,9 +64,9 @@ const AddVehicleBasic = () => {
           </Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => 
-          openModal("carFilter", 
-            <CarFilterModal  />
+        <TouchableOpacity style={styles.button} onPress={() =>
+          openModal("carFilter",
+            <CarFilterModal />
           )
         }>
           <Text style={[styles.buttonText, (isFiltered && selectedCar) && {
@@ -73,14 +79,9 @@ const AddVehicleBasic = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Modal d'agrandissement de l'image */}
-      {expandedImage && (
-        <View style={styles.modalContainer}>
-          <ImageExpand image={expandedImage} onRemoveExpand={() => setExpandedImage(null)} />
-        </View>
-      )}
 
- 
+
+
     </>
   );
 };

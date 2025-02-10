@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Modal, Portal, Provider as PaperProvider } from "react-native-paper";
+import { Modal, Portal, Provider as PaperProvider, IconButton } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 
-type ModalType = "carFilter" | "productFilter"; // Add more modal types as needed
+type ModalType = "carFilter" | "productFilter" | "CartPreview" | "ImageExpand"; // Add more modal types as needed
 
 interface ModalContextType {
   openModal: (type: ModalType, content?: ReactNode) => void;
@@ -32,6 +32,9 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         <Portal>
           <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={styles.modalContainer}>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+            <View style={{ alignItems: "flex-end" }}>
+                        <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
+                      </View>
               {modalContent}
             </ScrollView>
           </Modal>
@@ -51,6 +54,13 @@ export const useModal = () => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-     backgroundColor: 'white', padding: 20, height: "100%"
+     backgroundColor: 'white', padding: 20, height: "100%", marginTop:150,
+     borderTopRightRadius:20,
+     borderTopLeftRadius:20
+
+  },
+  closeButton: {
+    top: 0,
+    right: 0,
   },
 });

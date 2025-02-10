@@ -2,13 +2,14 @@ import { ProductFragment, useCompatibilityCheckQuery } from "@/saleor/api.genera
 import FontAwesome from "@expo/vector-icons/FontAwesome"
 import { useState } from "react"
 import {  StyleSheet, TouchableOpacity } from "react-native"
-import {Text, View , colors, fonts } from "@/components/Themed"
+import {PaddedView, Text, View , colors, fonts } from "@/components/Themed"
 
 import { Button } from "react-native-paper"
 import CarFilterModal from "./Modal"
 import { useCarFilter } from "@/context/useCarFilterContext"
 import { useRouter } from "expo-router"
 import { useModal } from "@/context/useModal"
+import { WhiteButton } from "../button"
 
 
 
@@ -42,7 +43,7 @@ const CompatibilityCheck = ({ product }: props) => {
   return (
     <>
       <View style={{ alignItems: "center" }}>
-        <View
+        <PaddedView
           style={[
             styles.vehicleContainer,
             isCompatible && styles.compatible,
@@ -57,9 +58,25 @@ const CompatibilityCheck = ({ product }: props) => {
             ]}
           >
             <View style={{
-              flexDirection: "row"
+              flexDirection: "row",
+              backgroundColor:"inherent" 
             }}>
-              <FontAwesome name="car" size={20} color={colors.secondary} />
+              <View style={{ position: "relative", backgroundColor:"inherent" }}>
+              <FontAwesome name="car" size={20} color={colors.secondary} style={{
+              }} />
+               
+               <FontAwesome
+                    name={(selectedCar?.name) ? isCompatible ? "check" : "warning" : "exclamation-circle"}
+                    size={13}
+                    color={(selectedCar?.name) ? isCompatible ? colors.success : colors.error : colors.warning}
+                    style={{
+                      position: "absolute",
+                      bottom: 4,
+                      right: -5,
+                    }}
+                  />
+
+              </View>
               <Text style={styles.vehicleText}>
                 {selectedCar?.name
                   ? isCompatible
@@ -75,7 +92,8 @@ const CompatibilityCheck = ({ product }: props) => {
             </View>
             <View style={{
               flexDirection:"row",
-              alignItems:"center"
+              alignItems:"center",
+              backgroundColor:"inherent"
             }}>
               {selectedCar?.name &&
               <>
@@ -109,12 +127,12 @@ const CompatibilityCheck = ({ product }: props) => {
           </View>
 
           {!selectedCar?.name &&
-            <Button style={styles.vehicleButton} onPress={() => openModal("carFilter",<CarFilterModal/>)}>
-              <Text style={styles.vehicleButtonText}>
-                {"Sélectionner un véhicule"}
-              </Text>
-            </Button>}
-        </View>
+            <WhiteButton 
+            title={"Sélectionner un véhicule"}
+            onPress={() => openModal("carFilter",<CarFilterModal/>)}
+            />
+            }
+        </PaddedView>
       </View>
 
     </>
@@ -143,16 +161,16 @@ const styles = StyleSheet.create({
   },
   vehicleText: {
     fontSize:fonts.caption,
-    marginLeft: 5
+    marginLeft: 5,
   },
   vehicleButton: {
     borderWidth: 1,
     backgroundColor: "white",
     borderRadius: 20,
-    borderColor: "black",
+    borderColor: colors.secondary,
   },
   vehicleButtonText: {
-    fontSize: 10
+    fontSize: fonts.sm
   },
   compatible: {
     backgroundColor: colors.successBg,

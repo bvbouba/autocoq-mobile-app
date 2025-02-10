@@ -1,6 +1,6 @@
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { FC, useState } from "react";
-import { ActivityIndicator, Image, Pressable, StyleSheet } from 'react-native';
+import { ActivityIndicator, Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "../../config";
 import { ProductFragment } from "../../saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from './../Themed';
@@ -61,16 +61,21 @@ const ProductListItem: FC<Props> = ({ product }) => {
 
 
     return <>
-        <Pressable onPress={() => router.push("products/details/" + product.id + "?" + params.toString())}>
+        <>
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper} testID="product-image-wrapper">
-                    <View><ProductImage product={product} />
+                    <View>
+                    <TouchableOpacity onPress={() => router.push("products/details/" + product.id + "?" + params.toString())}>
+                        <ProductImage product={product} />
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
+                        <TouchableOpacity onPress={() => router.push("products/details/" + product.id + "?" + params.toString())}>
                         <Text style={styles.productTitle} numberOfLines={2} >
                             {product.name}
                         </Text>
+                        </TouchableOpacity>
                         {product.externalReference && (
                             <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
                                 Référence # {product.externalReference}
@@ -113,7 +118,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                 </View>
             </View>
             <Divider style={{ borderBottomWidth: 5, marginTop:0, marginBottom:0 }} />
-        </Pressable>
+        </>
 
     </>
 }

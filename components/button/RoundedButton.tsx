@@ -8,16 +8,14 @@ interface Props {
   title: string;
   loading?: boolean;
   disabled?: boolean;
-  mode?: "text" | "outlined" | "contained";
   style?: object;
 }
 
-export const PrimaryButton: React.FC<Props> = ({
+export const RoundedButton: React.FC<Props> = ({
   onPress,
   title,
   loading = false,
   disabled = false,
-  mode = "contained",
   style = {},
 }) => {
   const [isPressed, setIsPressed] = useState(false);
@@ -32,7 +30,7 @@ export const PrimaryButton: React.FC<Props> = ({
         isPressed || pressed ? styles.pressed : null,
         style,
       ]}
-      disabled={disabled || loading}
+      disabled={loading}
     >
       {loading ? (
         <ActivityIndicator color="white" />
@@ -43,22 +41,21 @@ export const PrimaryButton: React.FC<Props> = ({
   );
 };
 
-export default PrimaryButton;
+export default RoundedButton;
 
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.secondary,
-    paddingVertical: 10,
-    marginVertical: 10,
-    borderRadius: 5,
+    borderRadius: 15,
     alignItems: "center",
-    justifyContent: "center",
+    width: "95%",
+    padding:8
   },
   pressed: {
     opacity: 0.6, // Makes the button slightly transparent when pressed
   },
   text: {
+    color: "#fff",
     fontWeight: "400",
-    color: "white",
   },
 });

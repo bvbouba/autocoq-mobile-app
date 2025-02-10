@@ -120,6 +120,7 @@ export const fonts = {
   body:14,
   caption:12,
   button:14,
+  sm:10
 } 
 
 export const spacing = {

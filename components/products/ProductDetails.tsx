@@ -23,6 +23,8 @@ import CompatibilityCheck from "../car/CompatibilityCheck";
 import Fitment from "../car/Fitment";
 import DeliveryMethod from "../DeliveryMethod";
 import { useNavigation } from "@react-navigation/native";
+import { useModal } from "@/context/useModal";
+import AddToTheCart from "../cart/AddToTheCart";
 
 interface Props {
   product: ProductFragment;
@@ -30,6 +32,7 @@ interface Props {
 
 const ProductDetails: FC<Props> = ({ product }) => {
   const router = useRouter();
+  const {openModal} = useModal()
 
   const isUniversal = product.isUniversal || true;
   const fitments = product.fitments || [];
@@ -82,7 +85,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View>
+        <PaddedView>
           <View style={{ flexDirection: "column", marginBottom: 15, padding: 8 }}>
             <Text style={styles.productTitle}>{product.name}</Text>
             {product.externalReference && (
@@ -91,21 +94,22 @@ const ProductDetails: FC<Props> = ({ product }) => {
               </Text>
             )}
           </View>
-        </View>
+        </PaddedView>
 
-        <View>
+        <PaddedView>
           <ProductImageCarousel
             images={
               product.media?.map((m, idx) => ({ url: m.url, alt: m.alt, id: idx })) || []
             }
           />
-        </View>
-
+        </PaddedView>
+        <PaddedView>
         <CompatibilityCheck product={product} />
+        </PaddedView>
 
         <Divider style={{ borderBottomWidth: 5 }} />
 
-        <View
+        <PaddedView
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -115,11 +119,13 @@ const ProductDetails: FC<Props> = ({ product }) => {
         >
           <Text style={styles.priceTitle}>Prix</Text>
           <Text style={styles.productPrice}>{price}</Text>
-        </View>
+        </PaddedView>
         <Divider style={{ borderBottomWidth: 5 }} />
-
+        
+        <PaddedView>
         <DeliveryMethod variant={product.defaultVariant} />
-
+        </PaddedView>
+        
         <Divider style={{ borderBottomWidth: 5 }} />
         <View style={styles.buttonContainer}>
           <View style={{ marginVertical: 5 }}>
@@ -135,7 +141,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
             mode="contained"
             onPress={async () => {
               await addItem(selectedVariant?.id);
-              router.push("(tabs)/cart");
+              openModal("CartPreview",<AddToTheCart />)
             }}
             disabled={loading}
           >

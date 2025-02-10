@@ -9,7 +9,7 @@ interface Props {
     lineItem: OrderLineFragment
 }
 
-const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ variant }) => {
+export const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ variant }) => {
     const media = variant.product.media || []
     if (variant.media && variant.media.length > 0) {
         return <Image

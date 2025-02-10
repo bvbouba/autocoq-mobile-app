@@ -124,9 +124,7 @@ const CarFilterModal = () => {
                 (!modalVisible) ?
                   <>
                     <View style={styles.filterContainer}>
-                      <View style={{ alignItems: "flex-end" }}>
-                        <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
-                      </View>
+          
 
                       <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <FontAwesome name="car" size={20} color={colors.secondary} style={styles.carIcon} />
@@ -210,9 +208,7 @@ const CarFilterModal = () => {
                   </> :
 
                   <View>
-                    <View style={{ alignItems: "flex-end" }}>
-                      <IconButton icon="close" size={20} onPress={() => setModalVisible(false)} style={styles.closeButton} />
-                    </View>
+   
                     <Animated.FlatList
                       data={getCurrentOptions()}
                       keyExtractor={(item) => item.id}

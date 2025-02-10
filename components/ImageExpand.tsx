@@ -8,8 +8,7 @@ import {
   Dimensions,
   Text,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons"; // Close button icon
-import { colors, fonts } from "./Themed";
+import { fonts } from "./Themed";
 import {
   Gesture,
   GestureDetector,
@@ -29,14 +28,13 @@ interface ProductMediaFragment {
 
 interface ImageExpandProps {
   image?: ProductMediaFragment;
-  onRemoveExpand: () => void;
 }
 
 function clamp(val:number, min:number, max:number) {
   return Math.min(Math.max(val, min), max);
 }
 
-const ImageExpand: React.FC<ImageExpandProps> = ({ image, onRemoveExpand }) => {
+const ImageExpand: React.FC<ImageExpandProps> = ({ image }) => {
   const scale = useSharedValue(1);
   const startScale = useSharedValue(1);
   const offsetX = useSharedValue(0); // For panning X
@@ -80,32 +78,25 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image, onRemoveExpand }) => {
       scale.value = newScale;
     });
 
-  const boxAnimatedStyles = useAnimatedStyle(() => ({
-    transform: [
-      { scale: scale.value },
-      { translateX: withSpring(offsetX.value) },
-      { translateY: withSpring(offsetY.value) },
-    ],
-  }));
+    const boxAnimatedStyles = useAnimatedStyle(() => {
+      return {
+        transform: [
+          { scale: scale.value },
+          { translateX: withSpring(offsetX.value) },
+          { translateY: withSpring(offsetY.value) },
+        ] as Array<{ scale?: number; translateX?: number; translateY?: number }>,
+      };
+    });
 
   if (!image) return null;
 
   return (
-    <Modal visible={!!image} transparent={true} animationType="fade">
-      {/* Detect outside taps */}
-      <TouchableWithoutFeedback onPress={onRemoveExpand}>
-        <View style={styles.overlay}>
+  
+        <>
           {/* Product Name */}
           {image.alt && <Text style={styles.productName}>{image.alt}</Text>}
 
-          {/* Close Button */}
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={onRemoveExpand}
-            activeOpacity={0.7}
-          >
-            <MaterialIcons name="close" size={28} color={colors.primary} />
-          </TouchableOpacity>
+  
 
           {/* Image Container */}
           <GestureHandlerRootView style={styles.container}>
@@ -122,41 +113,19 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image, onRemoveExpand }) => {
               </TouchableWithoutFeedback>
             </GestureDetector>
           </GestureHandlerRootView>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+        </>
   );
 };
 
 const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 50,
-  },
   productName: {
     position: "absolute",
     top: 20,
     fontSize:fonts.h2,
     fontWeight: "bold",
     color: "white",
-  },
-  closeButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-    zIndex: 10, // Ensures the button is clickable
   },
   imageWrapper: {
     width: width * 0.9,
@@ -184,16 +153,6 @@ const styles = StyleSheet.create({
   box: {
     borderRadius: 20,
     backgroundColor: '#b58df1',
-  },
-  dot: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#ccc',
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    pointerEvents: 'none',
   },
 });
 

@@ -6,6 +6,7 @@ import { View, colors } from "../../Themed"
 import ProductImage from "./ProductImage"
 import { MaterialIcons } from "@expo/vector-icons"
 import ImageExpand from "@/components/ImageExpand"
+import { useModal } from "@/context/useModal"
 
 interface ImageProps {
     url: string;
@@ -21,6 +22,7 @@ const ProductImageCarousel: FC<Props> = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const { width: windowWidth } = useWindowDimensions();
     const [expandedImage, setExpandedImage] = useState<ImageProps | null|undefined>(null);
+    const {openModal} = useModal()
     useEffect(() => {
         setCurrentIndex(0);
     }, [images]);
@@ -50,7 +52,15 @@ const ProductImageCarousel: FC<Props> = ({ images }) => {
                  {/* Expand Button - Center Right */}
                  <TouchableOpacity 
                         style={styles.expandButton} 
-                        onPress={() => setExpandedImage(images[currentIndex])}
+                        onPress={() => {
+                            setExpandedImage(images[currentIndex])
+                           if(expandedImage){ 
+                          openModal("ImageExpand",
+                            <ImageExpand image={expandedImage}  />
+                          )
+                        }
+                        }
+                    }
                     >
                         <MaterialIcons name="zoom-out-map" size={15} color="white" />
                     </TouchableOpacity>
@@ -93,12 +103,7 @@ const ProductImageCarousel: FC<Props> = ({ images }) => {
             </View>
         </View>
   
-      {/* Modal for Expanded Image
-        {expandedImage && (
-        <View style={styles.modalContainer}>
-          <ImageExpand image={expandedImage} onRemoveExpand={() => setExpandedImage(null)} />
-        </View>
-      )} */}
+     
         </>
     );
 };

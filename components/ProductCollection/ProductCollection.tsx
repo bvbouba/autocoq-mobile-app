@@ -99,8 +99,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   };
 
   const pageInfo = data?.products?.pageInfo
-
-
+  
   if (loading) return <Loading />;
   
   const products = mapEdgesToItems(data?.products);
@@ -147,6 +146,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    backgroundColor:"white"
   },
   header: {
     padding: 15,

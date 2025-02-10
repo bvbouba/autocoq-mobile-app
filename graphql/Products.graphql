@@ -14,6 +14,10 @@ fragment ShippingMethodFragment on ShippingMethod {
       amount
       currency
     }
+     maximumOrderPrice {
+      amount
+      currency
+    }
     minimumDeliveryDays
     maximumDeliveryDays
 }

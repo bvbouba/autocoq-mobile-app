@@ -41,9 +41,7 @@ const {closeModal} = useModal()
 
     return (
         <>
-         <View style={{ alignItems: "flex-end" }}>
-                        <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
-                      </View>
+
 
             <View>
                 <Text style={styles.bigTitle}>Filter & Sort</Text>
