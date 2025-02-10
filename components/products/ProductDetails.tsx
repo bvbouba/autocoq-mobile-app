@@ -1,8 +1,8 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   ProductFragment,
   ProductVariantFragment,
-} from "../../saleor/api.generated";
+} from "@/saleor/api.generated";
 import {
   colors,
   Divider,
@@ -12,9 +12,9 @@ import {
   View,
 } from "../Themed";
 import { ActivityIndicator, StyleSheet } from "react-native";
-import { useCartContext } from "../../context/useCartContext";
+import { useCartContext } from "@/context/useCartContext";
 import ProductImageCarousel from "./details/ProductImageCarousel";
-import { getConfig } from "../../config";
+import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import VariantSelector from "./details/VariantSelector";
 import { ScrollView } from "react-native-gesture-handler";
@@ -22,6 +22,7 @@ import { Button } from "react-native-paper";
 import CompatibilityCheck from "../car/CompatibilityCheck";
 import Fitment from "../car/Fitment";
 import DeliveryMethod from "../DeliveryMethod";
+import { useNavigation } from "@react-navigation/native";
 
 interface Props {
   product: ProductFragment;
@@ -46,6 +47,16 @@ const ProductDetails: FC<Props> = ({ product }) => {
     }
   );
 
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.getParent()?.setOptions({ tabBarStyle: { display: "flex" } });
+
+    return () => {
+      navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" } });
+    };
+  }, [navigation]);
+  
   const renderDescription = () => {
     if (!product.description) return null;
 

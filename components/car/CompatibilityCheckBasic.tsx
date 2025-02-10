@@ -4,6 +4,8 @@ import { StyleSheet, TouchableOpacity } from "react-native"
 import { useCarFilter } from "@/context/useCarFilterContext"
 import { Text, View, colors } from "@/components/Themed"
 import SkeletonContent from "react-native-skeleton-content"
+import { useModal } from "@/context/useModal"
+import CarFilterModal from "./Modal"
 
 
 interface props {
@@ -13,6 +15,7 @@ interface props {
 
 const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
   const { selectedCar } = useCarFilter()
+  const {openModal} = useModal()
 
   const { data, loading } = useCompatibilityCheckQuery({
     variables: {
@@ -70,7 +73,7 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
                 {selectedCar?.name
                   ? isCompatible
                     ? <>
-                      <TouchableOpacity onPress={() => setFilterOpen(true)}>
+                      <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal/>)}>
                         <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold"
                         }]}>Compatible avec votre </Text>
@@ -82,7 +85,7 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
                     </>
 
                     : <>
-                      <TouchableOpacity onPress={() => setFilterOpen(true)}>
+                      <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal/>)}>
                         <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold",
                           textDecorationLine: "underline"
@@ -100,7 +103,7 @@ const CompatibilityCheckBasic = ({ product, setFilterOpen }: props) => {
                     </>
                   :
 
-                  <TouchableOpacity onPress={() => setFilterOpen(true)}>
+                  <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal/>)}>
                     <Text style={[styles.vehicleText, {
                       textDecorationLine: "underline"
                     }]}>

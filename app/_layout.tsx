@@ -27,6 +27,7 @@ import { AuthProvider } from "@/lib/providers/authProvider";
 import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
 import { PathProvider } from "@/context/path";
 import { LoadingProvider } from "@/context/Loading";
+import { ModalProvider } from "@/context/useModal";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -89,6 +90,7 @@ function RootLayoutNav() {
         <CartProvider>
           <OrderProvider>
             <PaymentProvider>
+            <ModalProvider> 
             <GestureHandlerRootView style={{ flex: 1 }}>
               <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
                 <Stack>
@@ -116,7 +118,12 @@ function RootLayoutNav() {
                       header: () => <SearchHeader withBack />,
                     }}
                   />
-                  <Stack.Screen name="products/details/[id]" options={baseHeaderProps} />
+                  <Stack.Screen name="products/details/[id]" 
+                  options={{
+                    header:()=><SearchHeader withBack withVehicle={false}/>
+                    
+                    }} 
+                  />
                   <Stack.Screen name="checkout" options={{
                     header:()=><SimpleCloseHeader  title="Commande" subTitle="Paiement et Révision"/>
                     }}  />
@@ -151,6 +158,7 @@ function RootLayoutNav() {
                 </Stack>
               </ThemeProvider>
               </GestureHandlerRootView>
+              </ModalProvider> 
             </PaymentProvider>
           </OrderProvider>
         </CartProvider>

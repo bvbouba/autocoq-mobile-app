@@ -8,6 +8,7 @@ import { Text, View, colors, fonts } from "@/components/Themed";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PrimaryButton } from "../button";
 import { ActivityIndicator } from "react-native-paper";
+import { useModal } from "@/context/useModal";
 
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -24,8 +25,11 @@ const getLoadingTextColor = (loading: boolean, hasData: boolean) => {
   return hasData ? colors.textPrimary : colors.textSecondary;
 };
 
-const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+const CarFilterModal = () => {
   const { selectedCar, setSelectedCar, setIsFiltered } = useCarFilter();
+  const {closeModal} = useModal()
+
+  console.log("CarFilterModal")
 
   // États temporaires pour les sélections du modal
   const [tempCarYear, setTempCarYear] = useState(selectedCar?.year);
@@ -68,7 +72,7 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
       });
 
       setIsFiltered(true);
-      onClose();
+      closeModal()
     } else {
       Alert.alert("Veuillez sélectionner toutes les options de filtrage.");
     }
@@ -115,15 +119,13 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
 
   return (
     <>
-      {open && (
-          <Modal visible={open} onDismiss={onClose} contentContainerStyle={styles.modalContainer}>
 
-              {
+              { 
                 (!modalVisible) ?
                   <>
                     <View style={styles.filterContainer}>
                       <View style={{ alignItems: "flex-end" }}>
-                        <IconButton icon="close" size={20} onPress={onClose} style={styles.closeButton} />
+                        <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
                       </View>
 
                       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -193,7 +195,7 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
                       ]} mode="contained" onPress={() => {
                         setIsFiltered(false)
                         setSelectedCar({})
-                        onClose()
+                        closeModal()
                       }
                       }
                         disabled={loadingEngines}
@@ -226,10 +228,7 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
                     />
                   </View>
 
-              }
-
-          </Modal>
-      )}
+               }           
 
 
     </>
@@ -238,9 +237,7 @@ const CarFilterModal = ({ open, onClose }: { open: boolean; onClose: () => void 
 
 const styles = StyleSheet.create({
 
-  modalContainer: { backgroundColor: 'white', padding: 20, height: "100%",
-    top:SCREEN_HEIGHT/2
-   },
+  modalContainer: { backgroundColor: 'white', padding: 20, height: "100%"},
 
   dropdown: {
     padding: 15,

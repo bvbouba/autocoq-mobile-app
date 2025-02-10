@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { PrimaryButton } from "../button";
 import MyGarage from "../commun/MyGarage";
+import { useModal } from "@/context/useModal";
+import CarFilterModal from "./Modal";
 
 interface props {
     carMake?:MakeDetailsFragment|null,
@@ -22,8 +24,9 @@ interface props {
   }
 
 const AddVehicleSection =()=>{
-    const { selectedCar, clearFilter, isFiltered,setFilterOpen } = useCarFilter();
+    const { selectedCar, clearFilter, isFiltered } = useCarFilter();
     const [expandedImage, setExpandedImage] = useState<ImageProps | null | undefined>(null);
+    const {openModal} = useModal()
     
    
     return(<>
@@ -84,7 +87,7 @@ const AddVehicleSection =()=>{
               <View style={{ width: "100%" }}>
                 <PrimaryButton 
                 title={`AJOUTER UN VÉHICULE`}
-                onPress={() => setFilterOpen(true)}
+                onPress={() => openModal("carFilter",<CarFilterModal />)}
                 />              
               </View>
             </>

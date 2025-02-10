@@ -59,8 +59,6 @@ const CategoryProductScreen = () => {
             categoryIDs={[category?.id]}
           />
                 
-          {filterOpen && <CarFilterModal onClose={() => setFilterOpen(false)} open={filterOpen} />}
-
 </SafeAreaView>
 }
 

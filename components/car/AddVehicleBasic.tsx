@@ -6,6 +6,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import ImageExpand from "../ImageExpand";
+import { useModal } from "@/context/useModal";
 
 interface ImageProps {
   url: string;
@@ -16,6 +17,7 @@ const AddVehicleBasic = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const { isFiltered, selectedCar } = useCarFilter();
   const [expandedImage, setExpandedImage] = useState<ImageProps | null>(null);
+  const {openModal} = useModal()
 
   return (
     <>
@@ -56,8 +58,11 @@ const AddVehicleBasic = () => {
           </Text>
         </View>
 
-        {/* Section droite : Bouton */}
-        <TouchableOpacity style={styles.button} onPress={() => setFilterOpen(true)}>
+        <TouchableOpacity style={styles.button} onPress={() => 
+          openModal("carFilter", 
+            <CarFilterModal  />
+          )
+        }>
           <Text style={[styles.buttonText, (isFiltered && selectedCar) && {
             borderWidth: 1,
             textDecorationLine: "none",
@@ -75,8 +80,7 @@ const AddVehicleBasic = () => {
         </View>
       )}
 
-      {/* Modal de filtrage des véhicules */}
-      {filterOpen && <CarFilterModal onClose={() => setFilterOpen(false)} open={filterOpen} />}
+ 
     </>
   );
 };

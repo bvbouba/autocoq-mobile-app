@@ -8,6 +8,7 @@ import { Button } from "react-native-paper"
 import CarFilterModal from "./Modal"
 import { useCarFilter } from "@/context/useCarFilterContext"
 import { useRouter } from "expo-router"
+import { useModal } from "@/context/useModal"
 
 
 
@@ -17,7 +18,7 @@ interface props {
 }
 
 const CompatibilityCheck = ({ product }: props) => {
-  const [filterOpen, setFilterOpen] = useState(false);
+  const {openModal} = useModal()
   const { selectedCar,setIsFiltered } = useCarFilter()
   const categorySlug = product.category?.slug || ""
   const router = useRouter()
@@ -78,7 +79,7 @@ const CompatibilityCheck = ({ product }: props) => {
             }}>
               {selectedCar?.name &&
               <>
-                <TouchableOpacity onPress={() => setFilterOpen(true)}>
+                <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal/>)}>
                   <Text style={[styles.vehicleText, {
                     textDecorationLine: "underline"
                   }]}>
@@ -108,7 +109,7 @@ const CompatibilityCheck = ({ product }: props) => {
           </View>
 
           {!selectedCar?.name &&
-            <Button style={styles.vehicleButton} onPress={() => setFilterOpen(true)}>
+            <Button style={styles.vehicleButton} onPress={() => openModal("carFilter",<CarFilterModal/>)}>
               <Text style={styles.vehicleButtonText}>
                 {"Sélectionner un véhicule"}
               </Text>

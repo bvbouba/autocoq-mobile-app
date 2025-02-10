@@ -26,6 +26,8 @@ const DashboardScreen = () => {
   }, [
     catError]);
 
+  
+
     // Set loading state globally
   useEffect(() => {
     setIsLoading(loading);

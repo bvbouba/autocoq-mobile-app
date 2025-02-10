@@ -1,8 +1,8 @@
 import { usePathname } from "expo-router";
-import ProductDetails from "../../../components/products/ProductDetails"
-import { useGetProductByIdQuery } from "../../../saleor/api.generated";
+import ProductDetails from "@/components/products/ProductDetails"
+import { useGetProductByIdQuery } from "@/saleor/api.generated";
 import { StyleSheet } from "react-native"
-import { getConfig } from "../../../config";
+import { getConfig } from "@/config";
 import {Text, View } from "@/components/Themed"
 
 const ProductDetailsId = () => {
@@ -14,11 +14,11 @@ const ProductDetailsId = () => {
             channel: getConfig().channel
         }
     })
-    
+    console.log(data?.product)
     if(loading) return <View style={styles.scrollContainer}>
                         <Text>Loading...</Text>
                     </View>
-
+    
     if (called && data?.product) {
         return <View style={{ flex: 1 }}>
             <ProductDetails product={data.product} />

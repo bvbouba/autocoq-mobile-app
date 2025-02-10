@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { FC, useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import { Button, Chip, Modal } from "react-native-paper";
+import { Button, Chip, IconButton, Modal } from "react-native-paper";
 import * as yup from "yup";
 import CheckBoxWithLabel from "../../../utils/CheckboxWithLabel";
 import { getConfig } from "../../../config";
@@ -13,13 +13,9 @@ import { FilterPill } from "./FilterPills";
 import { getFilterOptions } from "./attributes";
 import SortingDropdown from "./SortingDropdown";
 import { UrlSorting } from "./sorting";
+import { useModal } from "@/context/useModal";
 
 interface Props {
-    open: boolean
-    onClose: () => void
-    onApply: (data: {
-        categories: CategoryPathFragment[]
-    }) => void,
     attributeFiltersData: AttributeFilterFragment[],
     addAttributeFilter: (attributeSlug: string, choiceSlug: string) => void,
     pills: FilterPill[],
@@ -30,22 +26,8 @@ interface Props {
     itemsCounter: number
 }
 
-interface Form {
-    collection: string,
-    categories: string[]
-}
-
-const validationSchema = yup.object().shape({
-    collection: yup.string().required("Required"),
-    categories: yup.array().required("Required"),
-});
-
-
 
 const ProductFilterBottomSheet: FC<Props> = ({ 
-    open, 
-    onClose, 
-    onApply, 
     attributeFiltersData, 
     addAttributeFilter, 
     pills, 
@@ -55,46 +37,14 @@ const ProductFilterBottomSheet: FC<Props> = ({
     sortBy,
    itemsCounter
 }) => {
+const {closeModal} = useModal()
 
-    const { data: collectionsData } = useGetCollectionsQuery();
-    const { data: categoriesData } = useCategoryPathsQuery({
-        variables: {
-            channel: getConfig().channel
-        }
-    });
+    return (
+        <>
+         <View style={{ alignItems: "flex-end" }}>
+                        <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
+                      </View>
 
-    const { selectedCategories } = useProductContext();
-    const containerStyle = { backgroundColor: 'white', padding: 20, maxHeight: 500 };
-
-    const formik = useFormik<Form>({
-        initialValues: {
-            collection: "",
-            categories: [],
-        },
-        validationSchema: validationSchema,
-        onSubmit: () => { }
-    });
-
-
-    const submitForm = () => {
-        const formData = formik.values
-        onApply({
-            categories: categoriesData?.categories?.edges
-                .filter(cat => formData.categories.findIndex(formCat => formCat === cat.node.slug) !== -1)
-                .map(edge => edge.node) || [],
-        })
-    }
-
-
-    useEffect(() => {
-        if (selectedCategories && categoriesData) {
-            formik.setFieldValue("categories", selectedCategories.map(cat => cat.slug))
-        }
-    }, [selectedCategories, categoriesData])
-
-
-    return (<Modal visible={open} onDismiss={onClose} contentContainerStyle={containerStyle}>
-        <ScrollView>
             <View>
                 <Text style={styles.bigTitle}>Filter & Sort</Text>
                 <View style={{
@@ -131,12 +81,10 @@ const ProductFilterBottomSheet: FC<Props> = ({
                 ))}
 
             </View>
-        </ScrollView>
         <View style={styles.buttonGroup}>
-            <Button style={styles.primaryButton} mode="contained" onPress={submitForm}>Apply</Button>
             <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={() => clearFilters()}>Reset</Button>
         </View>
-    </Modal >
+    </>
     );
 };
 
@@ -184,7 +132,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "black",
         width: "45%",
-    }
+    },
+    closeButton: {
+        top: 0,
+        right: 0,
+      },
 })
 
 export default ProductFilterBottomSheet;

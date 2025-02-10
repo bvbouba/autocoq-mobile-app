@@ -8,6 +8,7 @@ import { ProductCollection } from "@/components/ProductCollection";
 import { UrlSorting } from "./sorting";
 import FilterBar from "./FilterBar";
 import ProductFilterBottomSheet from "./ProductFilterBottomSheet";
+import { useModal } from "@/context/useModal";
 
 export interface FilteredProductListProps {
   attributeFiltersData: AttributeFilterFragment[];
@@ -21,7 +22,8 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
   const [inStock, setInStock] = useState<boolean>(false);
   const [productsFilter, setProductsFilter] = useState<ProductFilterInput>();
   const [itemsCounter, setItemsCounter] = useState(0);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const {openModal} = useModal()
+  
 
   const pills: FilterPill[] = getPillsData(filters, attributeFiltersData);
 
@@ -74,7 +76,17 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
       </View>
 
       {/* {pills.length > 0 && <FilterPills pills={pills} onClearFilters={clearFilters} onRemoveAttribute={removeAttributeFilter} />} */}
-      <FilterBar openFilters={() => setFilterOpen(true)} />
+      <FilterBar openFilters={() => openModal("productFilter",
+        <ProductFilterBottomSheet 
+        attributeFiltersData = {attributeFiltersData}
+        addAttributeFilter={addAttributeFilter}
+        pills={pills}
+        clearFilters={clearFilters}
+        removeAttributeFilter={removeAttributeFilter}
+        setSortBy={setSortBy}
+        sortBy={sortBy}
+        itemsCounter={itemsCounter}
+        />)} />
       <ProductCollection 
       filter={productsFilter} 
       sortBy={sortBy || undefined} 
@@ -82,18 +94,7 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
       itemsCounter={itemsCounter}
       />
     </View>
-    <ProductFilterBottomSheet onClose={() => setFilterOpen(false)} open={filterOpen} onApply={(data) => {
-                    setFilterOpen(false)
-                }} 
-                attributeFiltersData = {attributeFiltersData}
-                addAttributeFilter={addAttributeFilter}
-                pills={pills}
-                clearFilters={clearFilters}
-                removeAttributeFilter={removeAttributeFilter}
-                setSortBy={setSortBy}
-                sortBy={sortBy}
-                itemsCounter={itemsCounter}
-    />
+  
     </>
   );
 }

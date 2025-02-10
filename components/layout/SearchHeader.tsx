@@ -14,9 +14,10 @@ interface Props {
   cleanSearch?: boolean;
   searchOnLoad?: boolean;
   companyName?: string;
+  withVehicle?:boolean
 }
 
-const SearchHeaderWithBack = () => {
+const SearchHeaderWithBack = ({withVehicle}:{withVehicle:boolean}) => {
   const statusBarInset = useSafeAreaInsets();
   const {goBack} = usePath()
  
@@ -43,7 +44,7 @@ const SearchHeaderWithBack = () => {
         </View>
       </SafeAreaView>
       <LoadingIndicator style={{ marginTop: 12 }} />
-      <AddVehicleBasic />
+      {withVehicle && <AddVehicleBasic />}
     </>
   );
 };
@@ -53,6 +54,7 @@ const SearchHeader: FC<Props> = ({
   cleanSearch,
   companyName,
   searchOnLoad = true,
+  withVehicle=true
 }) => {
   const statusBarInset = useSafeAreaInsets();
   
@@ -68,7 +70,7 @@ const SearchHeader: FC<Props> = ({
   };
 
   if (withBack) {
-    return <SearchHeaderWithBack />;
+    return <SearchHeaderWithBack withVehicle={withVehicle} />;
   }
 
   return (

@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     },
     productDetailWrapper: {
         flex: 1, 
-        gap:10
+        gap:10,
+        paddingHorizontal:5
     },
     tinyLogo: {
         width: 100,  

@@ -1,9 +1,8 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 
 import { Text, View } from './../Themed';
 import ProductListItem from './ProductListItem';
-import CarFilterModal from '../car/Modal';
 import { ProductFragment } from '@/saleor/api.generated';
 
 
@@ -12,7 +11,6 @@ interface Props {
 }
 
 const ProductListComponent: FC<Props> = ({ products }) => {
-    const [filterOpen, setFilterOpen] = useState(false);
   
     if (products && products.length === 0) {
         return <View style={styles.noProductsContainer} testID="prod-list-safe">
@@ -31,11 +29,10 @@ const ProductListComponent: FC<Props> = ({ products }) => {
                         return <></>
                     }
                     return (
-                        <ProductListItem key={product?.slug} product={product} setFilterOpen={setFilterOpen} />
+                        <ProductListItem key={product?.slug} product={product} />
                     )
                 })}
             </ScrollView>
-            {filterOpen && <CarFilterModal onClose={() => setFilterOpen(false)} open={filterOpen} />}
 
         </SafeAreaView>
     );

@@ -66,7 +66,7 @@ const ProductImageCarousel: FC<Props> = ({ images }) => {
                     maxIndicators={4}
                     interpolateOpacityAndColor={true}
                     activeIndicatorConfig={{
-                        color: colors.orange,
+                        color: colors.primary,
                         margin: 3,
                         opacity: 1,
                         size: 6,
@@ -93,12 +93,12 @@ const ProductImageCarousel: FC<Props> = ({ images }) => {
             </View>
         </View>
   
-      {/* Modal for Expanded Image */}
+      {/* Modal for Expanded Image
         {expandedImage && (
         <View style={styles.modalContainer}>
           <ImageExpand image={expandedImage} onRemoveExpand={() => setExpandedImage(null)} />
         </View>
-      )}
+      )} */}
         </>
     );
 };
