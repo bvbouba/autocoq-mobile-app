@@ -7,11 +7,14 @@ import { useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
 import BannerAds from '@/components/layout/BannerAds';
 import Loading from '@/components/Loading';
+import { useModal } from '@/context/useModal';
+import Auth from '@/components/account/auth';
 
 export default function AccountScreen() {
   const router = useRouter();
   const { user, loading, logout,authenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const {openModal} = useModal()
 
   const handleSignIn = () => {
     router.push(`/account/auth?redirectUrl=${"/account"}`);
@@ -61,7 +64,9 @@ export default function AccountScreen() {
 
         <View style={styles.accountButtonContainer}>
           {!user?.id && (
-            <TouchableOpacity style={styles.signUpButton} onPress={handleSignIn}>
+            <TouchableOpacity style={styles.signUpButton} onPress={()=>{
+              openModal("Auth",<Auth />)
+            }}>
               <Text style={styles.signUpButtonText}>
                 SE CONNECTER OU CRÉER UN COMPTE
               </Text>

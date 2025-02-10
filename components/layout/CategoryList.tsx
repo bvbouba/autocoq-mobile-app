@@ -30,7 +30,7 @@ const CategoryList = () => {
     const category = data.category;
     const childrens = mapEdgesToItems(category.children);
 
-    const categoryName = (category.children) ? category.name: "Voir par catégorie"
+    const categoryName = (childrens) ? category.name: "Voir par catégorie"
 
     return (
         <>

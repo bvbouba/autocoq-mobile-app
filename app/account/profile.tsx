@@ -1,4 +1,4 @@
-import { Divider, fonts } from '@/components/Themed';
+import { Divider, fonts, PaddedView } from '@/components/Themed';
 import { useAuth } from '@/lib/providers/authProvider';
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
@@ -9,7 +9,9 @@ export default function ProfileScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
+        <PaddedView>
         <Text>Loading...</Text>
+        </PaddedView>
       </View>
     );
   }

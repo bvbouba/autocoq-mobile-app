@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Modal, Portal, Provider as PaperProvider, IconButton } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 
-type ModalType = "carFilter" | "productFilter" | "CartPreview" | "ImageExpand"; // Add more modal types as needed
+type ModalType = "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | "Auth"; // Add more modal types as needed
 
 interface ModalContextType {
   openModal: (type: ModalType, content?: ReactNode) => void;
