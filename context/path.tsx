@@ -11,7 +11,6 @@ export const PathProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(path)
   const goBack = () => {
     setPath((prev) => {
       if (pathname.includes('shop') && prev.length > 0) {

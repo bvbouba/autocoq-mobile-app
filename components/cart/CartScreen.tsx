@@ -182,7 +182,10 @@ const CartScreen = () => {
                         mode="contained" 
                         disabled={loading}
                     >
-                        {mLoading ? <ActivityIndicator color="white" /> : "PASSER LA COMMANDE"}
+                        {mLoading ? <ActivityIndicator color="white" /> : 
+                        <Text style={{
+                            color:"white"
+                        }}>PASSER LA COMMANDE</Text>}
                     </Button>
                 </View>
             </PaddedView>

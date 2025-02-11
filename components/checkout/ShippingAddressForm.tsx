@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { StyleSheet,  } from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity,  } from "react-native";
 import { useFormik } from "formik";
 import {Text, View ,colors, fonts } from "@/components/Themed"
 
@@ -7,10 +7,11 @@ import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { useCartContext } from "../../context/useCartContext";
-import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation } from "../../saleor/api.generated";
+import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "../../saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useNavigation, useRouter } from "expo-router";
+import { useModal } from "@/context/useModal";
 
 interface Props {
   onSubmit: () => void;
@@ -47,6 +48,21 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const {authenticated,user} = useAuth()
+  const {openModal, closeModal} = useModal()
+  const { data:citiesData,  } = useGetCitiesQuery();
+
+  const renderItem = ({ item }: { item: { name: string } }) => (
+    <TouchableOpacity
+      style={styles.zoneItem}
+      onPress={() =>{ 
+        formik.setFieldValue("city", item.name)
+       closeModal()
+      }  
+      }
+    >
+      <Text style={styles.zoneText}>{item.name}</Text>
+    </TouchableOpacity>
+  );
 
   const updateMutation = async (formData: Form) => {
     const { data } = await updateShippingAddress({
@@ -211,14 +227,41 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   
       {/* City */}
       <View style={styles.inputContainer}>
+      <TouchableOpacity
+      style={{
+        width:"100%"
+      }} 
+      onPress={() =>
+        openModal(
+          "shipping",
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
+            
+              <FlatList
+                data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
+                keyExtractor={(item, idx) => `${item.name}-${idx}`}
+                renderItem={renderItem}
+                contentContainerStyle={styles.listContainer}
+                nestedScrollEnabled={true} 
+                keyboardShouldPersistTaps="handled" 
+              />
+
+            
+          </View>
+        )
+      }
+      >
         <TextInput
           style={styles.input}
-          onChangeText={(value) => formik.setFieldValue("city", value)}
+          
+          // onChangeText={(value) => formik.setFieldValue("city", value)}
           value={formik.values.city}
           placeholder="City"
           label={"City *"}
           theme={{ colors: { primary: "black" } }}
+          editable={false} 
         />
+      </TouchableOpacity>
         
       </View>
   
@@ -290,6 +333,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    width: "100%",
   },
   input: {
     flex: 1,
@@ -299,6 +343,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 10,
     color: "black",
+    width: "100%",
   },
   mandatory: {
     color: "red",
@@ -326,6 +371,29 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.error,
     textAlign: "center",
+  },
+  modalContent: {
+    padding: 20,
+    borderRadius: 10,
+    minWidth: 300,
+  },
+  modalTitle: {
+    fontSize: fonts.body,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  listContainer: {
+    paddingVertical: 10,
+  },
+  zoneItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  zoneText: {
+    fontSize: fonts.body,
+    color: colors.textPrimary,
   },
 });
 

@@ -28,7 +28,7 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const companyName = "AUTOCOQ";
-
+  const {delivery} = useCartContext()
   return (
     <Tabs
       screenOptions={{
@@ -70,7 +70,7 @@ export default function TabLayout() {
         options={{
           title: '',
           headerShown: true,
-          header:()=><SimpleCloseHeader  title="Panier" />,
+          header:()=><SimpleCloseHeader  title="Panier" subTitle={delivery.zone ? `Ma zone: ${delivery.zone}` : ""} />,
           tabBarIcon: ({ color }) => {
             const { cart } = useCartContext();
             return <TabBarIcon
@@ -86,7 +86,7 @@ export default function TabLayout() {
         name="account"
         options={{
           title: '',
-          headerShown: true,
+          headerShown: false,
           header: () => <SearchHeader withBack={false} cleanSearch companyName={companyName}/>,
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
           tabBarLabel: 'Compte',

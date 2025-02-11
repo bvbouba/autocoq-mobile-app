@@ -29,7 +29,6 @@ const CarFilterModal = () => {
   const { selectedCar, setSelectedCar, setIsFiltered } = useCarFilter();
   const {closeModal} = useModal()
 
-  console.log("CarFilterModal")
 
   // États temporaires pour les sélections du modal
   const [tempCarYear, setTempCarYear] = useState(selectedCar?.year);

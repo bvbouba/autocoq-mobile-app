@@ -14,7 +14,6 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 const CategoryProductScreen = () => {
     const pathname = usePathname();
     const [slug, setSlug] = useState<string>();
-    const {filterOpen,setFilterOpen} = useCarFilter()
      const {data, loading} = useCategoryBySlugQuery({
       skip:!slug,
       variables:{

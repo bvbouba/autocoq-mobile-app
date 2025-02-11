@@ -5,6 +5,7 @@ import { ProductVariantFragment } from "@/saleor/api.generated";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { formatDuration } from "@/utils/dateformat";
 import {Text, View } from "@/components/Themed"
+import ZoneSelector from "./ZoneSelector";
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
 
@@ -24,15 +25,14 @@ interface Props {
 const DeliveryMethodBasic = ({ variant }: Props) => {
   const [selectedOption, setSelectedOption] = useState("pickup");
   const availableShippingMethods = variant?.availableShippingMethods || [];
-
+  
   // Helper function to fetch a shipping method by ID
   const getShippingMethodById = (shippingId: string) => {
     return availableShippingMethods.find(method =>
       method.metadata.some(meta => meta.key === "id" && meta.value === shippingId)
     );
   };
-
-  if (!availableShippingMethods.length) return null;
+  if (!availableShippingMethods.length) return <ZoneSelector />;
 
   // Get shipping methods
   const pickup = getShippingMethodById("pickup");

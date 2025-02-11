@@ -12,6 +12,7 @@ import ProductListItem from "../products/ProductListItem";
 import { SafeAreaView, FlatList, StyleSheet, Animated, ActivityIndicator, Button } from 'react-native';
 import { colors, fonts, Text, View } from './../Themed';
 import Loading from "../Loading";
+import { useCartContext } from "@/context/useCartContext";
 
 export interface ProductCollectionProps {
   filter?: ProductFilterInput;
@@ -33,9 +34,10 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   perPage = 4,
   itemsCounter
 }) => {
-  
+  const {delivery} = useCartContext()
 
   const variables: ProductCollectionQueryVariables = {
+    zoneName:delivery?.zone || "xxxx",
     filter,
     first: perPage,
     channel: "ci",

@@ -1,12 +1,17 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { getConfig } from "../config";
-import { CheckoutFragment, useCheckoutLinesAddMutation, useCheckoutLinesUpdateMutation, useCreateCheckoutMutation, useGetCheckoutByIdLazyQuery } from "../saleor/api.generated";
+import { CheckoutFragment, DeliveryMethodFragment, useCheckoutLinesAddMutation, useCheckoutLinesUpdateMutation, useCreateCheckoutMutation, useGetCheckoutByIdLazyQuery } from "../saleor/api.generated";
 import { getCheckoutId, removeCheckoutId, setCheckoutId } from "./basketStore";
 import {
     handleErrors,
 } from "./checkout";
 import { useAuth } from "@/lib/providers/authProvider";
+
+interface DeliveryState {
+    zone: string | undefined;
+    method: DeliveryMethodFragment | undefined;
+}
 
 interface CartContextModel {
     cart: CheckoutFragment | undefined;
@@ -17,7 +22,16 @@ interface CartContextModel {
     setCart: (cart: CheckoutFragment) => void;
     addItem: (variantId: string) => Promise<void>;
     updateItemQuantity: (variantId: string, quantity: number) => void;
+    delivery: DeliveryState;
+    setDelivery: React.Dispatch<React.SetStateAction<DeliveryState>>;    
 }
+
+
+const defaultDeliveryState: DeliveryState = {
+    zone: undefined,
+    method: undefined
+};
+
 
 const CartContext = createContext<CartContextModel>({
     cart: undefined,
@@ -28,6 +42,8 @@ const CartContext = createContext<CartContextModel>({
     setCart: () => Function,
     refreshCart: () => Promise.resolve(undefined),
     updateItemQuantity: () => Function,
+    delivery: defaultDeliveryState,
+    setDelivery: () => {}
 });
 
 export const useCartContext = () => useContext(CartContext);
@@ -36,6 +52,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const [loading, setLoading] = useState<boolean | undefined>(undefined);
     const [loaded, setLoaded] = useState<boolean | undefined>(undefined);
     const [cart, setCart] = useState<CheckoutFragment | undefined>(undefined);
+    const [delivery, setDelivery] = useState<DeliveryState>(defaultDeliveryState);
 
     const [getCheckoutById, options] = useGetCheckoutByIdLazyQuery()
     const [createCheckout] = useCreateCheckoutMutation();
@@ -169,7 +186,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     }
 
     return (
-        <CartContext.Provider value={{ cart, addItem, removeCart, updateItemQuantity, refreshCart, loading, setCart, loaded }}>
+        <CartContext.Provider value={{ cart, addItem, removeCart, updateItemQuantity, refreshCart, loading, setCart, loaded,setDelivery,delivery }}>
             {children}
         </CartContext.Provider>
     );

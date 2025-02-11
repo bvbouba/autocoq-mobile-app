@@ -50,7 +50,6 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
     const existingFilter = filters.find((filter) => filter.slug === attributeSlug);
     if (existingFilter) {
       existingFilter.values = [...existingFilter.values, choiceSlug];
-      console.log(existingFilter)
       setFilters([...filters]);
     } else {
       setFilters([...filters, { slug: attributeSlug, values: [choiceSlug] }]);

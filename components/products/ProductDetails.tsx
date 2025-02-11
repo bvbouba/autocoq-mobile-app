@@ -11,7 +11,7 @@ import {
   Text,
   View,
 } from "../Themed";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { useCartContext } from "@/context/useCartContext";
 import ProductImageCarousel from "./details/ProductImageCarousel";
 import { getConfig } from "@/config";
@@ -25,13 +25,13 @@ import DeliveryMethod from "../DeliveryMethod";
 import { useNavigation } from "@react-navigation/native";
 import { useModal } from "@/context/useModal";
 import AddToTheCart from "../cart/AddToTheCart";
+import ZoneSelector from "../ZoneSelector";
 
 interface Props {
   product: ProductFragment;
 }
 
 const ProductDetails: FC<Props> = ({ product }) => {
-  const router = useRouter();
   const {openModal} = useModal()
 
   const isUniversal = product.isUniversal || true;
@@ -50,15 +50,6 @@ const ProductDetails: FC<Props> = ({ product }) => {
     }
   );
 
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    navigation.getParent()?.setOptions({ tabBarStyle: { display: "flex" } });
-
-    return () => {
-      navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" } });
-    };
-  }, [navigation]);
   
   const renderDescription = () => {
     if (!product.description) return null;
@@ -123,7 +114,8 @@ const ProductDetails: FC<Props> = ({ product }) => {
         <Divider style={{ borderBottomWidth: 5 }} />
         
         <PaddedView>
-        <DeliveryMethod variant={product.defaultVariant} />
+       <DeliveryMethod variant={product.defaultVariant} /> 
+       
         </PaddedView>
         
         <Divider style={{ borderBottomWidth: 5 }} />

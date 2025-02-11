@@ -4,18 +4,21 @@ import { useGetProductByIdQuery } from "@/saleor/api.generated";
 import { StyleSheet } from "react-native"
 import { getConfig } from "@/config";
 import {Text, View } from "@/components/Themed"
+import { useCartContext } from "@/context/useCartContext";
 
 const ProductDetailsId = () => {
     const pathname = usePathname();
+    const {delivery} = useCartContext()
     const productId = pathname.split("/")[pathname.split("/").length - 1]
     const { data, called,loading } = useGetProductByIdQuery({
         variables: {
             id: productId,
-            channel: getConfig().channel
+            channel: getConfig().channel,
+            zoneName: delivery?.zone || "xxxx"
         }
     })
-    console.log(data?.product)
-    if(loading) return <View style={styles.scrollContainer}>
+
+if(loading) return <View style={styles.scrollContainer}>
                         <Text>Loading...</Text>
                     </View>
     

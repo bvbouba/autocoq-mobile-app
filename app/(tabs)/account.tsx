@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    paddingHorizontal: 15,
+    padding:15,
   },
   scroll: {
     width: "100%",

@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
         fontSize:fonts.h2,
     },
     button: {
-        backgroundColor: colors.border,
+        backgroundColor: colors.secondary,
         borderRadius: 5,
         alignItems: "center",
         width: "100%",

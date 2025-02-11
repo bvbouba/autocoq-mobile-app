@@ -6,6 +6,8 @@ import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import RichText from "./RichText";
 import { formatDuration } from "@/utils/dateformat";
 import {colors, fonts, Text, View  } from "@/components/Themed"
+import ZoneSelector from "./ZoneSelector";
+import { useCartContext } from "@/context/useCartContext";
 
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
@@ -26,7 +28,16 @@ interface Props {
 const DeliveryMethod = ({ variant }: Props) => {
   const [selectedOption, setSelectedOption] = useState("pickup");
   const availableShippingMethods = variant?.availableShippingMethods || [];
+  const {setDelivery,delivery} = useCartContext()
 
+  const handleSelect= (id:string)=> {
+   setSelectedOption(id)
+   const method = availableShippingMethods.find(m=>m.id === id)
+   setDelivery({
+    ...delivery,
+    method
+   })
+  }
   // Helper function to fetch a shipping method by ID
   const getShippingMethodById = (shippingId: string) => {
     return availableShippingMethods.find(method =>
@@ -34,7 +45,7 @@ const DeliveryMethod = ({ variant }: Props) => {
     );
   };
 
-  if (!availableShippingMethods.length) return null;
+  if (!availableShippingMethods.length) return <ZoneSelector />;
 
   // Get shipping methods
   const pickup = getShippingMethodById("pickup");
@@ -47,9 +58,7 @@ const DeliveryMethod = ({ variant }: Props) => {
   targetTime.setHours(20, 0, 0, 0);
   const diffMs = Math.max(targetTime.getTime() - currentTime.getTime(), 0);
 
-  
-  console.log(homeDelivery?.minimumOrderPrice)
-  
+    
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const formattedDate = tomorrow.toLocaleDateString("fr", { weekday: "long", month: "long", day: "numeric" });
@@ -83,7 +92,7 @@ const DeliveryMethod = ({ variant }: Props) => {
         <TouchableOpacity
           key={option.id}
           style={[styles.option, selectedOption === option.id && styles.selectedOption]}
-          onPress={() => setSelectedOption(option.id)}
+          onPress={() => handleSelect(option.id)}
         >
           <View style={styles.optionContent}>
             <View style={styles.iconTextContainer}>
