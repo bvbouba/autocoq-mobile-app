@@ -2,7 +2,7 @@ import { FC } from "react"
 
 import { View, StyleSheet } from "react-native";
 import { IconButton } from "react-native-paper";
-import { Text } from "../Themed"
+import { Text } from "@/components/Themed"
 
 interface Props {
     onSelect: (value: number) => void

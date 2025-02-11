@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
-import { useCartContext } from "../../context/useCartContext"
-import { colors, Divider, fonts, PaddedView, Text, View } from "../Themed"
-import { getConfig } from "../../config"
+import { useCartContext } from "@/context/useCartContext"
+import { colors, Divider, fonts, PaddedView, Text, View } from "@/components/Themed"
+import { getConfig } from "@/config"
 
 
 const OrderTotal = () => {

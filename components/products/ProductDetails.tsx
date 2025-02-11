@@ -10,7 +10,7 @@ import {
   PaddedView,
   Text,
   View,
-} from "../Themed";
+} from "@/components/Themed";
 import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { useCartContext } from "@/context/useCartContext";
 import ProductImageCarousel from "./details/ProductImageCarousel";

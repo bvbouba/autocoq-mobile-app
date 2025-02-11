@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator,Platform } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import {Text, View , Divider,colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
@@ -37,7 +37,9 @@ export default function AccountScreen() {
   }
 
   return (
-    <View style={styles.scrollContainer}>
+    <View style={[styles.scrollContainer, {
+      marginTop: Platform.OS === 'ios' ? 40 : 0
+    }]}>
       <ScrollView style={styles.scroll}>
         <PaddedView style={styles.header}>
         <TouchableOpacity

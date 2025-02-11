@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import { Divider, fonts, PaddedView, Text } from '../../components/Themed';
-import OrdersList from '../../components/orders/OrdersList';
+import { Divider, fonts, PaddedView, Text } from '@/components/Themed';
+import OrdersList from '@/components/orders/OrdersList';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Orders() {

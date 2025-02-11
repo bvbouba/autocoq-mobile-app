@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native"
-import { getConfig } from "../../config";
-import { useCartContext } from "../../context/useCartContext"
-import { Divider, fonts, PaddedView, Text } from "../Themed"
+import { getConfig } from "@/config";
+import { useCartContext } from "@/context/useCartContext"
+import { Divider, fonts, PaddedView, Text } from "@/components/Themed"
 
 const CartSubtotal = () => {
     const { cart } = useCartContext();

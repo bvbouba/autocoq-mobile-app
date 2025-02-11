@@ -1,4 +1,4 @@
-import { View, Text, colors, PaddedView, fonts } from "../Themed";
+import { View, Text, colors, PaddedView, fonts } from "@/components/Themed";
 import { StyleSheet, useWindowDimensions, Pressable } from "react-native";
 import { useGetHomepageQuery } from "@/saleor/api.generated";
 import { getConfig } from "@/config";

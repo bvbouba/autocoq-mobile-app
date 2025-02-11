@@ -9,7 +9,7 @@ import LoadingIndicator from "./LoadingIndicator";
 const SimpleBackHeader = ({ title,hasLogo }: { title?: string,hasLogo?:boolean }) => {
   const router = useRouter();
   const statusBarInset = useSafeAreaInsets();
-  const logoUri = require("../../assets/images/logo.png");
+  const logoUri = require("@/assets/images/logo.png");
 
   return (
     <>

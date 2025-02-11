@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { View, colors, fonts } from "../Themed";
+import { View, colors, fonts } from "@/components/Themed";
 import {  StyleSheet, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePageQuery } from "@/saleor/api.generated";

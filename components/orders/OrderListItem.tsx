@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { OrderFragment } from "../../saleor/api.generated";
-import { fonts, PaddedView, Text, View } from "../Themed";
+import { OrderFragment } from "@/saleor/api.generated";
+import { fonts, PaddedView, Text, View } from "@/components/Themed";
 import { StyleSheet, Pressable } from "react-native";
 import { IconButton } from "react-native-paper";
 import { useRouter } from "expo-router";

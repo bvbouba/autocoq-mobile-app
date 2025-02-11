@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { ProductFragment, ProductVariantFragment } from "../../../saleor/api.generated";
-import { PaddedView, View, Text, colors, fonts } from "../../Themed";
-import { getConfig } from "../../../config";
+import { ProductFragment, ProductVariantFragment } from "@/saleor/api.generated";
+import { PaddedView, View, Text, colors, fonts } from "@/components/Themed";
+import { getConfig } from "@/config";
 import { Pressable, StyleSheet } from "react-native";
 
 interface Props {

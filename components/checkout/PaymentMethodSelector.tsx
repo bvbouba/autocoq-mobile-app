@@ -1,8 +1,8 @@
 import { useRouter } from "expo-router";
 import { FC } from "react";
 import { Pressable, StyleSheet } from "react-native";
-import { useCartContext } from "../../context/useCartContext";
-import { fonts, Text, View } from "../Themed";
+import { useCartContext } from "@/context/useCartContext";
+import { fonts, Text, View } from "@/components/Themed";
 import { usePaymentContext } from "@/context/usePaymentContext";
 import BillingAddress from "./BillingAddress";
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import for payment icon

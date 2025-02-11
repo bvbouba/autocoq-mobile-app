@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Alert, ScrollView, StyleSheet, View, Text } from "react-native";
 import {  useRouter } from "expo-router";
-import {  useGetHomepageQuery } from "../../saleor/api.generated";
-import { Divider } from "../Themed";
-import { getConfig } from "../../config";
+import {  useGetHomepageQuery } from "@/saleor/api.generated";
+import { Divider } from "@/components/Themed";
+import { getConfig } from "@/config";
 import CategoriesScroll from "../Dashboard/CategoriesScroll";
 import AuthPrompt from "../AuthPrompt";
 import { useAuth } from "@/lib/providers/authProvider";
@@ -53,7 +53,8 @@ const DashboardScreen = () => {
         {/* Catégories */}
         <CategoriesScroll
           menus={categoriesData?.menu?.items || []}
-          onClick={(slug) => router.push(`categories/${slug}`)}
+          onClick={(slug) => router.push(`/categories/${slug}`)}
+
         />
         <Divider />
         {!authenticated && (

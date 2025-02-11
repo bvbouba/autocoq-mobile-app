@@ -6,8 +6,8 @@ import {Text, View ,colors, fonts } from "@/components/Themed"
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { useCartContext } from "../../context/useCartContext";
-import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "../../saleor/api.generated";
+import { useCartContext } from "@/context/useCartContext";
+import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useNavigation, useRouter } from "expo-router";

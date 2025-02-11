@@ -3,14 +3,14 @@ import {
     useCheckoutBillingAddressUpdateMutation, 
     useCheckoutShippingAddressUpdateMutation, 
     useCurrentUserAddressesQuery 
-} from "../../saleor/api.generated";
+} from "@/saleor/api.generated";
 
 
 import {Text, View ,  PaddedView,colors, fonts } from "@/components/Themed"
 
 
 import { ScrollView, StyleSheet } from 'react-native';
-import { useCartContext } from "../../context/useCartContext";
+import { useCartContext } from "@/context/useCartContext";
 import CartItem from "./CartItem";
 import CartSubtotal from "./CartSubtotal";
 import { useRouter } from "expo-router";

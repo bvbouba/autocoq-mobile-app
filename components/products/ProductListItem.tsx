@@ -1,8 +1,8 @@
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { FC, useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
-import { getConfig } from "../../config";
-import { ProductFragment } from "../../saleor/api.generated";
+import { getConfig } from "@/config";
+import { ProductFragment } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from './../Themed';
 import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
 import DeliveryMethodBasic from "../DeliveryMethodBasic";

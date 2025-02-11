@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { StyleSheet } from 'react-native';
 import { Portal, Provider } from "react-native-paper";
-import { fonts, View } from "../Themed";
+import { fonts, View } from "@/components/Themed";
 import ProductListComponent from "./ProductListComponent";
 import ProductFilter from "./filter/ProductFilter";
 import ProductFilterBottomSheet from "./filter/ProductFilterBottomSheet";

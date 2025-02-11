@@ -1,11 +1,11 @@
 import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { fonts, Text } from "../../components/Themed";
-import OrderContent from "../../components/orders/OrderContent";
-import { useOrderContext } from "../../context/useOrderContext";
+import { fonts, Text } from "@/components/Themed";
+import OrderContent from "@/components/orders/OrderContent";
+import { useOrderContext } from "@/context/useOrderContext";
 import { useEffect, useState } from "react";
-import { OrderFragment, useGetOrderByIdQuery } from "../../saleor/api.generated";
-import { useCartContext } from "../../context/useCartContext";
+import { OrderFragment, useGetOrderByIdQuery } from "@/saleor/api.generated";
+import { useCartContext } from "@/context/useCartContext";
 import { useAuth } from "@/lib/providers/authProvider";
 import Loading from "../Loading";
 

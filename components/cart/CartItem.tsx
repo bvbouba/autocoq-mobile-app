@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { CheckoutLine } from "../../saleor/api.generated";
+import { CheckoutLine } from "@/saleor/api.generated";
 import {Text, View , Divider,colors, fonts } from "@/components/Themed"
 
 import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
-import { getConfig } from "../../config";
+import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
-import { useCartContext } from "../../context/useCartContext";
+import { useCartContext } from "@/context/useCartContext";
 
 interface Props {
     lineItem: CheckoutLine;

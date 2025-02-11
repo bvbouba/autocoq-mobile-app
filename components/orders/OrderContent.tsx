@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import { OrderFragment } from "../../saleor/api.generated";
-import { Divider, fonts, PaddedView, Text, View } from "../Themed";
+import { OrderFragment } from "@/saleor/api.generated";
+import { Divider, fonts, PaddedView, Text, View } from "@/components/Themed";
 import OrderLineItemComponent from "./OrderLineItemComponent";
 import OrderSubtotal from "./OrderSubtotal";
 import { formatDate } from "@/utils/dateformat";

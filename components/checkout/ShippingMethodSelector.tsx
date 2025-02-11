@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { FC } from "react";
 import { Pressable, StyleSheet, TouchableOpacity,Image } from "react-native";
-import { useCartContext } from "../../context/useCartContext";
+import { useCartContext } from "@/context/useCartContext";
 import {Text, View ,colors, fonts } from "@/components/Themed"
 import { IconButton } from "react-native-paper";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";

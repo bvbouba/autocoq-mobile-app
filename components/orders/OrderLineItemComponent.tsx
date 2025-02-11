@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { OrderLineVariantFragment, OrderLineFragment } from "../../saleor/api.generated";
+import { OrderLineVariantFragment, OrderLineFragment } from "@/saleor/api.generated";
 import { fonts, Text, View } from '../Themed';
 import { Image, Pressable, StyleSheet } from 'react-native';
-import { getConfig } from "../../config";
+import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 
 interface Props {

@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
-import { CollectionFragment } from "../../../saleor/api.generated";
+import { CollectionFragment } from "@/saleor/api.generated";
 import { ImageBackground, Pressable, StyleSheet, Image, useWindowDimensions } from "react-native";
-import { View, Text, PaddedView, colors } from "../../Themed";
-import parseDescription from "../../../utils/parseDescription";
+import { View, Text, PaddedView, colors } from "@/components/Themed";
+import parseDescription from "@/utils/parseDescription";
 import { Button } from "react-native-paper";
 import Carousel from "react-native-reanimated-carousel";
 import { useRouter } from "expo-router";

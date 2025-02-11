@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
-import ProductsScreen from "../../components/products/ProductsScreen";
-import { useProductContext } from "../../context/useProductContext";
+import ProductsScreen from "@/components/products/ProductsScreen";
+import { useProductContext } from "@/context/useProductContext";
 import { SafeAreaView } from "react-native";
 
 const ProductsResults = () => {

@@ -1,5 +1,5 @@
 import { ProgressBar } from "react-native-paper"
-import { colors, View } from "../Themed";
+import { colors, View } from "@/components/Themed";
 import { FC } from "react";
 import { useLoading } from "@/context/Loading";
 

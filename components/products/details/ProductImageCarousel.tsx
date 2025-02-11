@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react"
 import { Modal, StyleSheet, TouchableOpacity, useWindowDimensions } from "react-native"
 import AnimatedDotsCarousel from 'react-native-animated-dots-carousel'
 import Carousel from "react-native-reanimated-carousel"
-import { View, colors } from "../../Themed"
+import { View, colors } from "@/components/Themed"
 import ProductImage from "./ProductImage"
 import { MaterialIcons } from "@expo/vector-icons"
 import ImageExpand from "@/components/ImageExpand"

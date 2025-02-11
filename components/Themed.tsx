@@ -3,10 +3,9 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { Text as DefaultText, useColorScheme, View as DefaultView, StyleProp } from 'react-native';
+import { Text as DefaultText, useColorScheme, View as DefaultView, Platform } from 'react-native';
 
 import Colors from '../constants/Colors';
-import { FC, PropsWithChildren } from 'react';
 
 export function useThemeColor(
   props: { light?: string; dark?: string },

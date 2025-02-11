@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Image, Pressable, StyleSheet, TouchableOpacity } from "react-native";
-import { colors, fonts, SurfaceView, Text, View } from "../Themed";
-import {  MenuItemFragment } from "../../saleor/api.generated";
+import { colors, fonts, SurfaceView, Text, View } from "@/components/Themed";
+import {  MenuItemFragment } from "@/saleor/api.generated";
 import { useRouter } from "expo-router";
 
 interface Props {

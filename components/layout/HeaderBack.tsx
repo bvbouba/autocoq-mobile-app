@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { IconButton } from "react-native-paper";
-import { colors } from "../Themed";
+import { colors } from "@/components/Themed";
 
 
 const HeaderBack = () => {

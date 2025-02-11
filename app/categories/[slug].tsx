@@ -1,6 +1,6 @@
 import { useLocalSearchParams, usePathname } from "expo-router";
 import { useEffect, useState } from "react";
-import ProductsScreen from "../../components/products/ProductsScreen";
+import ProductsScreen from "@/components/products/ProductsScreen";
 import { SafeAreaView,StyleSheet } from "react-native";
 import { useCategoryBySlugQuery, useFilteringAttributesQuery, useProductListByCategoryQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";

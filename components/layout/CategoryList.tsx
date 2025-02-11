@@ -1,4 +1,4 @@
-import { View, Text, PaddedView, Divider, fonts } from "../Themed";
+import { View, Text, PaddedView, Divider, fonts } from "@/components/Themed";
 import { StyleSheet } from "react-native";
 import { useCategoryBySlugQuery } from "@/saleor/api.generated";
 import { useLocalSearchParams } from "expo-router";

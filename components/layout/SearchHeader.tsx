@@ -1,4 +1,4 @@
-import { View, colors, fonts } from "../Themed";
+import { View, colors, fonts } from "@/components/Themed";
 import { IconButton } from "react-native-paper";
 import ProductSearch from "../products/ProductsSearch";
 import { SafeAreaView, StyleSheet, Text, Image } from "react-native";
@@ -58,7 +58,7 @@ const SearchHeader: FC<Props> = ({
 }) => {
   const statusBarInset = useSafeAreaInsets();
   
-  const logoUri = require("../../assets/images/logo.png"); // Path to logo image
+  const logoUri = require("@/assets/images/logo.png"); // Path to logo image
 
   // Fallback for logo if unavailable
   const renderLogoOrName = () => {

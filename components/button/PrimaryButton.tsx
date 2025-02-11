@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, Pressable } from "react-native";
 import { Button } from "react-native-paper";
-import { colors } from "../Themed";
+import { colors } from "@/components/Themed";
 
 interface Props {
   onPress: () => void;

@@ -1,4 +1,4 @@
-import { View, Text } from "../Themed";
+import { View, Text } from "@/components/Themed";
 import { StyleSheet, Image } from "react-native";
 import { useCollectionBySlugQuery } from "@/saleor/api.generated";
 import RichText from "../RichText";

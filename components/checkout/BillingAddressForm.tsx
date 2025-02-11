@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { useCartContext } from "../../context/useCartContext";
-import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useGetCitiesQuery } from "../../saleor/api.generated";
+import { useCartContext } from "@/context/useCartContext";
+import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
 import {Text, View ,colors, fonts } from "@/components/Themed"

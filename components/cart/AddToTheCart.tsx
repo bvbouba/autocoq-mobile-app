@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { colors, Divider, fonts, PaddedView } from "../Themed"; // Assurez-vous que vous avez bien défini les couleurs ou remplacez-les par des couleurs statiques
+import { colors, Divider, fonts, PaddedView } from "@/components/Themed"; // Assurez-vous que vous avez bien défini les couleurs ou remplacez-les par des couleurs statiques
 import { useCartContext } from "@/context/useCartContext";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { useRouter } from "expo-router";

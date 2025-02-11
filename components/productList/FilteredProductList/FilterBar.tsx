@@ -1,11 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { useProductContext } from '../../../context/useProductContext';
+import { useProductContext } from '@/context/useProductContext';
 
 import { useLocalSearchParams } from 'expo-router';
-import { getConfig } from '../../../config';
-import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '../../../saleor/api.generated';
-import { colors, Divider, fonts, Text, View } from '../../Themed';
+import { getConfig } from '@/config';
+import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '@/saleor/api.generated';
+import { colors, Divider, fonts, Text, View } from '@/components/Themed';
 import { Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 

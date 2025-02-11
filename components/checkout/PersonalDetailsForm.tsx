@@ -4,8 +4,8 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import {Text, View , PaddedView,colors } from "@/components/Themed"
 
-import { useCartContext } from '../../context/useCartContext';
-import { useCheckoutEmailUpdateMutation } from '../../saleor/api.generated';
+import { useCartContext } from '@/context/useCartContext';
+import { useCheckoutEmailUpdateMutation } from '@/saleor/api.generated';
 import { TextInput, Button } from 'react-native-paper';
 import { useAuth } from '@/lib/providers/authProvider';
 

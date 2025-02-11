@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
-import { getConfig } from "../config";
-import { CategoryPathFragment, ProductFragment, useSearchProductsLazyQuery } from "../saleor/api.generated";
+import { getConfig } from "@/config";
+import { CategoryPathFragment, ProductFragment, useSearchProductsLazyQuery } from "@/saleor/api.generated";
 import {
     handleErrors
 } from "./checkout";

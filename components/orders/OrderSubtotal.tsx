@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { getConfig } from "../../config";
-import { fonts, Text, View } from "../Themed";
-import { OrderFragment } from "../../saleor/api.generated";
+import { getConfig } from "@/config";
+import { fonts, Text, View } from "@/components/Themed";
+import { OrderFragment } from "@/saleor/api.generated";
 import { FC } from "react";
 
 interface Props {

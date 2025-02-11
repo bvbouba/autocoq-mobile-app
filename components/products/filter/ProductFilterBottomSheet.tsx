@@ -1,13 +1,13 @@
 import { useFormik } from "formik";
 import { FC, useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import { Button, Chip, Modal } from "react-native-paper";
+import { Button, Modal } from "react-native-paper";
 import * as yup from "yup";
-import CheckBoxWithLabel from "../../../utils/CheckboxWithLabel";
-import { getConfig } from "../../../config";
-import { useProductContext } from "../../../context/useProductContext";
-import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "../../../saleor/api.generated";
-import { colors, Divider, fonts, Text, View } from "../../Themed";
+import CheckBoxWithLabel from "@/utils/CheckboxWithLabel";
+import { getConfig } from "@/config";
+import { useProductContext } from "@/context/useProductContext";
+import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "@/saleor/api.generated";
+import { colors, Divider, fonts, Text, View } from "@/components/Themed";
 
 interface Props {
     open: boolean

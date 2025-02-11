@@ -1,6 +1,6 @@
 import { StyleSheet, ActivityIndicator, View } from "react-native";
-import { useOrderContext } from "../../context/useOrderContext";
-import { fonts, Text } from "../Themed";
+import { useOrderContext } from "@/context/useOrderContext";
+import { fonts, Text } from "@/components/Themed";
 import OrderListItem from "./OrderListItem";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useOrdersQuery } from "@/saleor/api.generated";
