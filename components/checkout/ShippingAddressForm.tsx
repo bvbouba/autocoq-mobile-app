@@ -10,7 +10,7 @@ import { useCartContext } from "@/context/useCartContext";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
-import { useNavigation, useRouter } from "expo-router";
+import {  useRouter } from "expo-router";
 import { useModal } from "@/context/useModal";
 
 interface Props {
@@ -43,7 +43,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
   const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
   const [updateEmail] = useCheckoutEmailUpdateMutation();
-  const navigation = useRouter();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -122,7 +122,6 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
       setError(null);
       try {
         const errors = await updateMutation(data)
-
         if (errors && errors.length > 0) {
           setError(`Error: ${errors[0].field}`);
         } else {
@@ -135,13 +134,11 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
               },
           });
           const emailErrors = result.data?.checkoutEmailUpdate?.errors;
-           
           if(emailErrors && emailErrors?.length>0) {
             setError(`Error update email address`)
             return;
           }
          }
-          
           if (!cart?.billingAddress) {
             const billingErrors = await updateBillingMutation(data);  
             if (billingErrors && billingErrors.length > 0) {
@@ -149,7 +146,8 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
               return;
             }
           }
-          navigation.push("/checkout");
+
+          router.push("/checkout");
           onSubmit();
         }
       } catch (e) {
@@ -227,44 +225,39 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   
       {/* City */}
       <View style={styles.inputContainer}>
-      <TouchableOpacity
-      style={{
-        width:"100%"
-      }} 
-      onPress={() =>
-        openModal(
-          "shipping",
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
-            
-              <FlatList
-                data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
-                keyExtractor={(item, idx) => `${item.name}-${idx}`}
-                renderItem={renderItem}
-                contentContainerStyle={styles.listContainer}
-                nestedScrollEnabled={true} 
-                keyboardShouldPersistTaps="handled" 
-              />
-
-            
-          </View>
-        )
-      }
-      >
-        <TextInput
-          style={styles.input}
-          
-          // onChangeText={(value) => formik.setFieldValue("city", value)}
-          value={formik.values.city}
-          placeholder="City"
-          label={"City *"}
-          theme={{ colors: { primary: "black" } }}
-          editable={false} 
-        />
-      </TouchableOpacity>
-        
-      </View>
-  
+  <TouchableOpacity
+    style={{
+      width:"100%"
+    }}
+    onPress={() =>
+      openModal(
+        "shipping",
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
+          <FlatList
+            data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
+            keyExtractor={(item, idx) => `${item.name}-${idx}`}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContainer}
+            nestedScrollEnabled={true} 
+            keyboardShouldPersistTaps="handled" 
+          />
+        </View>
+      )
+    }
+  >
+    <View pointerEvents="none">
+      <TextInput
+        style={styles.input}
+        value={formik.values.city}
+        placeholder="City"
+        label={"City *"}
+        theme={{ colors: { primary: "black" } }}
+        editable={false}  // Keep it non-editable
+      />
+    </View>
+  </TouchableOpacity>
+</View>
       {/* Postal Code */}
       <View style={styles.inputContainer}>
         <TextInput

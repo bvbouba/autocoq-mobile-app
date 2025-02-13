@@ -91,9 +91,7 @@ fragment CheckoutFragment on Checkout {
     ...AddressFragment
   }
   isShippingRequired
-  availableShippingMethods {
-    ...DeliveryMethod
-  }
+
   availablePaymentGateways {
     id
     name
@@ -183,6 +181,14 @@ fragment CheckoutFragment on Checkout {
   }
 }
 
+
+fragment CheckoutWithZoneFragment on Checkout {
+  ...CheckoutFragment
+  availableShippingMethods(zoneName: $zoneName) {
+    ...DeliveryMethod
+  }
+}
+
 mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!, $email:String) {
   checkoutCreate(input: { channel: $channel, lines: $lines, email:$email }) {
     checkout {
@@ -196,11 +202,19 @@ mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!, $email
   }
 }
 
-query getCheckoutById($id: ID!) {
+query getCheckoutById($id: ID!, $zoneName:String) {
   checkout(id: $id) {
-    ...CheckoutFragment
+    ...CheckoutWithZoneFragment
   }
 }
+
+
+query CheckoutByToken($checkoutToken: UUID!, $zoneName:String) {
+  checkout(token: $checkoutToken) {
+    ...CheckoutWithZoneFragment
+  }
+}
+
 
 mutation checkoutCreate($channel: String!, $lines: [CheckoutLineInput!]!) {
   checkoutCreate(input: { channel: $channel, lines: $lines }) {

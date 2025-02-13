@@ -28,6 +28,7 @@ import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
 import { PathProvider } from "@/context/path";
 import { LoadingProvider } from "@/context/Loading";
 import { ModalProvider } from "@/context/useModal";
+import { CheckoutProvider } from "@/context/CheckoutProvider";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -87,7 +88,7 @@ function RootLayoutNav() {
     <PathProvider>
      <CarFilterProvider>
       <ProductsProvider>
-        <CartProvider>
+        <CheckoutProvider>
           <OrderProvider>
             <PaymentProvider>
             <ModalProvider> 
@@ -161,7 +162,7 @@ function RootLayoutNav() {
               </ModalProvider> 
             </PaymentProvider>
           </OrderProvider>
-        </CartProvider>
+        </CheckoutProvider>
       </ProductsProvider>
       </CarFilterProvider>
       </PathProvider>

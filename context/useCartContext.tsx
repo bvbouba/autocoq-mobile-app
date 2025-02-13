@@ -59,9 +59,14 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const [addLineItem] = useCheckoutLinesAddMutation();
     const [updateLineMutation] = useCheckoutLinesUpdateMutation();
     const {user} = useAuth()
-
+    
+    const zoneName = cart?.shippingAddress?.city
+    console.log(zoneName)
     const getCheckout = async () => {
-        const result = await getCheckoutById({ variables: { id: (await getCheckoutId()) || "none" } });
+        const result = await getCheckoutById({ variables: { id: (await getCheckoutId()) || "none" ,
+            zoneName
+        }
+    });
         handleErrors(result)
         return result.data?.checkout as CheckoutFragment;
     }

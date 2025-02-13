@@ -9,7 +9,7 @@ import {
 import {Text, View ,  PaddedView,colors, fonts } from "@/components/Themed"
 
 
-import { ScrollView, StyleSheet } from 'react-native';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
 import { useCartContext } from "@/context/useCartContext";
 import CartItem from "./CartItem";
 import CartSubtotal from "./CartSubtotal";
@@ -162,6 +162,7 @@ const CartScreen = () => {
                 ))}
                 <CartSubtotal />
                 </PaddedView>
+               
             </ScrollView>
 
             <PaddedView style={styles.footerContainer}>

@@ -1,8 +1,8 @@
-import { View,StyleSheet,ScrollView } from "react-native"
+import { View,StyleSheet,ScrollView,Image } from "react-native"
 import CategoryList from "../layout/CategoryList";
 import CategoryShortList from "../layout/CategoryShortList";
 
-const uri = require("../../assets/images/mechanic.jpg");
+const uri = require("../../assets/images/bg.jpg");
 
 
 
@@ -16,7 +16,8 @@ const ShopScreen = () => {
                 width:"100%",
             }}
             >
-            {/* <Image source={uri} style={styles.banner} /> */}
+            <Image source={uri} style={styles.banner} resizeMode="cover" 
+            />
 
             </View>
            <CategoryShortList  />

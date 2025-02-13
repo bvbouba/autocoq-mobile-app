@@ -44,15 +44,15 @@ const CartItem: FC<Props> = ({ lineItem }) => {
     const variants = lineItem.variant.product.variants || [];
 
     return <>
-        <Pressable onPress={() => router.push("products/details/" + lineItem.variant.product.id)}>
-            <View style={styles.productItem}>
+<Pressable onPress={() => router.push(`/products/details/${lineItem.variant.product.id}`)}>
+<View style={styles.productItem}>
                 <View style={styles.productWrapper} testID="product-image-wrapper">
                     <View style={styles.imageWrapper}>
                         <CartImage line={lineItem} />
                     </View>
 
                     <View style={styles.productDetailWrapper}>
-                        <Text style={styles.productTitle}>
+                        <Text style={[styles.productTitle, { maxWidth: "99%" }]}>
                             {lineItem.variant.product.name}
                         </Text>
                         {variants.length > 1 && <Text style={styles.productVariant}>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         textAlign: "left",
         fontWeight: 'bold',
         fontSize:fonts.caption,
-        marginBottom: 8
+        marginBottom: 8,
     },
     productVariant: {
         textAlign: "left",
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     },
     imageWrapper: {
         flexDirection: "column",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     productDetailWrapper: {
         display: "flex",

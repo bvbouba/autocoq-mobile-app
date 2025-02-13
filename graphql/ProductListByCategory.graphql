@@ -1,4 +1,11 @@
-query ProductListByCategory($slug: String!, $channel: String!,$filter:ProductFilterInput, $zoneName: String) {
+query ProductListByCategory(
+	$slug: String!
+	$channel: String!
+	$filter:ProductFilterInput
+	$zoneName: String
+	$orderPrice: MoneyInputType
+  $orderWeight: WeightInputType
+	) {
 	category(slug: $slug,) {
 		name
 		description

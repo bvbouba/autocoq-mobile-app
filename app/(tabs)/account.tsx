@@ -77,15 +77,15 @@ export default function AccountScreen() {
         </View>
 
         <View style={styles.list}>
-          <ListItem name="Mes commandes" url="account/orders" />
+          <ListItem name="Mes commandes" onPress={()=>router.push("/account/orders")} />
           <Divider />
-          {user?.id && <><ListItem name="Mes adresses" url="account/addresses" />
+          {user?.id && <><ListItem name="Mes adresses" onPress={()=>router.push("/account/addresses")} />
                         <Divider />
                         </>
           }
-          <ListItem name="FAQ" url="account/faq" />
+          <ListItem name="FAQ" onPress={()=>router.push("/account/faq")} />
           <Divider />
-          <ListItem name="Conditions générales" url="account/terms" />
+          <ListItem name="Conditions générales" onPress={()=>router.push("/account/terms")} />
 
           {user?.id && (
             <View style={{marginTop:50}}>

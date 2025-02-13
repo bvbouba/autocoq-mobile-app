@@ -5,22 +5,15 @@ import { IconButton } from "react-native-paper"
 import { useRouter } from "expo-router"
 import { usePath } from "@/context/path"
 
+
 interface Props {
     name: string,
-    url:string
+    onPress: () => void
     slug?:string
 }
 
-const ListItem: FC<Props> = ({ name,url,slug="" }) => {
-     const {addPath} = usePath()
-    const router = useRouter();
-    const onPress = () => {
-        if(slug){
-        addPath(slug)
-         }
-        router.push(url)
-    }
-
+const ListItem: FC<Props> = ({ name,onPress }) => {
+  
     return <Pressable onPress={onPress}>
         <View style={styles.wrapper}>
             <View style={styles.titleWrapper}>

@@ -51,6 +51,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
     });
 
     const variants = product?.variants || []
+    const defaultVariant = product.defaultVariant
 
     const handleAddItem = async () => {
         if (!(variants.length>0)) return;
@@ -71,13 +72,13 @@ const ProductListItem: FC<Props> = ({ product }) => {
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper} testID="product-image-wrapper">
                     <View>
-                    <TouchableOpacity onPress={() => router.push("products/details/" + product.id + "?" + params.toString())}>
+                    <TouchableOpacity onPress={() => router.push(`/products/details/${product.id}?${params.toString()}`)}>
                         <ProductImage product={product} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
-                        <TouchableOpacity onPress={() => router.push("products/details/" + product.id + "?" + params.toString())}>
+                        <TouchableOpacity onPress={() => router.push(`/products/details/${product.id}?${params.toString()}`)}>
                         <Text style={styles.productTitle} numberOfLines={2} >
                             {product.name}
                         </Text>
@@ -106,7 +107,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                         </Text></View>
                         )}
                         <CompatibilityCheckBasic product={product} setFilterOpen={setFilterOpen}/>
-                        <DeliveryMethodBasic  variant={variants[0]}/>
+                        <DeliveryMethodBasic  variant={defaultVariant}/>
                         <View style={styles.buttonContainer}>
                         <Button
                             style={styles.button}

@@ -34,8 +34,9 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   perPage = 4,
   itemsCounter
 }) => {
-  const {delivery} = useCartContext()
-
+  const {delivery,cart} = useCartContext()
+  const subtotalPrice = cart?.subtotalPrice.gross
+  
   const variables: ProductCollectionQueryVariables = {
     zoneName:delivery?.zone || "xxxx",
     filter,
@@ -48,11 +49,14 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           field: sortBy.field,
         },
       }),
+    orderPrice: (subtotalPrice
+    ? { currency: subtotalPrice.currency, amount: subtotalPrice.amount }
+    : undefined)
   };
    
 
   const { loading, error, data, fetchMore } = useProductCollectionQuery({ variables });
-
+  
   const [allProducts, setAllProducts] = useState<ProductFragment[]>([]);
   const [hasNextPage, setHasNextPage] = useState(false);
 

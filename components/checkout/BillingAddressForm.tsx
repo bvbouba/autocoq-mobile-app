@@ -191,7 +191,6 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
       </View>
   
       {/* City */}
-      {/* City */}
       <View style={styles.inputContainer}>
       <TouchableOpacity
       style={{

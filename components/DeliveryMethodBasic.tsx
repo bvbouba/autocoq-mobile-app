@@ -37,7 +37,7 @@ const DeliveryMethodBasic = ({ variant }: Props) => {
   // Get shipping methods
   const pickup = getShippingMethodById("pickup");
   const sameDay = getShippingMethodById("same-day");
-  const homeDelivery = getShippingMethodById("home-delivery");
+  const homeDelivery = getShippingMethodById("home-delivery") || getShippingMethodById("home-delivery-free") ;
 
   // Calculate time difference from now to 20:00 (8 PM)
   const currentTime = new Date();

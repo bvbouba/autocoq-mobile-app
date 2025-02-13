@@ -55,7 +55,11 @@ fragment ProductVariantFragment on ProductVariant {
   }
 
  
-  availableShippingMethods(zoneName: $zoneName) {
+  availableShippingMethods(
+    zoneName: $zoneName
+    orderPrice: $orderPrice
+    orderWeight:$orderWeight
+    ) {
     ...ShippingMethodFragment
   }
 }
@@ -100,6 +104,9 @@ fragment ProductFragment on Product {
       reference
     }
   }
+  defaultVariant {
+     ...ProductVariantFragment
+  }
   variants {
     ...ProductVariantFragment
   }
@@ -114,13 +121,26 @@ fragment ProductFragment on Product {
   }
 }
 
-query getProductById($id: ID!, $channel: String!, $zoneName: String) {
+query getProductById(
+  $id: ID!
+  $channel: String!
+  $zoneName: String
+  $orderPrice: MoneyInputType
+  $orderWeight: WeightInputType
+  
+  ) {
   product(id: $id, channel: $channel) {
     ...ProductFragment
   }
 }
 
-query getProductsList($channel: String!, $filter: ProductFilterInput, $zoneName: String) {
+query getProductsList(
+  $channel: String!
+  $filter: ProductFilterInput
+  $zoneName: String
+  $orderPrice: MoneyInputType
+  $orderWeight: WeightInputType
+  ) {
   products(first: 10, channel: $channel, filter: $filter) {
     edges {
       node {
@@ -140,6 +160,8 @@ query searchProducts(
 	$carModel:[ID!]
 	$carYear:[ID!]
   $zoneName: String
+  $orderPrice: MoneyInputType
+  $orderWeight: WeightInputType
 ) {
   products(
     first: 100

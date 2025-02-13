@@ -8,13 +8,18 @@ import { useCartContext } from "@/context/useCartContext";
 
 const ProductDetailsId = () => {
     const pathname = usePathname();
-    const {delivery} = useCartContext()
+    const {delivery,cart} = useCartContext()
     const productId = pathname.split("/")[pathname.split("/").length - 1]
+    const subtotalPrice = cart?.subtotalPrice.gross
+
     const { data, called,loading } = useGetProductByIdQuery({
         variables: {
             id: productId,
             channel: getConfig().channel,
-            zoneName: delivery?.zone || "xxxx"
+            zoneName: delivery?.zone || "xxxx",
+            orderPrice: (subtotalPrice
+                ? { currency: subtotalPrice.currency, amount: subtotalPrice.amount }
+                : undefined)
         }
     })
 

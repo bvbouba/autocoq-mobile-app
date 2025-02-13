@@ -2,6 +2,9 @@ fragment CategoryDetailsFragment on Category {
   id
   name
   slug
+   parent{
+        slug
+      }
   children(first: 10) {
     edges {
       node {

@@ -5,7 +5,6 @@ import { useCartContext } from "@/context/useCartContext";
 import {Text, View ,colors, fonts } from "@/components/Themed"
 import { IconButton } from "react-native-paper";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
-import { ProductFragment } from "@/saleor/api.generated";
 
 
 const ShippingMethodSelector: FC = () => {
@@ -60,6 +59,7 @@ const ShippingMethodSelector: FC = () => {
           }}>
             {cart.lines.map(line=>
                 <Image
+                key={line.id}
                 style={styles.tinyLogo}
                 source={{
                     uri: line.variant.product.thumbnail?.url
