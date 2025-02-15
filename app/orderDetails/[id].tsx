@@ -1,5 +1,4 @@
 import {  usePathname } from "expo-router";
-import { StyleSheet } from "react-native";
 
 import { useEffect, useState } from "react";
 import OrderDetails from "@/components/orders/OrderDetails";

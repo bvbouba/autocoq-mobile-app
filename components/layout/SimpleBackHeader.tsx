@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize:fonts.h2,
     fontWeight: "bold",
-    color: colors.primary,
+    color: colors.secondary,
     marginLeft: 10,
   },
   backButton: {

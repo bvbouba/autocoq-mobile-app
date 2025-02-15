@@ -34468,6 +34468,13 @@ export type GetOrderByIdQueryVariables = Exact<{
 
 export type GetOrderByIdQuery = { __typename?: 'Query', order?: { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, created: string, updatedAt: string, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, externalReference?: string | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }>, shippingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, streetAddress2: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, billingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, streetAddress2: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null } | null };
 
+export type GetOrderByTokenQueryVariables = Exact<{
+  token: Scalars['UUID']['input'];
+}>;
+
+
+export type GetOrderByTokenQuery = { __typename?: 'Query', orderByToken?: { __typename?: 'Order', id: string, number: string, status: OrderStatus, paymentStatus: PaymentChargeStatusEnum, created: string, updatedAt: string, shippingMethodName?: string | null, shippingPrice: { __typename?: 'TaxedMoney', currency: string, gross: { __typename?: 'Money', currency: string, amount: number } }, shippingMethods: Array<{ __typename?: 'ShippingMethod', id: string, name: string, price: { __typename?: 'Money', amount: number } }>, total: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, subtotal: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, voucher?: { __typename?: 'Voucher', code?: string | null, discountValue?: number | null, currency?: string | null } | null, undiscountedTotal: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', currency: string, amount: number } }, lines: Array<{ __typename?: 'OrderLine', id: string, quantity: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, undiscountedUnitPrice: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } }, unitDiscount: { __typename?: 'Money', amount: number }, totalPrice: { __typename?: 'TaxedMoney', currency: string, tax: { __typename?: 'Money', currency: string, amount: number }, net: { __typename?: 'Money', currency: string, amount: number }, gross: { __typename?: 'Money', currency: string, amount: number } }, variant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, product: { __typename?: 'Product', id: string, name: string, externalReference?: string | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null }, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, reference?: string | null, plainText?: string | null }> }>, media?: Array<{ __typename?: 'ProductMedia', url: string }> | null } | null }>, shippingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, streetAddress2: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null, billingAddress?: { __typename?: 'Address', id: string, phone?: string | null, firstName: string, lastName: string, streetAddress1: string, streetAddress2: string, city: string, postalCode: string, isDefaultBillingAddress?: boolean | null, isDefaultShippingAddress?: boolean | null, country: { __typename?: 'CountryDisplay', code: string, country: string } } | null } | null };
+
 export type OrdersQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
@@ -36698,6 +36705,46 @@ export type GetOrderByIdQueryHookResult = ReturnType<typeof useGetOrderByIdQuery
 export type GetOrderByIdLazyQueryHookResult = ReturnType<typeof useGetOrderByIdLazyQuery>;
 export type GetOrderByIdSuspenseQueryHookResult = ReturnType<typeof useGetOrderByIdSuspenseQuery>;
 export type GetOrderByIdQueryResult = Apollo.QueryResult<GetOrderByIdQuery, GetOrderByIdQueryVariables>;
+export const GetOrderByTokenDocument = gql`
+    query getOrderByToken($token: UUID!) {
+  orderByToken(token: $token) {
+    ...OrderFragment
+  }
+}
+    ${OrderFragmentDoc}`;
+
+/**
+ * __useGetOrderByTokenQuery__
+ *
+ * To run a query within a React component, call `useGetOrderByTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderByTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderByTokenQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useGetOrderByTokenQuery(baseOptions: Apollo.QueryHookOptions<GetOrderByTokenQuery, GetOrderByTokenQueryVariables> & ({ variables: GetOrderByTokenQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrderByTokenQuery, GetOrderByTokenQueryVariables>(GetOrderByTokenDocument, options);
+      }
+export function useGetOrderByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderByTokenQuery, GetOrderByTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrderByTokenQuery, GetOrderByTokenQueryVariables>(GetOrderByTokenDocument, options);
+        }
+export function useGetOrderByTokenSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderByTokenQuery, GetOrderByTokenQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrderByTokenQuery, GetOrderByTokenQueryVariables>(GetOrderByTokenDocument, options);
+        }
+export type GetOrderByTokenQueryHookResult = ReturnType<typeof useGetOrderByTokenQuery>;
+export type GetOrderByTokenLazyQueryHookResult = ReturnType<typeof useGetOrderByTokenLazyQuery>;
+export type GetOrderByTokenSuspenseQueryHookResult = ReturnType<typeof useGetOrderByTokenSuspenseQuery>;
+export type GetOrderByTokenQueryResult = Apollo.QueryResult<GetOrderByTokenQuery, GetOrderByTokenQueryVariables>;
 export const OrdersDocument = gql`
     query Orders($before: String, $after: String) {
   me {

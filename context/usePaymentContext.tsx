@@ -39,7 +39,7 @@ const PaymentContext = createContext<PaymentContextModel>({
 export const usePaymentContext = () => useContext(PaymentContext);
 
 export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
-    const { checkout } = useCheckout();
+    const { checkout,checkoutToken } = useCheckout();
     const {authenticated} = useAuth()
     const { setRecentOrderId: setOrderId } = useOrderContext();
 
@@ -64,7 +64,7 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
 
             const createPaymentResult = await createPayment({
                 variables: {
-                    checkoutId: checkout?.id as string,
+                    token: checkoutToken,
                     paymentInput: {
                         amount: checkout?.totalPrice.gross.amount,
                         gateway: chosenGateway
@@ -74,7 +74,7 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
             handleErrors(createPaymentResult)
             const checkoutCompleteResult = await completeCheckout({
                 variables: {
-                    checkoutId: checkout?.id as string
+                    token: checkoutToken
                 }
             });
             handleErrors(checkoutCompleteResult);
@@ -89,7 +89,7 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
         createPaymentStatus.reset();
         const checkoutCompleteResult = await completeCheckout({
             variables: {
-                checkoutId: checkout?.id as string
+                token: checkoutToken
             }
         })
         handleErrors(checkoutCompleteResult)

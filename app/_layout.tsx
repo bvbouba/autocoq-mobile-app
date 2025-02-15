@@ -154,7 +154,9 @@ function RootLayoutNav() {
                                                       header: () => <SimpleBackHeader hasLogo={true} />,
                                                     }} />
                   <Stack.Screen name="account/addresses" options={{ headerTitle: "Adresses"}} />
-                  <Stack.Screen name="account/orders" options={{ headerTitle: "Mes commandes"}} />
+                  <Stack.Screen name="account/orders" options={{ 
+                    headerTitle: "Mes commandes"
+                    }} />
                 </Stack>
               </ThemeProvider>
               </GestureHandlerRootView>

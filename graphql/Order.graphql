@@ -150,6 +150,12 @@ query getOrderById($id: ID!) {
   }
 }
 
+query getOrderByToken($token: UUID!) {
+  orderByToken(token: $token) {
+    ...OrderFragment
+  }
+}
+
 query Orders($before: String, $after: String) {
   me {
     orders(first: 10, before: $before, after: $after) {
