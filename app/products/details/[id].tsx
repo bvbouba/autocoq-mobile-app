@@ -4,6 +4,7 @@ import { useGetProductByIdQuery } from "@/saleor/api.generated";
 import { StyleSheet } from "react-native"
 import { getConfig } from "@/config";
 import {Text, View } from "@/components/Themed"
+import Loading from "@/components/Loading";
 
 const ProductDetailsId = () => {
     const pathname = usePathname();
@@ -16,9 +17,7 @@ const ProductDetailsId = () => {
         }
     })
 
-if(loading) return <View style={styles.scrollContainer}>
-                        <Text>Loading...</Text>
-                    </View>
+if(loading) return <Loading />
     
     if (called && data?.product) {
         return <View style={{ flex: 1 }}>

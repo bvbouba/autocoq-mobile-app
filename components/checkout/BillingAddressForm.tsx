@@ -28,35 +28,34 @@ interface Form {
 }
 
 const validationSchema = yup.object().shape({
-  firstName: yup.string().required("Required"),
-  lastName: yup.string().required("Required"),
-  phone: yup.string().required("Required"),
-  streetAddress1: yup.string().required("Required"),
+  firstName: yup.string().required("Requis"),
+  lastName: yup.string().required("Requis"),
+  phone: yup.string().required("Requis"),
+  streetAddress1: yup.string().required("Requis"),
   streetAddress2: yup.string(),
-  postalCode: yup.string().required("Required"),
-  city: yup.string().required("Required"),
+  postalCode: yup.string().required("Requis"),
+  city: yup.string().required("Requis"),
 });
 
 const BillingAddressForm: FC<Props> = () => {
-  const { checkout } = useCheckout();
+  const { checkout, checkoutToken } = useCheckout();
   const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
   const [updateEmail] = useCheckoutEmailUpdateMutation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const {authenticated,user} = useAuth()
-  const {openModal, closeModal} = useModal()
-  const { data:citiesData,  } = useGetCitiesQuery();
-  const router = useRouter()
+  const { authenticated, user } = useAuth();
+  const { openModal, closeModal } = useModal();
+  const { data: citiesData } = useGetCitiesQuery();
+  const router = useRouter();
 
   const renderItem = ({ item }: { item: { name: string } }) => (
     <TouchableOpacity
       style={styles.zoneItem}
-      onPress={() =>{ 
-        formik.setFieldValue("city", item.name)
-       closeModal()
-      }  
-      }
+      onPress={() => {
+        formik.setFieldValue("city", item.name);
+        closeModal();
+      }}
     >
       <Text style={styles.zoneText}>{item.name}</Text>
     </TouchableOpacity>
@@ -65,7 +64,7 @@ const BillingAddressForm: FC<Props> = () => {
   const updateMutation = async (formData: Form) => {
     const { data } = await updateBillingAddress({
       variables: {
-        id: checkout?.id as string,
+        token: checkoutToken,
         billingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
@@ -78,15 +77,16 @@ const BillingAddressForm: FC<Props> = () => {
         },
       },
     });
-    return data?.checkoutBillingAddressUpdate?.errors
+    return data?.checkoutBillingAddressUpdate?.errors;
   };
-  const phoneNumber = checkout?.email?.split('@')[0]
+
+  const phoneNumber = checkout?.email?.split("@")[0];
 
   const formik = useFormik<Form>({
     initialValues: {
       firstName: checkout?.billingAddress?.firstName || "",
       lastName: checkout?.billingAddress?.lastName || "",
-      phone: checkout?.billingAddress?.phone || phoneNumber ||"",
+      phone: checkout?.billingAddress?.phone || phoneNumber || "",
       streetAddress1: checkout?.billingAddress?.streetAddress1 || "",
       streetAddress2: checkout?.billingAddress?.streetAddress2 || "",
       postalCode: checkout?.billingAddress?.postalCode || "225",
@@ -97,29 +97,29 @@ const BillingAddressForm: FC<Props> = () => {
       setLoading(true);
       setError(null);
       try {
-        const errors = await updateMutation(data)
+        const errors = await updateMutation(data);
         if (errors && errors.length > 0) {
-          setError(`Error: ${errors[0].field}`);
+          setError(`Erreur : ${errors[0].field}`);
         } else {
-          if(!checkout?.email) {
+          if (!checkout?.email) {
             const phoneNumber = user?.email.split("@")[0] || data.phone;
             const result = await updateEmail({
               variables: {
-                  id: checkout?.id as string,
-                  email: `${phoneNumber}@autocoq.com`
+                token: checkoutToken,
+                email: `${phoneNumber}@autocoq.com`,
               },
-          });
-          const emailErrors = result.data?.checkoutEmailUpdate?.errors;
-           
-          if(emailErrors && emailErrors?.length>0) {
-            setError(`Error update email address`)
-            return;
+            });
+            const emailErrors = result.data?.checkoutEmailUpdate?.errors;
+
+            if (emailErrors && emailErrors?.length > 0) {
+              setError(`Erreur lors de la mise à jour de l'adresse e-mail`);
+              return;
+            }
           }
-         }
           router.push("/checkout");
         }
       } catch (e) {
-        setError("Failed to save billing address. Please try again.");
+        setError("Échec de l'enregistrement de l'adresse de facturation. Veuillez réessayer.");
       } finally {
         setLoading(false);
       }
@@ -128,123 +128,112 @@ const BillingAddressForm: FC<Props> = () => {
 
   const renderForm = () => (
     <View style={styles.formContainer}>
-      {/* First Name */}
+      {/* Prénom */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("firstName", value)}
           value={formik.values.firstName}
-          placeholder="First Name"
-          label={`First Name *`}
+          placeholder="Prénom"
+          label="Prénom *"
           theme={{ colors: { primary: "black" } }}
         />
       </View>
-  
-      {/* Last Name */}
+
+      {/* Nom */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("lastName", value)}
           value={formik.values.lastName}
-          placeholder="Last Name"
-          label={"Last Name *"}
+          placeholder="Nom"
+          label="Nom *"
           theme={{ colors: { primary: "black" } }}
         />
-        
       </View>
-  
-      {/* Phone */}
+
+      {/* Téléphone */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("phone", value)}
           value={formik.values.phone}
-          placeholder="Phone Number"
-          label={"Phone Number *"}
+          placeholder="Numéro de téléphone"
+          label="Numéro de téléphone *"
           theme={{ colors: { primary: "black" } }}
         />
-        
       </View>
-  
-      {/* Address Line 1 */}
+
+      {/* Adresse Ligne 1 */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress1", value)}
           value={formik.values.streetAddress1}
-          placeholder="Address Line 1"
-          label={"Address Line 1 *"}
+          placeholder="Adresse Ligne 1"
+          label="Adresse Ligne 1 *"
           theme={{ colors: { primary: "black" } }}
         />
-        
       </View>
-  
-      {/* Address Line 2 (Optional) */}
+
+      {/* Adresse Ligne 2 (Optionnel) */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress2", value)}
           value={formik.values.streetAddress2}
-          placeholder="Address Line 2"
-          label="Address Line 2"
+          placeholder="Adresse Ligne 2"
+          label="Adresse Ligne 2"
           theme={{ colors: { primary: "black" } }}
         />
       </View>
-  
-      {/* City */}
-      <View style={styles.inputContainer}>
-      <TouchableOpacity
-      style={{
-        width:"100%"
-      }} 
-      onPress={() =>
-        openModal(
-          "shipping",
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
-            
-              <FlatList
-                data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
-                keyExtractor={(item, idx) => `${item.name}-${idx}`}
-                renderItem={renderItem}
-                contentContainerStyle={styles.listContainer}
-                nestedScrollEnabled={true} 
-                keyboardShouldPersistTaps="handled" 
-              />
 
-            
-          </View>
-        )
-      }
-      >
-        <TextInput
-          style={styles.input}
-          
-          // onChangeText={(value) => formik.setFieldValue("city", value)}
-          value={formik.values.city}
-          placeholder="City"
-          label={"City *"}
-          theme={{ colors: { primary: "black" } }}
-          editable={false} 
-        />
-      </TouchableOpacity>
-        
+      {/* Ville */}
+      <View style={styles.inputContainer}>
+        <TouchableOpacity
+          style={{ width: "100%" }}
+          onPress={() =>
+            openModal(
+              "shipping",
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
+
+                <FlatList
+                  data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
+                  keyExtractor={(item, idx) => `${item.name}-${idx}`}
+                  renderItem={renderItem}
+                  contentContainerStyle={styles.listContainer}
+                  nestedScrollEnabled={true}
+                  keyboardShouldPersistTaps="handled"
+                />
+              </View>
+            )
+          }
+        >
+          <TextInput
+            style={styles.input}
+            value={formik.values.city}
+            placeholder="Ville"
+            label="Ville *"
+            theme={{ colors: { primary: "black" } }}
+            editable={false}
+          />
+        </TouchableOpacity>
       </View>
-  
-      {/* Postal Code */}
+
+      {/* Code Postal */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("postalCode", value)}
           value={formik.values.postalCode}
-          placeholder="Postal Code"
-          label="Postal Code"
+          placeholder="Code Postal"
+          label="Code Postal"
           theme={{ colors: { primary: "black" } }}
         />
-        
       </View>
-  
-      {/* Submit Button */}
+
+      {/* Bouton de soumission */}
       <Button
         onPress={() => formik.handleSubmit()}
         mode="contained"
@@ -252,10 +241,10 @@ const BillingAddressForm: FC<Props> = () => {
         style={styles.submitButton}
         labelStyle={styles.submitButtonText}
       >
-        {loading ? <ActivityIndicator color="white" /> : "CONTINUE"}
+        {loading ? <ActivityIndicator color="white" /> : "CONTINUER"}
       </Button>
-  
-      {/* Error Message */}
+
+      {/* Message d'erreur */}
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
@@ -263,15 +252,14 @@ const BillingAddressForm: FC<Props> = () => {
       )}
     </View>
   );
+
   return (
     <ScrollView style={styles.container}>
       {!showForm && authenticated ? (
         <>
-          <SavedAddressSelectionList
-            updateAddressMutation={(address: Form)  => updateMutation(address)}
-          />
+          <SavedAddressSelectionList updateAddressMutation={(address: Form) => updateMutation(address)} />
           <Button mode="text" onPress={() => setShowForm(true)}>
-            + Add New Address
+            + Ajouter une nouvelle adresse
           </Button>
         </>
       ) : (

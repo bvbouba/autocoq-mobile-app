@@ -14,7 +14,7 @@ const VariantSelector: FC<Props> = ({ product, selectedVariant, onSelect }) => {
     const variants = product.variants || []
     return <>
         {variants.length>1 ? <><PaddedView>
-            <Text style={styles.title}>Select</Text>
+            <Text style={styles.title}>Sélectionner</Text>
         </PaddedView>
         <PaddedView style={styles.container}>
 

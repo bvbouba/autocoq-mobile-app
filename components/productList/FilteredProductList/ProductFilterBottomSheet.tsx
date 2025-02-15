@@ -39,7 +39,7 @@ const {closeModal} = useModal()
 
 
             <View>
-                <Text style={styles.bigTitle}>Filter & Sort</Text>
+                <Text style={styles.bigTitle}>Filtrer et trier</Text>
                 <View style={{
                     flexDirection: "row"
                 }}>

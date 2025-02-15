@@ -10,7 +10,7 @@ export default function ProfileScreen() {
     return (
       <View style={styles.container}>
         <PaddedView>
-        <Text>Loading...</Text>
+          <Text>Chargement...</Text>
         </PaddedView>
       </View>
     );
@@ -21,14 +21,15 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.row}> 
-        <Text style={styles.title}>About Me</Text></View>
+        <Text style={styles.title}>À propos de moi</Text>
+      </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Username: </Text>
+        <Text style={styles.label}>Nom d'utilisateur : </Text>
         <Text style={styles.value}>{user?.firstName}</Text>
       </View>
       <Divider/>
       <View style={styles.row}>
-        <Text style={styles.label}>Phone Number: </Text>
+        <Text style={styles.label}>Numéro de téléphone : </Text>
         <Text style={styles.value}>{phoneNumber}</Text>
       </View>
       <Divider/>

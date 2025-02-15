@@ -70,13 +70,13 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
 
     return (<Modal visible={open} onDismiss={onClose} contentContainerStyle={containerStyle}>
         <ScrollView>
-        <Text style={styles.bigTitle}>Filter & Sort</Text>
+        <Text style={styles.bigTitle}>Filtrer & Trier</Text>
                   <Divider style={{ borderBottomWidth: 5 }} />
 
 
 
             <View style={styles.filterTypeContainer}>
-                <Text style={styles.filterTypeTitle}>Categories</Text>
+                <Text style={styles.filterTypeTitle}>Catégories</Text>
                 {categoriesData?.categories?.edges && categoriesData.categories?.edges
                     .map(cat =>
                         <CheckBoxWithLabel

@@ -33,7 +33,7 @@ export function FilterPills({ pills, onRemoveAttribute, onClearFilters }: Filter
       {/* Clear All button */}
       {pills.length > 0 && (
         <TouchableOpacity onPress={onClearFilters} style={styles.clearButton}>
-          <Text style={styles.clearText}>Clear all</Text>
+          <Text style={styles.clearText}>Tout effacer</Text>
         </TouchableOpacity>
       )}
     </View>

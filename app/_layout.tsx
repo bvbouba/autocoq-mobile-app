@@ -155,7 +155,9 @@ function RootLayoutNav() {
                                                     }} />
                   <Stack.Screen name="account/addresses" options={{ headerTitle: "Adresses"}} />
                   <Stack.Screen name="account/orders" options={{ 
-                    headerTitle: "Mes commandes"
+                    headerTitle: "Mes commandes",
+                    header: () => <SimpleBackHeader hasLogo={false}  />,
+
                     }} />
                 </Stack>
               </ThemeProvider>

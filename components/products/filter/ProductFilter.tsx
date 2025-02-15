@@ -54,32 +54,33 @@ const ProductFilter: FC<Props> = ({ openFilters }) => {
     return (
         <View style={styles.wrapper}>
 
-            <Divider />
-            <View style={[styles.filterWrapper, (numberOfFilters !== 0) && {
-                backgroundColor:"white"
-            }]}>
-                {numberOfFilters !== 0 && <Text style={styles.filterLabel}>{numberOfFilters} filters applied</Text>}
-                {numberOfFilters === 0 && <Text style={styles.filterLabel}>No Filters</Text>}
-                <View style={{
-                    flexDirection:"row",
-                    alignItems:"center",
-                    backgroundColor:colors.background,
-                }}>
-                
-                <Button style={[styles.filterButton,(numberOfFilters !== 0)&&{
-                    backgroundColor:"black",
-                    borderRadius:3,
-                }]} onPress={() => openFilters()} icon="chevron-down"
-                    contentStyle={{ flexDirection: 'row-reverse' }} labelStyle={(numberOfFilters !== 0)&&{color:"white"}}> 
-                     <FontAwesome name="filter" size={15} color={(numberOfFilters !== 0) ? "white" : colors.secondary} />
-                    <Text style={[styles.filterText,
-                     (numberOfFilters !== 0) && {color:"white"}
-                    ]}>Filters</Text> </Button>
-
-                </View>
+        <Divider />
+        <View style={[styles.filterWrapper, (numberOfFilters !== 0) && {
+            backgroundColor:"white"
+        }]}>
+            {numberOfFilters !== 0 && <Text style={styles.filterLabel}>{numberOfFilters} filtres appliqués</Text>}
+            {numberOfFilters === 0 && <Text style={styles.filterLabel}>Aucun filtre</Text>}
+            <View style={{
+                flexDirection:"row",
+                alignItems:"center",
+                backgroundColor:colors.background,
+            }}>
+            
+            <Button style={[styles.filterButton,(numberOfFilters !== 0)&&{
+                backgroundColor:"black",
+                borderRadius:3,
+            }]} onPress={() => openFilters()} icon="chevron-down"
+                contentStyle={{ flexDirection: 'row-reverse' }} labelStyle={(numberOfFilters !== 0)&&{color:"white"}}> 
+                 <FontAwesome name="filter" size={15} color={(numberOfFilters !== 0) ? "white" : colors.secondary} />
+                <Text style={[styles.filterText,
+                 (numberOfFilters !== 0) && {color:"white"}
+                ]}>Filtres</Text> </Button>
+    
             </View>
-            <Divider />
         </View>
+        <Divider />
+    </View>
+    
     );
 }
 

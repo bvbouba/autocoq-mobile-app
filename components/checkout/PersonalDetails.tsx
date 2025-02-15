@@ -17,7 +17,7 @@ const PersonalDetails = () => {
         return <Pressable onPress={() => router.push("/personalDetails")}>
             <View style={styles.personalDetailsWrapper}>
                 <View style={styles.titleWrapper}>
-                    <Text style={styles.personalDetailsTitle}>Personal Details</Text>
+                    <Text style={styles.personalDetailsTitle}>Détails personnels</Text>
                     <IconButton icon="chevron-down" onPress={() => router.push("/personalDetails")} style={styles.icon} />
                 </View>
                 <View style={styles.titleWrapper}>
@@ -32,16 +32,17 @@ const PersonalDetails = () => {
     return <Pressable onPress={() => router.push("/personalDetails")}>
         <View style={styles.personalDetailsWrapper}>
             <View style={styles.titleWrapper}>
-                <Text style={styles.personalDetailsTitle}>Personal Details</Text>
+                <Text style={styles.personalDetailsTitle}>Détails personnels</Text>
                 <IconButton icon="chevron-down" onPress={() => router.push("/personalDetails")} style={styles.icon} />
             </View>
             <View style={styles.titleWrapper}>
-                <Text style={styles.personalDetailsSummary}>Enter details</Text>
+                <Text style={styles.personalDetailsSummary}>Saisissez vos informations</Text>
             </View>
         </View>
     </Pressable >
 
 }
+
 
 export default PersonalDetails
 

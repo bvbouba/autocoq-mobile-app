@@ -17,14 +17,13 @@ interface Props {
 interface Form {
     phoneNumber: string,
 }
-
 const validationSchema = yup.object().shape({
-    phoneNumber: yup.string().matches(/^\d{10}$/, 'Phone number must be exactly 10 digits'),
+    phoneNumber: yup.string().matches(/^\d{10}$/, 'Le numéro de téléphone doit comporter exactement 10 chiffres'),
 });
 
 const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
-    const { checkout } = useCheckout();
-    const {user,authenticated} = useAuth()
+    const { checkout, checkoutToken } = useCheckout();
+    const { user } = useAuth()
     const [updateEmail] = useCheckoutEmailUpdateMutation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -41,22 +40,22 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
         validateOnBlur: false,
         onSubmit: async (data) => {
             setLoading(true);
-            setError(null); // Reset error state
+            setError(null); // Réinitialiser l'état de l'erreur
             try {
                 const result = await updateEmail({
                     variables: {
-                        id: checkout?.id as string,
+                        token: checkoutToken,
                         email: `${data.phoneNumber}@autocoq.com`
                     },
                 });
                 const errors = result.data?.checkoutEmailUpdate?.errors;
                 if (errors && errors.length > 0) {
-                    setError(`Error: ${errors[0].field}`);
+                    setError(`Erreur : ${errors[0].field}`);
                 } else {
                     onSubmit();
                 }
             } catch (err) {
-                setError("Failed to update email. Please try again.");
+                setError("Échec de la mise à jour de l'email. Veuillez réessayer.");
             } finally {
                 setLoading(false);
             }
@@ -69,8 +68,8 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
                 style={styles.input}
                 onChangeText={(value) => formik.setFieldValue("phoneNumber", value)}
                 value={formik.values.phoneNumber}
-                placeholder="Phone Number"
-                label="Phone Number"
+                placeholder="Numéro de téléphone"
+                label="Numéro de téléphone"
                 error={!!formik.errors.phoneNumber}
             />
             {formik.errors.phoneNumber && <Text style={styles.error}>{formik.errors.phoneNumber}</Text>}
@@ -80,11 +79,11 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
                     mode="contained"
                     disabled={loading}
                 >
-                    {loading ? <ActivityIndicator color="white" /> : "Submit"}
+                    {loading ? <ActivityIndicator color="white" /> : "Soumettre"}
                 </Button>
 
                 <Button onPress={onCancel} mode="text" style={styles.cancelButton}>
-                    Cancel
+                    Annuler
                 </Button>
 
                 {error && (
@@ -95,6 +94,7 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
         </PaddedView>
     );
 };
+
 
 export default PersonalDetailsForm;
 

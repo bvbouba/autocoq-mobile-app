@@ -79,7 +79,7 @@ const SavedAddressSelectionList = ({ updateAddressMutation }: SavedAddressSelect
     setIsUpdating(false);
 
     if (errors && errors.length > 0) {
-      setUError(`Error: ${errors[0].field}`);
+      setUError(`Erreur: ${errors[0].field}`);
     } else {
       router.push("/checkout")
     }

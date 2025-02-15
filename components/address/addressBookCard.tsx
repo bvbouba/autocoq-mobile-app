@@ -15,24 +15,24 @@ export function AddressBookCard({ address, onRefreshBook }: AddressBookCardProps
 
   let cardHeader = "";
   if (address.isDefaultShippingAddress && address.isDefaultBillingAddress) {
-    cardHeader = "Default Billing and Shipping Address";
+    cardHeader = "Adresse de facturation et de livraison par défaut";
   } else if (address.isDefaultShippingAddress) {
-    cardHeader = "Default Shipping Address";
+    cardHeader = "Adresse de livraison par défaut";
   } else if (address.isDefaultBillingAddress) {
-    cardHeader = "Default Billing Address";
+    cardHeader = "Adresse de facturation par défaut";
   }
 
   const confirmDeleteAddress = (addressId: string) => {
     Alert.alert(
-      "Confirm Deletion",
-      "Are you sure you want to delete this address?",
+      "Confirmer la suppression",
+      "Êtes-vous sûr de vouloir supprimer cette adresse ?",
       [
         {
-          text: "Cancel",
+          text: "Annuler",
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: "Supprimer",
           style: "destructive",
           onPress: () => {
             deleteAddressMutation({ variables: { id: addressId } });
@@ -45,7 +45,7 @@ export function AddressBookCard({ address, onRefreshBook }: AddressBookCardProps
 
   return (
     <View style={styles.card}>
-      {/* Delete Icon */}
+      {/* Icône de suppression */}
       <TouchableOpacity
         style={styles.deleteIcon}
         onPress={() => confirmDeleteAddress(address.id)}
@@ -53,13 +53,13 @@ export function AddressBookCard({ address, onRefreshBook }: AddressBookCardProps
         <Ionicons name="trash-outline" size={20} color="#dc3545" />
       </TouchableOpacity>
       
-      {/* Card Header */}
+      {/* En-tête de la carte */}
       {!!cardHeader && <Text style={styles.header}>{cardHeader}</Text>}
       
-      {/* Address Display */}
+      {/* Affichage de l'adresse */}
       <AddressDisplay address={address} />
       
-      {/* Buttons */}
+      {/* Boutons */}
       <View style={styles.buttonContainer}>
         {!address.isDefaultBillingAddress && (
           <TouchableOpacity
@@ -70,7 +70,7 @@ export function AddressBookCard({ address, onRefreshBook }: AddressBookCardProps
               })
             }
           >
-            <Text style={styles.buttonText}>Set Default Billing Address</Text>
+            <Text style={styles.buttonText}>Définir comme adresse de facturation par défaut</Text>
           </TouchableOpacity>
         )}
         {!address.isDefaultShippingAddress && (
@@ -82,7 +82,7 @@ export function AddressBookCard({ address, onRefreshBook }: AddressBookCardProps
               })
             }
           >
-            <Text style={styles.buttonText}>Set Default Shipping Address</Text>
+            <Text style={styles.buttonText}>Définir comme adresse de livraison par défaut</Text>
           </TouchableOpacity>
         )}
       </View>

@@ -19,7 +19,7 @@ const StockToggle: React.FC<StockToggleProps> = ({ enabled, onChange }) => {
         value={enabled}
       />
       {/* Label */}
-      <Text style={styles.label}>In stock</Text>
+      <Text style={styles.label}>En stock</Text>
       {/* Optional FontAwesome Icon (if needed) */}
       {enabled ? (
         <FontAwesome name="check-circle" size={18} color="#007bff" style={styles.icon} />

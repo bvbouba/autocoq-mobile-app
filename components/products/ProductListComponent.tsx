@@ -15,7 +15,7 @@ const ProductListComponent: FC<Props> = ({ products }) => {
     if (products && products.length === 0) {
         return <View style={styles.noProductsContainer} testID="prod-list-safe">
             <View style={styles.noProductsTextWrapper}>
-                <Text style={styles.noProductsText} >No products match given criteria</Text>
+                <Text style={styles.noProductsText} >Aucun produit ne correspond aux critères donnés</Text>
             </View>
         </View>
     }
