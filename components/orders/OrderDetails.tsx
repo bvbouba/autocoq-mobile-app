@@ -5,9 +5,9 @@ import OrderContent from "@/components/orders/OrderContent";
 import { useOrderContext } from "@/context/useOrderContext";
 import { useEffect, useState } from "react";
 import { OrderFragment, useGetOrderByIdQuery } from "@/saleor/api.generated";
-import { useCartContext } from "@/context/useCartContext";
 import { useAuth } from "@/lib/providers/authProvider";
 import Loading from "../Loading";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 const EcranNonTrouve = () => {
     return (
@@ -25,7 +25,6 @@ const EcranNonTrouve = () => {
 
 export const DetailsCommande = ({ orderId }: { orderId: string }) => {
     const { orderSuccess } = useLocalSearchParams();
-    const { removeCart } = useCartContext();
     const { authenticated } = useAuth();
     const { orders } = useOrderContext();
 
@@ -50,11 +49,6 @@ export const DetailsCommande = ({ orderId }: { orderId: string }) => {
         setLoading(false);
     }, [authenticated, data, orders]);
 
-    useEffect(() => {
-        if (orderSuccess && !authenticated) {
-            removeCart();
-        }
-    }, [orderSuccess]);
 
     if (loading || dbLoading) {
         return <Loading />

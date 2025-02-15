@@ -1,24 +1,21 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import BillingAddressForm from '../components/checkout/BillingAddressForm';
 import { PaddedView, Text } from '../components/Themed';
-import { useCartContext } from '../context/useCartContext';
+import { useCheckout } from '@/context/CheckoutProvider';
 
 const BillingAddressScreen = () => {
-    const { cart, refreshCart } = useCartContext();
+    const { checkout } = useCheckout();
     const router = useRouter()
 
-    if (!cart || cart.lines.length === 0) {
+    if (!checkout || checkout.lines.length === 0) {
         return <View>
-            <Text>Empty Cart</Text>
+            <Text>Panier Vide</Text>
         </View>
     }
 
     return <PaddedView>
-        <BillingAddressForm onSubmit={async () => {
-                await refreshCart()
-                router.back()
-        }} onCancel={() => router.back()} />
+        <BillingAddressForm  />
     </PaddedView>
 }
 

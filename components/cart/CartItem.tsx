@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { CheckoutLine } from "@/saleor/api.generated";
+import { CheckoutLine, useRemoveProductFromCheckoutMutation } from "@/saleor/api.generated";
 import {Text, View , Divider,colors, fonts } from "@/components/Themed"
 
 import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
-import { useCartContext } from "@/context/useCartContext";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 interface Props {
     lineItem: CheckoutLine;
@@ -35,7 +35,8 @@ const CartImage: FC<{ line: CheckoutLine }> = ({ line }) => {
 
 const CartItem: FC<Props> = ({ lineItem }) => {
     const router = useRouter();
-    const { updateItemQuantity, loading } = useCartContext();
+    const { onQuantityUpdate, loading,onCheckoutLineDelete } = useCheckout();
+
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',
@@ -77,7 +78,8 @@ const CartItem: FC<Props> = ({ lineItem }) => {
                 }}>
                     <View style={{ width: "auto" }}>
                         <TouchableOpacity
-                            onPress={() => updateItemQuantity(lineItem.id, 0)}
+                            onPress={async () => await onCheckoutLineDelete(lineItem.id)
+                            }
                         >
                             <Text style={{ textDecorationLine: "underline" }}>
                                 Supprimer
@@ -88,7 +90,7 @@ const CartItem: FC<Props> = ({ lineItem }) => {
                     <View style={styles.picker}>
                         <CartItemQuantityPicker
                             value={lineItem.quantity}
-                            onSelect={(value) => updateItemQuantity(lineItem.id, value)}
+                            onSelect={async(value) => await onQuantityUpdate(lineItem.variant.id, value)}
                             disabled={loading}
                         />
                         <View style={styles.priceContainer}>

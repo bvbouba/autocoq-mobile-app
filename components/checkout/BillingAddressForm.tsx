@@ -4,17 +4,17 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { useCartContext } from "@/context/useCartContext";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
 import {Text, View ,colors, fonts } from "@/components/Themed"
 import { useModal } from "@/context/useModal";
+import { useRouter } from "expo-router";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 
 interface Props {
-  onSubmit: () => void;
-  onCancel: () => void;
+
 }
 
 interface Form {
@@ -37,8 +37,8 @@ const validationSchema = yup.object().shape({
   city: yup.string().required("Required"),
 });
 
-const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
-  const { cart } = useCartContext();
+const BillingAddressForm: FC<Props> = () => {
+  const { checkout } = useCheckout();
   const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
   const [updateEmail] = useCheckoutEmailUpdateMutation();
   const [loading, setLoading] = useState(false);
@@ -47,6 +47,7 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
   const {authenticated,user} = useAuth()
   const {openModal, closeModal} = useModal()
   const { data:citiesData,  } = useGetCitiesQuery();
+  const router = useRouter()
 
   const renderItem = ({ item }: { item: { name: string } }) => (
     <TouchableOpacity
@@ -64,7 +65,7 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
   const updateMutation = async (formData: Form) => {
     const { data } = await updateBillingAddress({
       variables: {
-        id: cart?.id as string,
+        id: checkout?.id as string,
         billingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
@@ -79,17 +80,17 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
     });
     return data?.checkoutBillingAddressUpdate?.errors
   };
-  const phoneNumber = cart?.email?.split('@')[0]
+  const phoneNumber = checkout?.email?.split('@')[0]
 
   const formik = useFormik<Form>({
     initialValues: {
-      firstName: cart?.billingAddress?.firstName || "",
-      lastName: cart?.billingAddress?.lastName || "",
-      phone: cart?.billingAddress?.phone || phoneNumber ||"",
-      streetAddress1: cart?.billingAddress?.streetAddress1 || "",
-      streetAddress2: cart?.billingAddress?.streetAddress2 || "",
-      postalCode: cart?.billingAddress?.postalCode || "225",
-      city: cart?.billingAddress?.city || "",
+      firstName: checkout?.billingAddress?.firstName || "",
+      lastName: checkout?.billingAddress?.lastName || "",
+      phone: checkout?.billingAddress?.phone || phoneNumber ||"",
+      streetAddress1: checkout?.billingAddress?.streetAddress1 || "",
+      streetAddress2: checkout?.billingAddress?.streetAddress2 || "",
+      postalCode: checkout?.billingAddress?.postalCode || "225",
+      city: checkout?.billingAddress?.city || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
@@ -100,11 +101,11 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
         if (errors && errors.length > 0) {
           setError(`Error: ${errors[0].field}`);
         } else {
-          if(!cart?.email) {
+          if(!checkout?.email) {
             const phoneNumber = user?.email.split("@")[0] || data.phone;
             const result = await updateEmail({
               variables: {
-                  id: cart?.id as string,
+                  id: checkout?.id as string,
                   email: `${phoneNumber}@autocoq.com`
               },
           });
@@ -115,7 +116,7 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
             return;
           }
          }
-          onSubmit();
+          router.push("/checkout");
         }
       } catch (e) {
         setError("Failed to save billing address. Please try again.");
@@ -268,7 +269,6 @@ const BillingAddressForm: FC<Props> = ({ onSubmit }) => {
         <>
           <SavedAddressSelectionList
             updateAddressMutation={(address: Form)  => updateMutation(address)}
-            onSubmit= {onSubmit}
           />
           <Button mode="text" onPress={() => setShowForm(true)}>
             + Add New Address

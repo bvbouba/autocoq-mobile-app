@@ -53,16 +53,24 @@ fragment ProductVariantFragment on ProductVariant {
       plainText
     }
   }
+}
 
- 
-  availableShippingMethods(
-    zoneName: $zoneName
-    orderPrice: $orderPrice
-    orderWeight:$orderWeight
-    ) {
+
+query getAvailableShippingMethods(
+  $id:ID!
+  $zoneName: String,
+  $orderPrice: MoneyInputType
+  $orderWeight: WeightInputType
+){ 
+ productVariant(
+  id:$id,
+  ){
+  availableShippingMethods (zoneName:$zoneName, orderPrice: $orderPrice, orderWeight: $orderWeight){
     ...ShippingMethodFragment
   }
 }
+}
+
 
 fragment ProductFragment on Product {
   id
@@ -123,11 +131,7 @@ fragment ProductFragment on Product {
 
 query getProductById(
   $id: ID!
-  $channel: String!
-  $zoneName: String
-  $orderPrice: MoneyInputType
-  $orderWeight: WeightInputType
-  
+  $channel: String!  
   ) {
   product(id: $id, channel: $channel) {
     ...ProductFragment
@@ -159,9 +163,6 @@ query searchProducts(
   $carMake:[ID!]
 	$carModel:[ID!]
 	$carYear:[ID!]
-  $zoneName: String
-  $orderPrice: MoneyInputType
-  $orderWeight: WeightInputType
 ) {
   products(
     first: 100
@@ -170,9 +171,6 @@ query searchProducts(
       search: $search
       categories: $categories
       collections: $collections
-      carMake:$carMake
-      carModel:$carModel
-      carYear:$carYear
     }
   ) {
     edges {

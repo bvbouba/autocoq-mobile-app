@@ -2,16 +2,13 @@ import { EngineDetailsFragment, MakeDetailsFragment, ModelDetailsFragment, YearD
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type CarFilterContextType = {
-  setSelectedCar: (car?: car) => void;
+  setSelectedCar: (car?: carType) => void;
   clearFilter: () => void; 
-  isFiltered:boolean,
-  setIsFiltered:(isFiltered:boolean)=>void,
-  selectedCar?:car
-  filterOpen:boolean,
-  setFilterOpen:(filterOpen:boolean)=>void
+  selectedCar?:carType
+
 };
 
-interface car {
+export interface carType {
   make?: MakeDetailsFragment|null,
   model?:ModelDetailsFragment|null,
   engine?:EngineDetailsFragment|null,
@@ -21,13 +18,9 @@ interface car {
 const CarFilterContext = createContext<CarFilterContextType | null>(null);
 
 export const CarFilterProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedCar, setSelectedCar] = useState<car | undefined>()
-  const [isFiltered, setIsFiltered] = useState<boolean>(false);
-  const [filterOpen, setFilterOpen] = useState(false);
-
+  const [selectedCar, setSelectedCar] = useState<carType | undefined>()
   // Function to clear all selected filters
   const clearFilter = () => {
-    setIsFiltered(false);
     setSelectedCar(undefined)
   };
 
@@ -36,10 +29,6 @@ export const CarFilterProvider = ({ children }: { children: ReactNode }) => {
       value={{
         selectedCar,
         setSelectedCar,
-        isFiltered,
-        setIsFiltered,
-        setFilterOpen,
-        filterOpen,
         clearFilter, // Provide clearFilter in the context
       }}
     >

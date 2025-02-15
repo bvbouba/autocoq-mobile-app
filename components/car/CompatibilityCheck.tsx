@@ -10,6 +10,7 @@ import { useCarFilter } from "@/context/useCarFilterContext"
 import { useRouter } from "expo-router"
 import { useModal } from "@/context/useModal"
 import { WhiteButton } from "../button"
+import Loading from "../Loading"
 
 
 
@@ -20,7 +21,7 @@ interface props {
 
 const CompatibilityCheck = ({ product }: props) => {
   const {openModal} = useModal()
-  const { selectedCar,setIsFiltered } = useCarFilter()
+  const { selectedCar } = useCarFilter()
   const categorySlug = product.category?.slug || ""
   const router = useRouter()
   const params = new URLSearchParams();
@@ -37,7 +38,12 @@ const CompatibilityCheck = ({ product }: props) => {
     }
   })
 
-  if(loading) return 
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
+
   const isCompatible = data?.checkProductCompatibility;
   
   return (
@@ -113,8 +119,7 @@ const CompatibilityCheck = ({ product }: props) => {
 
                   ]} onPress={() => {
                     params.append("categories", categorySlug)
-                    setIsFiltered(true)
-                    router.push("/products/results?" + params.toString())
+                    router.push(`/products/results?"${params.toString()}`)
                   }}>
                     <Text style={styles.vehicleButtonText}>
                       {"Voir les pièces adaptées"}

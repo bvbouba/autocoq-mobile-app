@@ -1,70 +1,78 @@
 import * as React from 'react';
-import { Button, RadioButton, ActivityIndicator } from 'react-native-paper';
-import { PaddedView, Text } from '../components/Themed';
-import { getConfig } from '../config';
-import { useCartContext } from '../context/useCartContext';
+import { Button, ActivityIndicator } from 'react-native-paper';
+import { borderRadius, colors, fonts, PaddedView, Text } from '../components/Themed';
 import { useCheckoutShippingMethodUpdateMutation } from '../saleor/api.generated';
-import { useRouter } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
+import { useCheckout } from '@/context/CheckoutProvider';
+import DeliveryMethodComponent from '@/components/DeliveryMethod/DeliveryMethodComponent';
+import { useModal } from '@/context/useModal';
 
 const ShippingMethods = () => {
-    const { cart, refreshCart } = useCartContext();
+    const { closeModal } = useModal();
+    const { checkout, checkoutToken } = useCheckout();
     const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
-    const router = useRouter();
 
-    const shippingMethods = cart && cart.shippingMethods;
+    const shippingMethods = checkout && checkout.shippingMethods;
     const firstMethod = shippingMethods && shippingMethods?.length > 0 ? shippingMethods[0].id : undefined;
 
     const [checked, setChecked] = React.useState(firstMethod || "");
-    const [loading, setLoading] = React.useState(false); // State to manage loading
+    const [loading, setLoading] = React.useState(false); // État pour gérer le chargement
 
     const updateShippingMethod = async () => {
-        setLoading(true); // Start loading
+        setLoading(true); // Démarrer le chargement
         try {
             const res = await shippingAddressUpdate({
                 variables: {
-                    id: cart?.id as string,
+                    token: checkoutToken,
                     shippingMethodId: checked,
                 },
             });
-            await refreshCart();
-            router.back();
+            closeModal();
         } catch (error) {
-            console.error("Error updating shipping method:", error);
+            console.error("Erreur lors de la mise à jour du mode de livraison :", error);
         } finally {
-            setLoading(false); // End loading
+            setLoading(false); // Arrêter le chargement
         }
     };
 
+    const handleSelect = (id: string) => {
+        setChecked(id);
+    };
+
+    if (!shippingMethods) return;
+
     return (
         <PaddedView>
-            <Text style={styles.title}>Choose shipping method</Text>
-            {shippingMethods?.map((method) => {
-                const price = method.price.amount.toLocaleString(getConfig().locale, {
-                    style: "currency",
-                    currency: method.price.currency,
-                });
-                return (
-                    <View key={method.id} style={styles.radioContainer}>
-                        <RadioButton
-                            value={method.id}
-                            status={checked === method.id ? "checked" : "unchecked"}
-                            onPress={() => setChecked(method.id)}
-                        />
-                        <View style={styles.labelContainer}>
-                            <Text style={styles.methodName}>{method.name}</Text>
-                            <Text style={styles.methodPrice}>{price}</Text>
-                        </View>
-                    </View>
-                );
-            })}
+            <View>
+                <Text style={styles.title}>Modifier le mode de livraison</Text>
+                <Text style={{
+                    fontSize: fonts.body,
+                    color: colors.textSecondary
+                }}>
+                    Veuillez sélectionner une option ci-dessous
+                </Text>
+            </View>
+            <View style={{
+                marginVertical: 15,
+            }}>
+                <DeliveryMethodComponent
+                    availableShippingMethods={shippingMethods}
+                    handleSelect={handleSelect}
+                    selectedOption={checked}
+                />
+            </View>
 
             <Button
                 onPress={() => updateShippingMethod()}
                 mode="contained"
                 disabled={loading}
+                style={{
+                    backgroundColor: colors.secondary,
+                    borderRadius: 3,
+                    padding: 5
+                }}
             >
-                {loading ? <ActivityIndicator color="white" /> : "Submit"}
+                {loading ? <ActivityIndicator color="white" /> : "APPLIQUER"}
             </Button>
         </PaddedView>
     );
@@ -74,9 +82,10 @@ export default ShippingMethods;
 
 const styles = StyleSheet.create({
     title: {
+        fontSize: fonts.h2,
         fontWeight: "bold",
         marginTop: 8,
-        marginBottom: 12,
+        marginBottom: 5,
     },
     radioContainer: {
         flexDirection: "row",

@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import {
   ProductFragment,
   ProductVariantFragment,
+  useCheckoutShippingMethodUpdateMutation,
 } from "@/saleor/api.generated";
 import {
   colors,
@@ -11,21 +12,18 @@ import {
   Text,
   View,
 } from "@/components/Themed";
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
-import { useCartContext } from "@/context/useCartContext";
+import { ActivityIndicator, StyleSheet } from "react-native";
 import ProductImageCarousel from "./details/ProductImageCarousel";
 import { getConfig } from "@/config";
-import { useRouter } from "expo-router";
 import VariantSelector from "./details/VariantSelector";
 import { ScrollView } from "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 import CompatibilityCheck from "../car/CompatibilityCheck";
 import Fitment from "../car/Fitment";
-import DeliveryMethod from "../DeliveryMethod";
-import { useNavigation } from "@react-navigation/native";
 import { useModal } from "@/context/useModal";
 import AddToTheCart from "../cart/AddToTheCart";
-import ZoneSelector from "../ZoneSelector";
+import { useCheckout } from "@/context/CheckoutProvider";
+import DeliveryMethod from "../DeliveryMethod/DeliveryMethod";
 
 interface Props {
   product: ProductFragment;
@@ -33,11 +31,13 @@ interface Props {
 
 const ProductDetails: FC<Props> = ({ product }) => {
   const {openModal} = useModal()
+  const [checkedId, setCheckedId] = useState<string>()
+  const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
 
   const isUniversal = product.isUniversal || true;
   const fitments = product.fitments || [];
 
-  const { addItem, loading } = useCartContext();
+  const { onAddToCart, loading,checkoutToken } = useCheckout();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantFragment>(
     product.defaultVariant as ProductVariantFragment
   );
@@ -114,7 +114,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
         <Divider style={{ borderBottomWidth: 5 }} />
         
         <PaddedView>
-       <DeliveryMethod variant={product.defaultVariant} /> 
+       <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId}/> 
        
         </PaddedView>
         
@@ -132,7 +132,16 @@ const ProductDetails: FC<Props> = ({ product }) => {
             style={styles.button}
             mode="contained"
             onPress={async () => {
-              await addItem(selectedVariant?.id);
+              await onAddToCart(selectedVariant?.id);
+              if (checkedId) {
+                await shippingAddressUpdate({
+                  variables: {
+                      token: checkoutToken,
+                      shippingMethodId: checkedId,
+                  },
+              });
+              }
+              
               openModal("CartPreview",<AddToTheCart />)
             }}
             disabled={loading}

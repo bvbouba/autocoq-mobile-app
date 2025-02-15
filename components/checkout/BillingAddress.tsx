@@ -1,26 +1,24 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
-import { useCartContext } from "@/context/useCartContext"
 import { IconButton } from "react-native-paper"
-import {fonts, Text, View  } from "@/components/Themed"
-
+import { fonts, Text, View } from "@/components/Themed"
+import { useCheckout } from "@/context/CheckoutProvider"
 
 const BillingAddress = () => {
-    const { cart } = useCartContext()
+    const { checkout } = useCheckout()
     const router = useRouter();
 
-    const billingDetails = cart && cart.billingAddress
+    const billingDetails = checkout && checkout.billingAddress
     if (billingDetails) {
         return <>
             <View style={styles.billAddressWrapper}>
                 <View style={styles.titleWrapper}>
-                    <Text style={styles.billingAddressTitle}>Billing Address</Text>
+                    <Text style={styles.billingAddressTitle}>Adresse de facturation</Text>
                     <TouchableOpacity onPress={() => router.push("/billingAddress")}>
-                    <Text style={styles.icon}>Edit Billing</Text>
+                        <Text style={styles.icon}>Modifier l'adresse</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.detailWrapper}>
-    
                     <Text style={styles.billingAddressValue}>
                         {billingDetails.lastName}, {billingDetails.firstName}
                     </Text>
@@ -38,14 +36,14 @@ const BillingAddress = () => {
     return <Pressable onPress={() => router.push("/billingAddress")}>
         <View style={styles.billAddressWrapper}>
             <View style={styles.titleWrapper}>
-                <Text style={styles.billingAddressTitle}>Billing Address</Text>
+                <Text style={styles.billingAddressTitle}>Adresse de facturation</Text>
                 <IconButton icon="chevron-down" onPress={() => router.push("/billingAddress")} style={styles.icon} />
             </View>
             <View style={styles.titleWrapper}>
-                <Text style={styles.billingAddressSummary}>Enter billing details</Text>
+                <Text style={styles.billingAddressSummary}>Saisissez les détails de facturation</Text>
             </View>
         </View>
-    </Pressable >
+    </Pressable>
 }
 
 export default BillingAddress
@@ -59,21 +57,21 @@ const styles = StyleSheet.create({
     icon: {
         marginTop: 5,
         marginRight: 10,
-        fontSize:fonts.body,
-        textDecorationLine:"underline"
+        fontSize: fonts.body,
+        textDecorationLine: "underline"
     },
     titleWrapper: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems:"center",
+        alignItems: "center",
         borderRadius: 5,
         backgroundColor: 'inherit',
     },
     detailWrapper: {
         flexDirection: "column",
         backgroundColor: 'inherit',
-      },
+    },
     billingAddressValue: {
         overflow: "hidden",
         fontStyle: "italic",

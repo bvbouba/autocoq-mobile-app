@@ -2,13 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { colors, Divider, fonts, PaddedView } from "@/components/Themed"; // Assurez-vous que vous avez bien défini les couleurs ou remplacez-les par des couleurs statiques
-import { useCartContext } from "@/context/useCartContext";
+import { useCheckout } from "@/context/CheckoutProvider";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { useRouter } from "expo-router";
 import { useModal } from "@/context/useModal";
 
 const AddedToCart: React.FC = () => {
-  const { cart } = useCartContext();
+  const { checkout } = useCheckout();
   const router = useRouter();
   const { closeModal } = useModal();
 
@@ -23,7 +23,7 @@ const AddedToCart: React.FC = () => {
 
       {/* Liste des produits */}
       <FlatList
-        data={cart?.lines}
+        data={checkout?.lines}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.productRow}>
@@ -51,7 +51,7 @@ const AddedToCart: React.FC = () => {
       />
 
       {/* Sous-total du panier */}
-      <Text style={styles.subtotal}>Sous-total du panier : {convertMoneyToString(cart?.subtotalPrice.gross)}</Text>
+      <Text style={styles.subtotal}>Sous-total du panier : {convertMoneyToString(checkout?.subtotalPrice.gross)}</Text>
       <Divider />
 
       {/* Bouton Voir le panier & Commander */}

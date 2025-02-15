@@ -1,15 +1,15 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet } from "react-native"
-import { useCartContext } from "@/context/useCartContext"
 import {  Text, View } from "@/components/Themed"
 import { IconButton } from "react-native-paper"
+import { useCheckout } from "@/context/CheckoutProvider"
 
 
 const PersonalDetails = () => {
-    const { cart } = useCartContext()
+    const { checkout } = useCheckout()
     const router = useRouter();
 
-    const email = cart && cart.email || ""
+    const email = checkout && checkout.email || ""
 
     const phoneNumber = email.split("@")[0];
 

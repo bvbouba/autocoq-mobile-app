@@ -1,32 +1,34 @@
 import { useRouter } from "expo-router";
 import { FC } from "react";
-import { Pressable, StyleSheet, TouchableOpacity,Image } from "react-native";
-import { useCartContext } from "@/context/useCartContext";
-import {Text, View ,colors, fonts } from "@/components/Themed"
+import { Pressable, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useCheckout } from "@/context/CheckoutProvider";
+import { Text, View, colors, fonts } from "@/components/Themed"
 import { IconButton } from "react-native-paper";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
+import { useModal } from "@/context/useModal";
+import ShippingMethods from "@/app/shippingMethods";
 
 
 const ShippingMethodSelector: FC = () => {
-  const { cart } = useCartContext();
+  const { checkout } = useCheckout();
   const router = useRouter();
-
-  const shippingMethods = cart && cart.shippingMethods;
-  const price = cart?.shippingPrice?.gross?.amount || 0;
+  const { openModal } = useModal()
+  const shippingMethods = checkout && checkout.shippingMethods;
+  const price = checkout?.shippingPrice?.gross?.amount || 0;
   const deliveryMethod = shippingMethods?.find((s) => s.price.amount === price);
 
   // Calculate the estimated delivery date
-  const getEstimatedDeliveryDate = (maxDays: number | undefined ) => {
+  const getEstimatedDeliveryDate = (maxDays: number | undefined) => {
 
     if (maxDays === undefined) return "";
 
     if (maxDays === 0) {
-        return "Aujourd'hui"; // If delivery is today
-      }
-    
+      return "Aujourd'hui"; // If delivery is today
+    }
+
     const today = new Date();
     today.setDate(today.getDate() + maxDays);
-    
+
     return today.toLocaleDateString("fr", {
       weekday: "short",
       day: "2-digit",
@@ -34,19 +36,27 @@ const ShippingMethodSelector: FC = () => {
     });
   };
 
-  const estimatedDate = getEstimatedDeliveryDate(deliveryMethod?.maximumDeliveryDays||0);
+  const estimatedDate = getEstimatedDeliveryDate(deliveryMethod?.maximumDeliveryDays || 0);
 
   if (shippingMethods && shippingMethods.length > 0) {
     return (
-      <Pressable onPress={() => router.push("/shippingMethods")}>
+      <Pressable onPress={() => {
+        openModal("ShippingMethod",
+          <ShippingMethods />
+        )
+      }}>
         <View style={styles.shippingMethodWrapper}>
           <View style={styles.titleWrapper}>
-            {<Text style={styles.shippingMethodTitle}>{deliveryMethod?.name}  
-                {(deliveryMethod?.price.amount !== 0) && `- ${convertMoneyToString(
+            {<Text style={styles.shippingMethodTitle}>{deliveryMethod?.name}
+              {(deliveryMethod?.price.amount !== 0) && `- ${convertMoneyToString(
                 deliveryMethod?.price)}`}
             </Text>}
-            <TouchableOpacity onPress={() => router.push("/shippingMethods")}>
-              <Text style={styles.icon}>Changer</Text>
+            <TouchableOpacity onPress={() => {
+              openModal("ShippingMethod",
+                <ShippingMethods />
+              )
+            }}>
+              <Text style={styles.icon}>Modifier</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.titleWrapper}>
@@ -55,17 +65,17 @@ const ShippingMethodSelector: FC = () => {
             </Text>
           </View>
           <View style={{
-            flexDirection:"column"
+            flexDirection: "column"
           }}>
-            {cart.lines.map(line=>
-                <Image
+            {checkout.lines.map(line =>
+              <Image
                 key={line.id}
                 style={styles.tinyLogo}
                 source={{
-                    uri: line.variant.product.thumbnail?.url
+                  uri: line.variant.product.thumbnail?.url
                 }}
                 resizeMode="contain"
-            />
+              />
             )
 
             }
@@ -102,13 +112,13 @@ const styles = StyleSheet.create({
   shippingMethodWrapper: {
     borderRadius: 5,
     margin: 8,
-    padding:10,
-    borderWidth:1,
-    borderColor:colors.border,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   icon: {
     marginTop: 5,
-    fontSize:fonts.body,
+    fontSize: fonts.body,
     textDecorationLine: "underline",
   },
   titleWrapper: {
@@ -118,12 +128,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     backgroundColor: "inherit",
-    fontSize:fonts.caption
+    fontSize: fonts.caption
   },
   shippingMethodValue: {
     overflow: "hidden",
-    color:colors.textSecondary,
-    fontSize:fonts.body,
+    color: colors.textSecondary,
+    fontSize: fonts.body,
     width: 300,
     marginLeft: 16,
   },
@@ -141,8 +151,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   tinyLogo: {
-    marginVertical:10,
+    marginVertical: 10,
     width: 50,
     height: 50,
-},
+  },
 });

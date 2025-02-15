@@ -2,13 +2,11 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { useColorScheme, StyleSheet } from 'react-native';
 
-import {  Text, View } from '@/components/Themed';
+import {  colors, Text, View } from '@/components/Themed';
 import Colors from '@/constants/Colors';
-import { useCartContext } from '@/context/useCartContext';
-import HeaderBack from '@/components/layout/HeaderBack';
 import SearchHeader from '@/components/layout/SearchHeader';
-import SimpleBackHeader from '@/components/layout/SimpleBackHeader';
 import SimpleCloseHeader from '@/components/layout/SimpleCloseHeader';
+import { useCheckout } from '@/context/CheckoutProvider';
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -28,7 +26,7 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const companyName = "AUTOCOQ";
-  const {delivery} = useCartContext()
+  const {delivery} = useCheckout()
   return (
     <Tabs
       screenOptions={{
@@ -50,7 +48,7 @@ export default function TabLayout() {
         options={{
           title: '',
           headerShown: true,
-         header: () => <SearchHeader withBack={false} cleanSearch companyName={companyName}/>,
+         header: () => <SearchHeader withBack={false} cleanSearch companyName={companyName} carIconColor={colors.textPrimary} />,
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           tabBarLabel: 'Accueil',
         }}
@@ -72,11 +70,11 @@ export default function TabLayout() {
           headerShown: true,
           header:()=><SimpleCloseHeader  title="Panier" subTitle={delivery.zone ? `Ma zone: ${delivery.zone}` : ""} />,
           tabBarIcon: ({ color }) => {
-            const { cart } = useCartContext();
+            const { checkout } = useCheckout();
             return <TabBarIcon
               name="shopping-cart"
               color={color}
-              number={cart && cart.lines.length > 0 ? cart.lines.map(line => line.quantity).reduce((prev, curr) => prev + curr, 0) : undefined}
+              number={checkout && checkout.lines.length > 0 ? checkout.lines.map(line => line.quantity).reduce((prev, curr) => prev + curr, 0) : undefined}
             />;
           },
           tabBarLabel: 'Panier',

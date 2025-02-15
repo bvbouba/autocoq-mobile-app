@@ -12,7 +12,8 @@ import ProductListItem from "../products/ProductListItem";
 import { SafeAreaView, FlatList, StyleSheet, Animated, ActivityIndicator, Button } from 'react-native';
 import { colors, fonts, Text, View } from './../Themed';
 import Loading from "../Loading";
-import { useCartContext } from "@/context/useCartContext";
+import { useCheckout } from "@/context/CheckoutProvider";
+import { useCarFilter } from "@/context/useCarFilterContext";
 
 export interface ProductCollectionProps {
   filter?: ProductFilterInput;
@@ -34,12 +35,22 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   perPage = 4,
   itemsCounter
 }) => {
-  const {delivery,cart} = useCartContext()
-  const subtotalPrice = cart?.subtotalPrice.gross
+
+  const {selectedCar} = useCarFilter()
+
   
   const variables: ProductCollectionQueryVariables = {
-    zoneName:delivery?.zone || "xxxx",
-    filter,
+    filter: {
+      ...filter,
+      ...(selectedCar
+        ? {
+              ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }), 
+              ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }), 
+              ...(selectedCar?.model && { carModel: [selectedCar?.model.id] }),
+              ...(selectedCar?.engine && { carEngine: [selectedCar?.engine.id] }),
+          }
+        : {})
+    },
     first: perPage,
     channel: "ci",
     ...(sortBy?.field &&
@@ -49,9 +60,6 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
           field: sortBy.field,
         },
       }),
-    orderPrice: (subtotalPrice
-    ? { currency: subtotalPrice.currency, amount: subtotalPrice.amount }
-    : undefined)
   };
    
 
@@ -108,7 +116,6 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   
   if (loading) return <Loading />;
   
-  const products = mapEdgesToItems(data?.products);
 
   if (!allProducts || allProducts.length === 0) {
     return (

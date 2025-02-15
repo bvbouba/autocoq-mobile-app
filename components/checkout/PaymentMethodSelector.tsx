@@ -1,52 +1,57 @@
-import { useRouter } from "expo-router";
 import { FC } from "react";
-import { Pressable, StyleSheet } from "react-native";
-import { useCartContext } from "@/context/useCartContext";
+import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import { useCheckout } from "@/context/CheckoutProvider";
 import { fonts, Text, View } from "@/components/Themed";
 import { usePaymentContext } from "@/context/usePaymentContext";
 import BillingAddress from "./BillingAddress";
-import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import for payment icon
+import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import pour l'icône de paiement
+import { useModal } from "@/context/useModal";
+import PaymentMethods from "@/app/paymentMethods";
 
 const PaymentMethodSelector: FC = () => {
-  const { cart } = useCartContext();
+  const { checkout } = useCheckout();
   const { chosenGateway } = usePaymentContext();
-  const router = useRouter();
+  const { openModal } = useModal();
 
-  const paymentMethods = cart?.availablePaymentGateways || [];
+  const paymentMethods = checkout?.availablePaymentGateways || [];
   const paymentMethod = paymentMethods.find((p) => p.id === chosenGateway);
 
-  // Check if no payment method is selected
+  // Vérifier si aucune méthode de paiement n'est sélectionnée
   const isPaymentSelected = !!paymentMethod;
   const borderColor = isPaymentSelected ? "black" : "red";
 
   return (
     <View>
       <View style={styles.titleWrapper}>
-        <Text style={styles.paymentMethodTitle}>Payment Method</Text>
+        <Text style={styles.paymentMethodTitle}>Mode de paiement</Text>
       </View>
-      <Pressable onPress={() => router.push("/paymentMethods")}>
+      <Pressable onPress={() => openModal("PaymentMethod", <PaymentMethods />)}>
         <View style={[styles.paymentMethodWrapper, { borderColor }]}>
           <View style={styles.titleWrapper}>
             {isPaymentSelected ? (
-            <View style={{
-                flexDirection:"row",
-                alignItems:"center"
-            }}>
-            {paymentMethod?.id === "cash.on.delivery" && (
+              <View style={{
+                flexDirection: "row",
+                alignItems: "center"
+              }}>
+                {paymentMethod?.id === "cash.on.delivery" && (
                   <MaterialCommunityIcons
                     name="cash"
                     size={30}
                     color="green"
                   />
                 )}
-              <Text style={styles.paymentMethodValue} numberOfLines={1}>
-                {paymentMethod?.name}
-              </Text>
+                <Text style={styles.paymentMethodValue} numberOfLines={1}>
+                  {paymentMethod?.name}
+                </Text>
               </View>
             ) : (
-              <Text style={[styles.paymentMethodSummary, { color: "red" }]}>
-                Please select a payment method
-              </Text>
+              <TouchableOpacity onPress={() =>
+                openModal("PaymentMethod", <PaymentMethods />)}
+              >
+                <Text style={[styles.paymentMethodSummary, { color: "red" }]}>
+                  Veuillez sélectionner un mode de paiement
+                </Text>
+              </TouchableOpacity>
             )}
           </View>
           {isPaymentSelected && <BillingAddress />}
@@ -82,14 +87,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     flexDirection: "row",
     alignItems: "center",
-    fontSize:fonts.h2
+    fontSize: fonts.h2
   },
   paymentMethodTitle: {
     fontWeight: "bold",
     padding: 8,
     marginTop: 8,
     marginLeft: 8,
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
   },
   paymentMethodSummary: {
     overflow: "hidden",

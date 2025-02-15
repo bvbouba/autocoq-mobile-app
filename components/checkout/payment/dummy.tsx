@@ -1,5 +1,5 @@
 import { colors } from "@/components/Themed";
-import { useCartContext } from "@/context/useCartContext";
+import { useCheckout } from "@/context/CheckoutProvider";
 import { usePaymentContext } from "@/context/usePaymentContext";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { Alert,StyleSheet,View } from "react-native";
@@ -7,13 +7,13 @@ import { Button } from "react-native-paper";
 
 export const dummyGatewayId = "dummy"
 const DummyPayment = () => {
-    const { cart } = useCartContext();
+    const { checkout } = useCheckout();
     const { chosenGateway } = usePaymentContext();
-    const buyNowEnabled = cart?.email && cart?.billingAddress && (cart?.isShippingRequired ? cart?.shippingAddress : true)  && (cart.deliveryMethod) && (chosenGateway)
+    const buyNowEnabled = checkout?.email && checkout?.billingAddress && (checkout?.isShippingRequired ? checkout?.shippingAddress : true)  && (checkout.deliveryMethod) && (chosenGateway)
 
     const buyNow = () => {
         if (!buyNowEnabled) {
-            Alert.alert("Please fill in required information to contiue");
+            Alert.alert("Veuillez remplir les informations requises pour continuer");
             return
         }
     }
@@ -30,7 +30,7 @@ const DummyPayment = () => {
             labelStyle={styles.submitButtonText}
             disabled={true}
         >
-            {`COMPLETE PURCHASE ${convertMoneyToString(cart?.totalPrice.gross)}`}
+            {`TERMINER L'ACHAT ${convertMoneyToString(checkout?.totalPrice.gross)}`}
         </Button>
         </View>
     );

@@ -1,27 +1,25 @@
 import { useRouter } from "expo-router"
 import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
-import { useCartContext } from "@/context/useCartContext"
-import {Text, View ,colors, fonts } from "@/components/Themed"
+import { Text, View, colors, fonts } from "@/components/Themed"
 import { IconButton } from "react-native-paper"
-
+import { useCheckout } from "@/context/CheckoutProvider"
 
 const ShippingAddress = () => {
-    const { cart } = useCartContext()
+    const { checkout } = useCheckout()
     const router = useRouter();
 
-    const shippingDetails = cart && cart.shippingAddress
+    const shippingDetails = checkout && checkout.shippingAddress
 
     if (shippingDetails) {
         return <Pressable onPress={() => router.push("/shippingAddress")}>
             <View style={styles.shippingAddressWrapper}>
                 <View style={styles.titleWrapper}>
-                    <Text style={styles.shippingAddressTitle}>Shipping To </Text>
+                    <Text style={styles.shippingAddressTitle}>Livraison à</Text>
                     <TouchableOpacity onPress={() => router.push("/shippingAddress")}>
-                    <Text style={styles.icon}>Change</Text>
+                        <Text style={styles.icon}>Modifier</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.detailWrapper}>
-    
                     <Text style={styles.shippingAddressValue}>
                         {shippingDetails.lastName}, {shippingDetails.firstName}
                     </Text>
@@ -33,22 +31,20 @@ const ShippingAddress = () => {
                     </Text>
                 </View>
             </View>
-        </Pressable >
+        </Pressable>
     }
-
 
     return <Pressable onPress={() => router.push("/shippingAddress")}>
         <View style={styles.shippingAddressWrapper}>
             <View style={styles.titleWrapper}>
-                <Text style={styles.shippingAddressTitle}>Shipping Address</Text>
+                <Text style={styles.shippingAddressTitle}>Adresse de livraison</Text>
                 <IconButton icon="chevron-down" onPress={() => router.push("/shippingAddress")} style={styles.icon} />
             </View>
             <View style={styles.titleWrapper}>
-                <Text style={styles.shippingAddressSummary}>Enter details</Text>
+                <Text style={styles.shippingAddressSummary}>Saisir les détails</Text>
             </View>
         </View>
-    </Pressable >
-
+    </Pressable>
 }
 
 export default ShippingAddress
@@ -57,27 +53,27 @@ const styles = StyleSheet.create({
     shippingAddressWrapper: {
         borderRadius: 5,
         margin: 8,
-        backgroundColor:colors.background,
-        paddingBottom:10
+        backgroundColor: colors.background,
+        paddingBottom: 10
     },
     icon: {
         marginTop: 5,
         marginRight: 10,
-        fontSize:fonts.body,
-        textDecorationLine:"underline"
+        fontSize: fonts.body,
+        textDecorationLine: "underline"
     },
     titleWrapper: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems:"center",
+        alignItems: "center",
         borderRadius: 5,
         backgroundColor: 'inherit',
     },
     detailWrapper: {
         flexDirection: "column",
         backgroundColor: 'inherit',
-      },
+    },
     shippingAddressValue: {
         overflow: "hidden",
         fontStyle: "italic",

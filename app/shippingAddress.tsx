@@ -1,23 +1,22 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import {  View } from 'react-native';
 import ShippingAddressForm from '../components/checkout/ShippingAddressForm';
-import { PaddedView, Text } from '../components/Themed';
-import { useCartContext } from '../context/useCartContext';
+import {  Text } from '../components/Themed';
+import { useCheckout } from '@/context/CheckoutProvider';
 
 
 
 const ShippingAddressScreen = () => {
-    const { cart, refreshCart } = useCartContext();
+    const { checkout } = useCheckout();
     const router = useRouter()
 
-    if (!cart || cart.lines.length === 0) {
+    if (!checkout || checkout.lines.length === 0) {
         return <View>
-            <Text>Empty Cart</Text>
+            <Text>Panier vide</Text>
         </View>
     }
 
     const complete = async () => {
-        await refreshCart()
         router.back()
     }
 

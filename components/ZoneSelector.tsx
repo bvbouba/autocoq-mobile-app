@@ -2,12 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { colors, fonts } from "./Themed";
-import { useCartContext } from "@/context/useCartContext";
 import { useModal } from "@/context/useModal";
 import { useGetCitiesQuery } from "@/saleor/api.generated";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 const ZoneSelector: React.FC = () => {
-  const { delivery, setDelivery } = useCartContext();
+  const { delivery, setDelivery } = useCheckout();
   const { openModal, closeModal } = useModal();
   const { data, loading } = useGetCitiesQuery();
 

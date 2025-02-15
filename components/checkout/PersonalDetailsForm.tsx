@@ -4,10 +4,10 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import {Text, View , PaddedView,colors } from "@/components/Themed"
 
-import { useCartContext } from '@/context/useCartContext';
 import { useCheckoutEmailUpdateMutation } from '@/saleor/api.generated';
 import { TextInput, Button } from 'react-native-paper';
 import { useAuth } from '@/lib/providers/authProvider';
+import { useCheckout } from '@/context/CheckoutProvider';
 
 interface Props {
     onSubmit: () => void
@@ -23,13 +23,13 @@ const validationSchema = yup.object().shape({
 });
 
 const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
-    const { cart } = useCartContext();
+    const { checkout } = useCheckout();
     const {user,authenticated} = useAuth()
     const [updateEmail] = useCheckoutEmailUpdateMutation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     
-    const email = user?.email || cart?.email
+    const email = user?.email || checkout?.email
     const phoneNumber = user?.email.split("@")[0];
 
     const formik = useFormik<Form>({
@@ -45,7 +45,7 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
             try {
                 const result = await updateEmail({
                     variables: {
-                        id: cart?.id as string,
+                        id: checkout?.id as string,
                         email: `${data.phoneNumber}@autocoq.com`
                     },
                 });

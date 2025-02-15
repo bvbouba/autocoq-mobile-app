@@ -2,11 +2,11 @@ import { ApolloError } from "@apollo/client";
 import { createContext, FC, PropsWithChildren, useContext, useState } from "react";
 import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "../saleor/api.generated";
 import { handleErrors } from "./checkout";
-import { useCartContext } from "./useCartContext";
 import { useOrderContext } from "./useOrderContext";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { useAuth } from "@/lib/providers/authProvider";
+import { useCheckout } from "./CheckoutProvider";
 
 interface ConfirmationData {
     id: string
@@ -39,7 +39,7 @@ const PaymentContext = createContext<PaymentContextModel>({
 export const usePaymentContext = () => useContext(PaymentContext);
 
 export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
-    const { cart } = useCartContext();
+    const { checkout } = useCheckout();
     const {authenticated} = useAuth()
     const { setRecentOrderId: setOrderId } = useOrderContext();
 
@@ -64,9 +64,9 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
 
             const createPaymentResult = await createPayment({
                 variables: {
-                    checkoutId: cart?.id as string,
+                    checkoutId: checkout?.id as string,
                     paymentInput: {
-                        amount: cart?.totalPrice.gross.amount,
+                        amount: checkout?.totalPrice.gross.amount,
                         gateway: chosenGateway
                     }
                 }
@@ -74,7 +74,7 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
             handleErrors(createPaymentResult)
             const checkoutCompleteResult = await completeCheckout({
                 variables: {
-                    checkoutId: cart?.id as string
+                    checkoutId: checkout?.id as string
                 }
             });
             handleErrors(checkoutCompleteResult);
@@ -89,7 +89,7 @@ export const PaymentProvider: FC<PropsWithChildren> = ({ children }) => {
         createPaymentStatus.reset();
         const checkoutCompleteResult = await completeCheckout({
             variables: {
-                checkoutId: cart?.id as string
+                checkoutId: checkout?.id as string
             }
         })
         handleErrors(checkoutCompleteResult)

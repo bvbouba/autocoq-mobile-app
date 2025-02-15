@@ -26,6 +26,7 @@ fragment DeliveryMethod on ShippingMethod {
 
 fragment CheckoutFragment on Checkout {
   id
+  token
   voucherCode
   isShippingRequired
   discount {
@@ -43,17 +44,7 @@ fragment CheckoutFragment on Checkout {
     __typename
   }
   shippingMethods {
-    id
-    name
-    description
-    message
-    price {
-      currency
-      amount
-    }
-    active
-    minimumDeliveryDays
-    maximumDeliveryDays
+    ...ShippingMethodFragment
   }
   totalPrice {
     tax {
@@ -189,22 +180,17 @@ fragment CheckoutWithZoneFragment on Checkout {
   }
 }
 
-mutation createCheckout($channel: String!, $lines: [CheckoutLineInput!]!, $email:String) {
-  checkoutCreate(input: { channel: $channel, lines: $lines, email:$email }) {
+
+mutation CreateCheckout($email: String, $lines: [CheckoutLineInput!]!, $channel: String!) {
+  checkoutCreate(input: { channel: $channel, email: $email, lines: $lines }) {
     checkout {
       ...CheckoutFragment
     }
     errors {
       field
-      code
       message
+      code
     }
-  }
-}
-
-query getCheckoutById($id: ID!, $zoneName:String) {
-  checkout(id: $id) {
-    ...CheckoutWithZoneFragment
   }
 }
 
@@ -229,8 +215,13 @@ mutation checkoutCreate($channel: String!, $lines: [CheckoutLineInput!]!) {
   }
 }
 
-mutation checkoutLinesUpdate($id: ID!, $lines: [CheckoutLineUpdateInput!]!) {
-  checkoutLinesUpdate(id: $id, lines: $lines) {
+
+
+mutation CheckoutLineUpdate(
+  $token: UUID
+  $lines: [CheckoutLineUpdateInput!]!
+) {
+  checkoutLinesUpdate(token: $token, lines: $lines) {
     checkout {
       ...CheckoutFragment
     }
@@ -242,21 +233,26 @@ mutation checkoutLinesUpdate($id: ID!, $lines: [CheckoutLineUpdateInput!]!) {
   }
 }
 
-mutation CheckoutLinesAdd($id: ID!, $lines: [CheckoutLineInput!]!) {
-  checkoutLinesAdd(id: $id, lines: $lines) {
+
+mutation CheckoutAddProductLine(
+  $checkoutToken: UUID!
+  $variantId: ID!
+) {
+  checkoutLinesAdd(token: $checkoutToken, lines: [{ quantity: 1, variantId: $variantId }]) {
     checkout {
       ...CheckoutFragment
     }
     errors {
-      field
-      code
       message
+      code
     }
   }
 }
 
-mutation checkoutAddPromoCode($id: ID!, $promoCode: String!) {
-  checkoutAddPromoCode(checkoutId: $id, promoCode: $promoCode) {
+
+
+mutation checkoutAddPromoCode($token: UUID!, $promoCode: String!) {
+  checkoutAddPromoCode(token: $token, promoCode: $promoCode) {
     checkout {
       ...CheckoutFragment
     }
@@ -269,10 +265,10 @@ mutation checkoutAddPromoCode($id: ID!, $promoCode: String!) {
 }
 
 mutation checkoutBillingAddressUpdate(
-  $id: ID!
+  $token: UUID!
   $billingAddress: AddressInput!
 ) {
-  checkoutBillingAddressUpdate(id: $id, billingAddress: $billingAddress) {
+  checkoutBillingAddressUpdate(token: $token, billingAddress: $billingAddress) {
     checkout {
       ...CheckoutFragment
     }
@@ -284,10 +280,10 @@ mutation checkoutBillingAddressUpdate(
 }
 
 mutation checkoutShippingAddressUpdate(
-  $id: ID!
+  $token: UUID!
   $shippingAddress: AddressInput!
 ) {
-  checkoutShippingAddressUpdate(id: $id, shippingAddress: $shippingAddress) {
+  checkoutShippingAddressUpdate(token: $token, shippingAddress: $shippingAddress) {
     checkout {
       ...CheckoutFragment
     }
@@ -298,8 +294,8 @@ mutation checkoutShippingAddressUpdate(
   }
 }
 
-mutation checkoutShippingMethodUpdate($id: ID!, $shippingMethodId: ID!) {
-  checkoutShippingMethodUpdate(id: $id, shippingMethodId: $shippingMethodId) {
+mutation checkoutShippingMethodUpdate($token: UUID!, $shippingMethodId: ID!) {
+  checkoutShippingMethodUpdate(token: $token, shippingMethodId: $shippingMethodId) {
     checkout {
       ...CheckoutFragment
     }
@@ -310,8 +306,8 @@ mutation checkoutShippingMethodUpdate($id: ID!, $shippingMethodId: ID!) {
   }
 }
 
-mutation checkoutPaymentCreate($checkoutId: ID!, $paymentInput: PaymentInput!) {
-  checkoutPaymentCreate(checkoutId: $checkoutId, input: $paymentInput) {
+mutation checkoutPaymentCreate($token: UUID!, $paymentInput: PaymentInput!) {
+  checkoutPaymentCreate(token: $token,  input: $paymentInput) {
     payment {
       id
       chargeStatus
@@ -326,8 +322,8 @@ mutation checkoutPaymentCreate($checkoutId: ID!, $paymentInput: PaymentInput!) {
   }
 }
 
-mutation checkoutComplete($checkoutId: ID!) {
-  checkoutComplete(checkoutId: $checkoutId) {
+mutation checkoutComplete($token: UUID!) {
+  checkoutComplete(token: $token) {
     order {
       id
       userEmail
@@ -344,8 +340,8 @@ mutation checkoutComplete($checkoutId: ID!) {
 }
 
 
-mutation checkoutEmailUpdate($id: ID!, $email: String!) {
-  checkoutEmailUpdate(id: $id, email: $email) {
+mutation checkoutEmailUpdate($token: UUID!, $email: String!) {
+  checkoutEmailUpdate(token: $token, email: $email) {
     checkout {
       ...CheckoutFragment
     }
@@ -356,6 +352,7 @@ mutation checkoutEmailUpdate($id: ID!, $email: String!) {
     }
   }
 }
+
 
 
 mutation RemoveProductFromCheckout(

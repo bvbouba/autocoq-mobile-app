@@ -1,16 +1,15 @@
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { FC, useState } from "react";
-import { ActivityIndicator, Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "@/config";
 import { ProductFragment } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from './../Themed';
 import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
-import DeliveryMethodBasic from "../DeliveryMethodBasic";
 import { Button } from "react-native-paper";
-import { useCartContext } from "@/context/useCartContext";
-import { useCarFilter } from "@/context/useCarFilterContext";
+import { useCheckout } from "@/context/CheckoutProvider";
 import { useModal } from "@/context/useModal";
 import AddedToCart from "../cart/AddToTheCart";
+import DeliveryMethodBasic from "../DeliveryMethod/DeliveryMethodBasic";
 
 interface Props {
     product: ProductFragment
@@ -32,10 +31,9 @@ const ProductImage: FC<{ product: ProductFragment }> = ({ product }) => {
 }
 
 const ProductListItem: FC<Props> = ({ product }) => {
-    const { addItem } = useCartContext();
+    const { onAddToCart } = useCheckout();
     const {openModal}= useModal()
     const [loading, setLoading] = useState(false);
-    const {setFilterOpen} = useCarFilter()
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',
@@ -57,7 +55,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
         if (!(variants.length>0)) return;
         setLoading(true);
         try {
-            await addItem(variants[0].id);
+            await onAddToCart(defaultVariant?.id||"");
             openModal("CartPreview",
                 <AddedToCart />
             )
@@ -106,8 +104,8 @@ const ProductListItem: FC<Props> = ({ product }) => {
                             {product.category.name}
                         </Text></View>
                         )}
-                        <CompatibilityCheckBasic product={product} setFilterOpen={setFilterOpen}/>
-                        <DeliveryMethodBasic  variant={defaultVariant}/>
+                        <CompatibilityCheckBasic product={product} />
+                        {defaultVariant && <DeliveryMethodBasic  variant={defaultVariant}/>}
                         <View style={styles.buttonContainer}>
                         <Button
                             style={styles.button}

@@ -2,7 +2,7 @@ import { StyleSheet, Alert, ScrollView, Dimensions, TouchableOpacity, FlatList, 
 import { Modal, Button, IconButton } from "react-native-paper";
 import { useCarEnginesListQuery, useCarMakesListQuery, useCarModelsListQuery, useCarYearsListQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
-import { useCarFilter } from "@/context/useCarFilterContext";
+import { carType, useCarFilter } from "@/context/useCarFilterContext";
 import { useState } from "react";
 import { Text, View, colors, fonts } from "@/components/Themed";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -11,7 +11,6 @@ import { ActivityIndicator } from "react-native-paper";
 import { useModal } from "@/context/useModal";
 
 
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 interface optionProps {
   id: string;
@@ -25,8 +24,12 @@ const getLoadingTextColor = (loading: boolean, hasData: boolean) => {
   return hasData ? colors.textPrimary : colors.textSecondary;
 };
 
-const CarFilterModal = () => {
-  const { selectedCar, setSelectedCar, setIsFiltered } = useCarFilter();
+interface props {
+  setSelectedLocalCar?: (car?: carType) => void
+}
+
+const CarFilterModal = ({setSelectedLocalCar}:props) => {
+  const { selectedCar, setSelectedCar } = useCarFilter();
   const {closeModal} = useModal()
 
 
@@ -61,7 +64,15 @@ const CarFilterModal = () => {
     if (tempCarYear && tempCarMake && tempCarModel && (carEngines.length === 0 || tempCarEngine)) {
       const carNameParts = [tempCarMake?.name, tempCarModel?.name, tempCarEngine?.name, tempCarYear?.name].filter(Boolean);
       const carName = carNameParts.length > 0 ? carNameParts.join(" ") : null;
-
+      if(setSelectedLocalCar) {
+        setSelectedLocalCar({
+          make: tempCarMake,
+          year: tempCarYear,
+          model: tempCarModel,
+          engine: tempCarEngine,
+          name: carName,
+        });
+      }else{
       setSelectedCar({
         make: tempCarMake,
         year: tempCarYear,
@@ -69,8 +80,7 @@ const CarFilterModal = () => {
         engine: tempCarEngine,
         name: carName,
       });
-
-      setIsFiltered(true);
+    }
       closeModal()
     } else {
       Alert.alert("Veuillez sélectionner toutes les options de filtrage.");
@@ -190,7 +200,6 @@ const CarFilterModal = () => {
                         borderColor: "black"
                       }
                       ]} mode="contained" onPress={() => {
-                        setIsFiltered(false)
                         setSelectedCar({})
                         closeModal()
                       }

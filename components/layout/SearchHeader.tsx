@@ -14,10 +14,11 @@ interface Props {
   cleanSearch?: boolean;
   searchOnLoad?: boolean;
   companyName?: string;
-  withVehicle?:boolean
+  withVehicle?:boolean;
+  carIconColor?:string;
 }
 
-const SearchHeaderWithBack = ({withVehicle}:{withVehicle:boolean}) => {
+const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  carIconColor?:string;}) => {
   const statusBarInset = useSafeAreaInsets();
   const {goBack} = usePath()
  
@@ -39,7 +40,7 @@ const SearchHeaderWithBack = ({withVehicle}:{withVehicle:boolean}) => {
               onPress={() => goBack()}
               iconColor={colors.primary}
             />
-            <ProductSearch />
+            <ProductSearch carIconColor={carIconColor}/>
           </View>
         </View>
       </SafeAreaView>
@@ -54,7 +55,8 @@ const SearchHeader: FC<Props> = ({
   cleanSearch,
   companyName,
   searchOnLoad = true,
-  withVehicle=true
+  withVehicle=true,
+  carIconColor
 }) => {
   const statusBarInset = useSafeAreaInsets();
   
@@ -70,7 +72,7 @@ const SearchHeader: FC<Props> = ({
   };
 
   if (withBack) {
-    return <SearchHeaderWithBack withVehicle={withVehicle} />;
+    return <SearchHeaderWithBack withVehicle={withVehicle} carIconColor={carIconColor}/>;
   }
 
   return (
@@ -87,7 +89,9 @@ const SearchHeader: FC<Props> = ({
       >
         <View style={{ alignItems:"center"}}>{renderLogoOrName()}</View>
         <View style={styles.searchBarWrapperFull}>
-          <ProductSearch cleanSearch={cleanSearch} searchOnLoad={searchOnLoad} />
+          <ProductSearch cleanSearch={cleanSearch} searchOnLoad={searchOnLoad}
+          carIconColor={carIconColor}
+          />
         </View>
       </View>
       <LoadingIndicator />

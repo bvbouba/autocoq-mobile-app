@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Button, RadioButton, ActivityIndicator } from 'react-native-paper';
-import {  PaddedView, Text } from '../components/Themed';
-import { useCartContext } from '../context/useCartContext';
-import { useRouter } from 'expo-router';
+import { fonts, PaddedView, Text } from '../components/Themed';
 import { View, StyleSheet } from 'react-native';
 import { usePaymentContext } from '@/context/usePaymentContext';
+import { useCheckout } from '@/context/CheckoutProvider';
+import { useModal } from '@/context/useModal';
 
-const paymentMethods = () => {
-    const { cart, refreshCart } = useCartContext();
+const PaymentMethods = () => {
+    const { checkout } = useCheckout();
     const { setChosenGateway } = usePaymentContext();
-    const router = useRouter();
+    const { closeModal } = useModal();
 
-    const paymentMethods = cart && cart.availablePaymentGateways;
+    const paymentMethods = checkout && checkout.availablePaymentGateways;
     const firstMethod = paymentMethods && paymentMethods.length > 0 ? paymentMethods[0].id : undefined;
 
     const [checked, setChecked] = React.useState(firstMethod || "");
@@ -21,15 +21,14 @@ const paymentMethods = () => {
         if (checked) {
             setLoading(true); 
             setChosenGateway(checked); 
-            await refreshCart();
-            router.back(); 
+            closeModal();
             setLoading(false); 
         }
     };
 
     return (
         <PaddedView>
-            <Text style={styles.title}>Choose Payment method</Text>
+            <Text style={styles.title}>Méthode de paiement</Text>
             {paymentMethods?.map((method) => {
                 return (
                     <View key={method.id} style={styles.radioContainer}>
@@ -50,22 +49,22 @@ const paymentMethods = () => {
                 mode="contained"
                 disabled={loading}
                 style={styles.submitButton}
-               labelStyle={styles.submitButtonText}
+                labelStyle={styles.submitButtonText}
             >
-                {loading ? <ActivityIndicator color="white" /> : "CONTINUE"}
+                {loading ? <ActivityIndicator color="white" /> : "APPLIQUER"}
             </Button>
         </PaddedView>
     );
 };
 
-
-export default paymentMethods;
+export default PaymentMethods;
 
 const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         marginTop: 8,
         marginBottom: 12,
+        fontSize: fonts.h1,
     },
     radioContainer: {
         flexDirection: "row",
@@ -84,12 +83,11 @@ const styles = StyleSheet.create({
     submitButton: {
         backgroundColor: "black",
         marginHorizontal: 10,
-        borderRadius:5,
-        padding:5
-      },
-      submitButtonText: {
-        fontWeight:"bold",
-        color: "white", 
-      },
+        borderRadius: 5,
+        padding: 5
+    },
+    submitButtonText: {
+        fontWeight: "bold",
+        color: "white",
+    },
 });
-

@@ -12,7 +12,6 @@ import { LogBox, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { colors } from "../components/Themed";
 import SearchHeader from "../components/layout/SearchHeader";
-import { CartProvider } from "../context/useCartContext";
 import { OrderProvider } from "../context/useOrderContext";
 import { PaymentProvider } from "../context/usePaymentContext";
 import { ProductsProvider } from "../context/useProductContext";

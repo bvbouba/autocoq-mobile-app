@@ -3,6 +3,7 @@ import {  TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "re
 import { AddressDetailsFragment, CheckoutError, useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useAuth } from "@/lib/providers/authProvider";
 import {fonts, Text, View } from "@/components/Themed"
+import { useRouter } from "expo-router";
 
 
 // Mock AddressFormData type
@@ -19,12 +20,12 @@ type AddressFormData = {
 
 interface SavedAddressSelectionListProps {
   updateAddressMutation: (address: AddressFormData) => Promise<CheckoutError[] | undefined>;
-  onSubmit: () => void
 }
 
-const SavedAddressSelectionList = ({ updateAddressMutation,onSubmit }: SavedAddressSelectionListProps) => {
+const SavedAddressSelectionList = ({ updateAddressMutation }: SavedAddressSelectionListProps) => {
     const {authenticated,token,checkAndRefreshToken} = useAuth()
     const [isValidatingToken, setIsValidatingToken] = useState(true);
+    const router = useRouter()
     const { loading, error, data } = useCurrentUserAddressesQuery({
       skip: !authenticated, 
       context: {
@@ -80,7 +81,7 @@ const SavedAddressSelectionList = ({ updateAddressMutation,onSubmit }: SavedAddr
     if (errors && errors.length > 0) {
       setUError(`Error: ${errors[0].field}`);
     } else {
-      onSubmit()
+      router.push("/checkout")
     }
   };
 

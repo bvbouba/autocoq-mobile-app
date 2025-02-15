@@ -4,8 +4,8 @@ import { useProductContext } from '@/context/useProductContext';
 
 import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '@/config';
-import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from '@/saleor/api.generated';
-import { colors, Divider, fonts, Text, View } from '@/components/Themed';
+import { CategoryPathFragment, useCategoryPathsQuery,  } from '@/saleor/api.generated';
+import { colors, fonts, Text, View } from '@/components/Themed';
 import { Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -15,8 +15,7 @@ interface Props {
 
 const FilterBar: FC<Props> = ({ openFilters }) => {
 
-    const { collection: collectionsQueryString, categories: categoriesQueryString } = useLocalSearchParams();
-    const { data: collectionsData, called: collectionsCalled } = useGetCollectionsQuery()
+    const { categories: categoriesQueryString } = useLocalSearchParams();
     const { data: categoriesData } = useCategoryPathsQuery({
         variables: {
             channel: getConfig().channel

@@ -39,7 +39,7 @@ const ProductsScreen = ({products}:props) => {
             params.append("categories", categoriesQueryString as string)
         }
 
-        router.push("/products/results?" + params.toString())
+        router.push(`/products/results?${params.toString()}`)
     }, [categoriesQueryString, searchQueryString, collectionsQueryString]);
 
     

@@ -14,7 +14,7 @@ interface ImageProps {
 }
 
 const AddVehicleBasic = () => {
-  const { isFiltered, selectedCar } = useCarFilter();
+  const { selectedCar } = useCarFilter();
   const [expandedImage, setExpandedImage] = useState<ImageProps | null>(null);
   const { openModal } = useModal()
 
@@ -46,7 +46,7 @@ const AddVehicleBasic = () => {
             ) : (
               <View style={{ position: "relative" }}>
                 <FontAwesome name="car" size={18} color={colors.secondary} />
-                <FontAwesome
+                {!selectedCar?.name && <FontAwesome
                   name="exclamation-circle"
                   size={13}
                   color={colors.warning}
@@ -55,12 +55,12 @@ const AddVehicleBasic = () => {
                     bottom: -4,
                     right: -6,
                   }}
-                />
+                />}
               </View>
             )}
           </TouchableOpacity>
           <Text style={styles.vehicleText}>
-            {isFiltered && selectedCar ? selectedCar.name : "Sur quel véhicule travaillez-vous ?"}
+            {selectedCar?.name ? selectedCar.name : "Sur quel véhicule travaillez-vous ?"}
           </Text>
         </View>
 
@@ -69,12 +69,12 @@ const AddVehicleBasic = () => {
             <CarFilterModal />
           )
         }>
-          <Text style={[styles.buttonText, (isFiltered && selectedCar) && {
+          <Text style={[styles.buttonText, (selectedCar) && {
             borderWidth: 1,
             textDecorationLine: "none",
             borderRadius: 5
           }]}>
-            {isFiltered && selectedCar ? "Changer" : "Sélectionner un véhicule"}
+            {selectedCar?.name ? "Changer" : "Sélectionner un véhicule"}
           </Text>
         </TouchableOpacity>
       </View>

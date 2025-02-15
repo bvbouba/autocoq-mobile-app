@@ -1,12 +1,12 @@
 import { StyleSheet, View } from "react-native"
 import { getConfig } from "@/config";
-import { useCartContext } from "@/context/useCartContext"
 import { Divider, fonts, PaddedView, Text } from "@/components/Themed"
+import { useCheckout } from "@/context/CheckoutProvider";
 
 const CartSubtotal = () => {
-    const { cart } = useCartContext();
+    const { checkout } = useCheckout();
 
-    if (!cart) {
+    if (!checkout) {
         return <></>
     }
 
@@ -19,9 +19,9 @@ const CartSubtotal = () => {
             <View style={styles.subtotalRow}>
                 <Text>Sous-total: </Text>
                 <Text>
-                    {(cart.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
+                    {(checkout.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
                         style: "currency",
-                        currency: cart.subtotalPrice.gross.currency
+                        currency: checkout.subtotalPrice.gross.currency
                     })}
                 </Text>
             </View>
@@ -29,9 +29,9 @@ const CartSubtotal = () => {
                 <Text style={styles.shippingText}>
                     Frais de Livraison calculée à la caisse
                     {/* includes{" "}
-                    {cart.totalPrice.tax.amount.toLocaleString(getConfig().locale, {
+                    {checkout.totalPrice.tax.amount.toLocaleString(getConfig().locale, {
                         style: "currency",
-                        currency: cart.subtotalPrice.tax.currency,
+                        currency: checkout.subtotalPrice.tax.currency,
                     })}{" "}
                     TVA */}
                 </Text>
@@ -40,9 +40,9 @@ const CartSubtotal = () => {
             <View style={styles.totalRow}>
                 <Text style={styles.totalText}>Total</Text>
                 <Text style={styles.totalAmount}>
-                    {(cart.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
+                    {(checkout.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
                         style: "currency",
-                        currency: cart.subtotalPrice.gross.currency
+                        currency: checkout.subtotalPrice.gross.currency
                     })}
                 </Text>
             </View>

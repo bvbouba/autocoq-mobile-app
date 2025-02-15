@@ -9,8 +9,7 @@ import {
 import {Text, View ,  PaddedView,colors, fonts } from "@/components/Themed"
 
 
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
-import { useCartContext } from "@/context/useCartContext";
+import {  ScrollView, StyleSheet } from 'react-native';
 import CartItem from "./CartItem";
 import CartSubtotal from "./CartSubtotal";
 import { useRouter } from "expo-router";
@@ -19,9 +18,10 @@ import { getConfig } from "@/config";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useState } from "react";
 import Loading from "../Loading";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 const CartScreen = () => {
-    const { cart, loading } = useCartContext();
+    const { checkout, loading } = useCheckout();
     const { authenticated, user, token, checkAndRefreshToken } = useAuth();
     const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
     const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
@@ -51,7 +51,7 @@ const CartScreen = () => {
     const handleSubmit = async () => {
         setmLoading(true)
  
-        if (cart?.shippingAddress && cart?.billingAddress) {
+        if (checkout?.shippingAddress && checkout?.billingAddress) {
             setmLoading(false)
             navigation.push('/checkout');
             return;
@@ -62,10 +62,10 @@ const CartScreen = () => {
         let billingSuccess = false;
       
         try {
-            if (!cart?.shippingAddress && shippingAddress && cart?.isShippingRequired) {
+            if (!checkout?.shippingAddress && shippingAddress && checkout?.isShippingRequired) {
                 const { data: shippingData } = await updateShippingAddress({
                     variables: { 
-                        id: cart?.id as string, 
+                        id: checkout?.id as string, 
                         shippingAddress: {
                             streetAddress1: shippingAddress?.streetAddress1,
                             streetAddress2: shippingAddress?.streetAddress2,
@@ -88,10 +88,10 @@ const CartScreen = () => {
             } 
     
             // Update Billing Address if missing
-            if (!cart?.billingAddress && billingAddress) {
+            if (!checkout?.billingAddress && billingAddress) {
                 const { data: billingData } = await updateBillingAddress({
                     variables: { 
-                        id: cart?.id as string, 
+                        id: checkout?.id as string, 
                         billingAddress: {
                             streetAddress1: billingAddress?.streetAddress1,
                             streetAddress2: billingAddress?.streetAddress2,
@@ -123,7 +123,7 @@ const CartScreen = () => {
         if ((shippingSuccess || billingSuccess)) {
             navigation.push('/checkout');
         } else {
-            if(cart?.isShippingRequired){
+            if(checkout?.isShippingRequired){
             navigation.push('/shippingAddress');
             }else{
                 navigation.push('/billingAddress')
@@ -138,7 +138,7 @@ const CartScreen = () => {
         );
     }
 
-    if (!cart || cart.lines.length === 0) {
+    if (!checkout || checkout.lines.length === 0) {
         return (
             <View style={styles.emptyCartContainer}>
                 <PaddedView>
@@ -157,7 +157,7 @@ const CartScreen = () => {
         <View style={styles.scrollContainer} testID="cart-list-safe">
             <ScrollView style={styles.scroll} testID="cart-list-scroll">
                 <PaddedView>
-                {cart.lines.map(line => (
+                {checkout.lines.map(line => (
                     <CartItem lineItem={line as CheckoutLine} key={line.id} />
                 ))}
                 <CartSubtotal />
@@ -169,9 +169,9 @@ const CartScreen = () => {
                 <View style={styles.subtotalRow}>
                     <Text style={{ fontWeight: "bold" }}>Sous-total : </Text>
                     <Text style={{ fontWeight: "bold" }}>
-                        {(cart.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
+                        {(checkout.subtotalPrice.gross.amount).toLocaleString(getConfig().locale, {
                             style: "currency",
-                            currency: cart.subtotalPrice.gross.currency
+                            currency: checkout.subtotalPrice.gross.currency
                         })}
                     </Text>
                 </View>

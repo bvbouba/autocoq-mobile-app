@@ -14,7 +14,6 @@ interface props {
     carModel?:ModelDetailsFragment|null,
     carEngine?:EngineDetailsFragment|null,
     carYear?: YearDetailsFragment|null,
-    isFiltered?:boolean;
     clearFilter: () => void
   }
 
@@ -24,7 +23,7 @@ interface props {
   }
 
 const AddVehicleSection =()=>{
-    const { selectedCar, clearFilter, isFiltered } = useCarFilter();
+    const { selectedCar, clearFilter } = useCarFilter();
     const [expandedImage, setExpandedImage] = useState<ImageProps | null | undefined>(null);
     const {openModal} = useModal()
     
@@ -32,7 +31,7 @@ const AddVehicleSection =()=>{
     return(<>
      <SurfaceView>
       <MyGarage />
-          {isFiltered && selectedCar ? (
+          {selectedCar ? (
             <View style={{
               flexDirection: "row",
             }}>
@@ -69,7 +68,7 @@ const AddVehicleSection =()=>{
                     {/* Modal for Expanded Image */}
                     {expandedImage && (
                       <View style={styles.modalContainer}>
-                        <ImageExpand image={expandedImage} onRemoveExpand={() => setExpandedImage(null)} />
+                        <ImageExpand image={expandedImage} />
                       </View>
                     )}
                </>

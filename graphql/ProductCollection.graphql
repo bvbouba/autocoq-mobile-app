@@ -33,9 +33,6 @@ query ProductCollection(
   $filter: ProductFilterInput
   $sortBy: ProductOrder
   $channel: String!
-  $zoneName:String
-  $orderPrice: MoneyInputType
-  $orderWeight: WeightInputType
 ) {
   products(
     first: $first

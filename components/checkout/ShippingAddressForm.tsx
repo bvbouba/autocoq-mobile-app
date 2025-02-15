@@ -6,12 +6,12 @@ import {Text, View ,colors, fonts } from "@/components/Themed"
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { useCartContext } from "@/context/useCartContext";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
 import {  useRouter } from "expo-router";
 import { useModal } from "@/context/useModal";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 interface Props {
   onSubmit: () => void;
@@ -29,17 +29,17 @@ interface Form {
 }
 
 const validationSchema = yup.object().shape({
-  firstName: yup.string().required("Required"),
-  lastName: yup.string().required("Required"),
-  phone: yup.string().required("Required"),
-  streetAddress1: yup.string().required("Required"),
+  firstName: yup.string().required("Requis"),
+  lastName: yup.string().required("Requis"),
+  phone: yup.string().required("Requis"),
+  streetAddress1: yup.string().required("Requis"),
   streetAddress2: yup.string(),
-  postalCode: yup.string().required("Required"),
-  city: yup.string().required("Required"),
+  postalCode: yup.string().required("Requis"),
+  city: yup.string().required("Requis"),
 });
 
-const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
-  const { cart } = useCartContext();
+const ShippingAddressForm: FC<Props> = () => {
+  const { checkout,checkoutToken } = useCheckout();
   const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
   const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
   const [updateEmail] = useCheckoutEmailUpdateMutation();
@@ -67,7 +67,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const updateMutation = async (formData: Form) => {
     const { data } = await updateShippingAddress({
       variables: {
-        id: cart?.id as string,
+        token: checkoutToken,
         shippingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
@@ -86,7 +86,7 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const updateBillingMutation = async (formData: Form) => {
     const { data } = await updateBillingAddress({
       variables: {
-        id: cart?.id as string,
+        token: checkoutToken,
         billingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
@@ -104,54 +104,53 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
   };
 
 
-  const phoneNumber = cart?.email?.split('@')[0]
+  const phoneNumber = checkout?.email?.split('@')[0]
 
   const formik = useFormik<Form>({
     initialValues: {
-      firstName: cart?.shippingAddress?.firstName || cart?.billingAddress?.firstName || "",
-      lastName: cart?.shippingAddress?.lastName || cart?.billingAddress?.lastName || "",
-      phone: cart?.shippingAddress?.phone || cart?.billingAddress?.phone || phoneNumber || "",
-      streetAddress1: cart?.shippingAddress?.streetAddress1 || cart?.billingAddress?.streetAddress1 || "",
-      streetAddress2: cart?.shippingAddress?.streetAddress2 || cart?.billingAddress?.streetAddress2 || "" ,
-      postalCode: cart?.shippingAddress?.postalCode ||  "225",
-      city: cart?.shippingAddress?.city || cart?.billingAddress?.city || "",
+      firstName: checkout?.shippingAddress?.firstName || checkout?.billingAddress?.firstName || "",
+      lastName: checkout?.shippingAddress?.lastName || checkout?.billingAddress?.lastName || "",
+      phone: checkout?.shippingAddress?.phone || checkout?.billingAddress?.phone || phoneNumber || "",
+      streetAddress1: checkout?.shippingAddress?.streetAddress1 || checkout?.billingAddress?.streetAddress1 || "",
+      streetAddress2: checkout?.shippingAddress?.streetAddress2 || checkout?.billingAddress?.streetAddress2 || "",
+      postalCode: checkout?.shippingAddress?.postalCode || "225",
+      city: checkout?.shippingAddress?.city || checkout?.billingAddress?.city || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
       setLoading(true);
       setError(null);
       try {
-        const errors = await updateMutation(data)
+        const errors = await updateMutation(data);
         if (errors && errors.length > 0) {
-          setError(`Error: ${errors[0].field}`);
+          setError(`Erreur : ${errors[0].field}`);
         } else {
-          if(!cart?.email) {
+          if (!checkout?.email) {
             const phoneNumber = user?.email.split("@")[0] || data.phone;
             const result = await updateEmail({
               variables: {
-                  id: cart?.id as string,
-                  email: `${phoneNumber}@autocoq.com`
+                token: checkoutToken,
+                email: `${phoneNumber}@autocoq.com`,
               },
-          });
-          const emailErrors = result.data?.checkoutEmailUpdate?.errors;
-          if(emailErrors && emailErrors?.length>0) {
-            setError(`Error update email address`)
-            return;
+            });
+            const emailErrors = result.data?.checkoutEmailUpdate?.errors;
+            if (emailErrors && emailErrors?.length > 0) {
+              setError(`Erreur lors de la mise à jour de l'adresse e-mail`);
+              return;
+            }
           }
-         }
-          if (!cart?.billingAddress) {
-            const billingErrors = await updateBillingMutation(data);  
+          if (!checkout?.billingAddress) {
+            const billingErrors = await updateBillingMutation(data);
             if (billingErrors && billingErrors.length > 0) {
-              setError(`Error updating billing address: ${billingErrors[0].field}`);
+              setError(`Erreur lors de la mise à jour de l'adresse de facturation : ${billingErrors[0].field}`);
               return;
             }
           }
 
           router.push("/checkout");
-          onSubmit();
         }
       } catch (e) {
-        setError("Failed to save shipping address. Please try again.");
+        setError("Échec de l'enregistrement de l'adresse de livraison. Veuillez réessayer.");
       } finally {
         setLoading(false);
       }
@@ -160,118 +159,115 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
 
   const renderForm = () => (
     <View style={styles.formContainer}>
-      {/* First Name */}
+      {/* Prénom */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("firstName", value)}
           value={formik.values.firstName}
-          placeholder="First Name"
-          label={`First Name *`}
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Prénom"
+          label={`Prénom *`}
+          theme={{ colors: { primary: colors.textPrimary } }}
         />
       </View>
   
-      {/* Last Name */}
+      {/* Nom de famille */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("lastName", value)}
           value={formik.values.lastName}
-          placeholder="Last Name"
-          label={"Last Name *"}
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Nom de famille"
+          label={"Nom de famille *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
         />
-        
       </View>
   
-      {/* Phone */}
+      {/* Téléphone */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("phone", value)}
           value={formik.values.phone}
-          placeholder="Phone Number"
-          label={"Phone Number *"}
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Numéro de téléphone"
+          label={"Numéro de téléphone *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
         />
-        
       </View>
   
-      {/* Address Line 1 */}
+      {/* Adresse Ligne 1 */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress1", value)}
           value={formik.values.streetAddress1}
-          placeholder="Address Line 1"
-          label={"Address Line 1 *"}
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Adresse Ligne 1"
+          label={"Adresse Ligne 1 *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
         />
-        
       </View>
   
-      {/* Address Line 2 (Optional) */}
+      {/* Adresse Ligne 2 (Optionnel) */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress2", value)}
           value={formik.values.streetAddress2}
-          placeholder="Address Line 2"
-          label="Address Line 2"
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Adresse Ligne 2"
+          label="Adresse Ligne 2"
+          theme={{ colors: { primary: colors.textPrimary } }}
         />
       </View>
   
-      {/* City */}
+      {/* Ville */}
       <View style={styles.inputContainer}>
-  <TouchableOpacity
-    style={{
-      width:"100%"
-    }}
-    onPress={() =>
-      openModal(
-        "shipping",
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
-          <FlatList
-            data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
-            keyExtractor={(item, idx) => `${item.name}-${idx}`}
-            renderItem={renderItem}
-            contentContainerStyle={styles.listContainer}
-            nestedScrollEnabled={true} 
-            keyboardShouldPersistTaps="handled" 
-          />
-        </View>
-      )
-    }
-  >
-    <View pointerEvents="none">
-      <TextInput
-        style={styles.input}
-        value={formik.values.city}
-        placeholder="City"
-        label={"City *"}
-        theme={{ colors: { primary: "black" } }}
-        editable={false}  // Keep it non-editable
-      />
-    </View>
-  </TouchableOpacity>
-</View>
-      {/* Postal Code */}
+        <TouchableOpacity
+          style={{
+            width: "100%"
+          }}
+          onPress={() =>
+            openModal(
+              "shipping",
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
+                <FlatList
+                  data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
+                  keyExtractor={(item, idx) => `${item.name}-${idx}`}
+                  renderItem={renderItem}
+                  contentContainerStyle={styles.listContainer}
+                  nestedScrollEnabled={true} 
+                  keyboardShouldPersistTaps="handled" 
+                />
+              </View>
+            )
+          }
+        >
+          <View pointerEvents="none">
+            <TextInput
+              style={styles.input}
+              value={formik.values.city}
+              placeholder="Ville"
+              label={"Ville *"}
+              theme={{ colors: { primary: colors.textPrimary } }}
+              editable={false} 
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+      
+      {/* Code postal */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("postalCode", value)}
           value={formik.values.postalCode}
-          placeholder="Postal Code"
-          label="Postal Code"
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Code postal"
+          label="Code postal"
+          theme={{ colors: { primary: colors.textPrimary } }}
         />
-        
       </View>
   
-      {/* Submit Button */}
+      {/* Bouton de soumission */}
       <Button
         onPress={() => formik.handleSubmit()}
         mode="contained"
@@ -279,10 +275,10 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
         style={styles.submitButton}
         labelStyle={styles.submitButtonText}
       >
-        {loading ? <ActivityIndicator color="white" /> : "CONTINUE"}
+        {loading ? <ActivityIndicator color="white" /> : "CONTINUER"}
       </Button>
   
-      {/* Error Message */}
+      {/* Message d'erreur */}
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
@@ -290,7 +286,6 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
       )}
     </View>
   );
-  
 
   return (
     <ScrollView style={styles.container}>
@@ -298,10 +293,9 @@ const ShippingAddressForm: FC<Props> = ({ onSubmit, onCancel }) => {
         <>
           <SavedAddressSelectionList
             updateAddressMutation={(address: Form)  => updateMutation(address)}
-            onSubmit= {onSubmit}
           />
           <Button mode="text" onPress={() => setShowForm(true)}>
-            + Add New Address
+            + Ajouter une nouvelle adresse
           </Button>
         </>
       ) : (
@@ -330,12 +324,12 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: "white", // White background
-    borderWidth: 1, // 1px border
-    borderColor: colors.textSecondary, // Black border
+    backgroundColor: colors.background, 
+    borderWidth: 1,
+    borderColor: colors.border, 
     borderRadius: 4,
     paddingHorizontal: 10,
-    color: "black",
+    color: colors.textPrimary,
     width: "100%",
   },
   mandatory: {
@@ -344,13 +338,13 @@ const styles = StyleSheet.create({
     fontSize:fonts.h2,
   },
   submitButton: {
-    backgroundColor: "black", // Black button background
+    backgroundColor: colors.secondary, 
     marginTop: 10,
     borderRadius:5,
     padding:5
   },
   submitButtonText: {
-    color: "white", // White button text
+    color: "white", 
   },
   cancelButton: {
     marginTop: 10,

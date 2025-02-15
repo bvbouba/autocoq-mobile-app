@@ -1,5 +1,5 @@
 import { colors } from "@/components/Themed";
-import { useCartContext } from "@/context/useCartContext";
+import { useCheckout } from "@/context/CheckoutProvider";
 import { usePaymentContext } from "@/context/usePaymentContext";
 import { useRouter } from "expo-router";
 import { useEffect } from "react";
@@ -8,7 +8,7 @@ import { Button } from "react-native-paper";
 
 export const codGatewayId = "cash.on.delivery"
 const CodPayment = () => {
-    const { cart } = useCartContext();
+    const { checkout } = useCheckout();
     const { startCheckout,convertCartToOrder,confirmationData,error,loading } = usePaymentContext();
     const router = useRouter();
 
@@ -19,15 +19,15 @@ const CodPayment = () => {
     }, [confirmationData])
 
     const initializePaymentSheet = async () => {
-        if (!confirmationData || !cart) {
+        if (!confirmationData || !checkout) {
             return
         }
         return true
     };
 
     const openPaymentSheet = async () => {
-        Alert.alert('Success', 'Your order is confirmed!');
-        convertCartToOrder().then((result) => router.push("orderDetails/" + result.orderId + "?orderSuccess=true"))
+        Alert.alert('Success', 'Votre commande est confirmée!');
+        convertCartToOrder().then((result) => router.push(`/orderDetails/${result.orderId}?orderSuccess=true`))
     };
 
     const buyNow = () => {
@@ -46,7 +46,7 @@ const CodPayment = () => {
                     style={styles.submitButton}
                     labelStyle={styles.submitButtonText}
                 >
-                    {(loading) ? <ActivityIndicator color="white" /> : "Checkout and pay after delivery"}
+                    {(loading) ? <ActivityIndicator color="white" /> : "Commander et payer après la livraison"}
                 </Button>
                 </View>
 

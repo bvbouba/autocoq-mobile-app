@@ -28,7 +28,7 @@ export const useProductContext = () => useContext(ProductsContext);
 
 export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
     const [products, setProducts] = useState<ProductFragment[] | undefined>(undefined);
-    const {selectedCar,isFiltered} = useCarFilter()
+    const {selectedCar} = useCarFilter()
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [categoryFilters, setCategoryFilters] = useState<CategoryPathFragment[]>([]);
     const [searchProducts, searchProductsStatus] = useSearchProductsLazyQuery();
@@ -39,7 +39,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
         channel: getConfig().channel,
         search: searchQuery,
         categories: categoryFilters.map(cat => cat.id),
-        ...(selectedCar && isFiltered
+        ...(selectedCar
             ? {
                   ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }), 
                   ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }), 
@@ -60,7 +60,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
             }
 
         });
-    }, [searchQuery, categoryFilters,selectedCar,isFiltered??false]);
+    }, [searchQuery, categoryFilters,selectedCar,]);
 
     return (
         <ProductsContext.Provider value={{
