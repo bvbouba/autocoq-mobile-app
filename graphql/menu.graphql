@@ -5,10 +5,27 @@ fragment MenuItemFragment on MenuItem {
       category{
         ...CategoryPathFragment
       }
+     collection {
+       id
+       slug
+        backgroundImage {
+          url
+          alt
+        }
+  }
 }
 
-query getHomepage($channel: String!) {
+query getMainMenu($channel: String!) {
   menu(slug:"homepage",channel:$channel){
+    name
+    items{
+      ...MenuItemFragment
+    }
+  }
+}
+
+query getmenu($slug:String!, $channel: String!) {
+  menu(slug:$slug,channel:$channel){
     name
     items{
       ...MenuItemFragment

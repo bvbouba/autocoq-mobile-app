@@ -24,11 +24,11 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
  
 
   return (
-    <>
+    <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
       <SafeAreaView
         style={{
           ...styles.container,
-          marginTop: statusBarInset.top - 7,
+          marginTop: statusBarInset.top,
         }}
       >
         {/* Banner Section */}
@@ -46,7 +46,7 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
       </SafeAreaView>
       <LoadingIndicator style={{ marginTop: 12 }} />
       {withVehicle && <AddVehicleBasic />}
-    </>
+      </View>
   );
 };
 
@@ -74,7 +74,6 @@ const SearchHeader: FC<Props> = ({
   if (withBack) {
     return <SearchHeaderWithBack withVehicle={withVehicle} carIconColor={carIconColor}/>;
   }
-
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
       <Banner />

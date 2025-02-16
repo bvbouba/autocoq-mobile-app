@@ -1,26 +1,28 @@
 import { FC } from "react";
 import { Image, Pressable, StyleSheet, TouchableOpacity } from "react-native";
 import { colors, fonts, SurfaceView, Text, View } from "@/components/Themed";
-import {  MenuItemFragment } from "@/saleor/api.generated";
+import { MenuItemFragment } from "@/saleor/api.generated";
 import { useRouter } from "expo-router";
+import { Skeleton } from "moti/skeleton";
 
 interface Props {
     menus: MenuItemFragment[];
     onClick: (category: string) => void;
+    loading?: boolean;
 }
 
-const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
-    const router = useRouter()
-    const items = menus.map((menu) => {
+const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
+    const router = useRouter();
+
+    const items =
+        menus.map((menu) => {
             const media = menu.category?.backgroundImage;
             const product =
                 menu.category?.products?.edges && menu.category.products.edges.length > 0
                     ? menu.category.products.edges[0]
                     : undefined;
             const productMedia =
-                product &&
-                product.node.media &&
-                product.node.media.length > 0
+                product && product.node.media && product.node.media.length > 0
                     ? product.node.media[0]
                     : undefined;
 
@@ -28,38 +30,50 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
                 url: media?.url || productMedia?.url,
                 alt: media?.alt || productMedia?.alt,
                 name: menu.name,
-                slug: menu.category?.slug||"",
+                slug: menu.category?.slug || "",
             };
-        })
-        .filter((item) => !!item.url) || [];
+        }) || [];
 
     return (
         <SurfaceView style={styles.container}>
             <View style={styles.paddedTitle}>
                 <Text style={styles.collectionListTitle}>{"Catégories Populaires"}</Text>
-               <TouchableOpacity 
-               onPress={()=>router.push("/shop?slug=pieces-auto")}
-               >
-                <Text style={styles.viewAll}>Tout voir</Text></TouchableOpacity> 
+                <TouchableOpacity onPress={() => router.push("/shop?slug=pieces-auto")}>
+                    <Text style={styles.viewAll}>Tout voir</Text>
+                </TouchableOpacity>
             </View>
-            
+
             <View style={styles.gridContainer}>
-                {items.map((item, index) => (
-                    <Pressable
-                        key={index}
-                        onPress={() => onClick(item.slug)}
-                        style={styles.gridItem}
-                    >
-                        <View style={styles.imageContainer}>
-                            <Image
-                                source={{ uri: item.url }}
-                                resizeMode="contain"
-                                style={styles.image}
-                            />
+                {loading
+                    ? [...Array(6)].map((_, index) => (
+                        <View key={index} style={styles.gridItem}>
+                            <View style={styles.skeletonImageContainer}>
+                                <Skeleton
+                                    colorMode="light"
+                                    height="100%"
+                                    width="100%"
+                                    radius={10}
+                                />
+                            </View>
+
+                            <View style={styles.skeletonTextContainer}>
+                                <Skeleton
+                                    colorMode="light"
+                                    height={16} 
+                                    width={60} 
+                                    radius={5}
+                                />
+                            </View>
                         </View>
-                        <Text style={styles.itemText}>{item.name}</Text>
-                    </Pressable>
-                ))}
+                    ))
+                    : items.map((item, index) => (
+                        <Pressable key={index} onPress={() => onClick(item.slug)} style={styles.gridItem}>
+                            <View style={styles.imageContainer}>
+                                <Image source={{ uri: item.url }} resizeMode="contain" style={styles.image} />
+                            </View>
+                            <Text style={styles.itemText}>{item.name}</Text>
+                        </Pressable>
+                    ))}
             </View>
         </SurfaceView>
     );
@@ -68,13 +82,13 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick }) => {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        paddingBottom: 16, // Add some space below the grid
+        paddingBottom: 16, 
     },
     paddedTitle: {
         paddingTop: 8,
         paddingHorizontal: 16,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between",
     },
     collectionListTitle: {
         fontSize: fonts.h2,
@@ -99,20 +113,29 @@ const styles = StyleSheet.create({
         aspectRatio: 1, // Ensures a square container
         marginBottom: 8, // Space between image and text
     },
+    skeletonImageContainer: {
+        width: "60%", // Matches imageContainer
+        aspectRatio: 1, // Ensures the skeleton remains square
+        borderRadius: 10,
+        backgroundColor: "#E0E0E0",
+    },
+    skeletonTextContainer: {
+        marginTop: 8, // Matches text spacing
+    },
     image: {
         width: "100%",
         height: "100%",
     },
     itemText: {
-        fontSize:fonts.body,
-        fontWeight:400,
+        fontSize: fonts.body,
+        fontWeight: "400",
         textAlign: "center",
     },
     viewAll: {
-        fontSize:fonts.body,
+        fontSize: fonts.body,
         color: colors.primary,
-        textDecorationLine: 'underline', 
-        verticalAlign:'middle'
+        textDecorationLine: "underline",
+        verticalAlign: "middle",
     },
 });
 

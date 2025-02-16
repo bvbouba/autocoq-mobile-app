@@ -16,10 +16,6 @@ export default function AccountScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const {openModal} = useModal()
 
-  const handleSignIn = () => {
-    router.push(`/account/auth?redirectUrl=${"/account"}`);
-  };
-
   const handleSignOut = async () => {
     setIsLoading(true); // Commence le chargement
     try {
@@ -38,7 +34,6 @@ export default function AccountScreen() {
 
   return (
     <View style={[styles.scrollContainer, {
-      marginTop: Platform.OS === 'ios' ? 40 : 0
     }]}>
       <ScrollView style={styles.scroll}>
         <PaddedView style={styles.header}>
@@ -112,7 +107,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    padding:15,
+    paddingTop:50,
+    paddingHorizontal:15,
   },
   scroll: {
     width: "100%",

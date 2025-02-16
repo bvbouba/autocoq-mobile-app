@@ -19,7 +19,7 @@ export default function ProfileScreen() {
   const phoneNumber = user?.email.split("@")[0];
 
   return (
-    <View style={styles.container}>
+    <PaddedView style={styles.container}>
       <View style={styles.row}> 
         <Text style={styles.title}>À propos de moi</Text>
       </View>
@@ -33,7 +33,7 @@ export default function ProfileScreen() {
         <Text style={styles.value}>{phoneNumber}</Text>
       </View>
       <Divider/>
-    </View>
+    </PaddedView>
   );
 }
 

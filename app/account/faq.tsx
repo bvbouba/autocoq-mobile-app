@@ -2,7 +2,7 @@ import { StyleSheet, ScrollView } from 'react-native';
 import RichText from '@/components/RichText';
 import { usePageQuery } from '@/saleor/api.generated';
 import Loading from '@/components/Loading';
-import {fonts, Text, View  } from "@/components/Themed"
+import {fonts, PaddedView, Text, View  } from "@/components/Themed"
 
 
 export default function FAQScreen() {
@@ -29,18 +29,18 @@ export default function FAQScreen() {
   const content = data?.page?.content;
 
   return (
-    <View style={styles.container}>
+    <PaddedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {content ? <RichText jsonStringData={content} /> : <Text>Aucun contenu disponible.</Text>}
       </ScrollView>
-    </View>
+    </PaddedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "white",
   },
   header: {
     fontSize:fonts.h1,

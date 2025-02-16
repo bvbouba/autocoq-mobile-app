@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { useProductContext } from '@/context/useProductContext';
 
@@ -10,7 +10,7 @@ import { Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface Props {
-    openFilters: () => void
+    openFilters: () => void;
 }
 
 const FilterBar: FC<Props> = ({ openFilters }) => {

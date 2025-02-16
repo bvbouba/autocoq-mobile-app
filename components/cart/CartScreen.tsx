@@ -9,23 +9,28 @@ import {
 import {Text, View ,  PaddedView,colors, fonts } from "@/components/Themed"
 
 
-import {  ScrollView, StyleSheet } from 'react-native';
+import {  ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import CartItem from "./CartItem";
 import CartSubtotal from "./CartSubtotal";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { getConfig } from "@/config";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useState } from "react";
 import Loading from "../Loading";
 import { useCheckout } from "@/context/CheckoutProvider";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useModal } from "@/context/useModal";
+import Auth from "../account/auth";
 
 const CartScreen = () => {
-    const { checkout, loading } = useCheckout();
-    const { authenticated, user, token, checkAndRefreshToken } = useAuth();
+    const { checkout,checkoutToken, loading } = useCheckout();
+    const { authenticated, token, checkAndRefreshToken } = useAuth();
     const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
     const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
     const [mLoading,setmLoading] = useState(false)
+    const router = useRouter()
+    const {openModal} = useModal()
 
     const { data, loading: aloading } = useCurrentUserAddressesQuery({
         skip: !authenticated,
@@ -65,7 +70,7 @@ const CartScreen = () => {
             if (!checkout?.shippingAddress && shippingAddress && checkout?.isShippingRequired) {
                 const { data: shippingData } = await updateShippingAddress({
                     variables: { 
-                        id: checkout?.id as string, 
+                        token: checkoutToken, 
                         shippingAddress: {
                             streetAddress1: shippingAddress?.streetAddress1,
                             streetAddress2: shippingAddress?.streetAddress2,
@@ -91,7 +96,7 @@ const CartScreen = () => {
             if (!checkout?.billingAddress && billingAddress) {
                 const { data: billingData } = await updateBillingAddress({
                     variables: { 
-                        id: checkout?.id as string, 
+                        token: checkoutToken, 
                         billingAddress: {
                             streetAddress1: billingAddress?.streetAddress1,
                             streetAddress2: billingAddress?.streetAddress2,
@@ -141,15 +146,43 @@ const CartScreen = () => {
     if (!checkout || checkout.lines.length === 0) {
         return (
             <View style={styles.emptyCartContainer}>
-                <PaddedView>
-                    <Text style={styles.emptyCartText}>Panier vide</Text>
-                </PaddedView>
-                <PaddedView>
-                    <Button onPress={() => navigation.push("/")} mode="contained" style={styles.checkoutButton}>
-                        Aller au tableau de bord
-                    </Button>
-                </PaddedView>
+            <View style={styles.iconContainer}>
+                <FontAwesome name="shopping-cart" size={50} color="gray" />
             </View>
+
+            <PaddedView>
+                <Text style={styles.emptyCartText}>Votre panier est vide</Text>
+            </PaddedView>
+
+            <PaddedView>
+                <Text style={styles.description}>
+                    On dirait que vous n'avez pas encore ajouté d'articles à votre panier.
+                </Text>
+            </PaddedView>
+
+            <PaddedView>
+                <Button 
+                    onPress={() => router.push("/")} 
+                    mode="contained" 
+                    style={styles.checkoutButton}
+                >
+                    CONTINUER LES ACHATS
+                </Button>
+            </PaddedView>
+
+            {/* Sign-in prompt */}
+            <PaddedView>
+            <TouchableOpacity onPress={()=>{
+                openModal("Auth",<Auth />)
+            }}>
+                <Text style={styles.accountText}>
+                    Vous avez un compte ?{" "}
+                        <Text style={styles.linkText}>Se connecter ou créer un compte</Text>
+                    {" "}pour voir votre panier.
+                </Text>
+                </TouchableOpacity>
+            </PaddedView>
+        </View>
         );
     }
 
@@ -195,21 +228,54 @@ const CartScreen = () => {
 };
 
 const styles = StyleSheet.create({
+
+    emptyCartContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20,
+    },
+    iconContainer: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        backgroundColor: colors.background,
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 20,
+    },
+    emptyCartText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    description: {
+        fontSize: fonts.body,
+        textAlign: "center",
+        color: "#666",
+        marginBottom: 20,
+    },
+    checkoutButton: {
+        width: "100%",
+        borderRadius: 5,
+        paddingVertical: 10,
+        backgroundColor:colors.secondary
+    },
+    accountText: {
+        fontSize: fonts.body,
+        textAlign: "center",
+        marginTop: 10,
+        color: colors.textPrimary,
+    },
+    linkText: {
+        fontWeight: "bold",
+        textDecorationLine: "underline",
+        color: colors.primary,
+    },
     scrollContainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    emptyCartContainer: {
-        height: "100%",
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column"
-    },
-    emptyCartText: {
-        textAlign: "center",
-        fontWeight: "bold",
-        fontSize:fonts.h2
     },
     scroll: {
         width: "100%",
@@ -228,11 +294,6 @@ const styles = StyleSheet.create({
     },
     checkoutButtonContainer: {
         marginVertical: 5,
-    },
-    checkoutButton: {
-        backgroundColor: colors.primary,
-        borderRadius: 2,
-        width: "100%",
     },
 });
 

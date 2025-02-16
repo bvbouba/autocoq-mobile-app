@@ -1,22 +1,21 @@
 import { useRouter } from "expo-router";
-import { Platform, SafeAreaView, StyleSheet,Image } from "react-native";
-import {Text, View ,colors, fonts } from "@/components/Themed"
-
+import { Platform, SafeAreaView, StyleSheet, Image } from "react-native";
+import { Text, View, colors, fonts } from "@/components/Themed";
 import { IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LoadingIndicator from "./LoadingIndicator";
 
-const SimpleBackHeader = ({ title,hasLogo }: { title?: string,hasLogo?:boolean }) => {
+const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolean }) => {
   const router = useRouter();
   const statusBarInset = useSafeAreaInsets();
   const logoUri = require("@/assets/images/logo.png");
 
   return (
-    <>
+    <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
       <SafeAreaView
         style={{
           ...styles.container,
-          marginTop: statusBarInset.top+10,
+          marginTop: statusBarInset.top + 10,
         }}
       >
         <View style={styles.backContainer}>
@@ -28,12 +27,12 @@ const SimpleBackHeader = ({ title,hasLogo }: { title?: string,hasLogo?:boolean }
           />
           {title && <Text style={styles.title}>{title}</Text>}
         </View>
-        <View style={{ width:"100%", alignItems:"center"}}>
-        {hasLogo && <Image source={logoUri} style={styles.logo} />}
+        <View style={{ width: "100%", alignItems: "center" }}>
+          {hasLogo && <Image source={logoUri} style={styles.logo} />}
         </View>
       </SafeAreaView>
       <LoadingIndicator />
-    </>
+    </View>
   );
 };
 
@@ -51,19 +50,21 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: "space-between", 
   },
   title: {
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     fontWeight: "bold",
     color: colors.secondary,
-    marginLeft: 10,
+    flex: 1, 
+    textAlign: "center", 
   },
   backButton: {
     color: colors.primary,
   },
   logo: {
     width: 150,
-    height: 25, 
+    height: 25,
     resizeMode: "contain",
     marginBottom: 10,
   },

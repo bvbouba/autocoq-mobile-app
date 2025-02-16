@@ -8,7 +8,6 @@ import { FilterPill } from "./FilterPills";
 import { getFilterOptions } from "./attributes";
 import SortingDropdown from "./SortingDropdown";
 import { UrlSorting } from "./sorting";
-import { useModal } from "@/context/useModal";
 
 interface Props {
     attributeFiltersData: AttributeFilterFragment[],
@@ -32,12 +31,8 @@ const ProductFilterBottomSheet: FC<Props> = ({
     sortBy,
    itemsCounter
 }) => {
-const {closeModal} = useModal()
-
     return (
         <>
-
-
             <View>
                 <Text style={styles.bigTitle}>Filtrer et trier</Text>
                 <View style={{
@@ -62,8 +57,8 @@ const {closeModal} = useModal()
 
             <View style={styles.filterTypeContainer}>
 
-                {attributeFiltersData?.map((attribute) => (
-                    <FilterDropdown
+                {attributeFiltersData?.map((attribute) => {
+                    return <FilterDropdown
                         key={attribute.id}
                         label={attribute.name || ""}
                         optionToggle={addAttributeFilter}
@@ -71,7 +66,7 @@ const {closeModal} = useModal()
                         options={getFilterOptions(attribute, pills)}
                         removeAttributeFilter={removeAttributeFilter}
                     />
-                ))}
+               } )}
 
             </View>
         <View style={styles.buttonGroup}>
@@ -107,7 +102,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop: 16
+        marginTop: 16,
+        marginBottom:50
 
     },
     primaryButton: {

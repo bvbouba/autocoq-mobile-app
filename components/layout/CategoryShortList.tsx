@@ -1,21 +1,29 @@
 import { View, Text, colors, PaddedView, fonts } from "@/components/Themed";
 import { StyleSheet, useWindowDimensions, Pressable } from "react-native";
-import { useGetHomepageQuery } from "@/saleor/api.generated";
+import {  useGetMainMenuQuery } from "@/saleor/api.generated";
 import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import Carousel from "react-native-reanimated-carousel";
 import { useState } from "react";
+import { Skeleton } from "moti/skeleton";
 
 
 const CategoryShortList = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { width } = useWindowDimensions();
   const router = useRouter();
-  const { data: categoriesData, error: catError, loading } = useGetHomepageQuery({
+  const { data: categoriesData, error: catError, loading } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
   });
 
-  if (loading) return null;
+  if (loading) return  <View style={styles.skeletonContainer}>
+                    {[...Array(5)].map((_, index) => (
+                      <View key={index} style={styles.skeletonButton}>
+                        <Skeleton colorMode="light" height={30} width={width * 7 / 20} radius={5} />
+                      </View>
+                    ))}
+                  </View>;
+                  
   if (!categoriesData?.menu?.items) return null;
 
   return (
@@ -77,7 +85,16 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     padding: 5,
     fontSize:fonts.caption
-  }
+  },
+  skeletonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+  },
+  skeletonButton: {
+    margin: 5,
+    borderRadius: 5,
+  },
 });
 
 export default CategoryShortList;

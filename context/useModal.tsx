@@ -31,7 +31,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         {children}
         <Portal>
           <Modal visible={modalVisible} onDismiss={closeModal} contentContainerStyle={styles.modalContainer}>
-          <View style={{ alignItems: "flex-end" }}>
+          <View style={{ alignItems: "flex-end"}}>
                         <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
                       </View>
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">

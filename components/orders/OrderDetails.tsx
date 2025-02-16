@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { OrderFragment, useGetOrderByIdQuery } from "@/saleor/api.generated";
 import { useAuth } from "@/lib/providers/authProvider";
 import Loading from "../Loading";
-import { useCheckout } from "@/context/CheckoutProvider";
 
 const EcranNonTrouve = () => {
     return (
@@ -24,7 +23,6 @@ const EcranNonTrouve = () => {
 };
 
 export const DetailsCommande = ({ orderId }: { orderId: string }) => {
-    const { orderSuccess } = useLocalSearchParams();
     const { authenticated } = useAuth();
     const { orders } = useOrderContext();
 
@@ -37,21 +35,28 @@ export const DetailsCommande = ({ orderId }: { orderId: string }) => {
     });
 
     useEffect(() => {
-        setLoading(true);
-
-        if (authenticated && data?.order) {
-            setOrder(data?.order);
-        } else {
-            const cachedOrder = orders.find((o) => o.id === orderId);
-            setOrder(cachedOrder);
+        if (!authenticated || !orderId) {
+            setLoading(false);
+            return;
         }
 
-        setLoading(false);
-    }, [authenticated, data, orders]);
+        // First, check cached order
+        const cachedOrder = orders.find((o) => o.id === orderId);
+        if (cachedOrder) {
+            setOrder(cachedOrder);
+            setLoading(false);
+            return;
+        }
 
+        // If not in cache, wait for DB query
+        if (data?.order) {
+            setOrder(data.order);
+            setLoading(false);
+        }
+    }, [authenticated, data, orders, orderId]);
 
     if (loading || dbLoading) {
-        return <Loading />
+        return <Loading />;
     }
 
     if (!order) {
@@ -69,7 +74,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize:fonts.h2,
+        fontSize: fonts.h2,
         fontWeight: "bold",
     },
     link: {
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
     },
     linkText: {
-        fontSize:fonts.body,
+        fontSize: fonts.body,
         color: "#2e78b7",
     },
 });

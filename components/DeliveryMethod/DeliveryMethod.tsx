@@ -5,6 +5,7 @@ import { useCheckout } from "@/context/CheckoutProvider";
 import { ActivityIndicator } from "react-native-paper";
 import ZoneSelector from "../ZoneSelector";
 import DeliveryMethodComponent from "./DeliveryMethodComponent";
+import { Skeleton } from "moti/skeleton";
 
 
 interface Props {
@@ -39,11 +40,7 @@ const DeliveryMethod = ({ variant,setCheckedId }: Props) => {
   }
 
 
-  if (loading) {
-    return (
-      <ActivityIndicator color={colors.background} /> 
-    );
-  }
+  if (loading) return <Skeleton height={40} width="100%" radius={8} colorMode="light" />
 
   if (!availableShippingMethods?.length) return <ZoneSelector />;
 

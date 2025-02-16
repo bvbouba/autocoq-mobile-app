@@ -3,8 +3,8 @@ import { StyleSheet, ActivityIndicator,  } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
-import {  useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import {  useCreateTokenMutation, useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
+import {  useRouter } from 'expo-router';
 import {Text, View , PaddedView,colors, fonts } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';
@@ -48,9 +48,9 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
     const [sendCode] = useSendCodeMutation();
     const [verifyCode] = useVerifyCodeMutation();
     const [userRegister] = useUserRegisterMutation();
-    const route = useRouter();
-   const { login,error:loginError} = useAuth()
    const {closeModal} = useModal()
+   const [useLogin] = useCreateTokenMutation();
+   const {setRefreshToken,setToken} = useAuth()
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -84,15 +84,24 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                     setError(errorMsg);
                 } else {
                     try {
-                        await login({
-                            email: `${data.phone}@autocoq.com`,
-                            password: data.password,
+                const { data:loginData } = await useLogin({
+                        variables: {
+                        email: `${data.phone}@autocoq.com`,
+                        password: data.password,
+                    },
                         });
-                        if (!loginError) {
-
-                            closeModal()
-                                
-                        } 
+                    const loginError = loginData?.tokenCreate?.errors || [];
+                        if (loginError.length>0) {
+                            setError("La connexion a échoué. Veuillez réessayer sur la page de connexion.");                           
+                        } else {
+                            if (loginData?.tokenCreate?.token) {
+                                setToken(loginData?.tokenCreate?.token);
+                                setRefreshToken(loginData?.tokenCreate?.refreshToken || "");
+                                closeModal()
+                            } else {
+                                setError('Échec de l’authentification. Veuillez réessayer.');
+                            }
+                        }
                     } catch (err) {
                         console.error('Login error:', err);
                     } 

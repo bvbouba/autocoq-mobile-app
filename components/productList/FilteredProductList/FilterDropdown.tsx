@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome from Expo
 import { colors, Divider, fonts } from "@/components/Themed";
+import { useLoading } from "@/context/LoadingContext";
 
 export interface FilterDropdownOption {
   id: string;
@@ -23,8 +24,36 @@ export function FilterDropdown({
   attributeSlug,
   optionToggle,
   removeAttributeFilter,
-  options,
+  options: propOptions, // Rename to avoid confusion
 }: FilterDropdownProps) {
+  const [options, setOptions] = useState(propOptions); // Store options in state
+  const {setLoading, isLoading} = useLoading()
+  useEffect(() => {
+    setOptions(propOptions);
+  }, [propOptions]);
+
+  
+  const handleOptionPress = async (option:FilterDropdownOption) => {
+    if (isLoading) return;
+    setLoading(true); 
+
+    const newOptions = options?.map((opt) =>
+      opt.id === option.id ? { ...opt, chosen: !opt.chosen } : opt
+    );
+    setOptions(newOptions); // Update UI instantly
+
+    try {
+      if (option.chosen) {
+        await removeAttributeFilter(attributeSlug, option.slug);
+      } else {
+        await optionToggle(attributeSlug, option.slug);
+      }
+    } finally {
+      setLoading(false); // End loading state
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -33,13 +62,8 @@ export function FilterDropdown({
         <TouchableOpacity
           key={option.id}
           style={styles.radioOption}
-          onPress={() => {
-            if (option.chosen) {
-              removeAttributeFilter(attributeSlug, option.slug); 
-            } else {
-              optionToggle(attributeSlug, option.slug); 
-            }
-          }}
+          onPress={() => handleOptionPress(option)}
+          disabled={isLoading}
         >
           <View style={[styles.radioCircle, option.chosen && styles.radioCircleSelected]}>
             {option.chosen && <FontAwesome name="check" size={12} color="white" />}
@@ -51,6 +75,7 @@ export function FilterDropdown({
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -3,8 +3,8 @@ import ProductDetails from "@/components/products/ProductDetails"
 import { useGetProductByIdQuery } from "@/saleor/api.generated";
 import { StyleSheet } from "react-native"
 import { getConfig } from "@/config";
-import {Text, View } from "@/components/Themed"
-import Loading from "@/components/Loading";
+import { View } from "@/components/Themed"
+import ProductDetailsSkeleton from "@/components/skeletons/ProductDetails";
 
 const ProductDetailsId = () => {
     const pathname = usePathname();
@@ -17,7 +17,7 @@ const ProductDetailsId = () => {
         }
     })
 
-if(loading) return <Loading />
+if(loading) return <ProductDetailsSkeleton />
     
     if (called && data?.product) {
         return <View style={{ flex: 1 }}>

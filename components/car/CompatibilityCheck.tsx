@@ -11,6 +11,7 @@ import { useRouter } from "expo-router"
 import { useModal } from "@/context/useModal"
 import { WhiteButton } from "../button"
 import Loading from "../Loading"
+import { Skeleton } from "moti/skeleton"
 
 
 
@@ -38,11 +39,7 @@ const CompatibilityCheck = ({ product }: props) => {
     }
   })
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
+  if (loading) return <Skeleton height={40} width="100%" radius={8} colorMode="light" />
 
   const isCompatible = data?.checkProductCompatibility;
   

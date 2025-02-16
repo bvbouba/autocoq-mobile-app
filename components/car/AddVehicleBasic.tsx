@@ -93,7 +93,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "white",
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 0,
+    borderBottomWidth:1, 
+    borderColor:colors.border
   },
   leftSection: {
     flexDirection: "row",

@@ -7,6 +7,7 @@ import SkeletonContent from "react-native-skeleton-content"
 import { useModal } from "@/context/useModal"
 import CarFilterModal from "./Modal"
 import { useEffect, useState } from "react"
+import { Skeleton } from "moti/skeleton"
 
 
 interface props {
@@ -34,7 +35,8 @@ const CompatibilityCheckBasic = ({ product }: props) => {
     }
   })
 
-  if (loading) return
+  if (loading) return <Skeleton height={30} width="100%" radius={8} colorMode="light" />
+  
   const isCompatible = data?.checkProductCompatibility;
 
   return (

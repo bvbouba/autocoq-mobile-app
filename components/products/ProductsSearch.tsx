@@ -22,8 +22,6 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
     // Use the correct hook from expo-router
     const {
         search: searchQueryString,
-        collection: collectionsQueryString,
-        categories: categoriesQueryString
     } = useGlobalSearchParams();
     const router = useRouter();
     const { checkout } = useCheckout();
@@ -32,9 +30,7 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
 
     // Ensure that searchQueryString, collectionsQueryString, and categoriesQueryString are strings
     const search = Array.isArray(searchQueryString) ? searchQueryString[0] : searchQueryString;
-    const collections = Array.isArray(collectionsQueryString) ? collectionsQueryString[0] : collectionsQueryString;
-    const categories = Array.isArray(categoriesQueryString) ? categoriesQueryString[0] : categoriesQueryString;
-
+  
     const formik = useFormik<Form>({
         initialValues: {
             search: search || "",  // Default to an empty string if undefined
@@ -53,30 +49,22 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
             if (value) {
                 params.append("search", value);
             }
-            router.push(`/products/results?"${params.toString()}`);
+            router.push(`/products/results?${params.toString()}`);
         }
 
         const params = new URLSearchParams();
         if (value) {
             params.append("search", value);
         }
-
-        if (collections) {
-            params.append("collection", collections);
-        }
-        if (categories) {
-            params.append("categories", categories);
-        }
-
-        router.push(`/products/results?"${params.toString()}`);
-    }, [categories, collections]);
+           router.push(`/products/results?${params.toString()}`);
+    }, []);
 
     useEffect(() => {
-        if (searchOnLoad && (search || collections || categories)) {
+        if (searchOnLoad && search) {
             runSearch(search || "");
         }
         formik.setFieldValue("search", search || "");
-    }, [searchOnLoad, search, collections, categories]);
+    }, [searchOnLoad, search]);
 
     const onChange = (value: string) => {
         formik.setFieldValue("search", value);

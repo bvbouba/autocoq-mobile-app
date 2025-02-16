@@ -38,6 +38,7 @@
     "expo-web-browser": "^14.0.2",
     "formik": "^2.4.6",
     "graphql": "^16.10.0",
+    "moti": "^0.30.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.7",
@@ -82,11 +83,23 @@
   },
   "private": true,
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-"expo": {
-  "doctor": {
-    "reactNativeDirectoryCheck": {
-      "exclude": ["@apollo/client", "@expo/config", "@expo/config-plugins", "@expo/metro-config", "@expo/prebuild-config", "@react-native-community/cli-server-api", "expo-modules-autolinking", "graphql", "react-native-animated-dots-carousel", "yup","@stripe/stripe-react-native"]
+  "expo": {
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "exclude": [
+          "@apollo/client",
+          "@expo/config",
+          "@expo/config-plugins",
+          "@expo/metro-config",
+          "@expo/prebuild-config",
+          "@react-native-community/cli-server-api",
+          "expo-modules-autolinking",
+          "graphql",
+          "react-native-animated-dots-carousel",
+          "yup",
+          "@stripe/stripe-react-native"
+        ]
+      }
     }
   }
-}
 }

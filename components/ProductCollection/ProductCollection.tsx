@@ -9,11 +9,12 @@ import {
 } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import ProductListItem from "../products/ProductListItem";
-import { SafeAreaView, FlatList, StyleSheet, Animated, ActivityIndicator, Button } from 'react-native';
-import { colors, fonts, Text, View } from './../Themed';
-import Loading from "../Loading";
-import { useCheckout } from "@/context/CheckoutProvider";
+import { SafeAreaView, StyleSheet, Animated, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { colors, fonts, PaddedView, Text, View } from './../Themed';
 import { useCarFilter } from "@/context/useCarFilterContext";
+import { Button } from "react-native-paper";
+import { useRouter } from "expo-router";
+import ProductListItemSkeleton from "../skeletons/ProductListItem";
 
 export interface ProductCollectionProps {
   filter?: ProductFilterInput;
@@ -24,7 +25,8 @@ export interface ProductCollectionProps {
   allowMore?: boolean;
   perPage?: number;
   setCounter?: (value: number) => void;
-  itemsCounter: number;
+  itemsCounter?: number;
+  loading?:boolean;
 }
 
 export const ProductCollection: React.FC<ProductCollectionProps> = ({
@@ -33,38 +35,39 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   setCounter,
   allowMore = true,
   perPage = 4,
-  itemsCounter
+  itemsCounter = 0,
 }) => {
 
-  const {selectedCar} = useCarFilter()
+  const { selectedCar } = useCarFilter()
+  const router = useRouter()
 
-  
+
   const variables: ProductCollectionQueryVariables = {
     filter: {
       ...filter,
       ...(selectedCar
         ? {
-              ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }), 
-              ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }), 
-              ...(selectedCar?.model && { carModel: [selectedCar?.model.id] }),
-              ...(selectedCar?.engine && { carEngine: [selectedCar?.engine.id] }),
-          }
+          ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }),
+          ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }),
+          ...(selectedCar?.model && { carModel: [selectedCar?.model.id] }),
+          ...(selectedCar?.engine && { carEngine: [selectedCar?.engine.id] }),
+        }
         : {})
     },
     first: perPage,
     channel: "ci",
     ...(sortBy?.field &&
       sortBy?.direction && {
-        sortBy: {
-          direction: sortBy.direction,
-          field: sortBy.field,
-        },
-      }),
+      sortBy: {
+        direction: sortBy.direction,
+        field: sortBy.field,
+      },
+    }),
   };
-   
+
 
   const { loading, error, data, fetchMore } = useProductCollectionQuery({ variables });
-  
+
   const [allProducts, setAllProducts] = useState<ProductFragment[]>([]);
   const [hasNextPage, setHasNextPage] = useState(false);
 
@@ -74,37 +77,37 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
     }
   }, [setCounter, data?.products?.totalCount]);
 
-  
+
   useEffect(() => {
     if (data?.products?.edges) {
       setAllProducts(mapEdgesToItems(data.products));
       setHasNextPage(data.products.pageInfo.hasNextPage)
     }
   }, [data]);
- 
+
   const onLoadMore = async () => {
     if (!hasNextPage) {
       return;
     }
-  
+
     try {
       const result = await fetchMore({
         variables: {
           after: pageInfo?.endCursor,
         },
       });
-  
+
       if (result.data?.products?.edges) {
         const newProducts = mapEdgesToItems(result.data.products);
-        
+
         // Avoid duplicates by checking slug
         setAllProducts((prev) => {
           const existingSlugs = new Set(prev.map((p) => p.slug));
           const uniqueNewProducts = newProducts.filter((p) => !existingSlugs.has(p.slug));
-  
+
           return [...prev, ...uniqueNewProducts];
         });
-  
+
         setHasNextPage(result.data.products.pageInfo.hasNextPage);
       }
     } catch (error) {
@@ -113,23 +116,18 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   };
 
   const pageInfo = data?.products?.pageInfo
-  
-  if (loading) return <Loading />;
-  
 
-  if (!allProducts || allProducts.length === 0) {
-    return (
-      <View style={styles.noProductsContainer} testID="prod-list-safe">
-        <View style={styles.noProductsTextWrapper}>
-          <Text style={styles.noProductsText}>Aucun produit ne correspond aux critères donnés</Text>
-        </View>
-      </View>
-    );
-  }
+  if (loading) return <View style={{ padding: 10 }}>
+                    {[...Array(perPage)].map((_, index) => (
+                      <ProductListItemSkeleton key={index} />
+                    ))}
+                  </View>;
+
+
 
   return (
     <SafeAreaView style={styles.container} testID="prod-list-safe">
-     
+
 
       <Animated.FlatList
         data={allProducts}
@@ -137,19 +135,65 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         renderItem={({ item }) => <ProductListItem product={item} />}
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.3}
-        ListHeaderComponent={ // Add the header inside FlatList
-          <View style={styles.header}>
+        ListHeaderComponent={<View style={{
+          flexDirection: "column"
+        }}> <View style={styles.header}>
             <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
             <Text style={{ fontSize: fonts.caption }}>
               {itemsCounter < 2 ? " Résultat" : " Résultats"}
+              {filter?.search && ` pour`}
+            </Text>
+            <Text style={{
+              fontSize: fonts.caption,
+              fontWeight: "bold"
+            }}>
+              {filter?.search && ` "${filter.search}"`}
             </Text>
           </View>
+          <View>
+            {(!allProducts || allProducts.length === 0) ?
+              (<View style={styles.noProductsContainer} testID="prod-list-safe">
+                <PaddedView style={styles.noProductsTextWrapper}>
+                  <Text style={styles.noProductsText}>
+                    Désolé, aucun produit n'a été trouvé. Essayez d'ajuster vos filtres pour voir les résultats.
+                  </Text>
+                  {/* <View style={{
+                  flexDirection:"row",
+                }}>
+                <Text style={{
+                  fontSize:fonts.caption
+                }}>
+                  Besoin d'aide?
+                </Text>
+                <TouchableOpacity>
+                 <Text style={{
+                  textDecorationLine:"underline",
+                  fontSize:fonts.caption
+                 }}> Contactez nous</Text> 
+                </TouchableOpacity>
+                </View> */}
+                  <Button mode="contained" onPress={() => router.push("/")}
+                    style={{
+                      backgroundColor: "white",
+                      borderWidth: 1,
+                      borderRadius: 5,
+                      borderColor: colors.secondary
+                    }}
+                  >
+                    <Text> CONTINUER</Text>
+                  </Button>
+                </PaddedView>
+              </View>
+              ) : <></>
+            }
+          </View>
+        </View>
         }
         ListFooterComponent={allowMore && hasNextPage ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
           </View>
-        ) : null} 
+        ) : null}
       />
     </SafeAreaView>
   );
@@ -159,7 +203,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor:"white"
+    backgroundColor: "white"
   },
   header: {
     padding: 15,
@@ -172,9 +216,12 @@ const styles = StyleSheet.create({
   },
   noProductsTextWrapper: {
     marginTop: 32,
+    alignItems: "center",
+    gap: 20,
   },
   noProductsText: {
     textAlign: "center",
+    fontSize: fonts.caption
   },
   loadingContainer: {
     marginTop: 20,

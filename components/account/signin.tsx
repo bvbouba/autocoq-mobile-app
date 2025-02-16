@@ -3,11 +3,11 @@ import { StyleSheet, ActivityIndicator } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '@/lib/providers/authProvider';
 import { Text, View, PaddedView, colors, fonts } from "@/components/Themed"
 import { useModal } from '@/context/useModal';
 import Logo from '../Logo';
+import { useCreateTokenMutation } from '@/saleor/api.generated';
 
 interface Form {
     identifier: string;
@@ -23,9 +23,12 @@ interface props {
 }
 
 const SignIn: FC<props> = ({ phoneNumber }) => {
+    const [useLogin] = useCreateTokenMutation();
     const [showPassword, setShowPassword] = useState(false);
-    const { login, error, loading } = useAuth();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);  
     const { closeModal } = useModal()
+    const {setToken,setRefreshToken} = useAuth()
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -36,17 +39,36 @@ const SignIn: FC<props> = ({ phoneNumber }) => {
         validateOnChange: false,
         validateOnBlur: false,
         onSubmit: async (formData) => {
+            setLoading(true);
+            setError(null);
             try {
-                await login({
-                    email: `${formData.identifier}@autocoq.com`,
-                    password: formData.password,
+                const { data } = await useLogin({
+                    variables: {
+                        email: `${formData.identifier}@autocoq.com`,
+                        password: formData.password,
+                    },
                 });
-
-                if (!error) {
-                    closeModal()
+                const errors = data?.tokenCreate?.errors || [];
+                if (errors.length > 0) {
+                    if(errors[0].field==="email"){
+                        setError("Veuillez saisir des informations valides")
+                    }else{
+                    setError(data?.tokenCreate?.errors[0]?.message || 'Une erreur inconnue est survenue.');
+                    }
+                } else {
+                    if (data?.tokenCreate?.token) {
+                        setToken(data?.tokenCreate?.token);
+                        setRefreshToken(data?.tokenCreate?.refreshToken || "");
+                        closeModal()
+                    } else {
+                        setError('Échec de l’authentification. Veuillez réessayer.');
+                    }
                 }
             } catch (err) {
                 console.error('Login error:', err);
+                setError('Impossible de se connecter. Veuillez réessayer.');
+            } finally {
+                setLoading(false);
             }
         },
     });

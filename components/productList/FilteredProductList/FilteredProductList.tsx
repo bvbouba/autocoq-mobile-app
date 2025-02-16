@@ -14,9 +14,10 @@ export interface FilteredProductListProps {
   attributeFiltersData: AttributeFilterFragment[];
   collectionIDs?: string[];
   categoryIDs?: string[];
+  loading?:boolean;
 }
 
-export function FilteredProductList({ attributeFiltersData, collectionIDs, categoryIDs }: FilteredProductListProps) {
+export function FilteredProductList({ attributeFiltersData, collectionIDs, categoryIDs,loading }: FilteredProductListProps) {
   const [filters, setFilters] = useState<UrlFilter[]>([]);
   const [sortBy, setSortBy] = useState<UrlSorting | null>(null);
   const [inStock, setInStock] = useState<boolean>(false);
@@ -85,7 +86,9 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         setSortBy={setSortBy}
         sortBy={sortBy}
         itemsCounter={itemsCounter}
-        />)} />
+        />)} 
+        />
+        
       <ProductCollection 
       filter={productsFilter} 
       sortBy={sortBy || undefined} 

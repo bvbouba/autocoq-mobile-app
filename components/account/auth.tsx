@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {   TextInput, TouchableOpacity, StyleSheet, ActivityIndicator,Image } from "react-native";
 import { useLazyQuery } from "@apollo/client";
 import { CheckPhoneNumberDocument } from "@/saleor/api.generated";

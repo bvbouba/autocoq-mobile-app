@@ -6,6 +6,7 @@ import {colors, Text, View } from "@/components/Themed"
 import { useCheckout } from "@/context/CheckoutProvider";
 import { ActivityIndicator } from "react-native-paper";
 import ZoneSelector from "../ZoneSelector";
+import { Skeleton } from "moti/skeleton";
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
 
@@ -37,11 +38,10 @@ const DeliveryMethodBasic = ({ variant }: Props) => {
     }
   })
 
-  if (loading) {
-    return (
-      <ActivityIndicator color={colors.background} /> 
+  if (loading) return (
+    <Skeleton height={40} width="100%" radius={8} colorMode="light" />
     );
-  }
+  
 
   const availableShippingMethods = data?.productVariant?.availableShippingMethods
   // Helper function to fetch a shipping method by ID

@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/providers/authProvider";
 import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useState } from "react";
 import {  StyleSheet, FlatList } from "react-native";
-import {fonts, Text, View } from "@/components/Themed"
+import {fonts, PaddedView, Text, View } from "@/components/Themed"
 
 
 const CarnetDAdressesScreen = () => {
@@ -49,9 +49,9 @@ const CarnetDAdressesScreen = () => {
 
   if (addresses.length === 0) {
     return (
-      <View style={styles.container}>
+      <PaddedView style={styles.container}>
         <Text>Aucune adresse disponible</Text>
-      </View>
+      </PaddedView>
     );
   }
 

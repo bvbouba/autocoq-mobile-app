@@ -34577,14 +34577,22 @@ export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCitiesQuery = { __typename?: 'Query', getShippingZones?: Array<{ __typename?: 'ShippingZoneBasicType', name: string } | null> | null };
 
-export type MenuItemFragment = { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null };
+export type MenuItemFragment = { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null };
 
-export type GetHomepageQueryVariables = Exact<{
+export type GetMainMenuQueryVariables = Exact<{
   channel: Scalars['String']['input'];
 }>;
 
 
-export type GetHomepageQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null }> | null } | null };
+export type GetMainMenuQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null } | null };
+
+export type GetmenuQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+  channel: Scalars['String']['input'];
+}>;
+
+
+export type GetmenuQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null } | null };
 
 export const UserDetailsFragmentDoc = gql`
     fragment UserDetails on User {
@@ -35234,6 +35242,14 @@ export const MenuItemFragmentDoc = gql`
   id
   category {
     ...CategoryPathFragment
+  }
+  collection {
+    id
+    slug
+    backgroundImage {
+      url
+      alt
+    }
   }
 }
     ${CategoryPathFragmentDoc}`;
@@ -37232,8 +37248,8 @@ export type GetCitiesQueryHookResult = ReturnType<typeof useGetCitiesQuery>;
 export type GetCitiesLazyQueryHookResult = ReturnType<typeof useGetCitiesLazyQuery>;
 export type GetCitiesSuspenseQueryHookResult = ReturnType<typeof useGetCitiesSuspenseQuery>;
 export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQueryVariables>;
-export const GetHomepageDocument = gql`
-    query getHomepage($channel: String!) {
+export const GetMainMenuDocument = gql`
+    query getMainMenu($channel: String!) {
   menu(slug: "homepage", channel: $channel) {
     name
     items {
@@ -37244,37 +37260,81 @@ export const GetHomepageDocument = gql`
     ${MenuItemFragmentDoc}`;
 
 /**
- * __useGetHomepageQuery__
+ * __useGetMainMenuQuery__
  *
- * To run a query within a React component, call `useGetHomepageQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetHomepageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetMainMenuQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMainMenuQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetHomepageQuery({
+ * const { data, loading, error } = useGetMainMenuQuery({
  *   variables: {
  *      channel: // value for 'channel'
  *   },
  * });
  */
-export function useGetHomepageQuery(baseOptions: Apollo.QueryHookOptions<GetHomepageQuery, GetHomepageQueryVariables> & ({ variables: GetHomepageQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetMainMenuQuery(baseOptions: Apollo.QueryHookOptions<GetMainMenuQuery, GetMainMenuQueryVariables> & ({ variables: GetMainMenuQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetHomepageQuery, GetHomepageQueryVariables>(GetHomepageDocument, options);
+        return Apollo.useQuery<GetMainMenuQuery, GetMainMenuQueryVariables>(GetMainMenuDocument, options);
       }
-export function useGetHomepageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHomepageQuery, GetHomepageQueryVariables>) {
+export function useGetMainMenuLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMainMenuQuery, GetMainMenuQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetHomepageQuery, GetHomepageQueryVariables>(GetHomepageDocument, options);
+          return Apollo.useLazyQuery<GetMainMenuQuery, GetMainMenuQueryVariables>(GetMainMenuDocument, options);
         }
-export function useGetHomepageSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetHomepageQuery, GetHomepageQueryVariables>) {
+export function useGetMainMenuSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMainMenuQuery, GetMainMenuQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetHomepageQuery, GetHomepageQueryVariables>(GetHomepageDocument, options);
+          return Apollo.useSuspenseQuery<GetMainMenuQuery, GetMainMenuQueryVariables>(GetMainMenuDocument, options);
         }
-export type GetHomepageQueryHookResult = ReturnType<typeof useGetHomepageQuery>;
-export type GetHomepageLazyQueryHookResult = ReturnType<typeof useGetHomepageLazyQuery>;
-export type GetHomepageSuspenseQueryHookResult = ReturnType<typeof useGetHomepageSuspenseQuery>;
-export type GetHomepageQueryResult = Apollo.QueryResult<GetHomepageQuery, GetHomepageQueryVariables>;
+export type GetMainMenuQueryHookResult = ReturnType<typeof useGetMainMenuQuery>;
+export type GetMainMenuLazyQueryHookResult = ReturnType<typeof useGetMainMenuLazyQuery>;
+export type GetMainMenuSuspenseQueryHookResult = ReturnType<typeof useGetMainMenuSuspenseQuery>;
+export type GetMainMenuQueryResult = Apollo.QueryResult<GetMainMenuQuery, GetMainMenuQueryVariables>;
+export const GetmenuDocument = gql`
+    query getmenu($slug: String!, $channel: String!) {
+  menu(slug: $slug, channel: $channel) {
+    name
+    items {
+      ...MenuItemFragment
+    }
+  }
+}
+    ${MenuItemFragmentDoc}`;
+
+/**
+ * __useGetmenuQuery__
+ *
+ * To run a query within a React component, call `useGetmenuQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetmenuQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetmenuQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *      channel: // value for 'channel'
+ *   },
+ * });
+ */
+export function useGetmenuQuery(baseOptions: Apollo.QueryHookOptions<GetmenuQuery, GetmenuQueryVariables> & ({ variables: GetmenuQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetmenuQuery, GetmenuQueryVariables>(GetmenuDocument, options);
+      }
+export function useGetmenuLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetmenuQuery, GetmenuQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetmenuQuery, GetmenuQueryVariables>(GetmenuDocument, options);
+        }
+export function useGetmenuSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetmenuQuery, GetmenuQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetmenuQuery, GetmenuQueryVariables>(GetmenuDocument, options);
+        }
+export type GetmenuQueryHookResult = ReturnType<typeof useGetmenuQuery>;
+export type GetmenuLazyQueryHookResult = ReturnType<typeof useGetmenuLazyQuery>;
+export type GetmenuSuspenseQueryHookResult = ReturnType<typeof useGetmenuSuspenseQuery>;
+export type GetmenuQueryResult = Apollo.QueryResult<GetmenuQuery, GetmenuQueryVariables>;
 export type AccountAddressCreateKeySpecifier = ('accountErrors' | 'address' | 'errors' | 'user' | AccountAddressCreateKeySpecifier)[];
 export type AccountAddressCreateFieldPolicy = {
 	accountErrors?: FieldPolicy<any> | FieldReadFunction<any>,

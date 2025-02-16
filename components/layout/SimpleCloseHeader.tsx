@@ -10,8 +10,10 @@ const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: str
   const statusBarInset = useSafeAreaInsets();
 
   return (
-    <>
-      <SafeAreaView style={{ ...styles.container, marginTop: statusBarInset.top }}>
+    <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
+      <SafeAreaView style={{ ...styles.container, 
+        marginTop: statusBarInset.top ,
+        }}>
         <View style={styles.headerContainer}>
           <IconButton
             icon="close"
@@ -29,7 +31,7 @@ const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: str
       </SafeAreaView>
       <LoadingIndicator />
       <Divider />
-    </>
+    </View>
   );
 };
 

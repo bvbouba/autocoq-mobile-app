@@ -10,6 +10,7 @@ import { useCheckout } from "@/context/CheckoutProvider";
 import { useModal } from "@/context/useModal";
 import AddedToCart from "../cart/AddToTheCart";
 import DeliveryMethodBasic from "../DeliveryMethod/DeliveryMethodBasic";
+import { Skeleton } from "moti/skeleton";
 
 interface Props {
     product: ProductFragment
@@ -127,6 +128,10 @@ const ProductListItem: FC<Props> = ({ product }) => {
 
     </>
 }
+
+
+
+
 
 
 const styles = StyleSheet.create({

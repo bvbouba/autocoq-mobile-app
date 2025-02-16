@@ -61,7 +61,6 @@ export function SurfaceView(props: ViewProps) {
           width: "100%",
           backgroundColor: "white",
           borderRadius: 8, 
-          
           // iOS Shadow
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 3 }, // Moves shadow down
