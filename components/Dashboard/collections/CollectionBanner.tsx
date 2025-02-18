@@ -30,7 +30,7 @@ const CollectionImageBanner: FC<Props> = ({ collection, onClick, onProductClick 
                     </Text>
                 </View>
                 <Button mode="text" onPress={() => onClick(collection)} style={styles.collectionButton} textColor="white">
-                    View Products
+                   <Text> View Products</Text>
                 </Button>
 
             </ImageBackground>

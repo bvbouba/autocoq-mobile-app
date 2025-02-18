@@ -5,7 +5,7 @@ import { ProductFilterInput } from "@/saleor/api.generated";
 import ProductCollection from "@/components/ProductCollection/ProductCollection";
 
 const ProductsResults = () => {
-    const { search: searchQueryString } = useLocalSearchParams();
+    const { q: searchQueryString } = useLocalSearchParams();
     
     const [filter, setFilter] = useState<ProductFilterInput>();
     useEffect(() => {

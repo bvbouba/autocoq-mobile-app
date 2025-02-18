@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { ScrollView } from "react-native-gesture-handler";
+import { Pressable, ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
@@ -190,7 +190,7 @@ const BillingAddressForm: FC<Props> = () => {
 
       {/* Ville */}
       <View style={styles.inputContainer}>
-        <TouchableOpacity
+        <Pressable
           style={{ width: "100%" }}
           onPress={() =>
             openModal(
@@ -218,7 +218,7 @@ const BillingAddressForm: FC<Props> = () => {
             theme={{ colors: { primary: "black" } }}
             editable={false}
           />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Code Postal */}
@@ -259,7 +259,7 @@ const BillingAddressForm: FC<Props> = () => {
         <>
           <SavedAddressSelectionList updateAddressMutation={(address: Form) => updateMutation(address)} />
           <Button mode="text" onPress={() => setShowForm(true)}>
-            + Ajouter une nouvelle adresse
+           <Text>+ Ajouter une nouvelle adresse</Text> 
           </Button>
         </>
       ) : (

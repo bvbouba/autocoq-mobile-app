@@ -97,8 +97,8 @@ const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
             </View>
         </ScrollView>
         <View style={styles.buttonGroup}>
-            <Button style={styles.primaryButton} mode="contained" onPress={submitForm}>Apply</Button>
-            <Button style={styles.secondaryButton} mode="text"  textColor="black" onPress={() => formik.resetForm()}>Reset</Button>
+            <Button style={styles.primaryButton} mode="contained" onPress={submitForm}><Text>Apply</Text></Button>
+            <Button style={styles.secondaryButton} mode="text"  textColor="black" onPress={() => formik.resetForm()}><Text>Reset</Text></Button>
         </View>
     </Modal >
     );

@@ -7,20 +7,23 @@ import Loading from "@/components/Loading";
 import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
 import ProductCollectionSkeleton from "@/components/skeletons/ProductCollection";
+import { useMessage } from "@/context/MessageContext";
 
 
 
 const CollectionProductScreen = () => {
     const pathname = usePathname();
     const [slug, setSlug] = useState<string>();
-     const {data, loading} = useCollectionBySlugQuery({
+    const { showMessage } = useMessage();
+    
+     const {data, loading, error} = useCollectionBySlugQuery({
       skip:!slug,
       variables:{
         slug:slug||""
       }
     })
     const collectionID = data?.collection?.id
-    const {data:attributeData,loading:attributeLoading} = useFilteringAttributesQuery({
+    const {data:attributeData,loading:attributeLoading, error:attributeError} = useFilteringAttributesQuery({
       skip:!collectionID,
         variables:{
           filter: {
@@ -42,6 +45,14 @@ const CollectionProductScreen = () => {
         return (
           <ProductCollectionSkeleton />
         );
+      }
+    
+      if(error) {
+        showMessage("Échec réseau")
+        console.log(error.message)
+      }else if (attributeError) {
+        showMessage("Échec réseau")
+        console.log(attributeError.message)
       }
    
     const collection = data?.collection

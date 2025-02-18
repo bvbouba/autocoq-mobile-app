@@ -3,12 +3,12 @@ import { Modal, Button, IconButton } from "react-native-paper";
 import { useCarEnginesListQuery, useCarMakesListQuery, useCarModelsListQuery, useCarYearsListQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import { carType, useCarFilter } from "@/context/useCarFilterContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, colors, fonts } from "@/components/Themed";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { PrimaryButton } from "../button";
-import { ActivityIndicator } from "react-native-paper";
 import { useModal } from "@/context/useModal";
+import { useLoading } from "@/context/LoadingContext";
 
 
 
@@ -25,14 +25,15 @@ const getLoadingTextColor = (loading: boolean, hasData: boolean) => {
 };
 
 interface props {
-  setSelectedLocalCar?: (car?: carType) => void
+  setSelectedLocalCar?: (car?: carType) => void;
 }
 
-const CarFilterModal = ({setSelectedLocalCar}:props) => {
+const VehicleSelectionFilter = ({setSelectedLocalCar}:props) => {
   const { selectedCar, setSelectedCar } = useCarFilter();
   const {closeModal} = useModal()
-
-
+  const {setLoading} = useLoading()
+  const [isSaving, setIsSaving] = useState<boolean>()
+ 
   // États temporaires pour les sélections du modal
   const [tempCarYear, setTempCarYear] = useState(selectedCar?.year);
   const [tempCarMake, setTempCarMake] = useState(selectedCar?.make);
@@ -60,7 +61,12 @@ const CarFilterModal = ({setSelectedLocalCar}:props) => {
   });
   const carEngines = mapEdgesToItems(enginesData?.carEngines);
 
+  useEffect(()=>{
+     setLoading(loadingYears || loadingMakes || loadingModels || loadingEngines)
+  },[loadingYears,loadingMakes,loadingModels,loadingEngines])
+
   const handleFilter = () => {
+    setIsSaving(true)
     if (tempCarYear && tempCarMake && tempCarModel && (carEngines.length === 0 || tempCarEngine)) {
       const carNameParts = [tempCarMake?.name, tempCarModel?.name, tempCarEngine?.name, tempCarYear?.name].filter(Boolean);
       const carName = carNameParts.length > 0 ? carNameParts.join(" ") : null;
@@ -81,8 +87,10 @@ const CarFilterModal = ({setSelectedLocalCar}:props) => {
         name: carName,
       });
     }
+      setIsSaving(false)
       closeModal()
     } else {
+      setIsSaving(false)
       Alert.alert("Veuillez sélectionner toutes les options de filtrage.");
     }
   };
@@ -144,50 +152,39 @@ const CarFilterModal = ({setSelectedLocalCar}:props) => {
                       </View>
 
                       <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("year")}>
-                        {loadingYears ? (
-                          <ActivityIndicator size="small" color={colors.textPrimary} />
-                        ) : (
                           <Text style={{ color: getLoadingTextColor(loadingYears, (!!tempCarYear?.name)) }}>
                             {tempCarYear?.name || "Sélectionner une année"}
                           </Text>
-                        )}
                       </TouchableOpacity>
 
                       <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("make")} disabled={!tempCarYear}>
-                        {loadingMakes ? (
-                          <ActivityIndicator size="small" color={colors.textPrimary} />
-                        ) : (
+                    
                           <Text style={{ color: getLoadingTextColor(loadingMakes, !!tempCarMake?.name) }}>
                             {tempCarMake?.name || "Sélectionner une marque"}
                           </Text>
-                        )}
+                      
                       </TouchableOpacity>
 
                       <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("model")} disabled={!tempCarMake}>
-                        {loadingModels ? (
-                          <ActivityIndicator size="small" color={colors.textPrimary} />
-                        ) : (
+                  
                           <Text style={{ color: getLoadingTextColor(loadingModels, !!tempCarModel?.name) }}>
                             {tempCarModel?.name || "Sélectionner un modèle"}
                           </Text>
-                        )}
+                      
                       </TouchableOpacity>
 
                       {carEngines.length > 0 && (
                         <TouchableOpacity style={styles.dropdown} onPress={() => openSelectionModal("engine")} disabled={!tempCarModel}>
-                          {loadingEngines ? (
-                            <ActivityIndicator size="small" color={colors.textPrimary} />
-                          ) : (
+                    
                             <Text style={{ color: getLoadingTextColor(loadingEngines, !!tempCarEngine?.name) }}>
                               {tempCarEngine?.name || "Sélectionner un moteur"}
                             </Text>
-                          )}
                         </TouchableOpacity>
                       )}
                     </View>
 
                     <PrimaryButton title={`AJOUTER`}
-                      style={styles.button} mode="contained" onPress={handleFilter} disabled={loadingEngines} />
+                      style={styles.button} loading={isSaving} mode="contained" onPress={handleFilter} disabled={loadingEngines} />
 
 
                     <View style={[styles.buttonGroup, {
@@ -303,4 +300,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default CarFilterModal;
+export default VehicleSelectionFilter;

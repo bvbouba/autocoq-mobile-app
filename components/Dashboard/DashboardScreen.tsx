@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Alert, ScrollView, StyleSheet, View, Text } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
@@ -9,6 +9,7 @@ import AuthPrompt from "../AuthPrompt";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useLoading } from "@/context/LoadingContext";
 import HomepageCarousel from "../layout/HomepageCarousel";
+import { useMessage } from "@/context/MessageContext";
 
 
 
@@ -16,16 +17,17 @@ const DashboardScreen = () => {
   const router = useRouter();
   const { authenticated } = useAuth();
   const { setLoading } = useLoading()
+  const { showMessage } = useMessage();
 
-  const { data: categoriesData, error: catError, loading } = useGetMainMenuQuery({
+  const { data: categoriesData, error: catError, loading,previousData } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
   });
   useEffect(() => {
-    if (catError) Alert.alert("Erreur lors du chargement des catégories", catError.message);
+    if (catError) showMessage("Erreur lors du chargement des catégories",10000);
   }, [
     catError]);
 
-
+  
 
   // Set loading state globally
   useEffect(() => {
@@ -55,7 +57,7 @@ const DashboardScreen = () => {
           <Divider /> */}
           {/* Catégories */}
           <CategoriesScroll
-            menus={categoriesData?.menu?.items || []}
+            menus={categoriesData?.menu?.items || previousData?.menu?.items ||[]}
             onClick={(slug) => router.push(`/categories/${slug}`)}
             loading={loading}
           />

@@ -7,7 +7,7 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 import { PrimaryButton } from "../button";
 import MyGarage from "../commun/MyGarage";
 import { useModal } from "@/context/useModal";
-import CarFilterModal from "./Modal";
+import VehicleSelectionFilter from "./VehicleSelection";
 
 interface props {
     carMake?:MakeDetailsFragment|null,
@@ -86,7 +86,7 @@ const AddVehicleSection =()=>{
               <View style={{ width: "100%" }}>
                 <PrimaryButton 
                 title={`AJOUTER UN VÉHICULE`}
-                onPress={() => openModal("carFilter",<CarFilterModal />)}
+                onPress={() => openModal("carFilter",<VehicleSelectionFilter />)}
                 />              
               </View>
             </>

@@ -6,11 +6,13 @@ import { View, StyleSheet } from 'react-native';
 import { useCheckout } from '@/context/CheckoutProvider';
 import DeliveryMethodComponent from '@/components/DeliveryMethod/DeliveryMethodComponent';
 import { useModal } from '@/context/useModal';
+import { useMessage } from '@/context/MessageContext';
 
 const ShippingMethods = () => {
     const { closeModal } = useModal();
     const { checkout, checkoutToken } = useCheckout();
     const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
+    const { showMessage } = useMessage();
 
     const shippingMethods = checkout && checkout.shippingMethods;
     const firstMethod = shippingMethods && shippingMethods?.length > 0 ? shippingMethods[0].id : undefined;
@@ -29,7 +31,7 @@ const ShippingMethods = () => {
             });
             closeModal();
         } catch (error) {
-            console.error("Erreur lors de la mise à jour du mode de livraison :", error);
+            showMessage("Erreur lors de la mise à jour")
         } finally {
             setLoading(false); // Arrêter le chargement
         }

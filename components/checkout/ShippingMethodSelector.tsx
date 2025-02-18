@@ -47,6 +47,18 @@ const ShippingMethodSelector: FC = () => {
       }}>
         <View style={styles.shippingMethodWrapper}>
           <View style={styles.titleWrapper}>
+            {<Text style={styles.shippingMethodTitle}>
+            Méthode de livraison
+            </Text>}
+            <TouchableOpacity onPress={() => {
+              openModal("ShippingMethod",
+                <ShippingMethods />
+              )
+            }}>
+              <Text style={styles.icon}>Modifier</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.titleWrapper}>
             {<Text style={styles.shippingMethodTitle}>{deliveryMethod?.name}
               {(deliveryMethod?.price.amount !== 0) && `- ${convertMoneyToString(
                 deliveryMethod?.price)}`}
@@ -56,7 +68,6 @@ const ShippingMethodSelector: FC = () => {
                 <ShippingMethods />
               )
             }}>
-              <Text style={styles.icon}>Modifier</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.titleWrapper}>
@@ -141,7 +152,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 8,
     marginTop: 8,
-    marginLeft: 8,
+    marginLeft: 0,
   },
   shippingMethodSummary: {
     overflow: "hidden",

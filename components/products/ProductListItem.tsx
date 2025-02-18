@@ -71,13 +71,13 @@ const ProductListItem: FC<Props> = ({ product }) => {
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper} testID="product-image-wrapper">
                     <View>
-                    <TouchableOpacity onPress={() => router.push(`/products/details/${product.id}?${params.toString()}`)}>
+                    <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}>
                         <ProductImage product={product} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
-                        <TouchableOpacity onPress={() => router.push(`/products/details/${product.id}?${params.toString()}`)}>
+                        <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}>
                         <Text style={styles.productTitle} numberOfLines={2} >
                             {product.name}
                         </Text>
@@ -114,9 +114,9 @@ const ProductListItem: FC<Props> = ({ product }) => {
                             onPress={handleAddItem}
                             disabled={loading}
                         >
-                            <Text style={styles.buttonText}>
-                            {loading ? <ActivityIndicator color="white" /> : "AJOUTER AU PANIER"}
-                            </Text>
+                           
+                            {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}> AJOUTER AU PANIER</Text>
+                        }
                         </Button>
                         </View>
                     </View>

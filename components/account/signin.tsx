@@ -8,6 +8,7 @@ import { Text, View, PaddedView, colors, fonts } from "@/components/Themed"
 import { useModal } from '@/context/useModal';
 import Logo from '../Logo';
 import { useCreateTokenMutation } from '@/saleor/api.generated';
+import { useMessage } from '@/context/MessageContext';
 
 interface Form {
     identifier: string;
@@ -29,6 +30,7 @@ const SignIn: FC<props> = ({ phoneNumber }) => {
     const [error, setError] = useState<string | null>(null);  
     const { closeModal } = useModal()
     const {setToken,setRefreshToken} = useAuth()
+    const { showMessage } = useMessage();
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -53,7 +55,8 @@ const SignIn: FC<props> = ({ phoneNumber }) => {
                     if(errors[0].field==="email"){
                         setError("Veuillez saisir des informations valides")
                     }else{
-                    setError(data?.tokenCreate?.errors[0]?.message || 'Une erreur inconnue est survenue.');
+                    // setError(data?.tokenCreate?.errors[0]?.message || 'Une erreur inconnue est survenue.');
+                    showMessage('Une erreur inconnue est survenue.')
                     }
                 } else {
                     if (data?.tokenCreate?.token) {
@@ -61,12 +64,13 @@ const SignIn: FC<props> = ({ phoneNumber }) => {
                         setRefreshToken(data?.tokenCreate?.refreshToken || "");
                         closeModal()
                     } else {
-                        setError('Échec de l’authentification. Veuillez réessayer.');
+                        showMessage('Échec de l’authentification. Veuillez réessayer.')
+
                     }
                 }
             } catch (err) {
                 console.error('Login error:', err);
-                setError('Impossible de se connecter. Veuillez réessayer.');
+                showMessage("Impossible de se connecter. Veuillez réessayer.")
             } finally {
                 setLoading(false);
             }

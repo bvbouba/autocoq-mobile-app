@@ -13,14 +13,16 @@ const HomepageCarousel = () => {
   const router = useRouter();
 
   // Fetch menu items
-  const { data, error, loading } = useGetmenuQuery({
+  const { data, error, loading,previousData } = useGetmenuQuery({
     variables: { channel: getConfig().channel, slug: "carousel" },
   });
 
   if (loading) return <Skeleton colorMode="light" height={250} width="100%"  />
   if (!data?.menu?.items) return null;
+   
+  const items = data.menu.items || previousData?.menu?.items
 
-  const carouselItems = data.menu.items.map(menu => ({
+  const carouselItems = items.map(menu => ({
     slug: menu.collection?.slug,
     name: menu.name,
     id: menu.id,

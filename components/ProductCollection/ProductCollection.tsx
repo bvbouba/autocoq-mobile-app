@@ -15,6 +15,7 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 import { Button } from "react-native-paper";
 import { useRouter } from "expo-router";
 import ProductListItemSkeleton from "../skeletons/ProductListItem";
+import { useMessage } from "@/context/MessageContext";
 
 export interface ProductCollectionProps {
   filter?: ProductFilterInput;
@@ -40,6 +41,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
 
   const { selectedCar } = useCarFilter()
   const router = useRouter()
+  const {showMessage} = useMessage()
 
 
   const variables: ProductCollectionQueryVariables = {
@@ -112,6 +114,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       }
     } catch (error) {
       console.error("❌ Error fetching more:", error);
+      showMessage("Erreur")
     }
   };
 
@@ -122,7 +125,10 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                       <ProductListItemSkeleton key={index} />
                     ))}
                   </View>;
-
+  
+  if (error) {
+    showMessage("Échec réseau")
+  }
 
 
   return (

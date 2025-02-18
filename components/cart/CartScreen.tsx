@@ -16,21 +16,23 @@ import { router, useRouter } from "expo-router";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { getConfig } from "@/config";
 import { useAuth } from "@/lib/providers/authProvider";
-import { useState } from "react";
-import Loading from "../Loading";
+import { useEffect, useState } from "react";
 import { useCheckout } from "@/context/CheckoutProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useModal } from "@/context/useModal";
 import Auth from "../account/auth";
+import { useLoading } from "@/context/LoadingContext";
+import { useMessage } from "@/context/MessageContext";
 
 const CartScreen = () => {
     const { checkout,checkoutToken, loading } = useCheckout();
     const { authenticated, token, checkAndRefreshToken } = useAuth();
     const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
     const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
-    const [mLoading,setmLoading] = useState(false)
+    const [isLoading,setLoading] = useState(false)
     const router = useRouter()
     const {openModal} = useModal()
+    const {showMessage} = useMessage()
 
     const { data, loading: aloading } = useCurrentUserAddressesQuery({
         skip: !authenticated,
@@ -54,10 +56,8 @@ const CartScreen = () => {
     const navigation = useRouter();
 
     const handleSubmit = async () => {
-        setmLoading(true)
  
         if (checkout?.shippingAddress && checkout?.billingAddress) {
-            setmLoading(false)
             navigation.push('/checkout');
             return;
         }
@@ -67,6 +67,7 @@ const CartScreen = () => {
         let billingSuccess = false;
       
         try {
+            setLoading(true)
             if (!checkout?.shippingAddress && shippingAddress && checkout?.isShippingRequired) {
                 const { data: shippingData } = await updateShippingAddress({
                     variables: { 
@@ -89,6 +90,7 @@ const CartScreen = () => {
                     shippingSuccess = true;
                 } else {
                     console.error("Error updating shipping address:", shippingErrors);
+                    showMessage("Erreur lors de la mise à jour")
                 }
             } 
     
@@ -115,14 +117,15 @@ const CartScreen = () => {
                     billingSuccess = true;
                 } else {
                     console.error("Error updating billing address:", billingErrors);
+                    showMessage("Erreur lors de la mise à jour")
                 }
             }
     
         } catch (error) {
-            setmLoading(false)
             console.error("Failed to update addresses. Please try again.", error);
+            showMessage("Impossible de mettre à jour les adresses. Veuillez réessayer.")
         }finally{
-            setmLoading(false)
+            setLoading(false)
         }
         
         if ((shippingSuccess || billingSuccess)) {
@@ -137,11 +140,7 @@ const CartScreen = () => {
 
 5    };
 
-    if (aloading) {
-        return (
-           <Loading />
-        );
-    }
+
 
     if (!checkout || checkout.lines.length === 0) {
         return (
@@ -166,7 +165,9 @@ const CartScreen = () => {
                     mode="contained" 
                     style={styles.checkoutButton}
                 >
-                    CONTINUER LES ACHATS
+                   <Text style={{
+                    color:"white"
+                   }}>CONTINUER LES ACHATS</Text> 
                 </Button>
             </PaddedView>
 
@@ -216,7 +217,7 @@ const CartScreen = () => {
                         mode="contained" 
                         disabled={loading}
                     >
-                        {mLoading ? <ActivityIndicator color="white" /> : 
+                        {isLoading ? <ActivityIndicator color="white" /> : 
                         <Text style={{
                             color:"white"
                         }}>PASSER LA COMMANDE</Text>}

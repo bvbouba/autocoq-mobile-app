@@ -1,5 +1,6 @@
 import { colors } from "@/components/Themed";
 import { useCheckout } from "@/context/CheckoutProvider";
+import { useMessage } from "@/context/MessageContext";
 import { useOrderContext } from "@/context/useOrderContext";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "@/saleor/api.generated";
@@ -18,6 +19,7 @@ const CodPayment = () => {
     const [checkoutCompleteMutation] = useCheckoutCompleteMutation();
     const {authenticated} = useAuth()
     const { setRecentOrderId: setOrderId } = useOrderContext();
+    const {showMessage} = useMessage()
 
     const redirectToOrderDetailsPage = async (orderId: string) => {
         Alert.alert('Succès', 'Votre commande est confirmée !');
@@ -41,6 +43,7 @@ const CodPayment = () => {
     
         if (paymentCreateErrors) {
           console.error(paymentCreateErrors);
+          showMessage("Erreur de création de paiement")
           setIsPaymentProcessing(false);
           return;
         } 
@@ -52,7 +55,8 @@ const CodPayment = () => {
           },
         });
         if (completeErrors) {
-          console.error("Erreurs de finalisation :", completeErrors);
+          console.error("Erreur de finalisation :", completeErrors);
+          showMessage("Erreur de finalisation de la commande")
           setIsPaymentProcessing(false);
           return;
         }
@@ -66,6 +70,7 @@ const CodPayment = () => {
           redirectToOrderDetailsPage(order.id);
         } else {
           console.error("La commande n'a pas été créée");
+          showMessage("La commande n'a pas été créée")
         }
     };
 

@@ -21,15 +21,15 @@ interface Props {
 }
 
 
-const ProductFilterBottomSheet: FC<Props> = ({ 
-    attributeFiltersData, 
-    addAttributeFilter, 
-    pills, 
-    clearFilters, 
-    removeAttributeFilter, 
-    setSortBy, 
+const ProductFilterBottomSheet: FC<Props> = ({
+    attributeFiltersData,
+    addAttributeFilter,
+    pills,
+    clearFilters,
+    removeAttributeFilter,
+    setSortBy,
     sortBy,
-   itemsCounter
+    itemsCounter
 }) => {
     return (
         <>
@@ -56,23 +56,27 @@ const ProductFilterBottomSheet: FC<Props> = ({
 
 
             <View style={styles.filterTypeContainer}>
-
-                {attributeFiltersData?.map((attribute) => {
-                    return <FilterDropdown
-                        key={attribute.id}
-                        label={attribute.name || ""}
-                        optionToggle={addAttributeFilter}
-                        attributeSlug={attribute.slug!}
-                        options={getFilterOptions(attribute, pills)}
-                        removeAttributeFilter={removeAttributeFilter}
-                    />
-               } )}
-
+                {attributeFiltersData
+                    ?.filter(
+                        (attribute, index, self) =>
+                            self.findIndex((a) => a.id === attribute.id) === index
+                    )
+                    .map((attribute) => (
+                        <FilterDropdown
+                            key={attribute.id}
+                            label={attribute.name || ""}
+                            optionToggle={addAttributeFilter}
+                            attributeSlug={attribute.slug!}
+                            options={getFilterOptions(attribute, pills)}
+                            removeAttributeFilter={removeAttributeFilter}
+                        />
+                    ))}
             </View>
-        <View style={styles.buttonGroup}>
-            <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={() => clearFilters()}>Reset</Button>
-        </View>
-    </>
+            <View style={styles.buttonGroup}>
+                <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={() => clearFilters()}>
+                    <Text>Réinitialiser</Text></Button>
+            </View>
+        </>
     );
 };
 
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 16,
-        marginBottom:50
+        marginBottom: 50
 
     },
     primaryButton: {
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
     closeButton: {
         top: 0,
         right: 0,
-      },
+    },
 })
 
 export default ProductFilterBottomSheet;

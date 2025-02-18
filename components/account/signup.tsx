@@ -9,6 +9,7 @@ import {Text, View , PaddedView,colors, fonts } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';
 import Logo from '../Logo';
+import { useMessage } from '@/context/MessageContext';
 
 
 interface Props {
@@ -51,6 +52,7 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
    const {closeModal} = useModal()
    const [useLogin] = useCreateTokenMutation();
    const {setRefreshToken,setToken} = useAuth()
+   const { showMessage } = useMessage();
 
     const formik = useFormik<Form>({
         initialValues: {
@@ -92,18 +94,19 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                         });
                     const loginError = loginData?.tokenCreate?.errors || [];
                         if (loginError.length>0) {
-                            setError("La connexion a échoué. Veuillez réessayer sur la page de connexion.");                           
+                            showMessage("La connexion a échoué. Veuillez réessayer sur la page de connexion.")                         
                         } else {
                             if (loginData?.tokenCreate?.token) {
                                 setToken(loginData?.tokenCreate?.token);
                                 setRefreshToken(loginData?.tokenCreate?.refreshToken || "");
                                 closeModal()
                             } else {
-                                setError('Échec de l’authentification. Veuillez réessayer.');
+                                showMessage("Échec de l’authentification. Veuillez réessayer.") 
                             }
                         }
                     } catch (err) {
                         console.error('Login error:', err);
+                        showMessage("Erreur de connexion") 
                     } 
                 }
             } catch {

@@ -7,12 +7,14 @@ import { useModal } from "@/context/useModal";
 import SignIn from "./signin";
 import SignUp from "./signup";
 import Logo from "../Logo";
+import { useMessage } from "@/context/MessageContext";
 
 
 const Auth = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
   const {openModal} = useModal()
+  const { showMessage } = useMessage();
 
   // Apollo useLazyQuery for checking phone number
   const [checkPhoneExists, { loading }] = useLazyQuery(CheckPhoneNumberDocument, {
@@ -29,7 +31,7 @@ const Auth = () => {
       }
     },
     onError: (err) => {
-      setError("Une erreur est survenue. Veuillez réessayer.");
+      showMessage("Une erreur est survenue. Veuillez réessayer.")
       console.error(err);
     },
   });

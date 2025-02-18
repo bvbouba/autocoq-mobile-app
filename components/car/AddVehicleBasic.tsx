@@ -1,7 +1,7 @@
 import { TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Text, View, colors, fonts } from "@/components/Themed";
 
-import CarFilterModal from "./Modal";
+import VehicleSelectionFilter from "./VehicleSelection";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
@@ -66,7 +66,7 @@ const AddVehicleBasic = () => {
 
         <TouchableOpacity style={styles.button} onPress={() =>
           openModal("carFilter",
-            <CarFilterModal />
+            <VehicleSelectionFilter />
           )
         }>
           <Text style={[styles.buttonText, (selectedCar) && {

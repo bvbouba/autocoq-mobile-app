@@ -6,20 +6,23 @@ import { mapEdgesToItems } from "@/utils/map";
 import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
 import ProductCollectionSkeleton from "@/components/skeletons/ProductCollection";
+import { useMessage } from "@/context/MessageContext";
 
 
 
 const CategoryProductScreen = () => {
   const pathname = usePathname();
   const [slug, setSlug] = useState<string>();
-  const { data, loading: categoryLoading } = useCategoryBySlugQuery({
+  const { showMessage } = useMessage();
+
+  const { data, loading: categoryLoading,error } = useCategoryBySlugQuery({
     skip: !slug,
     variables: {
       slug: slug || ""
     }
   })
   const categoryID = data?.category?.id
-  const { data: attributeData, loading: attributeLoading } = useFilteringAttributesQuery({
+  const { data: attributeData, loading: attributeLoading, error:attributeError } = useFilteringAttributesQuery({
     skip: !categoryID,
     variables: {
       filter: {
@@ -41,11 +44,20 @@ const CategoryProductScreen = () => {
   const attributes = mapEdgesToItems(attributeData?.attributes)
 
   if (categoryLoading || attributeLoading) return <ProductCollectionSkeleton />
-
+  
+  if(error) {
+    showMessage("Échec réseau")
+    console.log(error.message)
+  }else if (attributeError) {
+    showMessage("Échec réseau")
+    console.log(attributeError.message)
+  }
 
   if (!category) {
     return <NotFoundScreen />;
   }
+
+  
 
   return <SafeAreaView style={{ flex: 1 }}>
     <FilteredProductList

@@ -67,22 +67,22 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
   const [addProductToCheckout] = useCheckoutAddProductLineMutation();
   const { user } = useAuth();
 
-  const { data, loading:checkoutByTokenLoading, error: checkoutError } = useCheckoutByTokenQuery({
+  const { data, loading: checkoutByTokenLoading, error: checkoutError } = useCheckoutByTokenQuery({
     skip: !checkoutToken,
-    variables:{
+    variables: {
       checkoutToken,
-      zoneName:checkout?.shippingAddress?.city
+      zoneName: checkout?.shippingAddress?.city
     }
   });
- 
+
   useEffect(() => {
     if (data?.checkout) {
       setCheckout(data.checkout);
     }
     setLoading(checkoutByTokenLoading)
-    setError(checkoutError?.message||"")
+    setError(checkoutError?.message || "")
   }, [data]);
- 
+
 
   const resetCheckoutToken = () => {
     setCheckoutToken("");
@@ -134,16 +134,16 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
     setError(errors.map((e) => e.message || "").join("\n"));
   };
 
-  
 
-  const onQuantityUpdate = async (variantId:string, quantity:number) => {
+
+  const onQuantityUpdate = async (variantId: string, quantity: number) => {
     if (!variantId || !checkoutToken) {
       return;
     }
     setLoading(true);
-    const {data:updateCheckoutLineData} = await checkoutLineUpdateMutation({
+    const { data: updateCheckoutLineData } = await checkoutLineUpdateMutation({
       variables: {
-        token:checkoutToken,
+        token: checkoutToken,
         lines: [
           {
             quantity,
@@ -156,7 +156,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
     if (updateCheckoutLineData?.checkoutLinesUpdate?.checkout) {
       setCheckout(updateCheckoutLineData?.checkoutLinesUpdate?.checkout);
     }
-    
+
     const mutationErrors = updateCheckoutLineData?.checkoutLinesUpdate?.errors;
     setLoading(false);
     if (mutationErrors && mutationErrors.length > 0) {
@@ -164,24 +164,33 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const onCheckoutLineDelete = async (lineId:string)=>{
-    if(!lineId || !checkoutToken) return
+  const onCheckoutLineDelete = async (lineId: string) => {
+    if (!lineId || !checkoutToken) return
     setLoading(true);
-    const {data:deleteCheckoutLineData} = await removeProductFromCheckout({
-      variables: {
-        checkoutToken,
-        lineId,
-      },
-    })
 
-    if (deleteCheckoutLineData?.checkoutLineDelete?.checkout) {
-      setCheckout(deleteCheckoutLineData?.checkoutLineDelete?.checkout);
+    try {
+      const { data: deleteCheckoutLineData } = await removeProductFromCheckout({
+        variables: {
+          checkoutToken,
+          lineId,
+        },
+      })
+      if (deleteCheckoutLineData?.checkoutLineDelete?.checkout) {
+        setCheckout(deleteCheckoutLineData?.checkoutLineDelete?.checkout);
+      }
+
+      const mutationErrors = deleteCheckoutLineData?.checkoutLineDelete?.errors;
+      if (mutationErrors && mutationErrors.length > 0) {
+        setError(mutationErrors.map((e) => e.message || "").join("\n"));
+      }
+
+    } catch (error) {
+      console.error("Erreur lors de la suppression du produit :", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    const mutationErrors = deleteCheckoutLineData?.checkoutLineDelete?.errors;
-    if (mutationErrors && mutationErrors.length > 0) {
-      setError(mutationErrors.map((e) => e.message || "").join("\n"));
-    }
+
+
   }
 
   const providerValues: CheckoutConsumerProps = {

@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
 import SecondaryButton from "./button/SecondaryButton";
 import {fonts, SurfaceView, Text, View  } from "@/components/Themed"
 import { useModal } from "@/context/useModal";
@@ -10,12 +9,7 @@ interface props {
 }
 
 const AuthPrompt = ({redirectUrl}:props) => {
-  const router = useRouter();
   const {openModal} = useModal()
-
-  const handleSignIn = () => {
-    router.push(`/account/auth?redirectUrl=${redirectUrl}`);
-  };
 
   return (
     <SurfaceView style={styles.wrapper}>

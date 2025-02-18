@@ -1,12 +1,13 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { CheckoutLine, useRemoveProductFromCheckoutMutation } from "@/saleor/api.generated";
-import {Text, View , Divider,colors, fonts } from "@/components/Themed"
+import { Text, View, Divider, colors, fonts } from "@/components/Themed"
 
 import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
 import { useCheckout } from "@/context/CheckoutProvider";
+import { useLoading } from "@/context/LoadingContext";
 
 interface Props {
     lineItem: CheckoutLine;
@@ -35,8 +36,9 @@ const CartImage: FC<{ line: CheckoutLine }> = ({ line }) => {
 
 const CartItem: FC<Props> = ({ lineItem }) => {
     const router = useRouter();
-    const { onQuantityUpdate, loading,onCheckoutLineDelete } = useCheckout();
-
+    const { onQuantityUpdate, loading, onCheckoutLineDelete } = useCheckout();
+    const {setLoading} = useLoading()
+   
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',
@@ -45,8 +47,8 @@ const CartItem: FC<Props> = ({ lineItem }) => {
     const variants = lineItem.variant.product.variants || [];
 
     return <>
-<Pressable onPress={() => router.push(`/products/details/${lineItem.variant.product.id}`)}>
-<View style={styles.productItem}>
+        <Pressable onPress={() => router.push(`/products/${lineItem.variant.product.id}`)}>
+            <View style={styles.productItem}>
                 <View style={styles.productWrapper} testID="product-image-wrapper">
                     <View style={styles.imageWrapper}>
                         <CartImage line={lineItem} />
@@ -90,7 +92,7 @@ const CartItem: FC<Props> = ({ lineItem }) => {
                     <View style={styles.picker}>
                         <CartItemQuantityPicker
                             value={lineItem.quantity}
-                            onSelect={async(value) => await onQuantityUpdate(lineItem.variant.id, value)}
+                            onSelect={async (value) => await onQuantityUpdate(lineItem.variant.id, value)}
                             disabled={loading}
                         />
                         <View style={styles.priceContainer}>
@@ -120,18 +122,18 @@ const styles = StyleSheet.create({
     productTitle: {
         textAlign: "left",
         fontWeight: 'bold',
-        fontSize:fonts.caption,
+        fontSize: fonts.caption,
         marginBottom: 8,
     },
     productVariant: {
         textAlign: "left",
-        fontSize:fonts.h2,
+        fontSize: fonts.h2,
         marginBottom: 16
     },
     productPrice: {
         textAlign: "left",
         fontWeight: "bold",
-        fontSize:fonts.h2,
+        fontSize: fonts.h2,
         marginBottom: 16
     },
     productDescription: {
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     partNo: {
-        fontSize:fonts.caption,
+        fontSize: fonts.caption,
         color: colors.textSecondary
     },
 

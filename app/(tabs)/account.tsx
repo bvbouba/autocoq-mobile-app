@@ -3,34 +3,39 @@ import { FontAwesome } from '@expo/vector-icons';
 import {Text, View , Divider,colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
 import BannerAds from '@/components/layout/BannerAds';
 import Loading from '@/components/Loading';
 import { useModal } from '@/context/useModal';
 import Auth from '@/components/account/auth';
+import { useLoading } from '@/context/LoadingContext';
+import { useMessage } from '@/context/MessageContext';
 
 export default function AccountScreen() {
   const router = useRouter();
   const { user, loading, logout,authenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const {openModal} = useModal()
+  const {setLoading} = useLoading()
+  const { showMessage } = useMessage();
+
+  useEffect(()=>{
+    setLoading(loading)
+  },[loading])
 
   const handleSignOut = async () => {
-    setIsLoading(true); // Commence le chargement
+    setIsLoading(true); 
     try {
       logout();
       router.push('/account');
     } catch (error) {
-      console.error("Erreur lors de la déconnexion :", error);
+      showMessage("Erreur lors de la déconnexion")
     } finally {
       setIsLoading(false); // Arrête le chargement
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <View style={[styles.scrollContainer, {

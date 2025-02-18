@@ -32,11 +32,10 @@ export function FilterDropdown({
     setOptions(propOptions);
   }, [propOptions]);
 
-  
   const handleOptionPress = async (option:FilterDropdownOption) => {
     if (isLoading) return;
     setLoading(true); 
-
+    console.log("loading")
     const newOptions = options?.map((opt) =>
       opt.id === option.id ? { ...opt, chosen: !opt.chosen } : opt
     );
@@ -44,15 +43,14 @@ export function FilterDropdown({
 
     try {
       if (option.chosen) {
-        await removeAttributeFilter(attributeSlug, option.slug);
+        removeAttributeFilter(attributeSlug, option.slug);
       } else {
-        await optionToggle(attributeSlug, option.slug);
+       optionToggle(attributeSlug, option.slug);
       }
     } finally {
       setLoading(false); // End loading state
     }
   };
-
 
   return (
     <View style={styles.container}>

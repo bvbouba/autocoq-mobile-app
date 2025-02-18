@@ -10,11 +10,19 @@ import ShippingMethodSelector from '@/components/checkout/ShippingMethodSelector
 import ShippingAddress from '@/components/checkout/ShippingAddress';
 import { FontAwesome } from '@expo/vector-icons';
 import { useCheckout } from '@/context/CheckoutProvider';
+import { useEffect } from 'react';
+import { useLoading } from '@/context/LoadingContext';
+import PromoCodeForm from '@/components/checkout/PromoCodeForm';
 
 const Checkout = () => {
-    const { checkout } = useCheckout();
+    const { checkout,loading } = useCheckout();
     const { chosenGateway } = usePaymentContext();
     const router = useRouter();
+    const {setLoading} = useLoading()
+
+    useEffect(()=>{ 
+    setLoading(loading)
+    },[loading])
     
     const Component = paymentMethodToComponent[chosenGateway || "dummy"];
 
@@ -59,6 +67,8 @@ const Checkout = () => {
                     <Divider style={{ borderBottomWidth: 10 }} />
                     <PaymentMethodSelector />
                     <Divider style={{ borderBottomWidth: 10 }} />
+                    {/* <PromoCodeForm />  */}
+                    {/* <Divider style={{ borderBottomWidth: 10 }} /> */}
                 </View>
                 <OrderTotal />
             </ScrollView>

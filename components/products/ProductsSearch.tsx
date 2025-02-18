@@ -47,16 +47,16 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
         if (cleanSearch) {
             const params = new URLSearchParams();
             if (value) {
-                params.append("search", value);
+                params.append("q", value);
             }
-            router.push(`/products/results?${params.toString()}`);
+            router.push(`/search?${params.toString()}`);
         }
 
         const params = new URLSearchParams();
         if (value) {
-            params.append("search", value);
+            params.append("q", value);
         }
-           router.push(`/products/results?${params.toString()}`);
+           router.push(`/search?${params.toString()}`);
     }, []);
 
     useEffect(() => {

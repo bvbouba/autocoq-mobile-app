@@ -21,6 +21,7 @@ import { PathProvider } from "@/context/path";
 import { ModalProvider } from "@/context/useModal";
 import { CheckoutProvider } from "@/context/CheckoutProvider";
 import { LoadingProvider } from "@/context/LoadingContext";
+import { MessageProvider } from "@/context/MessageContext";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -75,6 +76,7 @@ function RootLayoutNav() {
   return (
     <ApolloProvider client={apolloClient}>
       <AuthProvider>
+      <MessageProvider>
         <LoadingProvider>
           <PathProvider>
             <CarFilterProvider>
@@ -90,7 +92,7 @@ function RootLayoutNav() {
                               }}
                             />
                             <Stack.Screen
-                              name="products/results"
+                              name="search"
                               options={{
                                 headerStyle: {
                                   backgroundColor: colors.background,
@@ -116,7 +118,7 @@ function RootLayoutNav() {
                                 header: () => <SearchHeader withBack />,
                               }}
                             />
-                            <Stack.Screen name="products/details/[id]"
+                            <Stack.Screen name="products/[id]"
                               options={{
                                 header: () => <SearchHeader withBack withVehicle={false} />
 
@@ -146,18 +148,8 @@ function RootLayoutNav() {
                             <Stack.Screen name="account/terms" options={{ 
                                  header: () => <SimpleBackHeader hasLogo={false} title="Termes et conditions"/>,                             
                                }} />
-                            <Stack.Screen name="account/auth" options={{
-                              headerTitle: "",
-                              header: () => <SimpleBackHeader hasLogo={true} />,
-                            }} />
-                            <Stack.Screen name="account/signup" options={{
-                              headerTitle: "",
-                              header: () => <SimpleBackHeader hasLogo={true} />,
-                            }} />
-                            <Stack.Screen name="account/signin" options={{
-                              headerTitle: "",
-                              header: () => <SimpleBackHeader hasLogo={true} />,
-                            }} />
+                
+               
                             <Stack.Screen name="account/addresses" options={{ 
                                 header: () => <SimpleBackHeader hasLogo={false} title="Mes Adresses"/>,
                              }} />
@@ -173,6 +165,7 @@ function RootLayoutNav() {
             </CarFilterProvider>
           </PathProvider>
         </LoadingProvider>
+        </MessageProvider>
       </AuthProvider>
     </ApolloProvider>
   );

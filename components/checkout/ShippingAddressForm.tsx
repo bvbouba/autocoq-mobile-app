@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity,  } from "react-native";
+import { FlatList, Pressable, StyleSheet, TouchableOpacity,  } from "react-native";
 import { useFormik } from "formik";
 import {Text, View ,colors, fonts } from "@/components/Themed"
 
@@ -221,7 +221,7 @@ const ShippingAddressForm: FC<Props> = () => {
   
       {/* Ville */}
       <View style={styles.inputContainer}>
-        <TouchableOpacity
+        <Pressable
           style={{
             width: "100%"
           }}
@@ -252,7 +252,7 @@ const ShippingAddressForm: FC<Props> = () => {
               editable={false} 
             />
           </View>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       
       {/* Code postal */}
@@ -295,7 +295,7 @@ const ShippingAddressForm: FC<Props> = () => {
             updateAddressMutation={(address: Form)  => updateMutation(address)}
           />
           <Button mode="text" onPress={() => setShowForm(true)}>
-            + Ajouter une nouvelle adresse
+          <Text>  + Ajouter une nouvelle adresse </Text>
           </Button>
         </>
       ) : (

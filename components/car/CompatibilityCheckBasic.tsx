@@ -5,7 +5,7 @@ import { carType, useCarFilter } from "@/context/useCarFilterContext"
 import { Text, View, colors } from "@/components/Themed"
 import SkeletonContent from "react-native-skeleton-content"
 import { useModal } from "@/context/useModal"
-import CarFilterModal from "./Modal"
+import VehicleSelectionFilter from "./VehicleSelection"
 import { useEffect, useState } from "react"
 import { Skeleton } from "moti/skeleton"
 
@@ -16,21 +16,18 @@ interface props {
 
 const CompatibilityCheckBasic = ({ product }: props) => {
   const [selectedLocalCar, setSelectedLocalCar] = useState<carType | undefined>()
+  const { selectedCar } = useCarFilter()
   const {openModal} = useModal()
-  const {selectedCar}  = useCarFilter()
+  const car = selectedLocalCar || selectedCar
 
-  useEffect(()=>{
-    setSelectedLocalCar(selectedCar)
-  },[selectedCar])
-  
   const { data, loading } = useCompatibilityCheckQuery({
     variables: {
       productId: product.id,
       car: {
-        make: selectedLocalCar?.make?.id,
-        model: selectedLocalCar?.model?.id,
-        engine: selectedLocalCar?.engine?.id,
-        year: selectedLocalCar?.year?.id
+        make: car?.make?.id,
+        model: car?.model?.id,
+        engine: car?.engine?.id,
+        year: car?.year?.id
       }
     }
   })
@@ -46,14 +43,14 @@ const CompatibilityCheckBasic = ({ product }: props) => {
           style={[
             styles.vehicleContainer,
             isCompatible && styles.compatible,
-            !isCompatible && selectedLocalCar?.name && styles.noCompatible,
+            !isCompatible && car?.name && styles.noCompatible,
           ]}
         >
           <View
             style={[
               styles.vehicleCheck,
               isCompatible && styles.compatibleVehicleCheck,
-              !isCompatible && selectedLocalCar?.name && styles.noCompatibleVehicleCheck,
+              !isCompatible && car?.name && styles.noCompatibleVehicleCheck,
             ]}
           >
             <View style={{
@@ -67,9 +64,9 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                 }} />
           
                   <FontAwesome
-                    name={(selectedLocalCar?.name) ? isCompatible ? "check-circle" : "warning" : "exclamation-circle"}
+                    name={(car?.name) ? isCompatible ? "check-circle" : "warning" : "exclamation-circle"}
                     size={10}
-                    color={(selectedLocalCar?.name) ? isCompatible ? colors.success : colors.error : colors.warning}
+                    color={(car?.name) ? isCompatible ? colors.success : colors.error : colors.warning}
                     style={{
                       position: "absolute",
                       bottom: -2,
@@ -78,22 +75,22 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   />
               </View>
               <Text style={styles.vehicleText}>
-                {selectedLocalCar?.name
+                {car?.name
                   ? isCompatible
                     ? <>
-                      <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal/>)}>
+                      <TouchableOpacity onPress={() => openModal("carFilter",<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />)}>
                         <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold"
                         }]}>Compatible avec votre </Text>
                         <Text style={[styles.vehicleButtonText, {
                           textDecorationLine: "underline"
-                        }]}>{selectedLocalCar?.name}</Text>
+                        }]}>{car?.name}</Text>
                       </TouchableOpacity>
 
                     </>
 
                     : <>
-                      <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal/>)}>
+                      <TouchableOpacity onPress={() => openModal("carFilter",<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />)}>
                         <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold",
                           textDecorationLine: "underline"
@@ -105,13 +102,13 @@ const CompatibilityCheckBasic = ({ product }: props) => {
 
 
                           ]}
-                        >avec votre véhicule {selectedLocalCar?.name}</Text>
+                        >avec votre véhicule {car?.name}</Text>
                       </TouchableOpacity>
 
                     </>
                   :
 
-                  <TouchableOpacity onPress={() => openModal("carFilter",<CarFilterModal setSelectedLocalCar={setSelectedLocalCar}/>)}>
+                  <TouchableOpacity onPress={() => openModal("carFilter",<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar}/>)}>
                     <Text style={[styles.vehicleText, {
                       textDecorationLine: "underline"
                     }]}>

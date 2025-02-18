@@ -83,7 +83,7 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
                 </Button>
 
                 <Button onPress={onCancel} mode="text" style={styles.cancelButton}>
-                    Annuler
+                   <Text>Annuler</Text> 
                 </Button>
 
                 {error && (
