@@ -17,7 +17,7 @@
       "autoIncrement": true,
       "channel": "production",
       "android": {
-        "image": "ubuntu-22.04-jdk-17-ndk-r26b",
+        "image": "sdk-51",
         "env": {
           "NODE_VERSION": "20"
         }

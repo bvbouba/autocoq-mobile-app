@@ -4,7 +4,6 @@
   "license": "0BSD",
   "version": "1.0.0",
   "scripts": {
-    "preinstall": "nvm install 20 && nvm use 20",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
