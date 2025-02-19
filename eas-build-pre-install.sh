@@ -1,14 +1,27 @@
 #!/bin/bash
 
-echo "Installing Node.js 20..."
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-apt-get install -y nodejs
+echo "🔧 Installing nvm..."
+export NVM_DIR="$HOME/.nvm"
 
-echo "Setting default Node.js version..."
-export PATH="/usr/bin:$PATH"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  . "$NVM_DIR/nvm.sh"
+else
+  echo "❌ NVM is not installed. Exiting..."
+  exit 1
+fi
+
+echo "🔄 Installing and using Node.js 20..."
+nvm install 20
+nvm use 20
+nvm alias default 20
+
+# Confirm the correct Node.js version
+echo "✅ Node.js version:"
 node -v
 npm -v
 
-echo "Ensuring Yarn uses the correct Node version..."
-corepack enable
-yarn config set nodeLinker node-modules
+# Force Yarn to use the correct Node.js version
+echo "🔄 Configuring Yarn..."
+yarn config set ignore-engines true
+
+echo "✅ Pre-install script completed successfully!"
