@@ -23,7 +23,9 @@ npm -v
 # Install Yarn globally if not installed
 if ! command -v yarn &> /dev/null; then
   echo "🔄 Yarn not found. Installing..."
-  npm install -g yarn
+  npm install -g corepack
+  corepack enable
+  corepack prepare yarn@stable --activate
 
   # Ensure Yarn is available in the current shell session
   export PATH="$(npm bin -g):$PATH"
