@@ -3,19 +3,16 @@ import { FC } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { Text, View, colors, fonts } from "@/components/Themed"
-import { IconButton } from "react-native-paper";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { useModal } from "@/context/useModal";
 import ShippingMethods from "@/app/shippingMethods";
 
 
 const ShippingMethodSelector: FC = () => {
-  const { checkout } = useCheckout();
-  const router = useRouter();
+  const { checkout ,delivery} = useCheckout();
   const { openModal } = useModal()
   const shippingMethods = checkout && checkout.shippingMethods;
-  const price = checkout?.shippingPrice?.gross?.amount || 0;
-  const deliveryMethod = shippingMethods?.find((s) => s.price.amount === price);
+  const deliveryMethod = shippingMethods?.find((s) => s.id === delivery.methodId);
 
   // Calculate the estimated delivery date
   const getEstimatedDeliveryDate = (maxDays: number | undefined) => {
@@ -38,7 +35,7 @@ const ShippingMethodSelector: FC = () => {
 
   const estimatedDate = getEstimatedDeliveryDate(deliveryMethod?.maximumDeliveryDays || 0);
 
-  if (shippingMethods && shippingMethods.length > 0) {
+  if (deliveryMethod) {
     return (
       <Pressable onPress={() => {
         openModal("ShippingMethod",
@@ -78,7 +75,7 @@ const ShippingMethodSelector: FC = () => {
           <View style={{
             flexDirection: "column"
           }}>
-            {checkout.lines.map(line =>
+            {checkout?.lines.map(line =>
               <Image
                 key={line.id}
                 style={styles.tinyLogo}
@@ -97,23 +94,24 @@ const ShippingMethodSelector: FC = () => {
   }
 
   return (
-    <Pressable onPress={() => router.push("/shippingMethods")}>
+    <Pressable onPress={() => openModal("ShippingMethod",<ShippingMethods />)}>
       <View style={styles.shippingMethodWrapper}>
         <View style={styles.titleWrapper}>
           <Text style={styles.shippingMethodTitle}>Méthode de livraison</Text>
-          <IconButton
+          {/* <IconButton
             icon="chevron-down"
             onPress={() => router.push("/shippingMethods")}
             style={styles.icon}
-          />
+          /> */}
         </View>
         <View style={styles.titleWrapper}>
-          <Text style={styles.shippingMethodSummary}>
-            Saisissez d'abord l'adresse de livraison
+          <Text style={[styles.shippingMethodSummary, { color: "red" }]}>
+           Veuillez sélectionner un mode de livraison
           </Text>
         </View>
       </View>
     </Pressable>
+    
   );
 };
 

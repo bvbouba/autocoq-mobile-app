@@ -1,33 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import {  Text, StyleSheet, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { colors, fonts } from "./Themed";
 import { useModal } from "@/context/useModal";
-import { useGetCitiesQuery } from "@/saleor/api.generated";
 import { useCheckout } from "@/context/CheckoutProvider";
+import { ZoneList } from "./ZoneList";
 
 const ZoneSelector: React.FC = () => {
-  const { delivery, setDelivery } = useCheckout();
-  const { openModal, closeModal } = useModal();
-  const { data, loading } = useGetCitiesQuery();
+  const { delivery } = useCheckout();
+  const { openModal } = useModal();
 
-  // Function to handle zone selection
-  const handleSelectZone = (zone: string) => {
-    setDelivery({
-      ...delivery,
-      zone
-    });
-    closeModal()
-  };
-
-  const renderItem = ({ item }: { item: { name: string } }) => (
-    <TouchableOpacity
-      style={styles.zoneItem}
-      onPress={() => handleSelectZone(item.name)}
-    >
-      <Text style={styles.zoneText}>{item.name}</Text>
-    </TouchableOpacity>
-  );
 
   return (
     <TouchableOpacity
@@ -35,22 +17,7 @@ const ZoneSelector: React.FC = () => {
       onPress={() =>
         openModal(
           "shipping",
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Sélectionnez votre zone</Text>
-            {loading ? (
-              <Text style={styles.loadingText}>Chargement...</Text>
-            ) : (
-              <FlatList
-                data={data?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
-                keyExtractor={(item, idx) => `${item.name}-${idx}`}
-                renderItem={renderItem}
-                contentContainerStyle={styles.listContainer}
-                nestedScrollEnabled={true} 
-                keyboardShouldPersistTaps="handled" 
-              />
-
-            )}
-          </View>
+          <ZoneList />
         )
       }
     >
@@ -78,32 +45,5 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     textDecorationLine: "underline",
   },
-  modalContent: {
-    padding: 20,
-    borderRadius: 10,
-    minWidth: 300,
-  },
-  modalTitle: {
-    fontSize: fonts.body,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  listContainer: {
-    paddingVertical: 10,
-  },
-  zoneItem: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  zoneText: {
-    fontSize: fonts.body,
-    color: colors.textPrimary,
-  },
-  loadingText: {
-    textAlign: "center",
-    fontSize: fonts.body,
-    color: colors.textSecondary,
-  },
+
 });

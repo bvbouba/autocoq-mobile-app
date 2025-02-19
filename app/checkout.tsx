@@ -4,7 +4,6 @@ import { Text, View, Divider, PaddedView, colors, fonts } from "@/components/The
 import { Button } from 'react-native-paper';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
 import { paymentMethodToComponent } from '@/components/checkout/payment/supportedPaymentApps';
-import { usePaymentContext } from '@/context/usePaymentContext';
 import OrderTotal from '@/components/checkout/OrderTotal';
 import ShippingMethodSelector from '@/components/checkout/ShippingMethodSelector';
 import ShippingAddress from '@/components/checkout/ShippingAddress';
@@ -12,19 +11,21 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useCheckout } from '@/context/CheckoutProvider';
 import { useEffect } from 'react';
 import { useLoading } from '@/context/LoadingContext';
-import PromoCodeForm from '@/components/checkout/PromoCodeForm';
+import PromoCode from '@/components/checkout/PromoCode';
 
 const Checkout = () => {
-    const { checkout,loading } = useCheckout();
-    const { chosenGateway } = usePaymentContext();
+    const { checkout,loading,chosenGateway } = useCheckout();
     const router = useRouter();
     const {setLoading} = useLoading()
 
+    const buyNowEnabled = !!checkout?.email && !!checkout?.billingAddress && (!checkout?.isShippingRequired || !!checkout?.shippingAddress) &&!!checkout?.deliveryMethod && !!chosenGateway; 
+    
     useEffect(()=>{ 
     setLoading(loading)
     },[loading])
     
-    const Component = paymentMethodToComponent[chosenGateway || "dummy"];
+
+    const Component = paymentMethodToComponent[buyNowEnabled ? chosenGateway : "dummy"];
 
     if (!checkout || checkout.lines.length === 0) {
         return <View style={styles.wrapper}>
@@ -67,8 +68,8 @@ const Checkout = () => {
                     <Divider style={{ borderBottomWidth: 10 }} />
                     <PaymentMethodSelector />
                     <Divider style={{ borderBottomWidth: 10 }} />
-                    {/* <PromoCodeForm />  */}
-                    {/* <Divider style={{ borderBottomWidth: 10 }} /> */}
+                   {/* {!checkout?.discount?.amount && <> <PromoCode />  
+                  <Divider style={{ borderBottomWidth: 10 }} /> </>} */}
                 </View>
                 <OrderTotal />
             </ScrollView>

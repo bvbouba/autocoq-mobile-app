@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, Image, StyleSheet } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useCheckoutAddPromoCodeMutation } from "@/saleor/api.generated";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { colors, fonts, PaddedView } from "../Themed";
-import { useModal } from "@/context/useModal";
-import { IconButton } from "react-native-paper";
+import {  TextInput } from "react-native-paper";
 import { useMessage } from "@/context/MessageContext";
 
-const promoImage = require("../../assets/images/PromoCard.png");
 
-const PromoCodeForm = () => {
-  const { checkout, checkoutToken } = useCheckout();
-  const [editPromoCode, setEditPromoCode] = useState(false);
+interface props {
+  setEditPromoCode: React.Dispatch<React.SetStateAction<boolean>>}
+
+const PromoCodeForm = ({setEditPromoCode}:props) => {
+  const { checkoutToken } = useCheckout();
+  const [promoInput, setPromoInput] = useState(""); // Holds promo code temporarily
   const [checkoutAddPromoCodeMutation] = useCheckoutAddPromoCodeMutation();
-  const { openModal } = useModal();
-const {showMessage} = useMessage()
+  const [error,setError] = useState("");
+
   // Formik setup
   const formik = useFormik({
     initialValues: {
@@ -33,36 +34,28 @@ const {showMessage} = useMessage()
             token: checkoutToken,
           },
         });
-
         const errors = promoCodeData?.checkoutAddPromoCode?.errors;
         if (errors && errors?.length > 0) {
-          console.log({ promoCode: errors[0].message || "Erreur" });
-          showMessage("Erreur")
+          setError("Le code n'est pas valide")
         } else {
           setEditPromoCode(false); // Hide input after successful submission
+          formik.resetForm(); // Clear the promo code after successful apply
+          setPromoInput(""); // Also clear the local state
         }
       } catch (error) {
-        showMessage("Une erreur est survenue")
-
+        setError("Une erreur est survenue");
       }
     },
   });
 
-  // Determine button styles dynamically
-  const isButtonDisabled = !formik.values.promoCode || formik.isSubmitting;
+  // Disable button if promoCode is empty or submission is in progress
+  const isButtonDisabled = !promoInput || formik.isSubmitting;
   const buttonStyles = isButtonDisabled ? styles.buttonDisabled : styles.buttonActive;
   const buttonTextStyles = isButtonDisabled ? styles.buttonTextDisabled : styles.buttonTextActive;
 
   return (
     <>
-      {(editPromoCode || !checkout?.discount?.amount) && (
-        <PaddedView>
-          <TouchableOpacity
-            style={styles.promoContainer}
-            onPress={() =>
-              openModal(
-                "checkout",
-                <View style={{ gap: 10 }}>
+    <View style={{ gap: 10 }}>
                   <Text style={{ fontSize: fonts.h1, fontWeight: "bold" }}>
                     Entrer votre code de réduction
                   </Text>
@@ -70,16 +63,18 @@ const {showMessage} = useMessage()
                     Entrez un code valide ci-dessous.
                   </Text>
 
+                  {/* Use local state for input instead of Formik's value */}
                   <TextInput
-                        style={styles.input}
-                        placeholder="Entrez votre code promo"
-                        value={formik.values.promoCode}
-                        onChangeText={(value) => formik.setFieldValue("promoCode", value)}
-                        onBlur={formik.handleBlur("promoCode")}
-                        autoCapitalize="none"
-                      />
-                  
-                  
+                    style={styles.input}
+                    placeholder="Entrez votre code promo"
+                    value={promoInput} // Local state
+                    onChangeText={(value) => {
+                      setPromoInput(value); // Update local state
+                      formik.setFieldValue("promoCode", value); // Also update Formik state
+                    }}
+                    onBlur={formik.handleBlur("promoCode")}
+                    autoCapitalize="none"
+                  />
 
                   <TouchableOpacity
                     onPress={() => formik.handleSubmit()}
@@ -96,21 +91,14 @@ const {showMessage} = useMessage()
                   {formik.touched.promoCode && formik.errors.promoCode && (
                     <Text style={styles.errorText}>{formik.errors.promoCode}</Text>
                   )}
+                  {error && (
+                    <Text style={styles.errorText}>{error}</Text>
+                  )}
                 </View>
-              )
-            }
-          >
-            <View style={styles.promoContent}>
-              <Image source={promoImage} style={styles.tinyIcon} resizeMode="contain" />
-              <Text style={styles.promoText}>Code de réduction</Text>
-            </View>
-            <IconButton icon="chevron-right" style={styles.icon} />
-          </TouchableOpacity>
-        </PaddedView>
-      )}
     </>
   );
 };
+
 
 export default PromoCodeForm;
 
@@ -144,11 +132,12 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    padding: 10,
-    fontSize: fonts.caption,
+    backgroundColor: "white",
+    borderWidth: 1, 
+    borderColor: colors.textSecondary, 
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    color: "black",
   },
   submitButton: {
     marginHorizontal: 0,

@@ -1,22 +1,12 @@
 import { colors } from "@/components/Themed";
 import { useCheckout } from "@/context/CheckoutProvider";
-import { usePaymentContext } from "@/context/usePaymentContext";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
-import { Alert,StyleSheet,View } from "react-native";
+import { StyleSheet,View } from "react-native";
 import { Button } from "react-native-paper";
 
 export const dummyGatewayId = "dummy"
 const DummyPayment = () => {
-    const { checkout } = useCheckout();
-    const { chosenGateway } = usePaymentContext();
-    const buyNowEnabled = checkout?.email && checkout?.billingAddress && (checkout?.isShippingRequired ? checkout?.shippingAddress : true)  && (checkout.deliveryMethod) && (chosenGateway)
-
-    const buyNow = () => {
-        if (!buyNowEnabled) {
-            Alert.alert("Veuillez remplir les informations requises pour continuer");
-            return
-        }
-    }
+    const {checkout} = useCheckout()  
 
     return (
         <View 
@@ -25,7 +15,6 @@ const DummyPayment = () => {
         }}>
         <Button 
             mode="contained" 
-            onPress={buyNow}
             style={styles.submitButton}
             labelStyle={styles.submitButtonText}
             disabled={true}

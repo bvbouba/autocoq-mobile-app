@@ -1,18 +1,19 @@
 import { colors } from "@/components/Themed";
 import { useCheckout } from "@/context/CheckoutProvider";
+import { useLoading } from "@/context/LoadingContext";
 import { useMessage } from "@/context/MessageContext";
 import { useOrderContext } from "@/context/useOrderContext";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "@/saleor/api.generated";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, Alert, View, StyleSheet, Text } from "react-native";
 import { Button } from "react-native-paper";
 
 export const codGatewayId = "cash.on.delivery"
 
 const CodPayment = () => {
-    const { checkout, checkoutToken, resetCheckoutToken } = useCheckout();
+    const { checkout, checkoutToken, resetCheckoutToken ,chosenGateway} = useCheckout();
     const router = useRouter();
     const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
     const [checkoutPaymentCreateMutation] = useCheckoutPaymentCreateMutation();
@@ -20,12 +21,25 @@ const CodPayment = () => {
     const {authenticated} = useAuth()
     const { setRecentOrderId: setOrderId } = useOrderContext();
     const {showMessage} = useMessage()
+    const {setLoading}=useLoading()
+
+
+    const buyNowEnabled = !!checkout?.email &&
+    !!checkout?.billingAddress &&
+    (!checkout?.isShippingRequired || !!checkout?.shippingAddress) &&
+    !!checkout?.deliveryMethod && // Ensure delivery method is set
+    !!chosenGateway; // Ensure payment gateway is chosen
+
 
     const redirectToOrderDetailsPage = async (orderId: string) => {
         Alert.alert('Succès', 'Votre commande est confirmée !');
-        router.push(`/orderDetails/${orderId}?orderSuccess=true"`)   
-        resetCheckoutToken();
+        router.push(`/orders/${orderId}?orderSuccess=true`)   
+        setLoading(false)
     };
+
+    useEffect(()=>{
+     setLoading(isPaymentProcessing)
+    },[isPaymentProcessing])
 
     const handleSubmit = async () => {
         setIsPaymentProcessing(true);
@@ -47,13 +61,13 @@ const CodPayment = () => {
           setIsPaymentProcessing(false);
           return;
         } 
-    
         // Tentative de finalisation du paiement
         const { data: completeData, errors: completeErrors } = await checkoutCompleteMutation({
           variables: {
             token: checkoutToken,
           },
         });
+
         if (completeErrors) {
           console.error("Erreur de finalisation :", completeErrors);
           showMessage("Erreur de finalisation de la commande")
@@ -67,9 +81,11 @@ const CodPayment = () => {
             if(!authenticated){
                 setOrderId(order.id)
                 }
+          setIsPaymentProcessing(false);
           redirectToOrderDetailsPage(order.id);
         } else {
           console.error("La commande n'a pas été créée");
+          setIsPaymentProcessing(false);
           showMessage("La commande n'a pas été créée")
         }
     };
@@ -82,8 +98,10 @@ const CodPayment = () => {
             mode="contained"
             style={styles.submitButton}
             labelStyle={styles.submitButtonText}
+            disabled={!buyNowEnabled}
         >
-            {isPaymentProcessing ? <ActivityIndicator color="white" /> : "Commander et payer après la livraison"}
+            {/* {isPaymentProcessing ? <ActivityIndicator color="white" /> : "Commander et payer après la livraison"} */}
+            Commander et payer après la livraison
         </Button>
         </View>
 

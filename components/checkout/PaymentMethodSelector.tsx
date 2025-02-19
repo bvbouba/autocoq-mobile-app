@@ -1,16 +1,17 @@
 import { FC } from "react";
-import { Pressable, StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity,Image } from "react-native";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { fonts, Text, View } from "@/components/Themed";
-import { usePaymentContext } from "@/context/usePaymentContext";
 import BillingAddress from "./BillingAddress";
-import { MaterialCommunityIcons } from "@expo/vector-icons"; // Import pour l'icône de paiement
 import { useModal } from "@/context/useModal";
 import PaymentMethods from "@/app/paymentMethods";
 
+
+const codImage = require("../../assets/images/cod.png");
+
+
 const PaymentMethodSelector: FC = () => {
-  const { checkout } = useCheckout();
-  const { chosenGateway } = usePaymentContext();
+  const { checkout,chosenGateway } = useCheckout();
   const { openModal } = useModal();
 
   const paymentMethods = checkout?.availablePaymentGateways || [];
@@ -34,11 +35,7 @@ const PaymentMethodSelector: FC = () => {
                 alignItems: "center"
               }}>
                 {paymentMethod?.id === "cash.on.delivery" && (
-                  <MaterialCommunityIcons
-                    name="cash"
-                    size={30}
-                    color="green"
-                  />
+                   <Image source={codImage} style={styles.tinyIcon} resizeMode="contain" />
                 )}
                 <Text style={styles.paymentMethodValue} numberOfLines={1}>
                   {paymentMethod?.name}
@@ -102,5 +99,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: 16,
     marginBottom: 16,
+  },
+  tinyIcon: {
+    width: 100,
+    height: 100,
+    resizeMode: "stretch",
   },
 });

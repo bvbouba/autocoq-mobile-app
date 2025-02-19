@@ -12,16 +12,15 @@ import {Text, View ,  PaddedView,colors, fonts } from "@/components/Themed"
 import {  ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import CartItem from "./CartItem";
 import CartSubtotal from "./CartSubtotal";
-import { router, useRouter } from "expo-router";
+import {  useRouter } from "expo-router";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { getConfig } from "@/config";
 import { useAuth } from "@/lib/providers/authProvider";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useCheckout } from "@/context/CheckoutProvider";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useModal } from "@/context/useModal";
 import Auth from "../account/auth";
-import { useLoading } from "@/context/LoadingContext";
 import { useMessage } from "@/context/MessageContext";
 
 const CartScreen = () => {
@@ -33,6 +32,7 @@ const CartScreen = () => {
     const router = useRouter()
     const {openModal} = useModal()
     const {showMessage} = useMessage()
+    
 
     const { data, loading: aloading } = useCurrentUserAddressesQuery({
         skip: !authenticated,

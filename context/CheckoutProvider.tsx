@@ -17,7 +17,7 @@ import { useAuth } from "@/lib/providers/authProvider";
 
 interface DeliveryState {
   zone: string | undefined;
-  method: DeliveryMethodFragment | undefined;
+  methodId: string | undefined;
 }
 
 const CHECKOUT_TOKEN = "@SaleorApp:checkoutToken";
@@ -33,7 +33,9 @@ export interface CheckoutConsumerProps {
   setDelivery: React.Dispatch<React.SetStateAction<DeliveryState>>;
   onAddToCart: (selectedVariantID: string) => Promise<void>;
   onQuantityUpdate: (variantId: string, quantity: number) => Promise<void>;
-  onCheckoutLineDelete: (lineId: string) => Promise<void>
+  onCheckoutLineDelete: (lineId: string) => Promise<void>;
+  chosenGateway: string
+    setChosenGateway: (gateway: string) => void;
 }
 
 // ✅ Create context with default value `undefined`
@@ -50,7 +52,7 @@ export const useCheckout = () => {
 
 const defaultDeliveryState: DeliveryState = {
   zone: undefined,
-  method: undefined,
+  methodId: undefined,
 };
 
 export function CheckoutProvider({ children }: { children: ReactNode }) {
@@ -61,7 +63,9 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [checkoutLineUpdateMutation, { loading: loadingLineUpdate }] = useCheckoutLineUpdateMutation();
   const [removeProductFromCheckout] = useRemoveProductFromCheckoutMutation();
+  const [chosenGateway, setChosenGateway] = useState<string>("");
 
+  
 
   const [createCheckout] = useCreateCheckoutMutation();
   const [addProductToCheckout] = useCheckoutAddProductLineMutation();
@@ -204,7 +208,9 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
     delivery,
     onAddToCart,
     onQuantityUpdate,
-    onCheckoutLineDelete
+    onCheckoutLineDelete,
+    chosenGateway,
+    setChosenGateway,  
   };
 
   return <CheckoutContext.Provider value={providerValues}>{children}</CheckoutContext.Provider>;

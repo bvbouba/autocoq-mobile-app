@@ -1,12 +1,9 @@
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { fonts, Text } from "@/components/Themed";
 import OrderContent from "@/components/orders/OrderContent";
-import { useOrderContext } from "@/context/useOrderContext";
-import { useEffect, useState } from "react";
-import { OrderFragment, useGetOrderByIdQuery } from "@/saleor/api.generated";
-import { useAuth } from "@/lib/providers/authProvider";
-import Loading from "../Loading";
+import {  useGetOrderByIdQuery } from "@/saleor/api.generated";
+import OrderDetailsSkeleton from "@/components/skeletons/OrderDetails"
 
 const EcranNonTrouve = () => {
     return (
@@ -22,41 +19,17 @@ const EcranNonTrouve = () => {
     );
 };
 
-export const DetailsCommande = ({ orderId }: { orderId: string }) => {
-    const { authenticated } = useAuth();
-    const { orders } = useOrderContext();
+export const DetailsCommande = ({ orderId }: { orderId: string | undefined}) => {
 
-    const [order, setOrder] = useState<OrderFragment | undefined>(undefined);
-    const [loading, setLoading] = useState(true);
-
-    const { data, loading: dbLoading } = useGetOrderByIdQuery({
-        variables: { id: orderId },
-        skip: !authenticated || !orderId,
+    const { data, loading: loading } = useGetOrderByIdQuery({
+        skip: !orderId,
+        variables: { id: orderId || ""},
     });
-
-    useEffect(() => {
-        if (!authenticated || !orderId) {
-            setLoading(false);
-            return;
-        }
-
-        // First, check cached order
-        const cachedOrder = orders.find((o) => o.id === orderId);
-        if (cachedOrder) {
-            setOrder(cachedOrder);
-            setLoading(false);
-            return;
-        }
-
-        // If not in cache, wait for DB query
-        if (data?.order) {
-            setOrder(data.order);
-            setLoading(false);
-        }
-    }, [authenticated, data, orders, orderId]);
-
-    if (loading || dbLoading) {
-        return <Loading />;
+    
+    const order = data?.order
+  
+    if (loading) {
+        return <OrderDetailsSkeleton />;
     }
 
     if (!order) {

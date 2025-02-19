@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native"
 import { colors, Divider, fonts, PaddedView, Text, View } from "@/components/Themed"
 import { getConfig } from "@/config"
 import { useCheckout } from "@/context/CheckoutProvider"
+import { convertMoneyToString } from "@/utils/convertMoneytoString"
 
 const OrderTotal = () => {
     const { checkout } = useCheckout()
@@ -16,22 +17,22 @@ const OrderTotal = () => {
             fontWeight: "900"
         }}>Résumé de la commande</Text>
         <Divider />
+        {/* { <PaddedView style={styles.rowWrapper}>
+            <Text>{`Réductions`}</Text>
+            <Text>
+                {convertMoneyToString(checkout?.discount)}
+            </Text>
+        </PaddedView> } */}
         <PaddedView style={styles.rowWrapper}>
             <Text>{`Sous-total des articles`}</Text>
-            <Text>
-                {checkout?.subtotalPrice.gross.amount.toLocaleString(getConfig().locale, {
-                    style: "currency",
-                    currency: checkout?.subtotalPrice.gross.currency
-                })}
+            <Text>{}
+                {convertMoneyToString(checkout?.subtotalPrice.gross)}
             </Text>
         </PaddedView>
         <PaddedView style={styles.rowWrapper}>
             <Text>Livraison :</Text>
-            <Text >
-                {deliveryMethod && deliveryMethod.toLocaleString(getConfig().locale, {
-                    style: "currency",
-                    currency: checkout?.shippingPrice.gross.currency
-                })}
+            <Text>
+                {convertMoneyToString(checkout?.shippingPrice.gross)}
                 {(!deliveryMethod || deliveryMethod === 0) && "-"}
             </Text>
         </PaddedView>
@@ -39,10 +40,7 @@ const OrderTotal = () => {
         <PaddedView style={styles.rowWrapper}>
             <Text style={styles.title}>Total :</Text>
             <Text style={styles.price}>
-                {checkout?.totalPrice.gross.amount.toLocaleString(getConfig().locale, {
-                    style: "currency",
-                    currency: checkout?.totalPrice.gross.currency
-                })}
+                {convertMoneyToString(checkout?.totalPrice.gross)}
             </Text>
         </PaddedView>
     </View>

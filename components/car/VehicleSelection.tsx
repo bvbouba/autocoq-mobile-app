@@ -1,5 +1,5 @@
-import { StyleSheet, Alert, ScrollView, Dimensions, TouchableOpacity, FlatList, Animated } from "react-native";
-import { Modal, Button, IconButton } from "react-native-paper";
+import { StyleSheet, Alert, TouchableOpacity, Animated } from "react-native";
+import {  Button } from "react-native-paper";
 import { useCarEnginesListQuery, useCarMakesListQuery, useCarModelsListQuery, useCarYearsListQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import { carType, useCarFilter } from "@/context/useCarFilterContext";
@@ -86,6 +86,7 @@ const VehicleSelectionFilter = ({setSelectedLocalCar}:props) => {
         engine: tempCarEngine,
         name: carName,
       });
+
     }
       setIsSaving(false)
       closeModal()

@@ -15,7 +15,7 @@ interface Props {
 
 const OrderListItem: FC<Props> = ({ order }) => {
   const router = useRouter();
-  const onPress = () => router.push("/orderDetails/" + order.id);
+  const onPress = () => router.push(`/orders/${order.id}`);
 
   return (
     <Pressable onPress={onPress}>

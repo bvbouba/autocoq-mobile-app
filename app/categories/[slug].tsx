@@ -45,12 +45,8 @@ const CategoryProductScreen = () => {
 
   if (categoryLoading || attributeLoading) return <ProductCollectionSkeleton />
   
-  if(error) {
+  if(error || (attributeError && attributeError.message)) {
     showMessage("Échec réseau")
-    console.log(error.message)
-  }else if (attributeError) {
-    showMessage("Échec réseau")
-    console.log(attributeError.message)
   }
 
   if (!category) {

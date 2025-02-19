@@ -23,7 +23,6 @@ if(loading) return <ProductDetailsSkeleton />
 
     if(error) {
         showMessage("Échec réseau")
-        console.log(error.message)
       }
     
     if (called && data?.product) {

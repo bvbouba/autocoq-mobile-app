@@ -10,7 +10,7 @@ import { useMessage } from '@/context/MessageContext';
 
 const ShippingMethods = () => {
     const { closeModal } = useModal();
-    const { checkout, checkoutToken } = useCheckout();
+    const { checkout, checkoutToken,setDelivery,delivery } = useCheckout();
     const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
     const { showMessage } = useMessage();
 
@@ -29,6 +29,10 @@ const ShippingMethods = () => {
                     shippingMethodId: checked,
                 },
             });
+            setDelivery({
+                ...delivery,
+                methodId:checked
+            })
             closeModal();
         } catch (error) {
             showMessage("Erreur lors de la mise à jour")

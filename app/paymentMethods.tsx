@@ -1,93 +1,96 @@
-import * as React from 'react';
-import { Button, RadioButton, ActivityIndicator } from 'react-native-paper';
-import { fonts, PaddedView, Text } from '../components/Themed';
-import { View, StyleSheet } from 'react-native';
-import { usePaymentContext } from '@/context/usePaymentContext';
-import { useCheckout } from '@/context/CheckoutProvider';
-import { useModal } from '@/context/useModal';
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useCheckout } from "@/context/CheckoutProvider";
+import { useModal } from "@/context/useModal";
+import { colors, fonts } from "../components/Themed";
+import { useLoading } from "@/context/LoadingContext";
 
 const PaymentMethods = () => {
-    const { checkout } = useCheckout();
-    const { setChosenGateway } = usePaymentContext();
-    const { closeModal } = useModal();
+  const { checkout,setChosenGateway,chosenGateway  } = useCheckout();
+  const { closeModal } = useModal();
 
-    const paymentMethods = checkout && checkout.availablePaymentGateways;
-    const firstMethod = paymentMethods && paymentMethods.length > 0 ? paymentMethods[0].id : undefined;
+  const paymentMethods = checkout?.availablePaymentGateways || [];
 
-    const [checked, setChecked] = React.useState(firstMethod || "");
-    const [loading, setLoading] = React.useState(false); 
+const {isLoading, setLoading} = useLoading()
+  const handleSelect = async (methodId: string) => {
+    setLoading(true);
+    setChosenGateway(methodId);
+    closeModal();
+    setLoading(false);
+  };
 
-    const updatePaymentMethod = async () => {
-        if (checked) {
-            setLoading(true); 
-            setChosenGateway(checked); 
-            closeModal();
-            setLoading(false); 
-        }
-    };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Méthode de paiement</Text>
 
-    return (
-        <PaddedView>
-            <Text style={styles.title}>Méthode de paiement</Text>
-            {paymentMethods?.map((method) => {
-                return (
-                    <View key={method.id} style={styles.radioContainer}>
-                        <RadioButton
-                            value={method.id}
-                            status={checked === method.id ? "checked" : "unchecked"}
-                            onPress={() => setChecked(method.id)}
-                        />
-                        <View style={styles.labelContainer}>
-                            <Text style={styles.methodName}>{method.name}</Text>
-                        </View>
-                    </View>
-                );
-            })}
+      {paymentMethods.map((method) => (
+        <TouchableOpacity
+          key={method.id}
+          style={[styles.option, chosenGateway === method.id && styles.selectedOption]}
+          onPress={() => handleSelect(method.id)}
+          disabled={isLoading}
+        >
+          <Text style={styles.methodName}>{method.name}</Text>
+          <View style={[styles.radio, chosenGateway === method.id && styles.radioSelected]}>
+            {chosenGateway === method.id && <View style={styles.innerCircle} />}
+          </View>
+        </TouchableOpacity>
+      ))}
 
-            <Button
-                onPress={updatePaymentMethod}
-                mode="contained"
-                disabled={loading}
-                style={styles.submitButton}
-                labelStyle={styles.submitButtonText}
-            >
-                {loading ? <ActivityIndicator color="white" /> : "APPLIQUER"}
-            </Button>
-        </PaddedView>
-    );
+    </View>
+  );
 };
 
 export default PaymentMethods;
 
 const styles = StyleSheet.create({
-    title: {
-        fontWeight: "bold",
-        marginTop: 8,
-        marginBottom: 12,
-        fontSize: fonts.h1,
-    },
-    radioContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: 12,
-    },
-    labelContainer: {
-        marginLeft: 8,
-    },
-    methodName: {
-        fontWeight: "bold",
-    },
-    methodPrice: {
-        color: "gray",
-    },
-    submitButton: {
-        backgroundColor: "black",
-        marginHorizontal: 10,
-        borderRadius: 5,
-        padding: 5
-    },
-    submitButtonText: {
-        fontWeight: "bold",
-        color: "white",
-    },
+  container: {
+    backgroundColor: "#fff",
+    padding: 10,
+  },
+  title: {
+    fontSize: fonts.h1,
+    fontWeight: "bold",
+    marginBottom: 12,
+  },
+  option: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  selectedOption: {
+    borderColor: colors.secondary,
+  },
+  methodName: {
+    fontSize: fonts.caption,
+    fontWeight: "bold",
+  },
+  radio: {
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "black",
+  },
+  radioSelected: {
+    borderColor: "black",
+    backgroundColor: "black",
+    width: 18,
+    height: 18,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  innerCircle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.secondary,
+    borderWidth: 2,
+    borderColor: "white",
+  },
 });

@@ -6,6 +6,7 @@ import { View, Text } from "react-native";
 import RichText from "../RichText";
 import { colors, fonts } from "../Themed";
 import { ShippingMethodFragment } from "@/saleor/api.generated";
+import { useCheckout } from "@/context/CheckoutProvider";
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
 
@@ -22,7 +23,7 @@ interface props {
     handleSelect: (id: string) => void
 }
 export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption,handleSelect}:props) => {
-
+  const { delivery } = useCheckout();
   const getShippingMethodById = (shippingId: string) => {
         return availableShippingMethods?.find(method =>
           method.metadata.some(meta => meta.key === "id" && meta.value === shippingId)
@@ -69,7 +70,6 @@ export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption
       icon: "truck",
     },
   ].filter(Boolean) as OptionProps[];
-
   return (
     <View style={styles.container}>
       {options.map(option => (

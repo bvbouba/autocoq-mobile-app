@@ -2,7 +2,8 @@ import { AddressDetailsFragment, useAddressDeleteMutation, useSetAddressDefaultM
 import { StyleSheet, TouchableOpacity, Alert } from "react-native";
 import AddressDisplay from "./addressDisplay";
 import { Ionicons } from "@expo/vector-icons"; // Use FontAwesome if preferred
-import {fonts, Text, View  } from "@/components/Themed"
+import {colors, fonts, Text, View  } from "@/components/Themed"
+import { IconButton } from "react-native-paper";
 
 export interface AddressBookCardProps {
   address: AddressDetailsFragment;
@@ -45,21 +46,21 @@ export function AddressBookCard({ address, onRefreshBook }: AddressBookCardProps
 
   return (
     <View style={styles.card}>
-      {/* Icône de suppression */}
-      <TouchableOpacity
-        style={styles.deleteIcon}
-        onPress={() => confirmDeleteAddress(address.id)}
-      >
-        <Ionicons name="trash-outline" size={20} color="#dc3545" />
-      </TouchableOpacity>
+      <View style={{ alignItems: "flex-end"}}>
+    
+        <IconButton icon="close" size={20} onPress={() => confirmDeleteAddress(address.id)}  />
+ 
+      </View>
       
-      {/* En-tête de la carte */}
+      <View>
       {!!cardHeader && <Text style={styles.header}>{cardHeader}</Text>}
+      </View>
       
-      {/* Affichage de l'adresse */}
+      <View>
       <AddressDisplay address={address} />
-      
-      {/* Boutons */}
+      </View>
+
+    
       <View style={styles.buttonContainer}>
         {!address.isDefaultBillingAddress && (
           <TouchableOpacity
@@ -97,12 +98,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: "#fff",
     position: "relative",
+    flexDirection:"column"
   },
   deleteIcon: {
-    position: "absolute",
-    top: 8,
-    right: 8,
-    zIndex: 1,
+   
   },
   header: {
     fontSize:fonts.body,
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: colors.secondary,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 25,

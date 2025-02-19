@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {  TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { AddressDetailsFragment, CheckoutError, useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useAuth } from "@/lib/providers/authProvider";
-import {fonts, Text, View } from "@/components/Themed"
+import {colors, fonts, Text, View } from "@/components/Themed"
 import { useRouter } from "expo-router";
 
 
@@ -50,7 +50,7 @@ const SavedAddressSelectionList = ({ updateAddressMutation }: SavedAddressSelect
   const [uError, setUError] = useState<string | null>(null);
 
   if (loading && isValidatingToken) {
-    return <ActivityIndicator size="large" color="#007AFF" />;
+    return <ActivityIndicator size="large" color={colors.primary} />;
   }
 
   if (error) {
@@ -105,7 +105,7 @@ const SavedAddressSelectionList = ({ updateAddressMutation }: SavedAddressSelect
           </TouchableOpacity>
           {isUpdating && selectedSavedAddress?.id === address?.id && (
             <View style={styles.overlay}>
-              <ActivityIndicator size="large" color="#007AFF" />
+              <ActivityIndicator size="large" color={colors.primary} />
             </View>
           )}
         </View>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   selectedAddress: {
-    borderColor: "#007AFF",
+    borderColor: colors.secondary,
   },
   nameText: {
     fontSize:fonts.h2,

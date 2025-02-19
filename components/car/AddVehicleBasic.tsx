@@ -3,10 +3,11 @@ import { Text, View, colors, fonts } from "@/components/Themed";
 
 import VehicleSelectionFilter from "./VehicleSelection";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import ImageExpand from "../ImageExpand";
 import { useModal } from "@/context/useModal";
+import { useMessage } from "@/context/MessageContext";
 
 interface ImageProps {
   url: string;
@@ -17,6 +18,8 @@ const AddVehicleBasic = () => {
   const { selectedCar } = useCarFilter();
   const [expandedImage, setExpandedImage] = useState<ImageProps | null>(null);
   const { openModal } = useModal()
+  const {showMessage} = useMessage()
+
 
   return (
     <>

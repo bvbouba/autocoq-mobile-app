@@ -136,7 +136,7 @@ function RootLayoutNav() {
                             }} />
                             <Stack.Screen name="shippingMethods" options={baseHeaderProps} />
                             <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
-                            <Stack.Screen name="orderDetails/[id]" options={baseHeaderProps} />
+                            <Stack.Screen name="orders/[id]" options={baseHeaderProps} />
                             <Stack.Screen name="modal" options={{ presentation: "modal" }} />
                             <Stack.Screen name="account/profile" options={{ 
                               header: () => <SimpleBackHeader hasLogo={false} title="Mon profil"/>,

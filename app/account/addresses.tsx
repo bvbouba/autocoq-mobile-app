@@ -6,12 +6,13 @@ import { useState } from "react";
 import {  StyleSheet, FlatList } from "react-native";
 import {fonts, PaddedView, Text, View } from "@/components/Themed"
 import { useMessage } from "@/context/MessageContext";
+import { Skeleton } from "moti/skeleton";
 
 
 const CarnetDAdressesScreen = () => {
   const { authenticated, token, checkAndRefreshToken } = useAuth();
   const [isValidatingToken, setIsValidatingToken] = useState(true);
-
+  
   // Requête pour les adresses de l'utilisateur actuel
   const { loading, error, data, refetch } = useCurrentUserAddressesQuery({
     skip: !authenticated,
@@ -34,8 +35,14 @@ const CarnetDAdressesScreen = () => {
 
   if (loading || isValidatingToken) {
     return (
-      <Loading />
-    );
+      <View style={styles.container}>
+          {[...Array(2)].map((_, index) => (
+               <PaddedView>
+                  <Skeleton colorMode="light" height={150} width="100%" />
+                  </PaddedView>
+          ))}
+      </View>
+  );
   }
 
   if (error) {
@@ -72,7 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    padding:10
   },
   error: {
     color: "red",

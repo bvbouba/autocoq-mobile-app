@@ -13,6 +13,13 @@ export const PathProvider = ({ children }: { children: React.ReactNode }) => {
 
   const goBack = () => {
 
+
+    if (pathSlug==="orderSuccess") {
+        router.push("/");
+        
+        return;
+    }
+
     if (pathname.includes('shop') ) {
     
         if (pathSlug) {

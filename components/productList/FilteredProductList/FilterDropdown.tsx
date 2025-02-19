@@ -35,7 +35,6 @@ export function FilterDropdown({
   const handleOptionPress = async (option:FilterDropdownOption) => {
     if (isLoading) return;
     setLoading(true); 
-    console.log("loading")
     const newOptions = options?.map((opt) =>
       opt.id === option.id ? { ...opt, chosen: !opt.chosen } : opt
     );

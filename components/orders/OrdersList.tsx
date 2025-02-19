@@ -1,4 +1,4 @@
-import { StyleSheet, ActivityIndicator, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useOrderContext } from "@/context/useOrderContext";
 import { fonts, Text } from "@/components/Themed";
 import OrderListItem from "./OrderListItem";
@@ -6,20 +6,19 @@ import { useAuth } from "@/lib/providers/authProvider";
 import { useOrdersQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import { useState, useEffect } from "react";
-import Loading from "../Loading";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
 
 const OrdersList = () => {
     const { authenticated, token, checkAndRefreshToken } = useAuth();
-    const { orders: localOrders } = useOrderContext();
+    const { orders: localOrders,loading:loadingOrders } = useOrderContext();
+    // const [isValidatingToken, setIsValidatingToken] = useState(true);
 
-    const [isValidatingToken, setIsValidatingToken] = useState(true);
-
-    // Correction : Définir isValidatingToken à false si non authentifié
-    useEffect(() => {
-        if (!authenticated) {
-            setIsValidatingToken(false);
-        }
-    }, [authenticated]);
+    // useEffect(() => {
+    //     if (!authenticated) {
+    //         setIsValidatingToken(false);
+    //     }
+    // }, [authenticated]);
 
     const { data: ordersCollection, loading, error } = useOrdersQuery({
         skip: !authenticated,
@@ -30,18 +29,32 @@ const OrdersList = () => {
             },
         },
         onCompleted: () => {
-            setIsValidatingToken(false);
+            // setIsValidatingToken(false);
         },
         onError: async (error) => {
             if (error.message.includes("Signature has expired")) {
                 await checkAndRefreshToken();
             }
-            setIsValidatingToken(false);
+            // setIsValidatingToken(false);
         },
     });
-    
-    if (loading || isValidatingToken) {
-        <Loading />
+
+    if (loading || loadingOrders 
+        // || isValidatingToken
+    ) {
+        return (
+            <View style={styles.container}>
+                {[...Array(5)].map((_, index) => (
+                    <MotiView key={index} style={styles.skeletonItem}>
+                        <Skeleton colorMode="light" height={20} width="60%" />
+                        <View style={styles.skeletonText}>
+                        <Skeleton colorMode="light" height={15} width="40%"  />
+                        </View>
+                        <Skeleton colorMode="light" height={20} width="30%" />
+                    </MotiView>
+                ))}
+            </View>
+        );
     }
 
     if (error) {
@@ -49,8 +62,6 @@ const OrdersList = () => {
     }
 
     const dbOrders = mapEdgesToItems(ordersCollection?.me?.orders);
-
-    // Combiner les commandes locales avec celles récupérées et les trier
     const uniqueOrders = Array.from(
         new Map([...localOrders, ...dbOrders].map(order => [order.id, order])).values()
     ).sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
@@ -78,8 +89,18 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    skeletonItem: {
+        width: "90%",
+        backgroundColor: "#f0f0f0",
+        padding: 15,
+        borderRadius: 8,
+        marginBottom: 10,
+    },
+    skeletonText: {
+        marginVertical: 5,
+    },
     noOrdersText: {
-        fontSize:fonts.body,
+        fontSize: fonts.body,
         marginBottom: 20,
     },
     errorText: {

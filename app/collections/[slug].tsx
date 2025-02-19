@@ -47,14 +47,10 @@ const CollectionProductScreen = () => {
         );
       }
     
-      if(error) {
+      if(error || (attributeError && attributeError.message)) {
         showMessage("Échec réseau")
-        console.log(error.message)
-      }else if (attributeError) {
-        showMessage("Échec réseau")
-        console.log(attributeError.message)
       }
-   
+
     const collection = data?.collection
     const attributes = mapEdgesToItems(attributeData?.attributes)
 
