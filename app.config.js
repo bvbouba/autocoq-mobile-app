@@ -6,11 +6,11 @@ export default ({ config }) => ({
     channel: process.env.CHANNEL || "",
     locale: process.env.LOCALE?.split(",") || [],
     "eas": {
-              "projectId": "cdad611e-f28e-4cc5-b36b-1aa869bc7f94"
+              "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
     },
   },
   "name": "mobile",
-  "slug": "exposhop",
+  "slug": "autocoq",
   "version": "1.0.0",
   "orientation": "portrait",
   "icon": "./assets/images/icon.png",
