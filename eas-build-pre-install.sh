@@ -27,14 +27,15 @@ if ! command -v yarn &> /dev/null; then
 
   # Ensure Yarn is available in the current shell session
   export PATH="$(npm bin -g):$PATH"
+  export PATH="$HOME/.npm-global/bin:$PATH"
 fi
 
 # Confirm Yarn installation
 if command -v yarn &> /dev/null; then
-  echo "✅ Yarn version:"
+  echo "✅ Yarn installed successfully!"
   yarn -v
 else
-  echo "❌ Yarn installation failed."
+  echo "❌ Yarn installation failed. Exiting..."
   exit 1
 fi
 
