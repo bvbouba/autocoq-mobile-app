@@ -25,13 +25,18 @@ if ! command -v yarn &> /dev/null; then
   echo "🔄 Yarn not found. Installing..."
   npm install -g yarn
 
-  # Manually add Yarn to PATH
-  export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+  # Ensure Yarn is available in the current shell session
+  export PATH="$(npm bin -g):$PATH"
 fi
 
 # Confirm Yarn installation
-echo "✅ Yarn version:"
-yarn -v || echo "❌ Yarn installation failed."
+if command -v yarn &> /dev/null; then
+  echo "✅ Yarn version:"
+  yarn -v
+else
+  echo "❌ Yarn installation failed."
+  exit 1
+fi
 
 # Force Yarn to use the correct Node.js version
 echo "🔄 Configuring Yarn..."
