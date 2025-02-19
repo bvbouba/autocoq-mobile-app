@@ -17,7 +17,19 @@
       "autoIncrement": true,
       "channel": "production",
       "android": {
-        "image": "sdk-51",
+        "image": "sdk-52",
+        "env": {
+          "NODE_VERSION": "20"
+        },
+        "build": {
+          "pre-build": [
+            "nvm install 20",
+            "nvm use 20"
+          ]
+        }
+      },
+      "ios": {
+        "image": "latest",
         "env": {
           "NODE_VERSION": "20"
         }
