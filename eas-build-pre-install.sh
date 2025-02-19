@@ -20,6 +20,16 @@ echo "✅ Node.js version:"
 node -v
 npm -v
 
+# Install Yarn globally if not installed
+if ! command -v yarn &> /dev/null; then
+  echo "🔄 Yarn not found. Installing..."
+  npm install -g yarn
+fi
+
+# Confirm Yarn installation
+echo "✅ Yarn version:"
+yarn -v
+
 # Force Yarn to use the correct Node.js version
 echo "🔄 Configuring Yarn..."
 yarn config set ignore-engines true
