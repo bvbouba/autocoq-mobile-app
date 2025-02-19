@@ -14,20 +14,25 @@
       "channel": "preview"
     },
     "production": {
-      "autoIncrement": true,
-      "channel": "production",
-      "android": {
-        "image": "sdk-51",
-        "env": {
-          "NODE_VERSION": "20"
-        }
-      },
-      "ios": {
-      "env": {
-        "NODE_VERSION": "20"
-      }
+  "autoIncrement": true,
+  "channel": "production",
+  "android": {
+    "image": "sdk-51",
+    "env": {
+      "NODE_VERSION": "20"
     }
+  },
+  "ios": {
+    "env": {
+      "NODE_VERSION": "20"
     }
+  },
+  "env": {
+    "NODE_VERSION": "20",
+    "EXPO_USE_NODE_VERSION": "true"
+  }
+}
+
   },
   "submit": {
     "production": {}
