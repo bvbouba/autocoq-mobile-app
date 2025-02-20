@@ -1,10 +1,10 @@
 export default ({ config }) => ({
   "owner": "vaflaly",
   "extra": {
-    saleorApi: process.env.SALEOR_API_URL || "",
-    stripePK: process.env.STRIPE_PK || "",
-    channel: process.env.CHANNEL || "",
-    locale: process.env.LOCALE?.split(",") || [],
+    saleorApi: process.env.EXPO_PUBLIC_SALEOR_API_URL || "",
+    stripePK: process.env.EXPO_PUBLIC_STRIPE_PK || "",
+    channel: process.env.EXPO_PUBLIC_CHANNEL || "",
+    locale: process.env.EXPO_PUBLIC_LOCALE?.split(",") || [],
     "eas": {
               "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
     },

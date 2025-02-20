@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - ${SALEOR_API_URL}
+  - ${EXPO_PUBLIC_SALEOR_API_URL}
 documents: "graphql/**/*.{ts,graphql}"
 generates:
   saleor/api.generated.ts:
