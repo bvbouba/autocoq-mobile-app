@@ -1,10 +1,10 @@
 export default ({ config }) => ({
   "owner": "vaflaly",
   "extra": {
-    saleorApi: process.env.EXPO_PUBLIC_SALEOR_API_URL || "",
+    saleorApi: "https://autoparts-18vd.onrender.com/graphql/",
     stripePK: process.env.EXPO_PUBLIC_STRIPE_PK || "",
-    channel: process.env.EXPO_PUBLIC_CHANNEL || "",
-    locale: process.env.EXPO_PUBLIC_LOCALE?.split(",") || [],
+    channel: "ci",
+    locale: ("fr").split(",") || [],
     "eas": {
               "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
     },
@@ -24,7 +24,10 @@ export default ({ config }) => ({
   "assetBundlePatterns": ["**/*"],
   "ios": {
     "supportsTablet": true,
-    "bundleIdentifier": "com.anonymous.exposhop"
+    "bundleIdentifier": "com.anonymous.exposhop",
+    "infoPlist": {
+      "ITSAppUsesNonExemptEncryption": false
+    }
   },
   "android": {
     "adaptiveIcon": {
@@ -39,7 +42,7 @@ export default ({ config }) => ({
     "favicon": "./assets/images/favicon.png"
   },
   "updates": {
-    "url": "https://u.expo.dev/cdad611e-f28e-4cc5-b36b-1aa869bc7f94"
+    "url": "https://u.expo.dev/1b5a74aa-d133-4c94-9651-4dba78bf303f"
   },
   "runtimeVersion": "1.0.0",
   "plugins": [
