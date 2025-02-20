@@ -30,12 +30,12 @@ const CategoryList = () => {
         return (
             <View style={styles.container}>
                 <PaddedView>
-                    <Skeleton colorMode="light" height={30} width={180} radius={5} />
+                    <Skeleton colorMode="light" height={30} width={180} radius={2} />
                 </PaddedView>
                 <PaddedView style={{ flexDirection: "column" }}>
                     {[...Array(4)].map((_, index) => (
                         <View key={index}>
-                            <Skeleton colorMode="light" height={20} width="100%" radius={5} />
+                            <Skeleton colorMode="light" height={20} width="100%" radius={2} />
                             <Divider />
                         </View>
                     ))}

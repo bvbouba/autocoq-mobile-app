@@ -40,7 +40,7 @@ const DeliveryMethod = ({ variant,setCheckedId }: Props) => {
   }
 
 
-  if (loading) return <Skeleton height={40} width="100%" radius={8} colorMode="light" />
+  if (loading) return <Skeleton height={40} width="100%" radius={2} colorMode="light" />
 
   if (!availableShippingMethods?.length) return <ZoneSelector />;
 

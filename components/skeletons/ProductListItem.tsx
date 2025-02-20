@@ -8,26 +8,26 @@ export default function ProductListItemSkeleton() {
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper}>
                     <View>
-                        <Skeleton height={100} width={100} radius={4} colorMode="light" />
+                        <Skeleton height={100} width={100} radius={2} colorMode="light" />
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
-                            <Skeleton height={25} width="80%" radius={4} colorMode="light" />
+                            <Skeleton height={25} width="80%" radius={2} colorMode="light" />
                         </View>
-                        <Skeleton height={20} width="40%" radius={4} colorMode="light" />
+                        <Skeleton height={20} width="40%" radius={2} colorMode="light" />
                         <View style={{
                             flexDirection: "row",
                             alignItems: "center",
                             marginTop: 5
                         }}>
-                            <Skeleton height={20} width="60%" radius={4} colorMode="light" />
+                            <Skeleton height={20} width="60%" radius={2} colorMode="light" />
                         </View>
 
-                        <Skeleton height={30} width="100%" radius={4} colorMode="light" />
-                        <Skeleton height={30} width="100%" radius={4} colorMode="light" />
+                        <Skeleton height={30} width="100%" radius={2} colorMode="light" />
+                        <Skeleton height={30} width="100%" radius={2} colorMode="light" />
 
                         <View style={styles.buttonContainer}>
-                            <Skeleton height={40} width="95%" radius={4} colorMode="light" />
+                            <Skeleton height={40} width="95%" radius={2} colorMode="light" />
                         </View>
                     </View>
 

@@ -52,17 +52,9 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
                                     colorMode="light"
                                     height="100%"
                                     width="100%"
-                                    radius={10}
+                                    radius={2}
                                 />
-                            </View>
-
-                            <View style={styles.skeletonTextContainer}>
-                                <Skeleton
-                                    colorMode="light"
-                                    height={16} 
-                                    width={60} 
-                                    radius={5}
-                                />
+                        
                             </View>
                         </View>
                     ))

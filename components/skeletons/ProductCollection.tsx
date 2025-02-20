@@ -10,7 +10,7 @@ export default function ProductCollectionSkeleton() {
                 <View style={styles.wrapper}>
                     <View style={styles.filterWrapper}>
                         <View style={{ marginRight: 10 }}>
-                            <Skeleton height={40} width={100} radius={8} colorMode="light" />
+                            <Skeleton height={40} width={100} radius={2} colorMode="light" />
                         </View>
                         {/* <Skeleton height={20} width={60} radius={4} colorMode="light" /> */}
                     </View>

@@ -32,7 +32,7 @@ const CompatibilityCheckBasic = ({ product }: props) => {
     }
   })
 
-  if (loading) return <Skeleton height={30} width="100%" radius={8} colorMode="light" />
+  if (loading) return <Skeleton height={30} width="100%" radius={2} colorMode="light" />
   
   const isCompatible = data?.checkProductCompatibility;
 

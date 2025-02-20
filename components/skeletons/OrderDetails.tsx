@@ -9,16 +9,16 @@ const  OrderDetailsSkeleton=()=>{
          <PaddedView>
                 <View>
                     <View style={styles.statusWrapper}>
-                    <Skeleton colorMode="light" width="80%" height={20} radius={4} />
+                    <Skeleton colorMode="light" width="80%" height={20} radius={2} />
                     </View>
                     <View style={styles.statusWrapper}>
-                    <Skeleton colorMode="light" width="80%" height={20} radius={4} />                  
+                    <Skeleton colorMode="light" width="80%" height={20} radius={2} />                  
                       </View>
                     <View style={styles.statusWrapper}>
-                    <Skeleton colorMode="light" width="80%" height={20} radius={4} /> 
+                    <Skeleton colorMode="light" width="80%" height={20} radius={2} /> 
                     </View>
                     <View style={styles.statusWrapper}>
-                    <Skeleton colorMode="light" width="80%" height={20} radius={4} /> 
+                    <Skeleton colorMode="light" width="80%" height={20} radius={2} /> 
                     </View>
                
                 </View>
@@ -34,37 +34,37 @@ const  OrderDetailsSkeleton=()=>{
                 justifyContent:"space-between",
                 marginBottom:10
             }}>
-            <Skeleton colorMode="light" width="50%" height={20} radius={4} /> 
-            <Skeleton colorMode="light" width="50%" height={20} radius={4} /> 
+            <Skeleton colorMode="light" width="50%" height={20} radius={2} /> 
+            <Skeleton colorMode="light" width="50%" height={20} radius={2} /> 
             </View>
             <View style={{
                 flexDirection:"row",
                 justifyContent:"space-between",
                 marginBottom:10
             }}>
-            <Skeleton colorMode="light" width="50%" height={20} radius={4} /> 
-            <Skeleton colorMode="light" width="50%" height={20} radius={4} /> 
+            <Skeleton colorMode="light" width="50%" height={20} radius={2} /> 
+            <Skeleton colorMode="light" width="50%" height={20} radius={2} /> 
             </View>
             <View style={{
                 flexDirection:"row",
                 justifyContent:"space-between",
                 marginBottom:10
             }}>
-            <Skeleton colorMode="light" width="50%" height={20} radius={4} /> 
-            <Skeleton colorMode="light" width="50%" height={20} radius={4} /> 
+            <Skeleton colorMode="light" width="50%" height={20} radius={2} /> 
+            <Skeleton colorMode="light" width="50%" height={20} radius={2} /> 
             </View>
 
             </PaddedView>
 
             <Divider />
             <PaddedView>
-            <Skeleton colorMode="light" width="100%" height={100} radius={4} /> 
+            <Skeleton colorMode="light" width="100%" height={100} radius={2} /> 
             </PaddedView>
             
 
                     <Divider />
             <PaddedView>
-            <Skeleton colorMode="light" width="100%" height={100} radius={4} /> 
+            <Skeleton colorMode="light" width="100%" height={100} radius={2} /> 
             </PaddedView>
                 </>
     

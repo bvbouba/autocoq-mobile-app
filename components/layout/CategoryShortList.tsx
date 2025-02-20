@@ -19,7 +19,7 @@ const CategoryShortList = () => {
   if (loading) return  <View style={styles.skeletonContainer}>
                     {[...Array(5)].map((_, index) => (
                       <View key={index} style={styles.skeletonButton}>
-                        <Skeleton colorMode="light" height={30} width={width * 7 / 20} radius={5} />
+                        <Skeleton colorMode="light" height={30} width={width * 7 / 20} radius={2} />
                       </View>
                     ))}
                   </View>;
