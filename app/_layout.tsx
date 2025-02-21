@@ -17,7 +17,7 @@ import * as SplashScreen from 'expo-splash-screen'; // Corrected import
 import { CarFilterProvider } from "@/context/useCarFilterContext";
 import { AuthProvider } from "@/lib/providers/authProvider";
 import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
-import { PathProvider } from "@/context/path";
+import { NavigationProvider } from "@/context/NavigationContext";
 import { ModalProvider } from "@/context/useModal";
 import { CheckoutProvider } from "@/context/CheckoutProvider";
 import { LoadingProvider } from "@/context/LoadingContext";
@@ -78,7 +78,7 @@ function RootLayoutNav() {
       <AuthProvider>
       <MessageProvider>
         <LoadingProvider>
-          <PathProvider>
+          <NavigationProvider>
             <CarFilterProvider>
                 <CheckoutProvider>
                   <OrderProvider>
@@ -163,7 +163,7 @@ function RootLayoutNav() {
                   </OrderProvider>
                 </CheckoutProvider>
             </CarFilterProvider>
-          </PathProvider>
+          </NavigationProvider>
         </LoadingProvider>
         </MessageProvider>
       </AuthProvider>

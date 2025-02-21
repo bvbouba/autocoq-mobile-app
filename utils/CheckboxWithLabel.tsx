@@ -14,7 +14,7 @@ const CheckBoxWithLabel: React.FC<Props> = ({ label, status, onPress }) => {
         <TouchableOpacity onPress={onPress}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between" }}>
                 <Text >{label}</Text>
-                <Checkbox status={status} color={colors.orange}/>
+                <Checkbox status={status} color={colors.primary}/>
             </View>
         </TouchableOpacity>
     );

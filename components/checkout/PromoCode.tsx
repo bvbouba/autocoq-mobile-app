@@ -1,28 +1,49 @@
 import  { useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useCheckout } from "@/context/CheckoutProvider";
-import {  fonts, PaddedView } from "../Themed";
+import {  Divider, fonts, PaddedView } from "../Themed";
 import { useModal } from "@/context/useModal";
 import { IconButton, } from "react-native-paper";
 import PromoCodeForm from "./PromoCodeForm";
+import { useCheckoutRemovePromoCodeMutation } from "@/saleor/api.generated";
+import { useLoading } from "@/context/LoadingContext";
 
 const promoImage = require("../../assets/images/PromoCard.png");
 
 const PromoCode = () => {
   const { checkout } = useCheckout();
-  const [editPromoCode, setEditPromoCode] = useState(false);
+  const [checkoutRemovePromoCode] = useCheckoutRemovePromoCodeMutation();
   const { openModal } = useModal();
+  const {setLoading} = useLoading()
+
+  const onDelete = async () => {
+    try {
+       setLoading(true)
+      const {data} = await checkoutRemovePromoCode({
+        variables:{
+               checkoutId:checkout?.id,
+               promoCode:checkout?.voucherCode,
+        }
+      });
+      
+    } catch (error) {
+      console.error(error)
+    }finally{
+      setLoading(false)
+    }
+    
+	};
 
   return (
     <>
-      {(editPromoCode || !checkout?.discount?.amount) && (
-        <PaddedView>
+            <PaddedView>
+      {(!checkout?.discount?.amount) ? (
           <TouchableOpacity
             style={styles.promoContainer}
             onPress={() =>
               openModal(
                 "checkout",
-                 <PromoCodeForm setEditPromoCode={setEditPromoCode}/>
+                 <PromoCodeForm />
               )
             }
           >
@@ -32,8 +53,26 @@ const PromoCode = () => {
             </View>
             <IconButton icon="chevron-right" style={styles.icon} />
           </TouchableOpacity>
-        </PaddedView>
-      )}
+      ): 
+      <> <TouchableOpacity style={{
+        flexDirection:"row",
+        alignItems:"center"
+      }} 
+      
+      onPress={async ()=>await onDelete()}>
+        <Image source={promoImage} style={styles.tinyIcon} resizeMode="contain" />
+        <Text style={{
+          paddingLeft:10,
+          textDecorationLine:"underline",
+        }}>
+        Supprimer le code promo
+        </Text>
+        <IconButton icon="close"  />
+        </TouchableOpacity></>
+    }
+            </PaddedView>
+            <Divider style={{ borderBottomWidth: 10 }} /> 
+
     </>
   );
 };

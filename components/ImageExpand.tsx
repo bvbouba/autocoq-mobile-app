@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Modal,
   View,
   Image,
   TouchableWithoutFeedback,
@@ -13,7 +12,6 @@ import {
   Gesture,
   GestureDetector,
   GestureHandlerRootView,
-  TouchableOpacity,
 } from 'react-native-gesture-handler';
 import Animated, {
   useSharedValue,

@@ -6,12 +6,9 @@ import { Platform } from 'react-native';
 export function ExternalLink(props: React.ComponentProps<typeof Link>) {
   return (
     <Link
-      hrefAttrs={{
-        // On web, launch the link in a new tab.
-        target: '_blank',
-      }}
-      {...props}
-      onPress={(e) => {
+  {...props}
+  target={Platform.OS === 'web' ? '_blank' : undefined}
+  onPress={(e) => {
         if (Platform.OS !== 'web') {
           // Prevent the default behavior of linking to the default browser on native.
           e.preventDefault();

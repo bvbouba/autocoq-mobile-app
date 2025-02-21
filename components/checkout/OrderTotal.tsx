@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
-import { colors, Divider, fonts, PaddedView, Text, View } from "@/components/Themed"
-import { getConfig } from "@/config"
+import { Divider, fonts, PaddedView, Text, View } from "@/components/Themed"
 import { useCheckout } from "@/context/CheckoutProvider"
 import { convertMoneyToString } from "@/utils/convertMoneytoString"
 
@@ -17,12 +16,13 @@ const OrderTotal = () => {
             fontWeight: "900"
         }}>Résumé de la commande</Text>
         <Divider />
-        {/* { <PaddedView style={styles.rowWrapper}>
+        {checkout?.discount?.amount && 
+        <PaddedView style={styles.rowWrapper}>
             <Text>{`Réductions`}</Text>
             <Text>
                 {convertMoneyToString(checkout?.discount)}
             </Text>
-        </PaddedView> } */}
+        </PaddedView> }
         <PaddedView style={styles.rowWrapper}>
             <Text>{`Sous-total des articles`}</Text>
             <Text>{}

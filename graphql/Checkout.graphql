@@ -369,3 +369,21 @@ mutation RemoveProductFromCheckout(
     }
   }
 }
+
+
+mutation checkoutRemovePromoCode(
+	$checkoutId: ID
+	$promoCode: String
+	$promoCodeId: ID
+) {
+	checkoutRemovePromoCode(checkoutId: $checkoutId, promoCode: $promoCode, promoCodeId: $promoCodeId) {
+		errors {
+			message
+      field
+      code
+		}
+		checkout {
+			...CheckoutFragment
+		}
+	}
+}

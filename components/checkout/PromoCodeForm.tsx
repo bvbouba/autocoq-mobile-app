@@ -4,20 +4,17 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useCheckoutAddPromoCodeMutation } from "@/saleor/api.generated";
 import { useCheckout } from "@/context/CheckoutProvider";
-import { colors, fonts, PaddedView } from "../Themed";
+import { colors, fonts } from "../Themed";
 import {  TextInput } from "react-native-paper";
-import { useMessage } from "@/context/MessageContext";
+import { useModal } from "@/context/useModal";
 
 
-interface props {
-  setEditPromoCode: React.Dispatch<React.SetStateAction<boolean>>}
-
-const PromoCodeForm = ({setEditPromoCode}:props) => {
+const PromoCodeForm = () => {
   const { checkoutToken } = useCheckout();
   const [promoInput, setPromoInput] = useState(""); // Holds promo code temporarily
   const [checkoutAddPromoCodeMutation] = useCheckoutAddPromoCodeMutation();
   const [error,setError] = useState("");
-
+  const {closeModal} = useModal()
   // Formik setup
   const formik = useFormik({
     initialValues: {
@@ -38,9 +35,9 @@ const PromoCodeForm = ({setEditPromoCode}:props) => {
         if (errors && errors?.length > 0) {
           setError("Le code n'est pas valide")
         } else {
-          setEditPromoCode(false); // Hide input after successful submission
           formik.resetForm(); // Clear the promo code after successful apply
           setPromoInput(""); // Also clear the local state
+          closeModal()
         }
       } catch (error) {
         setError("Une erreur est survenue");
@@ -57,7 +54,7 @@ const PromoCodeForm = ({setEditPromoCode}:props) => {
     <>
     <View style={{ gap: 10 }}>
                   <Text style={{ fontSize: fonts.h1, fontWeight: "bold" }}>
-                    Entrer votre code de réduction
+                    Code de réduction
                   </Text>
                   <Text style={{ fontSize: fonts.body }}>
                     Entrez un code valide ci-dessous.
@@ -66,7 +63,7 @@ const PromoCodeForm = ({setEditPromoCode}:props) => {
                   {/* Use local state for input instead of Formik's value */}
                   <TextInput
                     style={styles.input}
-                    placeholder="Entrez votre code promo"
+                    placeholder=""
                     value={promoInput} // Local state
                     onChangeText={(value) => {
                       setPromoInput(value); // Update local state

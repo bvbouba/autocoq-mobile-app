@@ -6,13 +6,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { mapEdgesToItems } from "@/utils/map";
 import ListItem from "../ListItem";
 import { useEffect } from "react";
-import { usePath } from "@/context/path";
+import { useNavigationContext } from "@/context/NavigationContext";
 import { useLoading } from "@/context/LoadingContext";
 import { Skeleton } from "moti/skeleton";
 
 const CategoryList = () => {
     const { setLoading } = useLoading();
-    const { setPathSlug } = usePath();
+    const { setNavigationSlug } = useNavigationContext();
     const router = useRouter();
 
     const { slug } = useLocalSearchParams();
@@ -47,7 +47,7 @@ const CategoryList = () => {
     const category = data?.category || previousData?.category;
     if (!category) return null;
 
-    setPathSlug(category.parent?.slug || "");
+    setNavigationSlug(category.parent?.slug || "");
 
     const childrens = mapEdgesToItems(category.children);
     const categoryName = childrens ? category.name : "Voir par catégorie";

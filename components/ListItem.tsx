@@ -2,8 +2,6 @@ import { FC } from "react"
 import {  fonts, Text, View } from "./Themed"
 import { StyleSheet, Pressable } from "react-native"
 import { IconButton } from "react-native-paper"
-import { useRouter } from "expo-router"
-import { usePath } from "@/context/path"
 
 
 interface Props {

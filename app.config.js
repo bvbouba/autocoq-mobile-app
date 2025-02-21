@@ -1,4 +1,4 @@
-export default ({ config }) => ({
+export default () => ({
   "owner": "vaflaly",
   "extra": {
     saleorApi: process.env.EXPO_PUBLIC_SALEOR_API_URL || "",

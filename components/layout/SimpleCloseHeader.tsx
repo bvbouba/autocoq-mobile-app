@@ -3,7 +3,6 @@ import { Platform, SafeAreaView, StyleSheet, Text } from "react-native";
 import { Divider, IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {  View, colors, fonts } from "@/components/Themed";
-import LoadingIndicator from "./LoadingIndicator";
 
 const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: string }) => {
   const router = useRouter();
@@ -29,7 +28,6 @@ const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: str
           </View>
         </View>
       </SafeAreaView>
-      <LoadingIndicator />
       <Divider />
     </View>
   );

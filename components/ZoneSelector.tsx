@@ -23,8 +23,8 @@ const ZoneSelector: React.FC = () => {
     >
       <FontAwesome name="map-marker" size={24} color={colors.warning} />
       <Text style={styles.text}>
-        {delivery.method?.name
-          ? `Zone sélectionnée: ${delivery.method.name}`
+        {delivery.zone
+          ? `Zone sélectionnée: ${delivery.zone}`
           : "Choisissez votre zone pour voir les options de livraison"}
       </Text>
     </TouchableOpacity>

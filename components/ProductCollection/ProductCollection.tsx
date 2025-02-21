@@ -153,7 +153,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
               fontSize: fonts.caption,
               fontWeight: "bold"
             }}>
-              {filter?.search && ` "${filter.search}"`}
+              {filter?.search && `${filter.search}`}
             </Text>
           </View>
           <View>

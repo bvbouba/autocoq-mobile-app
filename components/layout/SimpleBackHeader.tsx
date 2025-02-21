@@ -3,14 +3,12 @@ import { Platform, SafeAreaView, StyleSheet, Image } from "react-native";
 import { Text, View, colors, fonts } from "@/components/Themed";
 import { IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import LoadingIndicator from "./LoadingIndicator";
-import { usePath } from "@/context/path";
+import { useNavigationContext } from "@/context/NavigationContext";
 
 const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolean }) => {
-  const router = useRouter();
   const statusBarInset = useSafeAreaInsets();
   const logoUri = require("@/assets/images/logo.png");
-  const {goBack} = usePath()
+  const {handleBackNavigation} = useNavigationContext()
 
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
@@ -23,7 +21,7 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
         <View style={styles.backContainer}>
           <IconButton
             icon="arrow-left"
-            onPress={() => goBack()}
+            onPress={() => handleBackNavigation()}
             style={{ marginLeft: Platform.OS === "android" ? -10 : 0 }}
             iconColor={colors.primary}
           />
@@ -33,7 +31,6 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
           {hasLogo && <Image source={logoUri} style={styles.logo} />}
         </View>
       </SafeAreaView>
-      <LoadingIndicator />
     </View>
   );
 };

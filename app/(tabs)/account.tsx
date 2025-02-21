@@ -178,9 +178,6 @@ const styles = StyleSheet.create({
   disabledButton: {
     opacity: 0.6, // Atténuer le bouton pour indiquer qu'il est désactivé
   },
-  loadingIndicator: {
-    marginLeft: 10,
-  },
   list: {
     marginTop: 20,
   },

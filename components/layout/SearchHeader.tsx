@@ -4,10 +4,9 @@ import ProductSearch from "../products/ProductsSearch";
 import { SafeAreaView, StyleSheet, Text, Image } from "react-native";
 import { FC, } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import LoadingIndicator from "./LoadingIndicator";
 import Banner from "./BannerSimple";
 import AddVehicleBasic from "../car/AddVehicleBasic";
-import { usePath } from "@/context/path";
+import { useNavigationContext } from "@/context/NavigationContext";
 
 interface Props {
   withBack?: boolean;
@@ -20,7 +19,7 @@ interface Props {
 
 const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  carIconColor?:string;}) => {
   const statusBarInset = useSafeAreaInsets();
-  const {goBack} = usePath()
+  const {handleBackNavigation} = useNavigationContext()
  
 
   return (
@@ -37,14 +36,13 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
           <View style={styles.searchBarWrapper}>
             <IconButton
               icon="arrow-left"
-              onPress={() => goBack()}
+              onPress={() => handleBackNavigation()}
               iconColor={colors.primary}
             />
             <ProductSearch carIconColor={carIconColor}/>
           </View>
         </View>
       </SafeAreaView>
-      <LoadingIndicator style={{ marginTop: 12 }} />
       {withVehicle && <AddVehicleBasic />}
       </View>
   );
@@ -93,7 +91,6 @@ const SearchHeader: FC<Props> = ({
           />
         </View>
       </View>
-      <LoadingIndicator />
     </View>
   );
 };

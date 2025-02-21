@@ -42,7 +42,7 @@ const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
         return <></>
     }
     
-    return <Pressable onPress={() => router.push("products/details/" + lineItem.variant?.product.id)}>
+    return <Pressable onPress={() => router.push(`/products/${lineItem.variant?.product.id}`)}>
         <View style={styles.productItem}>
             <View style={styles.imageWrapper} testID="product-image-wrapper">
                 <OrderItemImage variant={lineItem?.variant as OrderLineVariantFragment} />

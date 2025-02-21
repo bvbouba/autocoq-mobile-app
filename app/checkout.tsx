@@ -68,8 +68,7 @@ const Checkout = () => {
                     <Divider style={{ borderBottomWidth: 10 }} />
                     <PaymentMethodSelector />
                     <Divider style={{ borderBottomWidth: 10 }} />
-                   {/* {!checkout?.discount?.amount && <> <PromoCode />  
-                  <Divider style={{ borderBottomWidth: 10 }} /> </>} */}
+                    <PromoCode />  
                 </View>
                 <OrderTotal />
             </ScrollView>

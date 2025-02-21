@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import SecondaryButton from "./button/SecondaryButton";
-import {fonts, SurfaceView, Text, View  } from "@/components/Themed"
+import {colors, fonts, SurfaceView, Text, View  } from "@/components/Themed"
 import { useModal } from "@/context/useModal";
 import Auth from "./account/auth";
 
@@ -13,9 +13,19 @@ const AuthPrompt = ({redirectUrl}:props) => {
 
   return (
     <SurfaceView style={styles.wrapper}>
-      <View>
+      <View style={{
+        alignItems:"center",
+      }}>
+        <Text style={{
+          fontWeight:"bold",
+          marginBottom:10
+        }}>
+        DES RÉCOMPENSES <Text style={{
+          color:colors.primary
+        }}>VOUS ATTENDENT</Text>
+        </Text>
       <Text style={styles.promptText}>
-      Rejoignez Autocoq et commencez à économiser dès aujourd'hui.
+      Rejoignez AutoCoq et à cumuler des points dès aujourd'hui !
       </Text>
       </View>
       <View style={{width:"100%"}}>
