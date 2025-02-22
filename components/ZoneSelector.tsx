@@ -17,7 +17,7 @@ const ZoneSelector: React.FC = () => {
       onPress={() =>
         openModal(
           "shipping",
-          <ZoneList />
+          <ZoneList />,true
         )
       }
     >

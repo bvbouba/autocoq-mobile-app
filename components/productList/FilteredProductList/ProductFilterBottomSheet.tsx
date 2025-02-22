@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { AttributeFilterFragment, OrderDirection, ProductOrderField } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from "@/components/Themed";
@@ -32,17 +32,14 @@ const ProductFilterBottomSheet: FC<Props> = ({
     itemsCounter
 }) => {
     return (
-        <>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }}>
             <View>
                 <Text style={styles.bigTitle}>Filtrer et trier</Text>
-                <View style={{
-                    flexDirection: "row"
-                }}>
-
-                    <Text style={{
-                        fontSize: fonts.caption
-                    }}>{itemsCounter} {`${(itemsCounter < 2) ? " Résultat" : " Résultats"}`}</Text></View>
-
+                <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontSize: fonts.caption }}>
+                        {itemsCounter} {`${itemsCounter < 2 ? " Résultat" : " Résultats"}`}
+                    </Text>
+                </View>
             </View>
 
             <SortingDropdown
@@ -52,8 +49,6 @@ const ProductFilterBottomSheet: FC<Props> = ({
                 chosen={sortBy}
             />
             <Divider style={{ borderBottomWidth: 5 }} />
-
-
 
             <View style={styles.filterTypeContainer}>
                 {attributeFiltersData
@@ -72,11 +67,13 @@ const ProductFilterBottomSheet: FC<Props> = ({
                         />
                     ))}
             </View>
+
             <View style={styles.buttonGroup}>
-                <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={() => clearFilters()}>
-                    <Text>Réinitialiser</Text></Button>
+                <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={clearFilters}>
+                    <Text>Réinitialiser</Text>
+                </Button>
             </View>
-        </>
+        </ScrollView>
     );
 };
 

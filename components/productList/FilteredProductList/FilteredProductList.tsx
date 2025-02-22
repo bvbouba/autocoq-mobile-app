@@ -86,7 +86,9 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         setSortBy={setSortBy}
         sortBy={sortBy}
         itemsCounter={itemsCounter}
-        />)} 
+        />,
+        true
+      )} 
         />
         
       <ProductCollection 

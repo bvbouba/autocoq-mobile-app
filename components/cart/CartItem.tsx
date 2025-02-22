@@ -38,7 +38,10 @@ const CartItem: FC<Props> = ({ lineItem }) => {
     const router = useRouter();
     const { onQuantityUpdate, loading, onCheckoutLineDelete } = useCheckout();
     const {setLoading} = useLoading()
-   
+    
+    useEffect(()=>{
+      setLoading(loading)
+    },[loading])
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',

@@ -47,163 +47,129 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   const variables: ProductCollectionQueryVariables = {
     filter: {
       ...filter,
-      ...(selectedCar
-        ? {
-          ...(selectedCar?.year && { carYear: [selectedCar?.year.id] }),
-          ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }),
-          ...(selectedCar?.model && { carModel: [selectedCar?.model.id] }),
-          ...(selectedCar?.engine && { carEngine: [selectedCar?.engine.id] }),
-        }
-        : {})
+      ...(selectedCar && {
+        ...(selectedCar.year && { carYear: [selectedCar.year.id] }),
+        ...(selectedCar.make && { carMake: [selectedCar.make.id] }),
+        ...(selectedCar.model && { carModel: [selectedCar.model.id] }),
+        ...(selectedCar.engine && { carEngine: [selectedCar.engine.id] }),
+      }),
     },
     first: perPage,
     channel: "ci",
-    ...(sortBy?.field &&
-      sortBy?.direction && {
-      sortBy: {
-        direction: sortBy.direction,
-        field: sortBy.field,
-      },
+    ...(sortBy?.field && sortBy?.direction && {
+      sortBy: { direction: sortBy.direction, field: sortBy.field },
     }),
   };
-
-
+  
   const { loading, error, data, fetchMore } = useProductCollectionQuery({ variables });
-
+  
   const [allProducts, setAllProducts] = useState<ProductFragment[]>([]);
   const [hasNextPage, setHasNextPage] = useState(false);
-
+  
   useEffect(() => {
-    if (setCounter) {
-      setCounter(data?.products?.totalCount || 0);
-    }
+    if (setCounter) setCounter(data?.products?.totalCount || 0);
   }, [setCounter, data?.products?.totalCount]);
-
-
+  
   useEffect(() => {
     if (data?.products?.edges) {
       setAllProducts(mapEdgesToItems(data.products));
-      setHasNextPage(data.products.pageInfo.hasNextPage)
+      setHasNextPage(data.products.pageInfo.hasNextPage);
     }
   }, [data]);
-
+  
   const onLoadMore = async () => {
-    if (!hasNextPage) {
-      return;
-    }
-
+    if (!hasNextPage) return;
+  
     try {
-      const result = await fetchMore({
-        variables: {
-          after: pageInfo?.endCursor,
-        },
-      });
-
+      const result = await fetchMore({ variables: { after: pageInfo?.endCursor } });
+  
       if (result.data?.products?.edges) {
         const newProducts = mapEdgesToItems(result.data.products);
-
-        // Avoid duplicates by checking slug
+  
+        // Avoid duplicates using Set
         setAllProducts((prev) => {
           const existingSlugs = new Set(prev.map((p) => p.slug));
-          const uniqueNewProducts = newProducts.filter((p) => !existingSlugs.has(p.slug));
-
-          return [...prev, ...uniqueNewProducts];
+          return [...prev, ...newProducts.filter((p) => !existingSlugs.has(p.slug))];
         });
-
+  
         setHasNextPage(result.data.products.pageInfo.hasNextPage);
       }
     } catch (error) {
       console.error("❌ Error fetching more:", error);
-      showMessage("Erreur")
+      showMessage("Erreur");
     }
   };
-
-  const pageInfo = data?.products?.pageInfo
-
-  if (loading) return <View style={{ padding: 10 }}>
-                    {[...Array(perPage)].map((_, index) => (
-                      <ProductListItemSkeleton key={index} />
-                    ))}
-                  </View>;
   
-  if (error) {
-    showMessage("Échec réseau")
-  }
-
-
+  const pageInfo = data?.products?.pageInfo;
+  
+  if (loading)
+    return (
+      <View style={{ padding: 10 }}>
+        {[...Array(perPage)].map((_, index) => (
+          <ProductListItemSkeleton key={index} />
+        ))}
+      </View>
+    );
+  
+  if (error) showMessage("Échec réseau");
+  
   return (
     <SafeAreaView style={styles.container} testID="prod-list-safe">
-
-
       <Animated.FlatList
         data={allProducts}
         keyExtractor={(item, index) => `${item.slug}-${index}`} // Ensure unique keys
         renderItem={({ item }) => <ProductListItem product={item} />}
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.3}
-        ListHeaderComponent={<View style={{
-          flexDirection: "column"
-        }}> <View style={styles.header}>
-            <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
-            <Text style={{ fontSize: fonts.caption }}>
-              {itemsCounter < 2 ? " Résultat" : " Résultats"}
-              {filter?.search && ` pour`}
-            </Text>
-            <Text style={{
-              fontSize: fonts.caption,
-              fontWeight: "bold"
-            }}>
-              {filter?.search && `${filter.search}`}
-            </Text>
-          </View>
-          <View>
-            {(!allProducts || allProducts.length === 0) ?
-              (<View style={styles.noProductsContainer} testID="prod-list-safe">
+        ListHeaderComponent={
+          <View style={{ flexDirection: "column" }}>
+            <View style={styles.header}>
+              <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
+              <Text style={{ fontSize: fonts.caption }}>
+                {itemsCounter < 2 ? "Résultat" : "Résultats"}{" "}
+                {filter?.search && (
+                  <>
+                    {" pour "}
+                    <Text style={{ fontWeight: "bold" }}>{filter.search}</Text>
+                  </>
+                )}
+              </Text>
+            </View>
+  
+            {!allProducts.length && (
+              <View style={styles.noProductsContainer} testID="prod-list-safe">
                 <PaddedView style={styles.noProductsTextWrapper}>
                   <Text style={styles.noProductsText}>
                     Désolé, aucun produit n'a été trouvé. Essayez d'ajuster vos filtres pour voir les résultats.
                   </Text>
-                  {/* <View style={{
-                  flexDirection:"row",
-                }}>
-                <Text style={{
-                  fontSize:fonts.caption
-                }}>
-                  Besoin d'aide?
-                </Text>
-                <TouchableOpacity>
-                 <Text style={{
-                  textDecorationLine:"underline",
-                  fontSize:fonts.caption
-                 }}> Contactez nous</Text> 
-                </TouchableOpacity>
-                </View> */}
-                  <Button mode="contained" onPress={() => router.push("/")}
+                  <Button
+                    mode="contained"
+                    onPress={() => router.push("/")}
                     style={{
                       backgroundColor: "white",
                       borderWidth: 1,
                       borderRadius: 5,
-                      borderColor: colors.secondary
+                      borderColor: colors.secondary,
                     }}
                   >
-                    <Text> CONTINUER</Text>
+                    <Text>CONTINUER</Text>
                   </Button>
                 </PaddedView>
               </View>
-              ) : <></>
-            }
+            )}
           </View>
-        </View>
         }
-        ListFooterComponent={allowMore && hasNextPage ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={colors.primary} />
-          </View>
-        ) : null}
+        ListFooterComponent={
+          allowMore && hasNextPage ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+          ) : null
+        }
       />
     </SafeAreaView>
   );
-};
+  };
 
 const styles = StyleSheet.create({
   container: {

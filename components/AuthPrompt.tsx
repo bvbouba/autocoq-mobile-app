@@ -25,7 +25,7 @@ const AuthPrompt = ({redirectUrl}:props) => {
         }}>VOUS ATTENDENT</Text>
         </Text>
       <Text style={styles.promptText}>
-      Rejoignez AutoCoq et à cumuler des points dès aujourd'hui !
+      Rejoignez AutoCoq et commencez à gagner des points dès aujourd'hui !
       </Text>
       </View>
       <View style={{width:"100%"}}>
