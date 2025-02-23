@@ -17,7 +17,8 @@ export function RichText({ jsonStringData, stylesOverride = {} }: RichTextProps)
   const { width } = useWindowDimensions();
   const data = parseEditorJSData(jsonStringData);
 
-  if (!data) {
+  if (!data || !data.blocks) {
+    console.error("Invalid or empty JSON data:", jsonStringData);
     return null;
   }
 
@@ -33,14 +34,20 @@ export function RichText({ jsonStringData, stylesOverride = {} }: RichTextProps)
   const renderBlock = (block: any, index: number) => {
     switch (block.type) {
       case "paragraph":
-        return (
-          <RenderHtml
-            key={index}
-            contentWidth={width}
-            source={{ html: block.data.text }}
-            baseStyle={mergedStyles.paragraph}
-          />
-        );
+        if (!block.data?.text) return null; 
+        try {
+          return (
+            <RenderHtml
+              key={index}
+              contentWidth={width}
+              source={{ html: block.data.text || "" }}
+              baseStyle={mergedStyles.paragraph}
+            />
+          );
+        } catch (error) {
+          console.error("RenderHtml error:", error);
+          return null;
+        }
       case "header":
         return (
           <Text key={index} style={[mergedStyles.header, { fontSize: block.data.level * 6 }]}>

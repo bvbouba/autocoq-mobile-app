@@ -23,7 +23,6 @@ interface props {
     handleSelect: (id: string) => void
 }
 export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption,handleSelect}:props) => {
-  const { delivery } = useCheckout();
   const getShippingMethodById = (shippingId: string) => {
         return availableShippingMethods?.find(method =>
           method.metadata.some(meta => meta.key === "id" && meta.value === shippingId)
