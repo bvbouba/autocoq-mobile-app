@@ -74,19 +74,22 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        paddingBottom: 16, 
+        paddingBottom: 16,
+
     },
     paddedTitle: {
         paddingTop: 8,
         paddingHorizontal: 16,
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems:"center",
     },
     collectionListTitle: {
         fontSize: fonts.h2,
         lineHeight: 34,
         fontWeight: "600",
         textAlign: "left",
+        color:colors.textPrimary
     },
     gridContainer: {
         flexDirection: "row",
@@ -122,6 +125,7 @@ const styles = StyleSheet.create({
         fontSize: fonts.body,
         fontWeight: "400",
         textAlign: "center",
+        color:colors.textPrimary
     },
     viewAll: {
         fontSize: fonts.body,

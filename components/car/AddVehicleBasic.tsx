@@ -75,7 +75,8 @@ const AddVehicleBasic = () => {
           <Text style={[styles.buttonText, (selectedCar) && {
             borderWidth: 1,
             textDecorationLine: "none",
-            borderRadius: 5
+            borderRadius: 5,
+            color:colors.textPrimary
           }]}>
             {selectedCar?.name ? "Changer" : "Sélectionner un véhicule"}
           </Text>
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 0,
     borderBottomWidth:1, 
-    borderColor:colors.border
+    borderColor:colors.border,
   },
   leftSection: {
     flexDirection: "row",
@@ -118,7 +119,8 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
     fontSize: fonts.button,
     fontWeight: "500",
-    marginLeft: 10
+    marginLeft: 10,
+    color:colors.textPrimary
   },
   button: {
     paddingVertical: 6,

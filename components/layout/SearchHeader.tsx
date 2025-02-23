@@ -74,16 +74,18 @@ const SearchHeader: FC<Props> = ({
   }
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
-      <Banner />
 
       <View
         style={{
           ...styles.container,
-          padding: 16,
+          paddingBottom: 16,
+          paddingHorizontal:16,
           marginTop: statusBarInset.top,
           minHeight: 100,
         }}
       >
+              <Banner />
+
         <View style={{ alignItems:"center"}}>{renderLogoOrName()}</View>
         <View style={styles.searchBarWrapperFull}>
           <ProductSearch cleanSearch={cleanSearch} searchOnLoad={searchOnLoad}
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
   containerWithBack: {
     width: "100%",
     height: 40,
-    marginTop: 30,
+    marginTop: 0,
     marginBottom: 10,
     display: "flex",
     justifyContent: "space-between",

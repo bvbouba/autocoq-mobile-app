@@ -1,47 +1,62 @@
-import { FC } from "react"
-import {  fonts, Text, View } from "./Themed"
-import { StyleSheet, Pressable } from "react-native"
-import { IconButton } from "react-native-paper"
-
+import { FC } from "react";
+import { colors, fonts, Text, View } from "./Themed";
+import { StyleSheet, Pressable } from "react-native";
+import { IconButton } from "react-native-paper";
+import IconComponent from "./icon/IconComponent";
 
 interface Props {
-    name: string,
-    onPress: () => void
-    slug?:string
+  name: string;
+  onPress: () => void;
+  slug?: string;
+  icon?: string;
 }
 
-const ListItem: FC<Props> = ({ name,onPress }) => {
-  
-    return <Pressable onPress={onPress}>
-        <View style={styles.wrapper}>
-            <View style={styles.titleWrapper}>
-                <Text style={styles.title}>{name}</Text>
-                <IconButton icon="chevron-right" onPress={onPress} style={styles.icon} />
+const ListItem: FC<Props> = ({ name, onPress,icon }) => {
+
+  return (
+    <Pressable onPress={onPress}>
+      <View style={styles.wrapper}>
+        <View style={styles.titleWrapper}>
+            <View style={{
+                flexDirection:"row",
+                alignItems:"center",
+            }}>
+            {icon && <IconComponent name={icon} size={24} />}
+            <Text style={styles.title}>{name}</Text>
             </View>
+          <IconButton icon="chevron-right" onPress={onPress} style={styles.icon} />
         </View>
+      </View>
     </Pressable>
-}
+  );
+};
 
-export default ListItem
+export default ListItem;
 
 const styles = StyleSheet.create({
-    wrapper: {
-        // border: "0.5 solid " + colors.dividerGrey,
-        borderRadius: 5,
-    },
-    title: {
-        fontSize:fonts.body,
-        marginTop: 10,
-        marginLeft: 8,
-    },
-    icon: {
-        marginTop: 0,
-        marginRight: 5,
-    },
-    titleWrapper: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        borderRadius: 5,
-    },
-})
+  wrapper: {
+    borderRadius: 5,
+  },
+  title: {
+    fontSize: fonts.body,
+    marginLeft: 8,
+    color:colors.textPrimary
+  },
+  icon: {
+    marginTop: 0,
+    marginRight: 5,
+  },
+  iconImage: {
+    width: 24,
+    height: 24,
+    marginRight: 8,
+    resizeMode: "contain",
+    borderWidth:1
+  },
+  titleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderRadius: 5,
+  },
+});

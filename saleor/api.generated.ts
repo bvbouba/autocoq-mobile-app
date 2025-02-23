@@ -34291,14 +34291,14 @@ export type CompatibilityCheckQueryVariables = Exact<{
 
 export type CompatibilityCheckQuery = { __typename?: 'Query', checkProductCompatibility?: boolean | null };
 
-export type CategoryDetailsFragment = { __typename?: 'Category', id: string, name: string, slug: string, parent?: { __typename?: 'Category', slug: string } | null, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string } }> } | null } }> } | null };
+export type CategoryDetailsFragment = { __typename?: 'Category', id: string, name: string, slug: string, parent?: { __typename?: 'Category', slug: string } | null, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string } }> } | null } }> } | null };
 
 export type CategoryBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type CategoryBySlugQuery = { __typename?: 'Query', category?: { __typename?: 'Category', id: string, name: string, slug: string, parent?: { __typename?: 'Category', slug: string } | null, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string } }> } | null } }> } | null } | null };
+export type CategoryBySlugQuery = { __typename?: 'Query', category?: { __typename?: 'Category', id: string, name: string, slug: string, parent?: { __typename?: 'Category', slug: string } | null, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string } }> } | null } }> } | null } | null };
 
 export type CategoryPathFragment = { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null };
 
@@ -34645,12 +34645,16 @@ export const CategoryDetailsFragmentDoc = gql`
   parent {
     slug
   }
-  children(first: 10) {
+  children(first: 20) {
     edges {
       node {
         id
         name
         slug
+        metadata {
+          key
+          value
+        }
         children(first: 1) {
           edges {
             node {

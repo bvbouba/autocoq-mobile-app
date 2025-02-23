@@ -99,7 +99,7 @@ export const colors = {
   secondary:"#202124",
   background:"#F2F4F5",
   surface:"#ffffff",
-  textPrimary: "#202124",
+  textPrimary:"#555555", // "#202124",
   textSecondary: "#878484",
   error: "#D32F2F",
   errorBg: "#FFE6E8",

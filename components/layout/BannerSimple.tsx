@@ -1,7 +1,5 @@
-import { useRouter } from "expo-router";
 import { View, colors, fonts } from "@/components/Themed";
 import {  StyleSheet, Text } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePageQuery } from "@/saleor/api.generated";
 import { parseEditorJSData } from "@/utils/parseJsonEditor";
 
@@ -12,7 +10,6 @@ export interface RichTextProps {
   
 export function RichText({ jsonStringData }: RichTextProps) {
     const data = parseEditorJSData(jsonStringData);
-  
     if (!data) {
       return null;
     }
@@ -47,9 +44,7 @@ const BannerSimple = () => {
     },
   });
   const content = data?.page?.content
-
   if(loading) return null
-
   return (
     <>
  
@@ -63,11 +58,10 @@ const BannerSimple = () => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "#fffff",
         paddingVertical: 4,
         alignItems: "center",
         justifyContent: "center",
-        width: "100%",
+        width: "100%"
 
     },
     title: {
@@ -76,7 +70,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     description: {
-      fontSize: 11,
+      fontSize: fonts.caption,
+      color:colors.textSecondary,
       textAlign: "center",
     },
   });

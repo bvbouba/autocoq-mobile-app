@@ -17,11 +17,14 @@ const AuthPrompt = ({redirectUrl}:props) => {
         alignItems:"center",
       }}>
         <Text style={{
-          fontWeight:"bold",
-          marginBottom:10
+          marginBottom:10,
+          fontSize:fonts.h2,
+          color:colors.textPrimary
         }}>
         DES RÉCOMPENSES <Text style={{
-          color:colors.primary
+          fontWeight:"bold",
+          color:colors.primary,
+          fontSize:fonts.h2
         }}>VOUS ATTENDENT</Text>
         </Text>
       <Text style={styles.promptText}>

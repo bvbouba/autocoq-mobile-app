@@ -11,6 +11,7 @@ export default () => ({
   },
   "name": "mobile",
   "slug": "autocoq",
+  "newArchEnabled": true,
   "version": "1.0.0",
   "orientation": "portrait",
   "icon": "./assets/images/icon.png",

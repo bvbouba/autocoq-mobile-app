@@ -5,12 +5,16 @@ fragment CategoryDetailsFragment on Category {
    parent{
         slug
       }
-  children(first: 10) {
+  children(first: 20) {
     edges {
       node {
         id
         name
         slug
+        metadata{
+          key
+          value
+          }
         children(first:1){
           edges{
             node{

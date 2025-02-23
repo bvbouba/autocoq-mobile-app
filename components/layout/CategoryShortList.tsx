@@ -74,17 +74,19 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     fontWeight: 'bold',
     textAlign: 'left',
+    color:colors.textPrimary
   },
 
   button: {
     borderWidth: 1,
     margin: 5,
     borderRadius: 5,
+    alignItems:"center"
   },
   buttonText: {
-    color: colors.secondary,
     padding: 5,
-    fontSize:fonts.caption
+    fontSize:fonts.body,
+    color:colors.textPrimary
   },
   skeletonContainer: {
     flexDirection: "row",

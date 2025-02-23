@@ -1,4 +1,4 @@
-import { View, Text, PaddedView, Divider, fonts } from "@/components/Themed";
+import { View, Text, PaddedView, Divider, fonts, colors } from "@/components/Themed";
 import { StyleSheet } from "react-native";
 import { useCategoryBySlugQuery } from "@/saleor/api.generated";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -55,11 +55,13 @@ const CategoryList = () => {
     return (
         <View style={styles.container}>
             <PaddedView>
+                
                 <Text style={styles.categoryListTitle}>{categoryName}</Text>
             </PaddedView>
             <PaddedView style={{ flexDirection: "column" }}>
                 {childrens.map((children) => {
                     const child = mapEdgesToItems(children.children);
+                    const icon = children.metadata.find(m=>m.key==="icon")
                     const onPress = () => {
                         if (child.length > 0) {
                             router.push(`/shop?slug=${children.slug}`);
@@ -69,7 +71,7 @@ const CategoryList = () => {
                     };
                     return (
                         <View key={children.id}>
-                            <ListItem name={children.name} onPress={onPress} />
+                            <ListItem name={children.name} onPress={onPress} icon={icon?.value}/>
                             <Divider />
                         </View>
                     );
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         fontWeight: "bold",
         textAlign: "left",
+        color:colors.textPrimary
     },
 });
 
