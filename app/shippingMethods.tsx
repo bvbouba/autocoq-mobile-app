@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, ActivityIndicator } from 'react-native-paper';
-import { borderRadius, colors, fonts, PaddedView, Text } from '../components/Themed';
+import {  colors, fonts, PaddedView, Text } from '../components/Themed';
 import { useCheckoutShippingMethodUpdateMutation } from '../saleor/api.generated';
 import { View, StyleSheet } from 'react-native';
 import { useCheckout } from '@/context/CheckoutProvider';

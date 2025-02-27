@@ -91,8 +91,9 @@ const styles = StyleSheet.create({
     productPrice: {
         textAlign: "left",
         fontSize:fonts.h2,
-        fontWeight: 'bold',
-        marginBottom: 8
+        fontWeight: "800",
+        marginBottom: 8,
+        transform: [{ scaleY: 1.3 }],
     },
     productDescription: {
         textAlign: "left",

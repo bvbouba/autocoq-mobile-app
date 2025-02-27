@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useProductContext } from '@/context/useProductContext';
 
 import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '@/config';
-import { AttributeFilterFragment, CategoryPathFragment, useCategoryPathsQuery,  } from '@/saleor/api.generated';
+import { AttributeFilterFragment, CategoryPathFragment, useCategoryPathsQuery, } from '@/saleor/api.generated';
 import { colors, fonts, Text, View } from '@/components/Themed';
 import { Button, IconButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
@@ -18,15 +18,15 @@ interface Props {
     pills: FilterPill[];
     clearFilters: () => void;
     removeAttributeFilter: (attributeSlug: string, choiceSlug: string) => void;
-    attributeFiltersData: AttributeFilterFragment[]
+    attributeFiltersData: AttributeFilterFragment[];
+    addAttributeFilter: (attributeSlug: string, choiceSlug: string) => void
 }
 
-const FilterBar: FC<Props> = ({ openFilters,pills,clearFilters,removeAttributeFilter,attributeFiltersData }) => {
-    const [list, setList] = useState<{ select: FilterDropdownOption[]; unselect: FilterDropdownOption[] }>({
-        select: [],
-        unselect: [],
-      }); 
-    const {openModal} = useModal()
+const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttributeFilter, attributeFiltersData,
+    addAttributeFilter
+
+}) => {
+    const { openModal } = useModal()
     const { categories: categoriesQueryString } = useLocalSearchParams();
     const { data: categoriesData } = useCategoryPathsQuery({
         variables: {
@@ -52,7 +52,7 @@ const FilterBar: FC<Props> = ({ openFilters,pills,clearFilters,removeAttributeFi
 
                     return false;
                 }) || [];
-
+            console.log("setCategory")
             setCategoryFilters(foundCategories)
         }
         if (!categoriesQueryString) {
@@ -72,9 +72,9 @@ const FilterBar: FC<Props> = ({ openFilters,pills,clearFilters,removeAttributeFi
                 <View style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    gap:5
+                    gap: 5
                 }}>
-                    <Button
+                    <TouchableOpacity
                         style={[
                             styles.filterButton,
                             numberOfFilters !== 0 && {
@@ -83,39 +83,45 @@ const FilterBar: FC<Props> = ({ openFilters,pills,clearFilters,removeAttributeFi
                             }
                         ]}
                         onPress={() => openFilters()}
-                        icon={() => <FontAwesome name="filter" size={15} color={numberOfFilters !== 0 ? "white" : colors.secondary} />}
-                        contentStyle={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }} // Adds spacing
-                        labelStyle={[
-                            styles.filterText,
-                            numberOfFilters !== 0 && { color: "white" }
-                        ]}
+
                     >
-                        <Text>Filtres</Text>
-                    </Button>
+                        <FontAwesome name="filter" size={15} color={numberOfFilters !== 0 ? "white" : colors.secondary} />
+                        <Text
+                            style={[
+                                styles.filterText,
+                                numberOfFilters !== 0 && { color: "white" }
+                            ]}
+                        >Filtres</Text>
+
+                    </TouchableOpacity>
 
                     {attributeFiltersData
-                    ?.filter(
-                        (attribute, index, self) =>
-                            self.findIndex((a) => a.id === attribute.id) === index
-                    )
-                    .map((attribute) => (
-                        <Button
-                        icon={()=><IconButton icon="chevron-down" style={{}} size={12} />} 
-                        style={styles.filterButton}
-                        onPress={()=>openModal("productFilter",
-                            <FilterDropdown
-                            key={attribute.id}
-                            label={attribute.name || ""}
-                            options={getFilterOptions(attribute, pills)}
-                            setList={setList}
-                        />
-
-                        )}>
-                         <Text>
-                            {attribute.name}
-                         </Text>
-                        </Button>
-                    ))}
+                        ?.filter(
+                            (attribute, index, self) =>
+                                self.findIndex((a) => a.id === attribute.id) === index
+                        )
+                        .map((attribute) => (
+                            <TouchableOpacity
+                                key={attribute.id}
+                                style={styles.filterButton}
+                                onPress={() =>
+                                    openModal(
+                                        "productFilter",
+                                        <FilterDropdown
+                                            key={attribute.id}
+                                            label={attribute.name || ""}
+                                            optionToggle={addAttributeFilter}
+                                            attributeSlug={attribute.slug!}
+                                            options={getFilterOptions(attribute, pills)}
+                                            removeAttributeFilter={removeAttributeFilter}
+                                        />
+                                    )
+                                }
+                            >
+                                <Text style={styles.filterText}>{attribute.name}</Text>
+                                <FontAwesome name="chevron-down" size={12} color={colors.textPrimary} style={styles.icon} />
+                            </TouchableOpacity>
+                        ))}
 
                     {/* {pills.length > 0 && <FilterPills pills={pills} onClearFilters={clearFilters} onRemoveAttribute={removeAttributeFilter} />} */}
 
@@ -133,9 +139,10 @@ const styles = StyleSheet.create({
     },
     filterButton: {
         marginVertical: 0,
-        borderWidth: 1,
-        borderRadius:2,
-        backgroundColor: colors.border,
+        borderRadius: 2,
+        padding:5,
+        backgroundColor: colors.background,
+        flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10
     },
     wrapper: {
         width: "100%",
@@ -154,6 +161,9 @@ const styles = StyleSheet.create({
     },
     filterText: {
         fontSize: fonts.caption
+    },
+    icon: {
+        marginLeft: 2,
     }
 });
 

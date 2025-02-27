@@ -77,6 +77,7 @@ fragment ProductFragment on Product {
   name
   description
   slug
+  rating
   category {
     slug
     name

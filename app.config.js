@@ -1,7 +1,7 @@
 export default () => ({
   "owner": "vaflaly",
   "extra": {
-    saleorApi: process.env.EXPO_PUBLIC_SALEOR_API_URL || "https://autoparts-18vd.onrender.com/graphql/",
+    saleorApi: process.env.EXPO_PUBLIC_SALEOR_API_URL || "https://django.autocoq.com/graphql/",
     stripePK: process.env.EXPO_PUBLIC_STRIPE_PK || "",
     channel: process.env.EXPO_PUBLIC_CHANNEL || "ci",
     locale: process.env.EXPO_PUBLIC_LOCALE?.split(",") || ["fr"],

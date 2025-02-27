@@ -24,6 +24,7 @@ import { useModal } from "@/context/useModal";
 import AddToTheCart from "../cart/AddToTheCart";
 import { useCheckout } from "@/context/CheckoutProvider";
 import DeliveryMethod from "../DeliveryMethod/DeliveryMethod";
+import { renderStars } from "@/utils/renderStars";
 
 interface Props {
   product: ProductFragment;
@@ -79,11 +80,25 @@ const ProductDetails: FC<Props> = ({ product }) => {
         <PaddedView>
           <View style={{ flexDirection: "column", marginBottom: 15, padding: 8 }}>
             <Text style={styles.productTitle}>{product.name}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
             {product.externalReference && (
               <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
                 Référence # {product.externalReference}
               </Text>
             )}
+            {product.externalReference && product.defaultVariant?.sku && <Text> | </Text>}
+                                {product.defaultVariant?.sku && (
+                                    <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
+                                        SKU # {product.defaultVariant.sku}
+                                    </Text>
+                                )}
+            </View>
+             {/* Rating Section */}
+             {product.rating !== undefined && (
+                                <Text style={styles.ratingText}>
+                                    {renderStars(product.rating || 0)} ({product.rating})
+                                </Text>
+                            )}
           </View>
         </PaddedView>
 
@@ -98,7 +113,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
         <CompatibilityCheck product={product} />
         </PaddedView>
 
-        <Divider style={{ borderBottomWidth: 5 }} />
+        <Divider style={{ borderBottomWidth: 10 }} />
 
         <PaddedView
           style={{
@@ -111,14 +126,14 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <Text style={styles.priceTitle}>Prix</Text>
           <Text style={styles.productPrice}>{price}</Text>
         </PaddedView>
-        <Divider style={{ borderBottomWidth: 5 }} />
+        <Divider style={{ borderBottomWidth: 10 }} />
         
         <PaddedView>
        <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId}/> 
        
         </PaddedView>
         
-        <Divider style={{ borderBottomWidth: 5 }} />
+        <Divider style={{ borderBottomWidth: 10 }} />
         <View style={styles.buttonContainer}>
           <View style={{ marginVertical: 5 }}>
             <VariantSelector
@@ -152,14 +167,14 @@ const ProductDetails: FC<Props> = ({ product }) => {
           </Button>
         </View>
 
-        <Divider style={{ borderBottomWidth: 5 }} />
+        <Divider style={{ borderBottomWidth: 10 }} />
 
         <PaddedView style={styles.descriptionContainer}>
           <Text style={styles.descriptionTitle}>Description du produit</Text>
           {renderDescription()}
         </PaddedView>
 
-        <Divider style={{ borderBottomWidth: 5 }} />
+        <Divider style={{ borderBottomWidth: 10 }} />
 
         <Fitment fitmentData={fitments} isUniversal={isUniversal} />
       </ScrollView>
@@ -178,8 +193,9 @@ const styles = StyleSheet.create({
     fontSize:fonts.body,
   },
   productPrice: {
-    fontWeight: "bold",
+    fontWeight: "800",
     fontSize:fonts.h2,
+    transform: [{ scaleY: 1.3 }],
   },
   descriptionContainer: {
     paddingHorizontal: 16,
@@ -199,7 +215,7 @@ const styles = StyleSheet.create({
   priceTitle: {
     fontSize:fonts.body,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 0,
   },
   subtitle: {
     fontSize:fonts.h2,
@@ -223,13 +239,18 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "400",
+    fontWeight: "bold",
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
+  ratingText: {
+    fontSize: fonts.caption,
+    color: colors.textSecondary,
+    marginVertical: 5,
+},
 });
 
 export default ProductDetails;

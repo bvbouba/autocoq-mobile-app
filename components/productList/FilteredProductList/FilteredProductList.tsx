@@ -102,6 +102,7 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
       clearFilters={clearFilters}
       removeAttributeFilter={removeAttributeFilter}
       attributeFiltersData = {attributeFiltersData}
+      addAttributeFilter = {addAttributeFilter}
         />
         
       <ProductCollection 
