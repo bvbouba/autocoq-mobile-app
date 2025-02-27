@@ -15,6 +15,7 @@ const HomepageCarousel = () => {
   // Fetch menu items
   const { data, error, loading,previousData } = useGetmenuQuery({
     variables: { channel: getConfig().channel, slug: "carousel" },
+    fetchPolicy: "cache-first",
   });
 
   if (loading) return <Skeleton colorMode="light" height={250} width="100%"  />

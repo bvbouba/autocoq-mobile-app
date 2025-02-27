@@ -1,5 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome for the close icon
+import { colors, fonts } from "@/components/Themed";
+import { Button } from "react-native-paper";
 
 export interface FilterPill {
   label: string;
@@ -16,26 +18,27 @@ export interface FilterPillsProps {
 export function FilterPills({ pills, onRemoveAttribute, onClearFilters }: FilterPillsProps) {
   return (
     <View style={styles.container}>
-      {/* Scrollable pill list */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pillContainer}>
+
+      <View style={styles.pillContainer}>
         {pills.map(({ label, attributeSlug, choiceSlug }) => (
-          <TouchableOpacity
+          <Button
             key={`${attributeSlug}-${choiceSlug}`}
             onPress={() => onRemoveAttribute(attributeSlug, choiceSlug)}
-            style={styles.pill}
+            style={styles.filterButton}
           >
-            <Text style={styles.pillText}>{label}</Text>
-            <FontAwesome name="times" size={12} color="#fff" style={styles.closeIcon} />
-          </TouchableOpacity>
+            <Text style={styles.pillText}>{`${label} `}</Text>
+            <FontAwesome name="times" size={12} color={colors.secondary} style={styles.closeIcon} />
+          </Button>
         ))}
-      </ScrollView>
-
-      {/* Clear All button */}
+             {/* Clear All button */}
       {pills.length > 0 && (
-        <TouchableOpacity onPress={onClearFilters} style={styles.clearButton}>
+        <Button onPress={onClearFilters} style={styles.clearButton}>
           <Text style={styles.clearText}>Tout effacer</Text>
-        </TouchableOpacity>
+        </Button>
       )}
+      </View>
+
+ 
     </View>
   );
 }
@@ -44,34 +47,31 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: 10,
   },
   pillContainer: {
     flexDirection: "row",
     flexGrow: 1,
   },
-  pill: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#007bff",
-    borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
-    marginRight: 8,
-  },
+  filterButton: {
+    margin: 0,
+    borderWidth: 1,
+    borderRadius:2,
+    backgroundColor: colors.background,
+    marginLeft:5
+},
   pillText: {
-    color: "#fff",
-    fontSize: 14,
-    marginRight: 5,
+    color: colors.textPrimary,
+    fontSize: fonts.caption,
   },
   closeIcon: {
-    marginLeft: 4,
+    color: colors.textPrimary,
   },
   clearButton: {
     marginLeft: 10,
+    borderWidth:1
   },
   clearText: {
-    color: "#007bff",
+    color: colors.primary,
     fontSize: 14,
     fontWeight: "500",
   },

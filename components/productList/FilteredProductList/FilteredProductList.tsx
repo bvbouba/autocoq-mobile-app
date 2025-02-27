@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { AttributeFilterFragment, ProductFilterInput,} from "@/saleor/api.generated";
 
 import {  getPillsData,  UrlFilter } from "./attributes";
-import { FilterPill, } from "./FilterPills";
+import FilterPills, { FilterPill, } from "./FilterPills";
 import { ProductCollection } from "@/components/ProductCollection";
 import { UrlSorting } from "./sorting";
 import FilterBar from "./FilterBar";
@@ -29,11 +29,21 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
   const pills: FilterPill[] = getPillsData(filters, attributeFiltersData);
 
   useEffect(() => {
-    setProductsFilter({
-      attributes: filters.filter((filter) => filter.values?.length),
-      ...(categoryIDs?.length && { categories: categoryIDs }),
-      ...(collectionIDs?.length && { collections: collectionIDs }),
-      ...(inStock && { stockAvailability: "IN_STOCK" }),
+    setProductsFilter((prev) => {
+      const defaultFilter: ProductFilterInput = {
+        attributes: [],
+        categories: [],
+        collections: [],
+        stockAvailability: undefined, // Ensure correct typing
+      };
+  
+      return {
+        ...prev ?? defaultFilter, // Ensure `prev` is at least a valid object
+        attributes: filters.filter((filter) => filter.values?.length),
+        categories: categoryIDs?.length ? categoryIDs : prev?.categories ?? [],
+        collections: collectionIDs?.length ? collectionIDs : prev?.collections ?? [],
+        stockAvailability: inStock ? "IN_STOCK" : prev?.stockAvailability ?? undefined, // Ensure correct type
+      };
     });
   }, [inStock, JSON.stringify(filters), categoryIDs, collectionIDs]);
 
@@ -75,7 +85,6 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         {/*  <StockToggle enabled={inStock} onChange={(value: boolean) => setInStock(value)} /> */}
       </View>
 
-      {/* {pills.length > 0 && <FilterPills pills={pills} onClearFilters={clearFilters} onRemoveAttribute={removeAttributeFilter} />} */}
       <FilterBar openFilters={() => openModal("productFilter",
         <ProductFilterBottomSheet 
         attributeFiltersData = {attributeFiltersData}
@@ -89,6 +98,10 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         />,
         true
       )} 
+      pills={pills}
+      clearFilters={clearFilters}
+      removeAttributeFilter={removeAttributeFilter}
+      attributeFiltersData = {attributeFiltersData}
         />
         
       <ProductCollection 

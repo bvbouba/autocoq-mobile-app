@@ -1,20 +1,32 @@
-import { FC, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { FC, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 import { useProductContext } from '@/context/useProductContext';
 
 import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '@/config';
-import { CategoryPathFragment, useCategoryPathsQuery,  } from '@/saleor/api.generated';
+import { AttributeFilterFragment, CategoryPathFragment, useCategoryPathsQuery,  } from '@/saleor/api.generated';
 import { colors, fonts, Text, View } from '@/components/Themed';
-import { Button } from 'react-native-paper';
+import { Button, IconButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
+import FilterPills, { FilterPill } from './FilterPills';
+import { useModal } from '@/context/useModal';
+import FilterDropdown, { FilterDropdownOption } from './FilterDropdown';
+import { getFilterOptions } from './attributes';
 
 interface Props {
     openFilters: () => void;
+    pills: FilterPill[];
+    clearFilters: () => void;
+    removeAttributeFilter: (attributeSlug: string, choiceSlug: string) => void;
+    attributeFiltersData: AttributeFilterFragment[]
 }
 
-const FilterBar: FC<Props> = ({ openFilters }) => {
-
+const FilterBar: FC<Props> = ({ openFilters,pills,clearFilters,removeAttributeFilter,attributeFiltersData }) => {
+    const [list, setList] = useState<{ select: FilterDropdownOption[]; unselect: FilterDropdownOption[] }>({
+        select: [],
+        unselect: [],
+      }); 
+    const {openModal} = useModal()
     const { categories: categoriesQueryString } = useLocalSearchParams();
     const { data: categoriesData } = useCategoryPathsQuery({
         variables: {
@@ -53,21 +65,21 @@ const FilterBar: FC<Props> = ({ openFilters }) => {
     return (
         <View style={styles.wrapper}>
 
-            <View style={[styles.filterWrapper, (numberOfFilters !== 0) && {
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={[styles.filterWrapper, (numberOfFilters !== 0) && {
                 backgroundColor: "white"
             }]}>
 
                 <View style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    backgroundColor: colors.background,
+                    gap:5
                 }}>
                     <Button
                         style={[
                             styles.filterButton,
                             numberOfFilters !== 0 && {
-                                backgroundColor: "black",
-                                borderRadius: 3,
+                                backgroundColor: colors.secondary,
+                                borderRadius: 1,
                             }
                         ]}
                         onPress={() => openFilters()}
@@ -81,8 +93,35 @@ const FilterBar: FC<Props> = ({ openFilters }) => {
                         <Text>Filtres</Text>
                     </Button>
 
+                    {attributeFiltersData
+                    ?.filter(
+                        (attribute, index, self) =>
+                            self.findIndex((a) => a.id === attribute.id) === index
+                    )
+                    .map((attribute) => (
+                        <Button
+                        icon={()=><IconButton icon="chevron-down" style={{}} size={12} />} 
+                        style={styles.filterButton}
+                        onPress={()=>openModal("productFilter",
+                            <FilterDropdown
+                            key={attribute.id}
+                            label={attribute.name || ""}
+                            options={getFilterOptions(attribute, pills)}
+                            setList={setList}
+                        />
+
+                        )}>
+                         <Text>
+                            {attribute.name}
+                         </Text>
+                        </Button>
+                    ))}
+
+                    {/* {pills.length > 0 && <FilterPills pills={pills} onClearFilters={clearFilters} onRemoveAttribute={removeAttributeFilter} />} */}
+
+
                 </View>
-            </View>
+            </ScrollView>
         </View>
     );
 }
@@ -93,14 +132,15 @@ const styles = StyleSheet.create({
 
     },
     filterButton: {
-        margin: 0,
+        marginVertical: 0,
         borderWidth: 1,
-        backgroundColor: colors.background,
+        borderRadius:2,
+        backgroundColor: colors.border,
     },
     wrapper: {
         width: "100%",
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
+        borderTopWidth: 0.5,
+        borderBottomWidth: 0.5,
         borderColor: colors.border,
         backgroundColor: "white",
         paddingHorizontal: 10,
@@ -109,7 +149,6 @@ const styles = StyleSheet.create({
     filterWrapper: {
         width: "100%",
         display: "flex",
-        justifyContent: "space-between",
         flexDirection: "row",
 
     },

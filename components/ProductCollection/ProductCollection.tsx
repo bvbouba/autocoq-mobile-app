@@ -35,7 +35,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   sortBy,
   setCounter,
   allowMore = true,
-  perPage = 4,
+  perPage = 12,
   itemsCounter = 0,
 }) => {
 
@@ -126,7 +126,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
             <View style={styles.header}>
               <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
               <Text style={{ fontSize: fonts.caption }}>
-                {itemsCounter < 2 ? "Résultat" : "Résultats"}{" "}
+                {itemsCounter < 2 ? " Résultat" : " Résultats"}{" "}
                 {filter?.search && (
                   <>
                     {" pour "}

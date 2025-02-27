@@ -18,13 +18,20 @@ const CategoryList = () => {
     const { slug } = useLocalSearchParams();
     const { data, loading, previousData } = useCategoryBySlugQuery({
         variables: {
-            slug: slug ? String(slug) : "pieces-auto"
-        }
+            slug: slug ? String(slug) : "pieces-auto",
+        },
     });
 
     useEffect(() => {
         setLoading(loading);
     }, [loading]);
+
+    useEffect(() => {
+        if (!loading && data?.category) {
+            // Set the navigation slug after data is loaded
+            setNavigationSlug(data.category.parent?.slug || "");
+        }
+    }, [loading, data, setNavigationSlug]);
 
     if (loading && !previousData) {
         return (
@@ -47,21 +54,18 @@ const CategoryList = () => {
     const category = data?.category || previousData?.category;
     if (!category) return null;
 
-    setNavigationSlug(category.parent?.slug || "");
-
     const childrens = mapEdgesToItems(category.children);
     const categoryName = childrens ? category.name : "Voir par catégorie";
 
     return (
         <View style={styles.container}>
             <PaddedView>
-                
                 <Text style={styles.categoryListTitle}>{categoryName}</Text>
             </PaddedView>
             <PaddedView style={{ flexDirection: "column" }}>
                 {childrens.map((children) => {
                     const child = mapEdgesToItems(children.children);
-                    const icon = children.metadata.find(m=>m.key==="icon")
+                    const icon = children.metadata.find(m => m.key === "icon");
                     const onPress = () => {
                         if (child.length > 0) {
                             router.push(`/shop?slug=${children.slug}`);
@@ -71,7 +75,7 @@ const CategoryList = () => {
                     };
                     return (
                         <View key={children.id}>
-                            <ListItem name={children.name} onPress={onPress} icon={icon?.value}/>
+                            <ListItem name={children.name} onPress={onPress} icon={icon?.value} />
                             <Divider />
                         </View>
                     );
@@ -80,6 +84,7 @@ const CategoryList = () => {
         </View>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {

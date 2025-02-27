@@ -3,7 +3,7 @@ import { Text, View, colors, fonts } from "@/components/Themed";
 
 import VehicleSelectionFilter from "./VehicleSelection";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import ImageExpand from "../ImageExpand";
 import { useModal } from "@/context/useModal";
@@ -48,7 +48,7 @@ const AddVehicleBasic = () => {
               />
             ) : (
               <View style={{ position: "relative" }}>
-                <FontAwesome name="car" size={18} color={colors.secondary} />
+                <FontAwesome name="car" size={25} color={colors.secondary} />
                 {!selectedCar?.name && <FontAwesome
                   name="exclamation-circle"
                   size={13}

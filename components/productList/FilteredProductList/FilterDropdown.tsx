@@ -14,42 +14,42 @@ export interface FilterDropdownOption {
 export interface FilterDropdownProps {
   label: string;
   options?: FilterDropdownOption[];
-  attributeSlug: string;
-  optionToggle: (attributeSlug: string, choiceSlug: string) => void;
-  removeAttributeFilter: (attributeSlug: string, choiceSlug: string) => void
+  setList: React.Dispatch<React.SetStateAction<{
+    select: FilterDropdownOption[];
+    unselect: FilterDropdownOption[];
+}>>;
 }
 
 export function FilterDropdown({
   label,
-  attributeSlug,
-  optionToggle,
-  removeAttributeFilter,
   options: propOptions, // Rename to avoid confusion
+  setList,
 }: FilterDropdownProps) {
   const [options, setOptions] = useState(propOptions); // Store options in state
-  const {setLoading, isLoading} = useLoading()
   useEffect(() => {
     setOptions(propOptions);
   }, [propOptions]);
 
-  const handleOptionPress = async (option:FilterDropdownOption) => {
-    if (isLoading) return;
-    setLoading(true); 
+  const handleOptionPress = async (option: FilterDropdownOption) => {
     const newOptions = options?.map((opt) =>
       opt.id === option.id ? { ...opt, chosen: !opt.chosen } : opt
     );
-    setOptions(newOptions); // Update UI instantly
+    setOptions(newOptions);
 
-    try {
-      if (option.chosen) {
-        removeAttributeFilter(attributeSlug, option.slug);
-      } else {
-       optionToggle(attributeSlug, option.slug);
-      }
-    } finally {
-      setLoading(false); // End loading state
-    }
-  };
+        setList((prevList) => {
+            const isSelected = option.chosen;
+            const updatedSelect = isSelected
+                ? prevList.select.filter((opt) => opt.id !== option.id)
+                : [...prevList.select, { ...option, chosen: true }];
+
+            const updatedUnselect = isSelected
+                ? [...prevList.unselect, { ...option, chosen: false }]
+                : prevList.unselect.filter((opt) => opt.id !== option.id);
+
+            return { select: updatedSelect, unselect: updatedUnselect };
+        });
+   
+};
 
   return (
     <View style={styles.container}>
@@ -60,7 +60,6 @@ export function FilterDropdown({
           key={option.id}
           style={styles.radioOption}
           onPress={() => handleOptionPress(option)}
-          disabled={isLoading}
         >
           <View style={[styles.radioCircle, option.chosen && styles.radioCircleSelected]}>
             {option.chosen && <FontAwesome name="check" size={12} color="white" />}

@@ -128,18 +128,7 @@ const BillingAddressForm: FC<Props> = () => {
 
   const renderForm = () => (
     <View style={styles.formContainer}>
-      {/* Prénom */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(value) => formik.setFieldValue("firstName", value)}
-          value={formik.values.firstName}
-          placeholder="Prénom"
-          label="Prénom *"
-          theme={{ colors: { primary: "black" } }}
-        />
-      </View>
-
+ 
       {/* Nom */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -148,6 +137,18 @@ const BillingAddressForm: FC<Props> = () => {
           value={formik.values.lastName}
           placeholder="Nom"
           label="Nom *"
+          theme={{ colors: { primary: "black" } }}
+        />
+      </View>
+
+           {/* Prénom */}
+           <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(value) => formik.setFieldValue("firstName", value)}
+          value={formik.values.firstName}
+          placeholder="Prénom"
+          label="Prénom *"
           theme={{ colors: { primary: "black" } }}
         />
       </View>

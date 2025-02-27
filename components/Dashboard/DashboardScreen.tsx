@@ -19,20 +19,21 @@ const DashboardScreen = () => {
   const { setLoading } = useLoading()
   const { showMessage } = useMessage();
 
-  const { data: categoriesData, error: catError, loading,previousData } = useGetMainMenuQuery({
+  const { data: categoriesData, error: catError, loading, previousData } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network", // Fetches fresh data in the background while showing cache first
   });
+
   useEffect(() => {
-    if (catError) showMessage("Erreur lors du chargement des catégories",10000);
-  }, [
-    catError]);
+    if (catError) showMessage("Erreur lors du chargement des catégories", 10000);
+  }, [catError]);
 
   
 
-  // Set loading state globally
   useEffect(() => {
-    setLoading(loading);
-  }, [loading]);
+  if (loading !== null) setLoading(loading);
+   }, [loading]);
 
 
   return (

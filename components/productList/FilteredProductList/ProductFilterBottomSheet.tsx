@@ -1,9 +1,9 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { AttributeFilterFragment, OrderDirection, ProductOrderField } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from "@/components/Themed";
-import FilterDropdown from "./FilterDropdown";
+import FilterDropdown, { FilterDropdownOption } from "./FilterDropdown";
 import { FilterPill } from "./FilterPills";
 import { getFilterOptions } from "./attributes";
 import SortingDropdown from "./SortingDropdown";
@@ -31,6 +31,22 @@ const ProductFilterBottomSheet: FC<Props> = ({
     sortBy,
     itemsCounter
 }) => {
+    const [list, setList] = useState<{ select: FilterDropdownOption[]; unselect: FilterDropdownOption[] }>({
+        select: [],
+        unselect: [],
+      });
+
+      const handleApplyFilters = () => {
+        // Remove all filters in the "unselect" list
+        list.unselect.forEach((option) => removeAttributeFilter(option.slug, option.slug));
+    
+        // Add all filters in the "select" list
+        list.select.forEach((option) => addAttributeFilter(option.slug, option.slug));
+    
+        // Reset the selection list after applying
+        setList({ select: [], unselect: [] });
+      };
+
     return (
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }}>
             <View>
@@ -60,17 +76,20 @@ const ProductFilterBottomSheet: FC<Props> = ({
                         <FilterDropdown
                             key={attribute.id}
                             label={attribute.name || ""}
-                            optionToggle={addAttributeFilter}
-                            attributeSlug={attribute.slug!}
                             options={getFilterOptions(attribute, pills)}
-                            removeAttributeFilter={removeAttributeFilter}
+                            setList={setList}
                         />
                     ))}
             </View>
 
             <View style={styles.buttonGroup}>
                 <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={clearFilters}>
-                    <Text>Réinitialiser</Text>
+                    <Text>RÉINITIALISER</Text>
+                </Button>
+                <Button style={styles.primaryButton} mode="contained" textColor="white" onPress={handleApplyFilters}>
+                <Text style={{
+                    color:"#fff"
+                }}>APPLIQUER</Text>
                 </Button>
             </View>
         </ScrollView>

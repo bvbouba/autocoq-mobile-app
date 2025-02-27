@@ -159,18 +159,7 @@ const ShippingAddressForm: FC<Props> = () => {
 
   const renderForm = () => (
     <View style={styles.formContainer}>
-      {/* Prénom */}
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(value) => formik.setFieldValue("firstName", value)}
-          value={formik.values.firstName}
-          placeholder="Prénom"
-          label={`Prénom *`}
-          theme={{ colors: { primary: colors.textPrimary } }}
-        />
-      </View>
-  
+     
       {/* Nom de famille */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -179,6 +168,18 @@ const ShippingAddressForm: FC<Props> = () => {
           value={formik.values.lastName}
           placeholder="Nom de famille"
           label={"Nom de famille *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
+        />
+      </View>
+
+       {/* Prénom */}
+       <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(value) => formik.setFieldValue("firstName", value)}
+          value={formik.values.firstName}
+          placeholder="Prénom"
+          label={`Prénom *`}
           theme={{ colors: { primary: colors.textPrimary } }}
         />
       </View>
