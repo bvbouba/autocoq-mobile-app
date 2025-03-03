@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         fontSize: fonts.h2,
     },
     button: {
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.primary,
         borderRadius: 5,
         alignItems: "center",
         width: "100%",

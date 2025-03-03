@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
 
     },
     primaryButton: {
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.primary,
         marginTop: 10,
         borderRadius: 3,
         alignItems: "center",

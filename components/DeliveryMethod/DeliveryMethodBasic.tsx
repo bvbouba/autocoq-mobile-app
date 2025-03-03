@@ -112,6 +112,7 @@ const DeliveryMethodBasic = ({ variant }: Props) => {
             </View>
           </View>
       ))}
+      <ZoneSelector />
     </View>
   );
 };

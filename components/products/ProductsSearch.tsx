@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Pressable } from 'react-native';
 import { TextInput } from 'react-native-paper'
 import { colors, fonts } from '../Themed';
 
@@ -7,6 +7,8 @@ import { useRouter, useGlobalSearchParams } from 'expo-router';  // Correct impo
 import { useFormik } from 'formik';
 import { useCheckout } from '@/context/CheckoutProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useModal } from '@/context/useModal';
+import SearchUI from './SearchUI';
 
 interface Props {
     cleanSearch?: boolean;
@@ -20,79 +22,31 @@ interface Form {
 
 const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColor }) => {
     // Use the correct hook from expo-router
-    const {
-        search: searchQueryString,
-    } = useGlobalSearchParams();
     const router = useRouter();
     const { checkout } = useCheckout();
+    const {openModal} = useModal()
 
     const number = checkout && checkout.lines.length > 0 ? checkout.lines.map(line => line.quantity).reduce((prev, curr) => prev + curr, 0) : undefined
-
-    // Ensure that searchQueryString, collectionsQueryString, and categoriesQueryString are strings
-    const search = Array.isArray(searchQueryString) ? searchQueryString[0] : searchQueryString;
-  
-    const formik = useFormik<Form>({
-        initialValues: {
-            search: search || "",  // Default to an empty string if undefined
-        },
-        initialTouched: {
-            search: false,
-        },
-        onSubmit: () => {
-            // No-op for form submission
-        },
-    });
-
-    const runSearch = useCallback((value: string) => {
-        if (cleanSearch) {
-            const params = new URLSearchParams();
-            if (value) {
-                params.append("q", value);
-            }
-            router.push(`/search?${params.toString()}`);
-        }
-
-        const params = new URLSearchParams();
-        if (value) {
-            params.append("q", value);
-        }
-           router.push(`/search?${params.toString()}`);
-    }, []);
-
-    useEffect(() => {
-        if (searchOnLoad && search) {
-            runSearch(search || "");
-        }
-        formik.setFieldValue("search", search || "");
-    }, [searchOnLoad, search]);
-
-    const onChange = (value: string) => {
-        formik.setFieldValue("search", value);
-    };
-
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.textInputWrapper}>
+                <Pressable onPress={() => openModal("search",<SearchUI />,true,"112%",0,false)} >
+                <View pointerEvents="none">
                 <TextInput
                     mode="outlined"
-                    onChangeText={onChange}
-                    onSubmitEditing={() => {
-                        runSearch(formik.values.search);
-                    }}
-                    value={formik.values.search}
                     style={styles.searchBar}
                     placeholder="Rechercher des pièces"
                     outlineColor={colors.border}
                     placeholderTextColor={colors.textSecondary}
-
                     left={
                         <TextInput.Icon
                             icon="magnify"
                         />
                     }
                 />
-
+                </View>
+                </Pressable>
             </View>
             <TouchableOpacity onPress={()=>router.push("/cart")}>
             <View style={{ position: "relative", padding: 10, backgroundColor: colors.background, borderRadius: 20 }}>

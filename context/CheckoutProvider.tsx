@@ -51,7 +51,7 @@ export const useCheckout = () => {
 };
 
 const defaultDeliveryState: DeliveryState = {
-  zone: undefined,
+  zone: "Abidjan",
   methodId: undefined,
 };
 

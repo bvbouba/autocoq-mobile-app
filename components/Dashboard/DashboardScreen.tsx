@@ -15,7 +15,7 @@ import { useMessage } from "@/context/MessageContext";
 
 const DashboardScreen = () => {
   const router = useRouter();
-  const { authenticated } = useAuth();
+  // const { authenticated } = useAuth();
   const { setLoading } = useLoading()
   const { showMessage } = useMessage();
 
@@ -45,12 +45,12 @@ const DashboardScreen = () => {
           backgroundColor: colors.background
         }}>
 
-          {!authenticated && (
+          {/* {!authenticated && (
             <>
               <AuthPrompt redirectUrl="/" />
               <Divider />
             </>
-          )}
+          )} */}
 
 
           {/* <AddVehicleSection

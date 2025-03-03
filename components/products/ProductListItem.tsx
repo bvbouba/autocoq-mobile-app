@@ -17,10 +17,10 @@ interface Props {
     product: ProductFragment
 }
 
-const ProductImage: FC<{ product: ProductFragment }> = ({ product }) => {
+const ProductImage: FC<{ product: ProductFragment, isPressed: boolean }> = ({ product, isPressed }) => {
     if (product.media && product.media.length > 0) {
         return <Image
-            style={styles.tinyLogo}
+            style={[styles.tinyLogo, isPressed && styles.pressedImage]} // Add pressed styles here
             resizeMode="contain"
             source={{
                 uri: product?.media[0].url
@@ -34,6 +34,8 @@ const ProductListItem: FC<Props> = ({ product }) => {
     const { onAddToCart } = useCheckout();
     const { openModal } = useModal();
     const [loading, setLoading] = useState(false);
+    const [isImagePressed, setIsImagePressed] = useState(false);
+    const [isTitlePressed, setIsTitlePressed] = useState(false);
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',
@@ -62,22 +64,36 @@ const ProductListItem: FC<Props> = ({ product }) => {
     };
 
     // Convert rating value to stars
-    
+
     return (
         <>
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper} testID="product-image-wrapper">
                     <View>
-                        <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}>
-                            <ProductImage product={product} />
+                        <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}
+                            onPressIn={() => setIsImagePressed(true)}
+                            onPressOut={() => setIsImagePressed(false)}
+                        >
+                            <ProductImage product={product} isPressed={isImagePressed} />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
-                            <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}>
-                                <Text style={styles.productTitle} numberOfLines={2}>
-                                    {product.name}
-                                </Text>
+                            <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}
+                                onPressIn={() => setIsTitlePressed(true)}
+                                onPressOut={() => setIsTitlePressed(false)}
+                            >
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                    }}>
+                                    <Text style={[styles.productTitle, isTitlePressed && styles.pressedText]} numberOfLines={2}>
+                                        {product.name}
+                                    </Text>
+                                    <FontAwesome name="arrow-right" size={15} color={colors.primary}
+                                    />
+                                </View>
                             </TouchableOpacity>
                             {/* Reference and SKU */}
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -112,14 +128,14 @@ const ProductListItem: FC<Props> = ({ product }) => {
                         <CompatibilityCheckBasic product={product} />
                         {defaultVariant && <DeliveryMethodBasic variant={defaultVariant} />}
                         <View style={styles.buttonContainer}>
-                            <Button
-                                style={styles.button}
-                                mode="contained"
+                            <TouchableOpacity
+                                activeOpacity={0.6} 
                                 onPress={handleAddItem}
                                 disabled={loading}
+                                style={styles.button}
                             >
-                                {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}> AJOUTER AU PANIER</Text>}
-                            </Button>
+                                {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>AJOUTER AU PANIER</Text>}
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -152,10 +168,16 @@ const styles = StyleSheet.create({
         height: 100,
         flexShrink: 0,
     },
+    pressedImage: {
+        transform: [{ scale: 1.05 }], // Slight scaling effect when pressed
+    },
     productTitle: {
         textAlign: "left",
         fontWeight: 'bold',
         fontSize: fonts.body,
+    },
+    pressedText: {
+        transform: [{ scale: 1.05 }] // Slight scaling effect when pressed
     },
     referenceText: {
         fontSize: fonts.caption,
@@ -189,17 +211,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     button: {
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.primary,
         borderRadius: 30,
         alignItems: "center",
         width: "70%",
-        paddingVertical:5
+        paddingVertical: 17
     },
     buttonText: {
         color: "#fff",
         fontWeight: "bold",
         fontSize: fonts.caption,
-        
+
     },
 });
 

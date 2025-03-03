@@ -34521,6 +34521,23 @@ export type ProductCollectionQueryVariables = Exact<{
 
 export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
+export type SearchByProductNameQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  filter?: InputMaybe<ProductFilterInput>;
+  channel: Scalars['String']['input'];
+}>;
+
+
+export type SearchByProductNameQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', name: string } }> } | null };
+
+export type SearchByCategoryNameQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']['input']>;
+  filter?: InputMaybe<CategoryFilterInput>;
+}>;
+
+
+export type SearchByCategoryNameQuery = { __typename?: 'Query', categories?: { __typename?: 'CategoryCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'CategoryCountableEdge', cursor: string, node: { __typename?: 'Category', name: string } }> } | null };
+
 export type ProductListByCategoryQueryVariables = Exact<{
   slug: Scalars['String']['input'];
   channel: Scalars['String']['input'];
@@ -37024,6 +37041,101 @@ export type ProductCollectionQueryHookResult = ReturnType<typeof useProductColle
 export type ProductCollectionLazyQueryHookResult = ReturnType<typeof useProductCollectionLazyQuery>;
 export type ProductCollectionSuspenseQueryHookResult = ReturnType<typeof useProductCollectionSuspenseQuery>;
 export type ProductCollectionQueryResult = Apollo.QueryResult<ProductCollectionQuery, ProductCollectionQueryVariables>;
+export const SearchByProductNameDocument = gql`
+    query SearchByProductName($first: Int = 4, $filter: ProductFilterInput, $channel: String!) {
+  products(first: $first, channel: $channel, filter: $filter) {
+    totalCount
+    edges {
+      cursor
+      node {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchByProductNameQuery__
+ *
+ * To run a query within a React component, call `useSearchByProductNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchByProductNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchByProductNameQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      filter: // value for 'filter'
+ *      channel: // value for 'channel'
+ *   },
+ * });
+ */
+export function useSearchByProductNameQuery(baseOptions: Apollo.QueryHookOptions<SearchByProductNameQuery, SearchByProductNameQueryVariables> & ({ variables: SearchByProductNameQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchByProductNameQuery, SearchByProductNameQueryVariables>(SearchByProductNameDocument, options);
+      }
+export function useSearchByProductNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchByProductNameQuery, SearchByProductNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchByProductNameQuery, SearchByProductNameQueryVariables>(SearchByProductNameDocument, options);
+        }
+export function useSearchByProductNameSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchByProductNameQuery, SearchByProductNameQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchByProductNameQuery, SearchByProductNameQueryVariables>(SearchByProductNameDocument, options);
+        }
+export type SearchByProductNameQueryHookResult = ReturnType<typeof useSearchByProductNameQuery>;
+export type SearchByProductNameLazyQueryHookResult = ReturnType<typeof useSearchByProductNameLazyQuery>;
+export type SearchByProductNameSuspenseQueryHookResult = ReturnType<typeof useSearchByProductNameSuspenseQuery>;
+export type SearchByProductNameQueryResult = Apollo.QueryResult<SearchByProductNameQuery, SearchByProductNameQueryVariables>;
+export const SearchByCategoryNameDocument = gql`
+    query SearchByCategoryName($first: Int = 4, $filter: CategoryFilterInput) {
+  categories(first: $first, filter: $filter) {
+    totalCount
+    edges {
+      cursor
+      node {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchByCategoryNameQuery__
+ *
+ * To run a query within a React component, call `useSearchByCategoryNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchByCategoryNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchByCategoryNameQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useSearchByCategoryNameQuery(baseOptions?: Apollo.QueryHookOptions<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>(SearchByCategoryNameDocument, options);
+      }
+export function useSearchByCategoryNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>(SearchByCategoryNameDocument, options);
+        }
+export function useSearchByCategoryNameSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>(SearchByCategoryNameDocument, options);
+        }
+export type SearchByCategoryNameQueryHookResult = ReturnType<typeof useSearchByCategoryNameQuery>;
+export type SearchByCategoryNameLazyQueryHookResult = ReturnType<typeof useSearchByCategoryNameLazyQuery>;
+export type SearchByCategoryNameSuspenseQueryHookResult = ReturnType<typeof useSearchByCategoryNameSuspenseQuery>;
+export type SearchByCategoryNameQueryResult = Apollo.QueryResult<SearchByCategoryNameQuery, SearchByCategoryNameQueryVariables>;
 export const ProductListByCategoryDocument = gql`
     query ProductListByCategory($slug: String!, $channel: String!, $filter: ProductFilterInput, $zoneName: String, $orderPrice: MoneyInputType, $orderWeight: WeightInputType) {
   category(slug: $slug) {

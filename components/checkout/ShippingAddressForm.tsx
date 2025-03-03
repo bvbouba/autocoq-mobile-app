@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     fontSize:fonts.h2,
   },
   submitButton: {
-    backgroundColor: colors.secondary, 
+    backgroundColor: colors.primary, 
     marginTop: 10,
     borderRadius:5,
     padding:5

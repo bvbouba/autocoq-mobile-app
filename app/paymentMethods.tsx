@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     borderWidth: 2,
     borderColor: "white",
   },

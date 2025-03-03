@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonActive: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
   },
   buttonDisabled: {
     backgroundColor: colors.background,

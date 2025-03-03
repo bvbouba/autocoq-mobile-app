@@ -38,7 +38,7 @@ export default SecondaryButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.secondary, 
+    backgroundColor: colors.primary, 
     paddingVertical: 0,
     margin:10,
     borderRadius: 30,

@@ -97,6 +97,7 @@ export function Divider(props: DividerProps) {
 export const colors = {
   primary: "#ff6633",
   secondary:"#202124",
+  tertiary:"#202124",
   background:"#F2F4F5",
   surface:"#ffffff",
   textPrimary:"#555555", // "#202124",

@@ -73,7 +73,7 @@ const ShippingMethods = () => {
                 mode="contained"
                 disabled={loading}
                 style={{
-                    backgroundColor: colors.secondary,
+                    backgroundColor: colors.primary,
                     borderRadius: 3,
                     padding: 5
                 }}

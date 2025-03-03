@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   checkoutButton: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     padding: 12,
     borderRadius: 30,
     alignItems: "center",

@@ -17,15 +17,20 @@ const ZoneSelector: React.FC = () => {
       onPress={() =>
         openModal(
           "shipping",
-          <ZoneList />,true
+          <ZoneList />,true,
         )
       }
     >
-      <FontAwesome name="map-marker" size={24} color={colors.warning} />
+      <FontAwesome name="map-marker" size={20} color={colors.warning} />
       <Text style={styles.text}>
         {delivery.zone
-          ? `Zone sélectionnée: ${delivery.zone}`
-          : "Choisissez votre zone pour voir les options de livraison"}
+          ? `Livré à: ${delivery.zone}`
+          : "Choisissez une ville pour voir les options de livraison"}
+      </Text>
+      <Text style={[styles.text,{
+            textDecorationLine: "underline",
+      }]}>
+        Cliquer pour changer
       </Text>
     </TouchableOpacity>
   );
@@ -43,7 +48,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: fonts.caption,
     color: colors.textPrimary,
-    textDecorationLine: "underline",
   },
 
 });

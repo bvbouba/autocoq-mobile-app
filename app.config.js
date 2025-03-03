@@ -9,7 +9,7 @@ export default () => ({
               "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
     },
   },
-  "name": "mobile",
+  "name": "AutoCoq",
   "slug": "autocoq",
   "newArchEnabled": true,
   "version": "1.0.0",

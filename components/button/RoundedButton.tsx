@@ -45,7 +45,7 @@ export default RoundedButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     borderRadius: 15,
     alignItems: "center",
     width: "95%",

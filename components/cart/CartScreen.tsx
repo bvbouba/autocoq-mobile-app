@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
         width: "100%",
         borderRadius: 5,
         paddingVertical: 10,
-        backgroundColor:colors.secondary
+        backgroundColor:colors.primary
     },
     accountText: {
         fontSize: fonts.body,

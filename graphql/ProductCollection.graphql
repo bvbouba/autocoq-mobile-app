@@ -57,3 +57,42 @@ query ProductCollection(
     }
   }
 }
+
+
+query SearchByProductName(
+  $first: Int = 4
+  $filter: ProductFilterInput
+  $channel: String!
+) {
+  products(
+    first: $first
+    channel: $channel
+    filter: $filter
+  ) {
+    totalCount
+    edges {
+      cursor
+      node {
+        name
+      }
+    }
+  }
+}
+
+query SearchByCategoryName(
+  $first: Int = 4
+  $filter: CategoryFilterInput
+) {
+  categories(
+    first: $first
+    filter: $filter
+  ) {
+    totalCount
+    edges {
+      cursor
+      node {
+        name
+      }
+    }
+  }
+}

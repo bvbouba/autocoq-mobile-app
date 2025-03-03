@@ -47,7 +47,7 @@ export default PrimaryButton;
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     paddingVertical: 10,
     marginVertical: 10,
     borderRadius: 5,

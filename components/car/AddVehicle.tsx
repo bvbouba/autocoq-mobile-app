@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     toggleButton: {
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.primary,
       padding: 10,
       borderRadius: 15,
       alignItems: "center",
