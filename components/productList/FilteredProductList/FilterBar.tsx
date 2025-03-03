@@ -105,9 +105,9 @@ const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttribut
                                 key={attribute.id}
                                 style={styles.filterButton}
                                 onPress={() =>
-                                    openModal(
-                                        "productFilter",
-                                        <FilterDropdown
+                                    openModal({
+                                       type: "productFilter",
+                                       content: <FilterDropdown
                                             key={attribute.id}
                                             label={attribute.name || ""}
                                             optionToggle={addAttributeFilter}
@@ -115,7 +115,7 @@ const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttribut
                                             options={getFilterOptions(attribute, pills)}
                                             removeAttributeFilter={removeAttributeFilter}
                                         />
-                                    )
+                                    })
                                 }
                             >
                                 <Text style={styles.filterText}>{attribute.name}</Text>

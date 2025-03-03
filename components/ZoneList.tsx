@@ -3,6 +3,7 @@ import { colors, fonts } from "./Themed";
 import { useModal } from "@/context/useModal";
 import { useGetCitiesQuery } from "@/saleor/api.generated";
 import { useCheckout } from "@/context/CheckoutProvider";
+import { setZoneName } from "@/context/zone";
 
 
 export const ZoneList = () => {
@@ -13,6 +14,7 @@ export const ZoneList = () => {
 
      // Function to handle zone selection
   const handleSelectZone = (zone: string) => {
+    setZoneName(zone)
     setDelivery({
       ...delivery,
       zone

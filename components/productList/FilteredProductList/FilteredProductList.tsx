@@ -85,8 +85,9 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         {/*  <StockToggle enabled={inStock} onChange={(value: boolean) => setInStock(value)} /> */}
       </View>
 
-      <FilterBar openFilters={() => openModal("productFilter",
-        <ProductFilterBottomSheet 
+      <FilterBar openFilters={() => openModal({
+        type:"productFilter",
+        content:<ProductFilterBottomSheet 
         attributeFiltersData = {attributeFiltersData}
         addAttributeFilter={addAttributeFilter}
         pills={pills}
@@ -95,8 +96,8 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         setSortBy={setSortBy}
         sortBy={sortBy}
         itemsCounter={itemsCounter}
-        />,
-        true
+        /> 
+      }
       )} 
       pills={pills}
       clearFilters={clearFilters}

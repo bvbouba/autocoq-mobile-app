@@ -227,9 +227,9 @@ const ShippingAddressForm: FC<Props> = () => {
             width: "100%"
           }}
           onPress={() =>
-            openModal(
-              "shipping",
-              <View style={styles.modalContent}>
+            openModal({
+              type:"shipping",
+              content:<View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
                 <FlatList
                   data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
@@ -240,7 +240,7 @@ const ShippingAddressForm: FC<Props> = () => {
                   keyboardShouldPersistTaps="handled" 
                 />
               </View>
-            )
+            })
           }
         >
           <View pointerEvents="none">

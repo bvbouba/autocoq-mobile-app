@@ -31,7 +31,10 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.textInputWrapper}>
-                <Pressable onPress={() => openModal("search",<SearchUI />,true,"112%",0,false)} >
+                <Pressable onPress={() => openModal({
+                    type:"search",
+                    content:<SearchUI />,
+                    })} >
                 <View pointerEvents="none">
                 <TextInput
                     mode="outlined"

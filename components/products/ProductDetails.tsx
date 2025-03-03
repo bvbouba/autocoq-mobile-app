@@ -157,7 +157,10 @@ const ProductDetails: FC<Props> = ({ product }) => {
               });
               }
               
-              openModal("CartPreview",<AddToTheCart />)
+              openModal({
+                type:"CartPreview",
+                content:<AddToTheCart />
+              })
             }}
             disabled={loading}
           >

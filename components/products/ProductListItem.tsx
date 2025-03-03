@@ -2,7 +2,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { FC, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { getConfig } from "@/config";
-import { ProductFragment } from "@/saleor/api.generated";
+import { ProductCardFragment, ProductFragment, useAdditionalProductDataQuery } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from './../Themed';
 import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
 import { Button } from "react-native-paper";
@@ -12,12 +12,14 @@ import AddedToCart from "../cart/AddToTheCart";
 import DeliveryMethodBasic from "../DeliveryMethod/DeliveryMethodBasic";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { renderStars } from "@/utils/renderStars";
+import { convertMoneyToString } from "@/utils/convertMoneytoString";
+import { Skeleton } from "moti/skeleton";
 
 interface Props {
-    product: ProductFragment
+    product: ProductCardFragment
 }
 
-const ProductImage: FC<{ product: ProductFragment, isPressed: boolean }> = ({ product, isPressed }) => {
+const ProductImage: FC<{ product: ProductCardFragment, isPressed: boolean }> = ({ product, isPressed }) => {
     if (product.media && product.media.length > 0) {
         return <Image
             style={[styles.tinyLogo, isPressed && styles.pressedImage]} // Add pressed styles here
@@ -36,11 +38,13 @@ const ProductListItem: FC<Props> = ({ product }) => {
     const [loading, setLoading] = useState(false);
     const [isImagePressed, setIsImagePressed] = useState(false);
     const [isTitlePressed, setIsTitlePressed] = useState(false);
-
-    const formatter = new Intl.NumberFormat(getConfig().locale, {
-        style: 'currency',
-        currency: product.defaultVariant?.pricing?.price?.gross.currency,
+    const { data, loading: additionalLoading, error } = useAdditionalProductDataQuery({
+        variables:{
+            slug:product.slug
+        }
     });
+    const productDetails = data?.product
+
 
     const router = useRouter();
     const searchParams = useLocalSearchParams();
@@ -49,15 +53,18 @@ const ProductListItem: FC<Props> = ({ product }) => {
         params.append(key, value as string);
     });
 
-    const variants = product?.variants || [];
-    const defaultVariant = product.defaultVariant;
+    const variants = productDetails?.variants || [];
+    const defaultVariant = productDetails?.defaultVariant;
 
     const handleAddItem = async () => {
         if (!(variants.length > 0)) return;
         setLoading(true);
         try {
             await onAddToCart(defaultVariant?.id || "");
-            openModal("CartPreview", <AddedToCart />);
+            openModal({
+                type:"CartPreview", 
+                content:<AddedToCart />
+            });
         } finally {
             setLoading(false);
         }
@@ -96,29 +103,43 @@ const ProductListItem: FC<Props> = ({ product }) => {
                                 </View>
                             </TouchableOpacity>
                             {/* Reference and SKU */}
-                            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                {product.externalReference && (
-                                    <Text style={styles.referenceText}>
-                                        Référence # {product.externalReference}
-                                    </Text>
-                                )}
-                                {product.externalReference && product.defaultVariant?.sku && <Text> | </Text>}
-                                {product.defaultVariant?.sku && (
-                                    <Text style={styles.referenceText}>
-                                        SKU # {product.defaultVariant.sku}
-                                    </Text>
-                                )}
-                            </View>
+                            {additionalLoading ? <Skeleton height={20} width={200} radius={2} colorMode="light" /> :
+                             <View style={{ flexDirection: "row", alignItems: "center" }}>
+                             {productDetails?.externalReference && (
+                                 <Text style={styles.referenceText}>
+                                     Référence # {productDetails?.externalReference}
+                                 </Text>
+                             )}
+                             {productDetails?.externalReference && productDetails?.defaultVariant?.sku && <Text> | </Text>}
+                             {productDetails?.defaultVariant?.sku && (
+                                 <Text style={styles.referenceText}>
+                                     SKU # {productDetails?.defaultVariant.sku}
+                                 </Text>
+                             )}
+                         </View> 
+                            }
                             {/* Rating Section */}
-                            {product.rating !== undefined && (
+                            {
+                            additionalLoading ?
+                            
+                            <View style={{marginVertical:10}}>
+                            <Skeleton height={20} width={200} radius={2} colorMode="light"/>
+                            </View>:
+                            productDetails?.rating !== undefined && (
                                 <Text style={styles.ratingText}>
-                                    {renderStars(product.rating || 0)} ({product.rating})
+                                    {renderStars(productDetails?.rating || 0)} ({productDetails?.rating})
                                 </Text>
-                            )}
+                            ) 
+                            
+                            }
                         </View>
+                        {additionalLoading ?
+                        <Skeleton height={20} width={200} radius={2} colorMode="light" />
+                        :
                         <Text style={styles.productPrice}>
-                            {formatter.format(product.defaultVariant?.pricing?.price?.gross.amount || 0)}
+                            {convertMoneyToString(productDetails?.defaultVariant?.pricing?.price?.gross)}
                         </Text>
+                        }
                         {product.category && (
                             <View style={styles.notesWrapper}>
                                 <Text style={styles.notesLabel}>Notes: </Text>

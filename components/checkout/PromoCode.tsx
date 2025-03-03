@@ -41,10 +41,10 @@ const PromoCode = () => {
           <TouchableOpacity
             style={styles.promoContainer}
             onPress={() =>
-              openModal(
-                "checkout",
-                 <PromoCodeForm />
-              )
+              openModal({
+               type:"checkout",
+                 content:<PromoCodeForm />
+              })
             }
           >
             <View style={styles.promoContent}>

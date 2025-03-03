@@ -34,7 +34,7 @@ const AuthPrompt = ({redirectUrl}:props) => {
       <View style={{width:"100%"}}>
       <SecondaryButton
                 title={`SE CONNECTER OU CRÉER UN COMPTE`}
-                onPress={()=>openModal("Auth",<Auth />)}
+                onPress={()=>openModal({type:"Auth",content:<Auth />})}
                 />    
       </View>
     </SurfaceView>

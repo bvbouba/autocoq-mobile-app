@@ -194,9 +194,9 @@ const BillingAddressForm: FC<Props> = () => {
         <Pressable
           style={{ width: "100%" }}
           onPress={() =>
-            openModal(
-              "shipping",
-              <View style={styles.modalContent}>
+            openModal({
+              type:"shipping",
+              content:<View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
 
                 <FlatList
@@ -208,7 +208,7 @@ const BillingAddressForm: FC<Props> = () => {
                   keyboardShouldPersistTaps="handled"
                 />
               </View>
-            )
+            })
           }
         >
           <TextInput

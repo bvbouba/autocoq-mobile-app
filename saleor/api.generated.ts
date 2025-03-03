@@ -3081,12 +3081,14 @@ export type CarEngine = Node & {
   __typename?: 'CarEngine';
   /** Timestamp of car engine creation. */
   createdAt: Scalars['DateTime']['output'];
+  /** Description of the car Engine. */
+  desc?: Maybe<Scalars['String']['output']>;
   /** ID of the car engine. */
   id: Scalars['ID']['output'];
-  /** Model of the car. */
-  model?: Maybe<CarModel>;
   /** Name of the car engine. */
   name: Scalars['String']['output'];
+  /** Model of the car. */
+  variant?: Maybe<CarVariant>;
   /** Vin suffix for this car engine. */
   vinSuffix: Scalars['String']['output'];
 };
@@ -3224,6 +3226,10 @@ export type CarModel = Node & {
   __typename?: 'CarModel';
   /** Timestamp of car model creation. */
   createdAt: Scalars['DateTime']['output'];
+  /** Description of the car model. */
+  desc: Scalars['String']['output'];
+  /** End year for the car model. */
+  endYear?: Maybe<CarYear>;
   /** ID of the car model. */
   id: Scalars['ID']['output'];
   /** URL of the car model image. */
@@ -3234,6 +3240,8 @@ export type CarModel = Node & {
   name: Scalars['String']['output'];
   /** Slug for the car model. */
   slug?: Maybe<Scalars['String']['output']>;
+  /** Start year for the car model. */
+  startYear?: Maybe<CarYear>;
   /** List of VIN pattern entries for this car make. */
   vinPatterns?: Maybe<Array<Maybe<VinPattern>>>;
 };
@@ -3274,9 +3282,12 @@ export type CarModelDelete = {
 };
 
 export type CarModelFilterInput = {
+  endYearIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   makeIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   metadata?: InputMaybe<Array<MetadataFilter>>;
   search?: InputMaybe<Scalars['String']['input']>;
+  startYearIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  yearRange?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 /** Update an existing car model. */
@@ -3286,6 +3297,54 @@ export type CarModelUpdate = {
   carErrors: Array<CarError>;
   carModel?: Maybe<CarModel>;
   errors: Array<CarError>;
+};
+
+/** Represents a specific variant of a car model. */
+export type CarVariant = Node & {
+  __typename?: 'CarVariant';
+  /** Timestamp of car variant creation. */
+  createdAt: Scalars['DateTime']['output'];
+  /** Description of the car variant. */
+  desc?: Maybe<Scalars['String']['output']>;
+  /** End year for the car variant. */
+  endYear?: Maybe<CarYear>;
+  /** ID of the car variant. */
+  id: Scalars['ID']['output'];
+  /** URL of the car variant image. */
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  /** Model associated with this variant. */
+  model: CarModel;
+  /** Name of the car variant. */
+  name: Scalars['String']['output'];
+  /** Start year for the car variant. */
+  startYear?: Maybe<CarYear>;
+  /** VIN suffix for the car variant. */
+  vinSuffix?: Maybe<Scalars['String']['output']>;
+};
+
+export type CarVariantCountableConnection = {
+  __typename?: 'CarVariantCountableConnection';
+  edges: Array<CarVariantCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type CarVariantCountableEdge = {
+  __typename?: 'CarVariantCountableEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: CarVariant;
+};
+
+export type CarVariantFilterInput = {
+  endYearIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  metadata?: InputMaybe<Array<MetadataFilter>>;
+  modelIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  startYearIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 /** Represents a car year. */
@@ -21421,6 +21480,8 @@ export type ProductFilterInput = {
   carMake?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Filter by car model. */
   carModel?: InputMaybe<Array<Scalars['ID']['input']>>;
+  /** Filter by car variant. */
+  carVariant?: InputMaybe<Array<Scalars['ID']['input']>>;
   /** Filter by car year. */
   carYear?: InputMaybe<Array<Scalars['ID']['input']>>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -24839,6 +24900,10 @@ export type Query = {
   carModels?: Maybe<CarModelCountableConnection>;
   /** List of all vin pattern part relations. */
   carPartRelations?: Maybe<VinPatternPartRelationCountableConnection>;
+  /** Look up a car variant by ID. */
+  carVariant?: Maybe<CarVariant>;
+  /** List of all car variants. */
+  carVariants?: Maybe<CarVariantCountableConnection>;
   /** List of car years. */
   carYears?: Maybe<CarYearCountableConnection>;
   /** List of all cars. */
@@ -25379,6 +25444,20 @@ export type QueryCarPartRelationsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<VinPatternPartRelationFilterInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryCarVariantArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryCarVariantsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<CarVariantFilterInput>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -34507,7 +34586,14 @@ export type PageQueryVariables = Exact<{
 
 export type PageQuery = { __typename?: 'Query', page?: { __typename?: 'Page', id: string, title: string, seoTitle?: string | null, seoDescription?: string | null, slug: string, created: string, content?: string | null } | null };
 
-export type ProductCardFragment = { __typename?: 'Product', id: string, slug: string, name: string, thumbnail?: { __typename?: 'Image', url: string, alt?: string | null } | null, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }> };
+export type ProductCardFragment = { __typename?: 'Product', id: string, slug: string, name: string, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null };
+
+export type AdditionalProductDataQueryVariables = Exact<{
+  slug: Scalars['String']['input'];
+}>;
+
+
+export type AdditionalProductDataQuery = { __typename?: 'Query', product?: { __typename?: 'Product', externalReference?: string | null, rating?: number | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null } | null };
 
 export type ProductCollectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -34519,7 +34605,7 @@ export type ProductCollectionQueryVariables = Exact<{
 }>;
 
 
-export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, slug: string, name: string, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
 export type SearchByProductNameQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -35128,10 +35214,6 @@ export const ProductCardFragmentDoc = gql`
   id
   slug
   name
-  thumbnail {
-    url
-    alt
-  }
   category {
     id
     name
@@ -35140,14 +35222,6 @@ export const ProductCardFragmentDoc = gql`
     url
     alt
     type
-  }
-  attributes {
-    attribute {
-      slug
-    }
-    values {
-      name
-    }
   }
 }
     `;
@@ -36977,6 +37051,70 @@ export type PageQueryHookResult = ReturnType<typeof usePageQuery>;
 export type PageLazyQueryHookResult = ReturnType<typeof usePageLazyQuery>;
 export type PageSuspenseQueryHookResult = ReturnType<typeof usePageSuspenseQuery>;
 export type PageQueryResult = Apollo.QueryResult<PageQuery, PageQueryVariables>;
+export const AdditionalProductDataDocument = gql`
+    query AdditionalProductData($slug: String!) {
+  product(slug: $slug) {
+    externalReference
+    rating
+    pricing {
+      priceRange {
+        start {
+          gross {
+            amount
+          }
+        }
+      }
+    }
+    attributes {
+      attribute {
+        slug
+      }
+      values {
+        name
+      }
+    }
+    variants {
+      ...ProductVariantFragment
+    }
+    defaultVariant {
+      ...ProductVariantFragment
+    }
+  }
+}
+    ${ProductVariantFragmentDoc}`;
+
+/**
+ * __useAdditionalProductDataQuery__
+ *
+ * To run a query within a React component, call `useAdditionalProductDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdditionalProductDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdditionalProductDataQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useAdditionalProductDataQuery(baseOptions: Apollo.QueryHookOptions<AdditionalProductDataQuery, AdditionalProductDataQueryVariables> & ({ variables: AdditionalProductDataQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdditionalProductDataQuery, AdditionalProductDataQueryVariables>(AdditionalProductDataDocument, options);
+      }
+export function useAdditionalProductDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdditionalProductDataQuery, AdditionalProductDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdditionalProductDataQuery, AdditionalProductDataQueryVariables>(AdditionalProductDataDocument, options);
+        }
+export function useAdditionalProductDataSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AdditionalProductDataQuery, AdditionalProductDataQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AdditionalProductDataQuery, AdditionalProductDataQueryVariables>(AdditionalProductDataDocument, options);
+        }
+export type AdditionalProductDataQueryHookResult = ReturnType<typeof useAdditionalProductDataQuery>;
+export type AdditionalProductDataLazyQueryHookResult = ReturnType<typeof useAdditionalProductDataLazyQuery>;
+export type AdditionalProductDataSuspenseQueryHookResult = ReturnType<typeof useAdditionalProductDataSuspenseQuery>;
+export type AdditionalProductDataQueryResult = Apollo.QueryResult<AdditionalProductDataQuery, AdditionalProductDataQueryVariables>;
 export const ProductCollectionDocument = gql`
     query ProductCollection($before: String, $after: String, $first: Int = 4, $filter: ProductFilterInput, $sortBy: ProductOrder, $channel: String!) {
   products(
@@ -36991,7 +37129,7 @@ export const ProductCollectionDocument = gql`
     edges {
       cursor
       node {
-        ...ProductFragment
+        ...ProductCardFragment
       }
     }
     pageInfo {
@@ -37002,7 +37140,7 @@ export const ProductCollectionDocument = gql`
     }
   }
 }
-    ${ProductFragmentDoc}`;
+    ${ProductCardFragmentDoc}`;
 
 /**
  * __useProductCollectionQuery__
@@ -38345,12 +38483,13 @@ export type CarCreateFieldPolicy = {
 	carErrors?: FieldPolicy<any> | FieldReadFunction<any>,
 	errors?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type CarEngineKeySpecifier = ('createdAt' | 'id' | 'model' | 'name' | 'vinSuffix' | CarEngineKeySpecifier)[];
+export type CarEngineKeySpecifier = ('createdAt' | 'desc' | 'id' | 'name' | 'variant' | 'vinSuffix' | CarEngineKeySpecifier)[];
 export type CarEngineFieldPolicy = {
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	desc?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
-	model?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
+	variant?: FieldPolicy<any> | FieldReadFunction<any>,
 	vinSuffix?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CarEngineCountableConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | CarEngineCountableConnectionKeySpecifier)[];
@@ -38408,14 +38547,17 @@ export type CarMakeUpdateFieldPolicy = {
 	carMake?: FieldPolicy<any> | FieldReadFunction<any>,
 	errors?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type CarModelKeySpecifier = ('createdAt' | 'id' | 'imageUrl' | 'make' | 'name' | 'slug' | 'vinPatterns' | CarModelKeySpecifier)[];
+export type CarModelKeySpecifier = ('createdAt' | 'desc' | 'endYear' | 'id' | 'imageUrl' | 'make' | 'name' | 'slug' | 'startYear' | 'vinPatterns' | CarModelKeySpecifier)[];
 export type CarModelFieldPolicy = {
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	desc?: FieldPolicy<any> | FieldReadFunction<any>,
+	endYear?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	imageUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	make?: FieldPolicy<any> | FieldReadFunction<any>,
 	name?: FieldPolicy<any> | FieldReadFunction<any>,
 	slug?: FieldPolicy<any> | FieldReadFunction<any>,
+	startYear?: FieldPolicy<any> | FieldReadFunction<any>,
 	vinPatterns?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CarModelCountableConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | CarModelCountableConnectionKeySpecifier)[];
@@ -38446,6 +38588,29 @@ export type CarModelUpdateFieldPolicy = {
 	carErrors?: FieldPolicy<any> | FieldReadFunction<any>,
 	carModel?: FieldPolicy<any> | FieldReadFunction<any>,
 	errors?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CarVariantKeySpecifier = ('createdAt' | 'desc' | 'endYear' | 'id' | 'imageUrl' | 'model' | 'name' | 'startYear' | 'vinSuffix' | CarVariantKeySpecifier)[];
+export type CarVariantFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	desc?: FieldPolicy<any> | FieldReadFunction<any>,
+	endYear?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	imageUrl?: FieldPolicy<any> | FieldReadFunction<any>,
+	model?: FieldPolicy<any> | FieldReadFunction<any>,
+	name?: FieldPolicy<any> | FieldReadFunction<any>,
+	startYear?: FieldPolicy<any> | FieldReadFunction<any>,
+	vinSuffix?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CarVariantCountableConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | CarVariantCountableConnectionKeySpecifier)[];
+export type CarVariantCountableConnectionFieldPolicy = {
+	edges?: FieldPolicy<any> | FieldReadFunction<any>,
+	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type CarVariantCountableEdgeKeySpecifier = ('cursor' | 'node' | CarVariantCountableEdgeKeySpecifier)[];
+export type CarVariantCountableEdgeFieldPolicy = {
+	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
+	node?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type CarYearKeySpecifier = ('createdAt' | 'id' | 'name' | 'vinSuffix' | CarYearKeySpecifier)[];
 export type CarYearFieldPolicy = {
@@ -42866,7 +43031,7 @@ export type PromotionUpdatedEventFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	type?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('_entities' | '_service' | 'address' | 'addressValidationRules' | 'app' | 'appExtension' | 'appExtensions' | 'apps' | 'appsInstallations' | 'attribute' | 'attributes' | 'car' | 'carEngine' | 'carEngines' | 'carMake' | 'carMakes' | 'carModel' | 'carModels' | 'carPartRelations' | 'carYears' | 'cars' | 'categories' | 'category' | 'channel' | 'channels' | 'checkPhoneExists' | 'checkProductCompatibility' | 'checkout' | 'checkoutLines' | 'checkouts' | 'collection' | 'collections' | 'customerCar' | 'customerCars' | 'customers' | 'digitalContent' | 'digitalContents' | 'draftOrders' | 'exportFile' | 'exportFiles' | 'fitment' | 'fitments' | 'getShippingZones' | 'giftCard' | 'giftCardCurrencies' | 'giftCardSettings' | 'giftCardTags' | 'giftCards' | 'homepageEvents' | 'me' | 'menu' | 'menuItem' | 'menuItems' | 'menus' | 'order' | 'orderByToken' | 'orderSettings' | 'orders' | 'ordersTotal' | 'page' | 'pageType' | 'pageTypes' | 'pages' | 'payment' | 'payments' | 'permissionGroup' | 'permissionGroups' | 'plugin' | 'plugins' | 'product' | 'productType' | 'productTypes' | 'productVariant' | 'productVariants' | 'products' | 'promotion' | 'promotions' | 'reportProductSales' | 'sale' | 'sales' | 'shippingZone' | 'shippingZones' | 'shop' | 'staffUsers' | 'stock' | 'stocks' | 'taxClass' | 'taxClasses' | 'taxConfiguration' | 'taxConfigurations' | 'taxCountryConfiguration' | 'taxCountryConfigurations' | 'taxTypes' | 'tenant' | 'tenantWarehouse' | 'tenantWarehouses' | 'tenants' | 'transaction' | 'translation' | 'translations' | 'user' | 'vinPattern' | 'vinPatternPartRelation' | 'vinPatterns' | 'voucher' | 'vouchers' | 'warehouse' | 'warehouses' | 'webhook' | 'webhookEvents' | 'webhookSamplePayload' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('_entities' | '_service' | 'address' | 'addressValidationRules' | 'app' | 'appExtension' | 'appExtensions' | 'apps' | 'appsInstallations' | 'attribute' | 'attributes' | 'car' | 'carEngine' | 'carEngines' | 'carMake' | 'carMakes' | 'carModel' | 'carModels' | 'carPartRelations' | 'carVariant' | 'carVariants' | 'carYears' | 'cars' | 'categories' | 'category' | 'channel' | 'channels' | 'checkPhoneExists' | 'checkProductCompatibility' | 'checkout' | 'checkoutLines' | 'checkouts' | 'collection' | 'collections' | 'customerCar' | 'customerCars' | 'customers' | 'digitalContent' | 'digitalContents' | 'draftOrders' | 'exportFile' | 'exportFiles' | 'fitment' | 'fitments' | 'getShippingZones' | 'giftCard' | 'giftCardCurrencies' | 'giftCardSettings' | 'giftCardTags' | 'giftCards' | 'homepageEvents' | 'me' | 'menu' | 'menuItem' | 'menuItems' | 'menus' | 'order' | 'orderByToken' | 'orderSettings' | 'orders' | 'ordersTotal' | 'page' | 'pageType' | 'pageTypes' | 'pages' | 'payment' | 'payments' | 'permissionGroup' | 'permissionGroups' | 'plugin' | 'plugins' | 'product' | 'productType' | 'productTypes' | 'productVariant' | 'productVariants' | 'products' | 'promotion' | 'promotions' | 'reportProductSales' | 'sale' | 'sales' | 'shippingZone' | 'shippingZones' | 'shop' | 'staffUsers' | 'stock' | 'stocks' | 'taxClass' | 'taxClasses' | 'taxConfiguration' | 'taxConfigurations' | 'taxCountryConfiguration' | 'taxCountryConfigurations' | 'taxTypes' | 'tenant' | 'tenantWarehouse' | 'tenantWarehouses' | 'tenants' | 'transaction' | 'translation' | 'translations' | 'user' | 'vinPattern' | 'vinPatternPartRelation' | 'vinPatterns' | 'voucher' | 'vouchers' | 'warehouse' | 'warehouses' | 'webhook' | 'webhookEvents' | 'webhookSamplePayload' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	_entities?: FieldPolicy<any> | FieldReadFunction<any>,
 	_service?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -42887,6 +43052,8 @@ export type QueryFieldPolicy = {
 	carModel?: FieldPolicy<any> | FieldReadFunction<any>,
 	carModels?: FieldPolicy<any> | FieldReadFunction<any>,
 	carPartRelations?: FieldPolicy<any> | FieldReadFunction<any>,
+	carVariant?: FieldPolicy<any> | FieldReadFunction<any>,
+	carVariants?: FieldPolicy<any> | FieldReadFunction<any>,
 	carYears?: FieldPolicy<any> | FieldReadFunction<any>,
 	cars?: FieldPolicy<any> | FieldReadFunction<any>,
 	categories?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -45332,6 +45499,18 @@ export type StrictTypedTypePolicies = {
 	CarModelUpdate?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CarModelUpdateKeySpecifier | (() => undefined | CarModelUpdateKeySpecifier),
 		fields?: CarModelUpdateFieldPolicy,
+	},
+	CarVariant?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CarVariantKeySpecifier | (() => undefined | CarVariantKeySpecifier),
+		fields?: CarVariantFieldPolicy,
+	},
+	CarVariantCountableConnection?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CarVariantCountableConnectionKeySpecifier | (() => undefined | CarVariantCountableConnectionKeySpecifier),
+		fields?: CarVariantCountableConnectionFieldPolicy,
+	},
+	CarVariantCountableEdge?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | CarVariantCountableEdgeKeySpecifier | (() => undefined | CarVariantCountableEdgeKeySpecifier),
+		fields?: CarVariantCountableEdgeFieldPolicy,
 	},
 	CarYear?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | CarYearKeySpecifier | (() => undefined | CarYearKeySpecifier),

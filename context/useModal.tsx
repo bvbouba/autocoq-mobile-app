@@ -4,15 +4,17 @@ import { View, StyleSheet, ScrollView } from "react-native";
 
 type ModalType = "search" | "checkout" | "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | "Auth" | "shipping" | "ShippingMethod" | "PaymentMethod"; // Add more modal types as needed
 
+interface OpenModalParams {
+  type: ModalType;
+  content?: ReactNode;
+  disableScroll?: boolean;
+  height?: number | `${number}%`;
+  marginTop?: number;
+  closeButtonVisible?: boolean;
+}
+
 interface ModalContextType {
-  openModal: (
-    type: ModalType,
-    content?: ReactNode,
-    disableScroll?: boolean,
-    height?: number | `${number}%`,
-    marginTop?: number,
-    closeButtonVisible?:boolean,
-  ) => void;
+  openModal: (params: OpenModalParams) => void;
   closeModal: () => void;
 }
 
@@ -26,29 +28,30 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modalMarginTop, setModalMarginTop] = useState<number>(150);
   const [isCloseButtonVisible, setIsCloseButtonVisible] = useState(true); 
 
-  const openModal = (
-    type: ModalType,
-    content?: ReactNode,
-    disableScroll?: boolean,
-    height?: number | `${number}%`,
-    marginTop?: number,
-    closeButtonVisible?:boolean
-  ) => {
-    setModalContent(content || <View />);
-    setModalVisible(true);
-    setDisableScroll(disableScroll || false);
-    setIsCloseButtonVisible(closeButtonVisible || false);
+  
+const openModal = ({
+  type,
+  content,
+  disableScroll = false,
+  height="100%",
+  marginTop = 150,
+  closeButtonVisible = false,
+}: OpenModalParams) => {
+  setModalContent(content || <View />);
+  setModalVisible(true);
+  setDisableScroll(disableScroll);
+  setIsCloseButtonVisible(closeButtonVisible);
 
-    if (height !== undefined) {
-      if (typeof height === "number") {
-        setModalHeight(height);
-      } else if (/^\d+%$/.test(height)) { // Ensure it's a valid percentage like "80%"
-        setModalHeight(height as `${number}%`);
-      }
+  if (height !== undefined) {
+    if (typeof height === "number") {
+      setModalHeight(height);
+    } else if (/^\d+%$/.test(height)) {
+      setModalHeight(height as `${number}%`);
     }
+  }
 
-    setModalMarginTop(marginTop ?? 150); // Default marginTop to 150 if not provided
-  };
+  setModalMarginTop(marginTop);
+};
 
   const closeModal = () => {
     setModalVisible(false);

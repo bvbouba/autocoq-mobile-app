@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   OrderDirection,
+  ProductCardFragment,
   ProductCollectionQueryVariables,
   ProductFilterInput,
-  ProductFragment,
   ProductOrderField,
   useProductCollectionQuery,
 } from "@/saleor/api.generated";
@@ -63,7 +63,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   
   const { loading, error, data, fetchMore } = useProductCollectionQuery({ variables });
   
-  const [allProducts, setAllProducts] = useState<ProductFragment[]>([]);
+  const [allProducts, setAllProducts] = useState<ProductCardFragment[]>([]);
   const [hasNextPage, setHasNextPage] = useState(false);
   
   useEffect(() => {

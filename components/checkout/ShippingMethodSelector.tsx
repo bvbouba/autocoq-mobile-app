@@ -38,9 +38,9 @@ const ShippingMethodSelector: FC = () => {
   if (deliveryMethod) {
     return (
       <Pressable onPress={() => {
-        openModal("ShippingMethod",
-          <ShippingMethods />
-        )
+        openModal({type:"ShippingMethod",
+          content:<ShippingMethods />
+        })
       }}>
         <View style={styles.shippingMethodWrapper}>
           <View style={styles.titleWrapper}>
@@ -48,9 +48,10 @@ const ShippingMethodSelector: FC = () => {
             Méthode de livraison
             </Text>}
             <TouchableOpacity onPress={() => {
-              openModal("ShippingMethod",
-                <ShippingMethods />
-              )
+              openModal({
+                type:"ShippingMethod",
+                content:<ShippingMethods />
+              })
             }}>
               <Text style={styles.icon}>Modifier</Text>
             </TouchableOpacity>
@@ -61,9 +62,10 @@ const ShippingMethodSelector: FC = () => {
                 deliveryMethod?.price)}`}
             </Text>}
             <TouchableOpacity onPress={() => {
-              openModal("ShippingMethod",
-                <ShippingMethods />
-              )
+              openModal({
+                type:"ShippingMethod",
+                content:<ShippingMethods />
+              })
             }}>
             </TouchableOpacity>
           </View>
@@ -94,7 +96,10 @@ const ShippingMethodSelector: FC = () => {
   }
 
   return (
-    <Pressable onPress={() => openModal("ShippingMethod",<ShippingMethods />)}>
+    <Pressable onPress={() => openModal({
+      type:"ShippingMethod",
+      content:<ShippingMethods />
+    })}>
       <View style={styles.shippingMethodWrapper}>
         <View style={styles.titleWrapper}>
           <Text style={styles.shippingMethodTitle}>Méthode de livraison</Text>

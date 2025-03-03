@@ -2,10 +2,6 @@ fragment ProductCardFragment on Product {
   id
   slug
   name
-  thumbnail {
-    url
-    alt
-  }
   category {
     id
     name
@@ -15,12 +11,34 @@ fragment ProductCardFragment on Product {
     alt
     type
   }
-  attributes {
-    attribute {
-      slug
+}
+
+query AdditionalProductData($slug: String!) {
+  product(slug: $slug) {
+    externalReference
+    rating
+    pricing {
+      priceRange {
+        start {
+          gross {
+            amount
+          }
+        }
+      }
     }
-    values {
-      name
+    attributes {
+      attribute {
+        slug
+      }
+      values {
+        name
+      }
+    }
+    variants {
+    ...ProductVariantFragment
+  }
+    defaultVariant {
+    ...ProductVariantFragment
     }
   }
 }
@@ -46,7 +64,7 @@ query ProductCollection(
     edges {
       cursor
       node {
-        ...ProductFragment
+        ...ProductCardFragment
       }
     }
     pageInfo {

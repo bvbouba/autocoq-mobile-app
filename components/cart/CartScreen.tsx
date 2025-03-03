@@ -174,7 +174,10 @@ const CartScreen = () => {
             {/* Sign-in prompt */}
             <PaddedView>
             <TouchableOpacity onPress={()=>{
-                openModal("Auth",<Auth />)
+                openModal({
+                    type:"Auth",
+                    content:<Auth />
+                })
             }}>
                 <Text style={styles.accountText}>
                     Vous avez un compte ?{" "}

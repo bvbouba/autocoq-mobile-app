@@ -14,6 +14,7 @@ import {
   useRemoveProductFromCheckoutMutation,
 } from "@/saleor/api.generated";
 import { useAuth } from "@/lib/providers/authProvider";
+import { getZoneName } from "./zone";
 
 interface DeliveryState {
   zone: string | undefined;
@@ -51,7 +52,7 @@ export const useCheckout = () => {
 };
 
 const defaultDeliveryState: DeliveryState = {
-  zone: "Abidjan",
+  zone: "undefined",
   methodId: undefined,
 };
 
@@ -78,6 +79,15 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
       zoneName: checkout?.shippingAddress?.city
     }
   });
+
+
+  useEffect(() => {
+    const fetchZone = async () => {
+        const zoneName = await getZoneName();
+        setDelivery((prev) => ({ ...prev, zone: zoneName }));
+    };
+    fetchZone();
+}, []);
 
   useEffect(() => {
     if (data?.checkout) {
