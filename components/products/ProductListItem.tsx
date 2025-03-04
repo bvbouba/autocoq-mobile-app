@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         textAlign: "left",
         fontSize: fonts.h2,
         fontWeight: "800",
-        transform: [{ scaleY: 1.3 }],
+        // transform: [{ scaleY: 1.3 }],
     },
     notesWrapper: {
         flexDirection: "row",

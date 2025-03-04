@@ -8,6 +8,7 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 import ImageExpand from "../ImageExpand";
 import { useModal } from "@/context/useModal";
 import { useMessage } from "@/context/MessageContext";
+import AddVehicle from "./VehicleSelection";
 
 interface ImageProps {
   url: string;
@@ -70,8 +71,11 @@ const AddVehicleBasic = () => {
 
         <TouchableOpacity style={styles.button} onPress={() =>
           openModal({
-            id:"carFilter",
-            content:<VehicleSelectionFilter />,}
+            id:"AddVehicle",
+            content:<AddVehicle />,
+          closeButtonVisible:true,
+          marginTop:700
+          }
           )
         }>
           <Text style={[styles.buttonText, (selectedCar) && {

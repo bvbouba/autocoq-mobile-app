@@ -96,7 +96,10 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         setSortBy={setSortBy}
         sortBy={sortBy}
         itemsCounter={itemsCounter}
-        /> 
+        />,
+         disableScroll:true,
+         height:"120%",
+         closeButtonVisible:true
       }
       )} 
       pills={pills}

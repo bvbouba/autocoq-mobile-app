@@ -3112,8 +3112,8 @@ export type CarEngineCountableEdge = {
 
 export type CarEngineFilterInput = {
   metadata?: InputMaybe<Array<MetadataFilter>>;
-  modelIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   search?: InputMaybe<Scalars['String']['input']>;
+  variantIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type CarError = {
@@ -3355,7 +3355,7 @@ export type CarYear = Node & {
   /** ID of the car year. */
   id: Scalars['ID']['output'];
   /** Name of the year. */
-  name: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
   /** VIN suffix for the car year. */
   vinSuffix?: Maybe<Scalars['String']['output']>;
 };
@@ -34332,7 +34332,9 @@ export type CheckPhoneNumberQuery = { __typename?: 'Query', checkPhoneExists?: {
 
 export type MakeDetailsFragment = { __typename?: 'CarMake', id: string, name: string };
 
-export type CarMakesListQueryVariables = Exact<{ [key: string]: never; }>;
+export type CarMakesListQueryVariables = Exact<{
+  filter?: InputMaybe<CarMakeFilterInput>;
+}>;
 
 
 export type CarMakesListQuery = { __typename?: 'Query', carMakes?: { __typename?: 'CarMakeCountableConnection', edges: Array<{ __typename?: 'CarMakeCountableEdge', node: { __typename?: 'CarMake', id: string, name: string } }> } | null };
@@ -34346,6 +34348,15 @@ export type CarModelsListQueryVariables = Exact<{
 
 export type CarModelsListQuery = { __typename?: 'Query', carModels?: { __typename?: 'CarModelCountableConnection', edges: Array<{ __typename?: 'CarModelCountableEdge', node: { __typename?: 'CarModel', id: string, name: string, imageUrl?: string | null } }> } | null };
 
+export type VariantDetailsFragment = { __typename?: 'CarVariant', id: string, name: string, imageUrl?: string | null };
+
+export type CarVariantsListQueryVariables = Exact<{
+  filter?: InputMaybe<CarVariantFilterInput>;
+}>;
+
+
+export type CarVariantsListQuery = { __typename?: 'Query', carVariants?: { __typename?: 'CarVariantCountableConnection', edges: Array<{ __typename?: 'CarVariantCountableEdge', node: { __typename?: 'CarVariant', id: string, name: string, imageUrl?: string | null } }> } | null };
+
 export type EngineDetailsFragment = { __typename?: 'CarEngine', id: string, name: string };
 
 export type CarEnginesListQueryVariables = Exact<{
@@ -34355,12 +34366,12 @@ export type CarEnginesListQueryVariables = Exact<{
 
 export type CarEnginesListQuery = { __typename?: 'Query', carEngines?: { __typename?: 'CarEngineCountableConnection', edges: Array<{ __typename?: 'CarEngineCountableEdge', node: { __typename?: 'CarEngine', id: string, name: string } }> } | null };
 
-export type YearDetailsFragment = { __typename?: 'CarYear', id: string, name: number, vinSuffix?: string | null };
+export type YearDetailsFragment = { __typename?: 'CarYear', id: string, name: string, vinSuffix?: string | null };
 
 export type CarYearsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CarYearsListQuery = { __typename?: 'Query', carYears?: { __typename?: 'CarYearCountableConnection', edges: Array<{ __typename?: 'CarYearCountableEdge', node: { __typename?: 'CarYear', id: string, name: number, vinSuffix?: string | null } }> } | null };
+export type CarYearsListQuery = { __typename?: 'Query', carYears?: { __typename?: 'CarYearCountableConnection', edges: Array<{ __typename?: 'CarYearCountableEdge', node: { __typename?: 'CarYear', id: string, name: string, vinSuffix?: string | null } }> } | null };
 
 export type CompatibilityCheckQueryVariables = Exact<{
   productId: Scalars['ID']['input'];
@@ -34722,6 +34733,13 @@ export const MakeDetailsFragmentDoc = gql`
     `;
 export const ModelDetailsFragmentDoc = gql`
     fragment ModelDetails on CarModel {
+  id
+  name
+  imageUrl
+}
+    `;
+export const VariantDetailsFragmentDoc = gql`
+    fragment VariantDetails on CarVariant {
   id
   name
   imageUrl
@@ -35813,8 +35831,8 @@ export type CheckPhoneNumberLazyQueryHookResult = ReturnType<typeof useCheckPhon
 export type CheckPhoneNumberSuspenseQueryHookResult = ReturnType<typeof useCheckPhoneNumberSuspenseQuery>;
 export type CheckPhoneNumberQueryResult = Apollo.QueryResult<CheckPhoneNumberQuery, CheckPhoneNumberQueryVariables>;
 export const CarMakesListDocument = gql`
-    query CarMakesList {
-  carMakes(first: 50) {
+    query CarMakesList($filter: CarMakeFilterInput) {
+  carMakes(first: 50, filter: $filter) {
     edges {
       node {
         ...MakeDetails
@@ -35836,6 +35854,7 @@ export const CarMakesListDocument = gql`
  * @example
  * const { data, loading, error } = useCarMakesListQuery({
  *   variables: {
+ *      filter: // value for 'filter'
  *   },
  * });
  */
@@ -35899,6 +35918,50 @@ export type CarModelsListQueryHookResult = ReturnType<typeof useCarModelsListQue
 export type CarModelsListLazyQueryHookResult = ReturnType<typeof useCarModelsListLazyQuery>;
 export type CarModelsListSuspenseQueryHookResult = ReturnType<typeof useCarModelsListSuspenseQuery>;
 export type CarModelsListQueryResult = Apollo.QueryResult<CarModelsListQuery, CarModelsListQueryVariables>;
+export const CarVariantsListDocument = gql`
+    query CarVariantsList($filter: CarVariantFilterInput) {
+  carVariants(first: 50, filter: $filter) {
+    edges {
+      node {
+        ...VariantDetails
+      }
+    }
+  }
+}
+    ${VariantDetailsFragmentDoc}`;
+
+/**
+ * __useCarVariantsListQuery__
+ *
+ * To run a query within a React component, call `useCarVariantsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCarVariantsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCarVariantsListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useCarVariantsListQuery(baseOptions?: Apollo.QueryHookOptions<CarVariantsListQuery, CarVariantsListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CarVariantsListQuery, CarVariantsListQueryVariables>(CarVariantsListDocument, options);
+      }
+export function useCarVariantsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CarVariantsListQuery, CarVariantsListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CarVariantsListQuery, CarVariantsListQueryVariables>(CarVariantsListDocument, options);
+        }
+export function useCarVariantsListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CarVariantsListQuery, CarVariantsListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CarVariantsListQuery, CarVariantsListQueryVariables>(CarVariantsListDocument, options);
+        }
+export type CarVariantsListQueryHookResult = ReturnType<typeof useCarVariantsListQuery>;
+export type CarVariantsListLazyQueryHookResult = ReturnType<typeof useCarVariantsListLazyQuery>;
+export type CarVariantsListSuspenseQueryHookResult = ReturnType<typeof useCarVariantsListSuspenseQuery>;
+export type CarVariantsListQueryResult = Apollo.QueryResult<CarVariantsListQuery, CarVariantsListQueryVariables>;
 export const CarEnginesListDocument = gql`
     query CarEnginesList($filter: CarEngineFilterInput) {
   carEngines(first: 50, filter: $filter) {

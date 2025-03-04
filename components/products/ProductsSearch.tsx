@@ -1,10 +1,9 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import { FC, } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Pressable } from 'react-native';
 import { TextInput } from 'react-native-paper'
 import { colors, fonts } from '../Themed';
 
-import { useRouter, useGlobalSearchParams } from 'expo-router';  // Correct import
-import { useFormik } from 'formik';
+import { useRouter } from 'expo-router';  // Correct import
 import { useCheckout } from '@/context/CheckoutProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useModal } from '@/context/useModal';
@@ -34,8 +33,8 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
                 <Pressable onPress={() => openModal({
                     id:"search",
                     content:<SearchUI />,
-                    marginTop:150,
-                    height:"100%"
+                    marginTop:0,
+                    height:"130%"
                     })} >
                 <View pointerEvents="none">
                 <TextInput

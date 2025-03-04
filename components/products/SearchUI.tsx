@@ -14,7 +14,7 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { colors, fonts } from '../Themed';
+import { colors, Divider, fonts } from '../Themed';
 import { useRouter, useGlobalSearchParams } from 'expo-router';
 import { useFormik, FormikProps } from 'formik';
 import { Ionicons } from '@expo/vector-icons'; // Arrow icon
@@ -36,6 +36,7 @@ const ProductSearch: FC<Props> = () => {
     const { closeModal } = useModal();
     const [pressedItem, setPressedItem] = useState<string | null>(null);
     const search = Array.isArray(searchQueryString) ? searchQueryString[0] : searchQueryString;
+    const [isPressed, setIsPressed] = useState(false);
 
     // ✅ State for suggestions
     const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -175,6 +176,8 @@ const ProductSearch: FC<Props> = () => {
                                 </TouchableOpacity>
                             </View>
 
+                            <Divider style={{ borderBottomWidth: 10 }} />
+
                             {/* Recently Searched Section */}
                             {!isTyping && recentSearches.length > 0 && (
                                 <View style={styles.recentSearchContainer}>
@@ -241,9 +244,14 @@ const ProductSearch: FC<Props> = () => {
                         {/* Search Button */}
                         <View style={styles.bottomContainer}>
                             <TouchableOpacity
-                                style={styles.searchButton}
+                                style={[
+                                    styles.searchButton,
+                                    isPressed && { opacity: 0.6 }, 
+                                ]}
                                 onPress={() => runSearch(formik.values.search)}
-                                disabled={!formik.values.search.trim()}
+                                onPressIn={() => setIsPressed(true)}
+                                onPressOut={() => setIsPressed(false)}
+                                activeOpacity={0.6}
                             >
                                 <Text style={styles.searchButtonText}>Cliquez pour rechercher</Text>
                             </TouchableOpacity>
@@ -263,6 +271,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginTop: 10,
+        paddingHorizontal:10
     },
     inputContainer: {
         flex: 1,
@@ -294,8 +303,7 @@ const styles = StyleSheet.create({
     recentSearchContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingVertical: 20,
-        paddingHorizontal: 0,
+        padding: 10,
     },
     recentSearchTitle: {
         fontSize: fonts.h2,
@@ -307,11 +315,11 @@ const styles = StyleSheet.create({
         color: colors.primary,
     },
     recentSearchItem: {
-        paddingVertical: 10,
+        padding: 10,
         borderBottomColor: colors.border,
         flexDirection:"row",
         justifyContent:"space-between",
-        alignItems:"center"
+        alignItems:"center",
     },
     recentSearchText: {
         fontSize: fonts.body,
@@ -342,6 +350,7 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         marginBottom: 20,
+        paddingHorizontal:10
     },
     searchButton: {
         backgroundColor: colors.primary,

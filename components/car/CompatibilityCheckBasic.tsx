@@ -7,6 +7,7 @@ import { useModal } from "@/context/useModal"
 import VehicleSelectionFilter from "./VehicleSelection"
 import { useState } from "react"
 import { Skeleton } from "moti/skeleton"
+import AddVehicle from "./VehicleSelection"
 
 
 interface props {
@@ -78,8 +79,10 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   ? isCompatible
                     ? <>
                       <TouchableOpacity onPress={() => openModal({
-                        id:"carFilter",
-                      content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />,
+                        id:"AddVehicle",
+                      content:<AddVehicle />,
+                      closeButtonVisible:true,
+                      marginTop:700
                     })}>
                         <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold"
@@ -93,8 +96,10 @@ const CompatibilityCheckBasic = ({ product }: props) => {
 
                     : <>
                       <TouchableOpacity onPress={() => openModal({
-                        id:"carFilter",
-                      content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />,
+                        id:"AddVehicle",
+                      content:<AddVehicle/>,
+                      closeButtonVisible:true,
+                       marginTop:700
                  }
                     )}>
                         <Text style={[styles.vehicleButtonText, {
@@ -115,8 +120,10 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   :
 
                   <TouchableOpacity onPress={() => openModal({
-                    id:"carFilter",
-                    content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar}/>,
+                    id:"AddVehicle",
+                    content:<AddVehicle/>,
+                    closeButtonVisible:true,
+                    marginTop:700
                   }
                   )}>
                     <Text style={[styles.vehicleText, {

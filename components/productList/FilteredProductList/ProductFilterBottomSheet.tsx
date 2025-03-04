@@ -32,7 +32,11 @@ const ProductFilterBottomSheet: FC<Props> = ({
     itemsCounter
 }) => {
     return (
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 50 }}>
+        <>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingVertical: 10 }}>
+            <View style={{
+                paddingHorizontal: 10
+            }}>
             <View>
                 <Text style={styles.bigTitle}>Filtrer et trier</Text>
                 <View style={{ flexDirection: "row" }}>
@@ -48,7 +52,8 @@ const ProductFilterBottomSheet: FC<Props> = ({
                 }
                 chosen={sortBy}
             />
-            <Divider style={{ borderBottomWidth: 5 }} />
+            </View>
+            <Divider style={{ borderBottomWidth: 10 }} />
 
             <View style={styles.filterTypeContainer}>
                 {attributeFiltersData
@@ -67,13 +72,13 @@ const ProductFilterBottomSheet: FC<Props> = ({
                         />
                     ))}
             </View>
-
-            <View style={styles.buttonGroup}>
+        </ScrollView>
+        <View style={styles.buttonGroup}>
                 <Button style={styles.secondaryButton} mode="text" textColor="black" onPress={clearFilters}>
-                    <Text>Réinitialiser</Text>
+                    <Text>RÉINITIALISER</Text>
                 </Button>
             </View>
-        </ScrollView>
+        </>
     );
 };
 
@@ -104,8 +109,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 16,
-        marginBottom: 50
-
+        marginBottom: 150,
+        borderTopWidth:1,
+        borderColor:colors.border,
+        padding: 10
     },
     primaryButton: {
         backgroundColor: colors.primary,

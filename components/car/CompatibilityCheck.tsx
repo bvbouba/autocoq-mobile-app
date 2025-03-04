@@ -12,6 +12,7 @@ import { useModal } from "@/context/useModal"
 import { WhiteButton } from "../button"
 import Loading from "../Loading"
 import { Skeleton } from "moti/skeleton"
+import AddVehicle from "./VehicleSelection"
 
 
 
@@ -102,8 +103,10 @@ const CompatibilityCheck = ({ product }: props) => {
               {car?.name &&
               <>
                 <TouchableOpacity onPress={() => openModal({
-                  id:"carFilter",
-                content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />,
+                  id:"AddVehicle",
+                content:<AddVehicle  />,
+                closeButtonVisible:true,
+                marginTop:700
               }
               )}>
                   <Text style={[styles.vehicleText, {
@@ -137,8 +140,10 @@ const CompatibilityCheck = ({ product }: props) => {
             <WhiteButton 
             title={"Sélectionner un véhicule"}
             onPress={() => openModal({
-              id:"carFilter",
-              content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />,
+              id:"AddVehicle",
+              content:<AddVehicle />,
+              closeButtonVisible:true,
+               marginTop:700
              }
             )}
             />

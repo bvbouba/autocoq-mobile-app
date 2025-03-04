@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         fontWeight: "800",
         fontSize: fonts.h2,
         marginBottom: 16,
-        transform: [{ scaleY: 1.3 }],
+        // transform: [{ scaleY: 1.3 }],
     },
     productDescription: {
         textAlign: "left",

@@ -1,4 +1,4 @@
-import { EngineDetailsFragment, MakeDetailsFragment, ModelDetailsFragment, YearDetailsFragment } from "@/saleor/api.generated";
+import { EngineDetailsFragment, MakeDetailsFragment, ModelDetailsFragment, VariantDetailsFragment, YearDetailsFragment } from "@/saleor/api.generated";
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
 type CarFilterContextType = {
@@ -13,6 +13,7 @@ export interface carType {
   model?:ModelDetailsFragment|null,
   engine?:EngineDetailsFragment|null,
   year?:YearDetailsFragment|null,
+  variant?:VariantDetailsFragment| null,
   name?:string|null,
 }
 const CarFilterContext = createContext<CarFilterContextType | null>(null);

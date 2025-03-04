@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList, TextInput, Pressable } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { getSortingOptions, UrlSorting } from "./sorting"; 
 import { OrderDirection, ProductOrderField } from "@/saleor/api.generated";
@@ -24,14 +24,16 @@ const SortingDropdown: React.FC<SortingDropdownProps> = ({ optionToggle, chosen 
       </View>
 
       {/* Champ de saisie (cliquable pour ouvrir le modal) */}
-      <TouchableOpacity style={styles.inputContainer} onPress={() => setModalVisible(true)}>
+      <Pressable style={styles.inputContainer} onPress={() => setModalVisible(true)}>
+      <View pointerEvents="none" style={{flexDirection:"row", alignItems:"center"}}>
         <TextInput
           style={styles.input}
           value={chosen ? chosen.direction : "Popularité"}
-          editable={false} // Empêcher l'ouverture du clavier
+          editable={false} 
         />
         <FontAwesome name="chevron-down" size={16} color="#666" />
-      </TouchableOpacity>
+        </View>
+      </Pressable>
 
       {/* Liste déroulante du Modal */}
       <Modal transparent={true} visible={modalVisible} animationType="fade">
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: fonts.caption,
     color: "#333",
+    height:40
   },
   overlay: {
     flex: 1,

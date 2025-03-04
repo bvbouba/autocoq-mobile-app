@@ -3,8 +3,8 @@ fragment MakeDetails on CarMake {
   name
 }
 
-query CarMakesList {
-  carMakes(first: 50) {
+query CarMakesList($filter: CarMakeFilterInput) {
+  carMakes(first: 50, filter: $filter) {
     edges {
       node {
         ...MakeDetails
@@ -24,6 +24,22 @@ query CarModelsList($filter: CarModelFilterInput) {
     edges {
       node {
         ...ModelDetails
+      }
+    }
+  }
+}
+
+fragment VariantDetails on CarVariant {
+  id
+  name
+  imageUrl
+}
+
+query CarVariantsList($filter: CarVariantFilterInput) {
+  carVariants(first: 50, filter: $filter) {
+    edges {
+      node {
+        ...VariantDetails
       }
     }
   }
@@ -60,9 +76,6 @@ query CarYearsList {
   }
 }
 
-query compatibilityCheck(
-  $productId: ID!
-  $car: CarInput!
-) {
+query compatibilityCheck($productId: ID!, $car: CarInput!) {
   checkProductCompatibility(productId: $productId, car: $car)
 }

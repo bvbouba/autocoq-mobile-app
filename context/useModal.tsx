@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Modal, Portal, Provider as PaperProvider, IconButton } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 
-type ModalId = "search" | "checkout" | "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | "Auth" | "shipping" | "ShippingMethod" | "PaymentMethod";
+type ModalId = "search" | "checkout" | "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | 
+                "Auth" | "shipping" | "ShippingMethod" | "PaymentMethod" | "AddVehicle" | "AddByCarInformation" | 
+                "AddByVIN";
 
 interface OpenModalParams {
-  id: ModalId; 
+  id: ModalId;
   content?: ReactNode;
   disableScroll?: boolean;
   height?: number | `${number}%`;
@@ -83,7 +85,7 @@ export const useModal = () => {
 const styles = StyleSheet.create({
   modalContainer: {
     backgroundColor: "white",
-    padding: 20,
+    padding: 0,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
   },
