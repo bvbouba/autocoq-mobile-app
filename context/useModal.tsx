@@ -2,10 +2,10 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Modal, Portal, Provider as PaperProvider, IconButton } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 
-type ModalType = "search" | "checkout" | "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | "Auth" | "shipping" | "ShippingMethod" | "PaymentMethod"; // Add more modal types as needed
+type ModalId = "search" | "checkout" | "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | "Auth" | "shipping" | "ShippingMethod" | "PaymentMethod";
 
 interface OpenModalParams {
-  type: ModalType;
+  id: ModalId; 
   content?: ReactNode;
   disableScroll?: boolean;
   height?: number | `${number}%`;
@@ -15,47 +15,20 @@ interface OpenModalParams {
 
 interface ModalContextType {
   openModal: (params: OpenModalParams) => void;
-  closeModal: () => void;
+  closeModal: (id: ModalId) => void; // Close only a specific modal
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState<ReactNode>(null);
-  const [disableScroll, setDisableScroll] = useState(false);
-  const [modalHeight, setModalHeight] = useState<number | `${number}%`>(100);
-  const [modalMarginTop, setModalMarginTop] = useState<number>(150);
-  const [isCloseButtonVisible, setIsCloseButtonVisible] = useState(true); 
+  const [modals, setModals] = useState<OpenModalParams[]>([]);
 
-  
-const openModal = ({
-  type,
-  content,
-  disableScroll = false,
-  height="100%",
-  marginTop = 150,
-  closeButtonVisible = false,
-}: OpenModalParams) => {
-  setModalContent(content || <View />);
-  setModalVisible(true);
-  setDisableScroll(disableScroll);
-  setIsCloseButtonVisible(closeButtonVisible);
+  const openModal = (params: OpenModalParams) => {
+    setModals((prev) => [...prev, params]); // Add a new modal to the array
+  };
 
-  if (height !== undefined) {
-    if (typeof height === "number") {
-      setModalHeight(height);
-    } else if (/^\d+%$/.test(height)) {
-      setModalHeight(height as `${number}%`);
-    }
-  }
-
-  setModalMarginTop(marginTop);
-};
-
-  const closeModal = () => {
-    setModalVisible(false);
-    setModalContent(null);
+  const closeModal = (id: string) => {
+    setModals((prev) => prev.filter((modal) => modal.id !== id)); // Remove only the modal with the matching ID
   };
 
   return (
@@ -63,26 +36,36 @@ const openModal = ({
       <PaperProvider>
         {children}
         <Portal>
-          <Modal
-            visible={modalVisible}
-            onDismiss={closeModal}
-            contentContainerStyle={[
-              styles.modalContainer,
-              { height: modalHeight, marginTop: modalMarginTop },
-            ]}
-          >
-            {isCloseButtonVisible && <View style={{ alignItems: "flex-end" }}>
-              <IconButton icon="close" size={20} onPress={closeModal} style={styles.closeButton} />
-            </View>}
+          {modals.map(({ id, content, disableScroll, height, marginTop, closeButtonVisible }) => (
+            <Modal
+              key={id}
+              visible
+              onDismiss={() => closeModal(id)}
+              contentContainerStyle={[
+                styles.modalContainer,
+                { height: height || "100%", marginTop: marginTop || 150 },
+              ]}
+            >
+              {closeButtonVisible && (
+                <View style={{ alignItems: "flex-end" }}>
+                  <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={() => closeModal(id)}
+                    style={styles.closeButton}
+                  />
+                </View>
+              )}
 
-            {disableScroll ? (
-              <View style={{ flex: 1 }}>{modalContent}</View> // No ScrollView if disableScroll is true
-            ) : (
-              <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-                {modalContent}
-              </ScrollView>
-            )}
-          </Modal>
+              {disableScroll ? (
+                <View style={{ flex: 1 }}>{content}</View>
+              ) : (
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+                  {content}
+                </ScrollView>
+              )}
+            </Modal>
+          ))}
         </Portal>
       </PaperProvider>
     </ModalContext.Provider>
@@ -99,7 +82,7 @@ export const useModal = () => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,

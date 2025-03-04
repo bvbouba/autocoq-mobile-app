@@ -37,7 +37,7 @@ const PromoCodeForm = () => {
         } else {
           formik.resetForm(); // Clear the promo code after successful apply
           setPromoInput(""); // Also clear the local state
-          closeModal()
+          closeModal("checkout")
         }
       } catch (error) {
         setError("Une erreur est survenue");

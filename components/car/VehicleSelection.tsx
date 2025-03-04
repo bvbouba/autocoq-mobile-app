@@ -89,7 +89,7 @@ const VehicleSelectionFilter = ({setSelectedLocalCar}:props) => {
 
     }
       setIsSaving(false)
-      closeModal()
+      closeModal("carFilter")
     } else {
       setIsSaving(false)
       Alert.alert("Veuillez sélectionner toutes les options de filtrage.");
@@ -199,7 +199,7 @@ const VehicleSelectionFilter = ({setSelectedLocalCar}:props) => {
                       }
                       ]} mode="contained" onPress={() => {
                         setSelectedCar({})
-                        closeModal()
+                        closeModal("carFilter")
                       }
                       }
                         disabled={loadingEngines}

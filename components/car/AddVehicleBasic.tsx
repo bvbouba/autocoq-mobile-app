@@ -33,7 +33,8 @@ const AddVehicleBasic = () => {
                   alt: "",
                 })
                 if (expandedImage) {
-                  openModal({type:"ImageExpand",
+                  openModal({
+                    id:"ImageExpand",
                     content:<ImageExpand image={expandedImage} />
                 })
                 }
@@ -68,9 +69,9 @@ const AddVehicleBasic = () => {
         </View>
 
         <TouchableOpacity style={styles.button} onPress={() =>
-          openModal("carFilter",
-            <VehicleSelectionFilter />,
-            true,"100%",20,true
+          openModal({
+            id:"carFilter",
+            content:<VehicleSelectionFilter />,}
           )
         }>
           <Text style={[styles.buttonText, (selectedCar) && {

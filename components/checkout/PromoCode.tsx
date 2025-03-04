@@ -42,7 +42,7 @@ const PromoCode = () => {
             style={styles.promoContainer}
             onPress={() =>
               openModal({
-               type:"checkout",
+               id:"checkout",
                  content:<PromoCodeForm />
               })
             }

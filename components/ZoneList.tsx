@@ -19,7 +19,7 @@ export const ZoneList = () => {
       ...delivery,
       zone
     });
-    closeModal()
+    closeModal("shipping")
   };
 
   const renderItem = ({ item }: { item: { name: string } }) => (

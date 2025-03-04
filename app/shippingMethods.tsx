@@ -33,7 +33,7 @@ const ShippingMethods = () => {
                 ...delivery,
                 methodId:checked
             })
-            closeModal();
+            closeModal("ShippingMethod");
         } catch (error) {
             showMessage("Erreur lors de la mise à jour")
         } finally {

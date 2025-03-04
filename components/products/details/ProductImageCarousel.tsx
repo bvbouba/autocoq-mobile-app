@@ -56,7 +56,7 @@ const ProductImageCarousel: FC<Props> = ({ images }) => {
                             setExpandedImage(images[currentIndex])
                            if(expandedImage){ 
                           openModal({
-                            type:"ImageExpand",
+                            id:"ImageExpand",
                            content: <ImageExpand image={expandedImage}  />
                           })
                         }

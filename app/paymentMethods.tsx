@@ -14,7 +14,7 @@ const {isLoading, setLoading} = useLoading()
   const handleSelect = async (methodId: string) => {
     setLoading(true);
     setChosenGateway(methodId);
-    closeModal();
+    closeModal("PaymentMethod");
     setLoading(false);
   };
 

@@ -86,7 +86,9 @@ const AddVehicleSection =()=>{
               <View style={{ width: "100%" }}>
                 <PrimaryButton 
                 title={`AJOUTER UN VÉHICULE`}
-                onPress={() => openModal({type:"carFilter",content:<VehicleSelectionFilter />,
+                onPress={() => openModal({
+                  id:"carFilter",
+                  content:<VehicleSelectionFilter />,
                 }
                 )}
                 />              

@@ -62,7 +62,7 @@ const SignIn: FC<props> = ({ phoneNumber }) => {
                     if (data?.tokenCreate?.token) {
                         setToken(data?.tokenCreate?.token);
                         setRefreshToken(data?.tokenCreate?.refreshToken || "");
-                        closeModal()
+                        closeModal("Auth")
                     } else {
                         showMessage('Échec de l’authentification. Veuillez réessayer.')
 

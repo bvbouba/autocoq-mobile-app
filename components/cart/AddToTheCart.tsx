@@ -56,14 +56,14 @@ const AddedToCart: React.FC = () => {
 
       {/* Bouton Voir le panier & Commander */}
       <TouchableOpacity style={styles.checkoutButton} onPress={() =>{ 
-        closeModal()
+        closeModal("CartPreview")
         router.push("/cart")}
         }>
         <Text style={styles.checkoutText}>VOIR LE PANIER ET COMMANDER</Text>
       </TouchableOpacity>
 
       {/* Lien Continuer vos achats */}
-      <TouchableOpacity onPress={() => closeModal()}>
+      <TouchableOpacity onPress={() => closeModal("CartPreview")}>
         <Text style={styles.continueShopping}>Continuer vos achats</Text>
       </TouchableOpacity>
     </PaddedView>

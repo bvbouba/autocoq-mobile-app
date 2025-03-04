@@ -77,7 +77,8 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                 {car?.name
                   ? isCompatible
                     ? <>
-                      <TouchableOpacity onPress={() => openModal({type:"carFilter",
+                      <TouchableOpacity onPress={() => openModal({
+                        id:"carFilter",
                       content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />,
                     })}>
                         <Text style={[styles.vehicleButtonText, {
@@ -91,7 +92,8 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                     </>
 
                     : <>
-                      <TouchableOpacity onPress={() => openModal({type:"carFilter",
+                      <TouchableOpacity onPress={() => openModal({
+                        id:"carFilter",
                       content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar} />,
                  }
                     )}>
@@ -113,7 +115,7 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   :
 
                   <TouchableOpacity onPress={() => openModal({
-                    type:"carFilter",
+                    id:"carFilter",
                     content:<VehicleSelectionFilter setSelectedLocalCar={setSelectedLocalCar}/>,
                   }
                   )}>

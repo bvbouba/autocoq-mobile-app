@@ -16,7 +16,7 @@ const ZoneSelector: React.FC = () => {
       style={styles.container}
       onPress={() =>
         openModal({
-          type:"shipping",
+          id:"shipping",
           content:<ZoneList />
         })
       }

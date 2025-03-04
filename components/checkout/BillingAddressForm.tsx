@@ -54,7 +54,7 @@ const BillingAddressForm: FC<Props> = () => {
       style={styles.zoneItem}
       onPress={() => {
         formik.setFieldValue("city", item.name);
-        closeModal();
+        closeModal("shipping");
       }}
     >
       <Text style={styles.zoneText}>{item.name}</Text>
@@ -195,7 +195,7 @@ const BillingAddressForm: FC<Props> = () => {
           style={{ width: "100%" }}
           onPress={() =>
             openModal({
-              type:"shipping",
+              id:"shipping",
               content:<View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
 

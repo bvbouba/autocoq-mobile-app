@@ -24,10 +24,13 @@ const Auth = () => {
       } else {
         // Redirect user based on phone number existence
         if (data.checkPhoneExists.exists) {
-          openModal({type:"Auth",
+          openModal({
+            id:"Auth",
             content:<SignIn phoneNumber={phoneNumber}/>})
         } else {
-          openModal({type:"Auth",content:<SignUp phoneNumber={phoneNumber} />})
+          openModal({
+            id:"Auth",
+            content:<SignUp phoneNumber={phoneNumber} />})
         }
       }
     },

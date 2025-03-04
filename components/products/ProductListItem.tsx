@@ -62,7 +62,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
         try {
             await onAddToCart(defaultVariant?.id || "");
             openModal({
-                type:"CartPreview", 
+                id:"CartPreview", 
                 content:<AddedToCart />
             });
         } finally {

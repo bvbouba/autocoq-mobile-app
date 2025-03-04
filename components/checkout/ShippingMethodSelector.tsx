@@ -38,7 +38,8 @@ const ShippingMethodSelector: FC = () => {
   if (deliveryMethod) {
     return (
       <Pressable onPress={() => {
-        openModal({type:"ShippingMethod",
+        openModal({
+          id:"ShippingMethod",
           content:<ShippingMethods />
         })
       }}>
@@ -49,7 +50,7 @@ const ShippingMethodSelector: FC = () => {
             </Text>}
             <TouchableOpacity onPress={() => {
               openModal({
-                type:"ShippingMethod",
+                id:"ShippingMethod",
                 content:<ShippingMethods />
               })
             }}>
@@ -63,7 +64,7 @@ const ShippingMethodSelector: FC = () => {
             </Text>}
             <TouchableOpacity onPress={() => {
               openModal({
-                type:"ShippingMethod",
+                id:"ShippingMethod",
                 content:<ShippingMethods />
               })
             }}>
@@ -97,7 +98,7 @@ const ShippingMethodSelector: FC = () => {
 
   return (
     <Pressable onPress={() => openModal({
-      type:"ShippingMethod",
+      id:"ShippingMethod",
       content:<ShippingMethods />
     })}>
       <View style={styles.shippingMethodWrapper}>

@@ -96,7 +96,7 @@ const ProductSearch: FC<Props> = () => {
         if (!value.trim()) return;
         const params = new URLSearchParams();
         params.append("q", value);
-        closeModal()
+        closeModal("search")
         router.push(`/search?${params.toString()}`);
         
         // Save the search term to recent searches
@@ -165,7 +165,7 @@ const ProductSearch: FC<Props> = () => {
                                 </View>
 
                                 {/* Annuler Button */}
-                                <TouchableOpacity onPress={() => closeModal()} style={{ marginLeft: 10 }}>
+                                <TouchableOpacity onPress={() => closeModal("search")} style={{ marginLeft: 10 }}>
                                     <Text style={{
                                         fontSize: fonts.body,
                                         color: colors.textPrimary,

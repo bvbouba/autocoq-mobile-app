@@ -56,7 +56,7 @@ const ShippingAddressForm: FC<Props> = () => {
       style={styles.zoneItem}
       onPress={() =>{ 
         formik.setFieldValue("city", item.name)
-       closeModal()
+       closeModal("shipping")
       }  
       }
     >
@@ -228,7 +228,7 @@ const ShippingAddressForm: FC<Props> = () => {
           }}
           onPress={() =>
             openModal({
-              type:"shipping",
+              id:"shipping",
               content:<View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
                 <FlatList

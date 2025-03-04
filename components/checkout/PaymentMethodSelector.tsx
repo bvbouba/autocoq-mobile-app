@@ -26,7 +26,9 @@ const PaymentMethodSelector: FC = () => {
       <View style={styles.titleWrapper}>
         <Text style={styles.paymentMethodTitle}>Mode de paiement</Text>
       </View>
-      <Pressable onPress={() => openModal({type:"PaymentMethod", content:<PaymentMethods />
+      <Pressable onPress={() => openModal({
+        id:"PaymentMethod", 
+        content:<PaymentMethods />
   }
     )}>
         <View style={[styles.paymentMethodWrapper, { borderColor }]}>
@@ -46,7 +48,7 @@ const PaymentMethodSelector: FC = () => {
             ) : (
               <TouchableOpacity onPress={() =>
                 openModal({
-                  type:"PaymentMethod",
+                  id:"PaymentMethod",
                   content: <PaymentMethods />
                 })}
               >

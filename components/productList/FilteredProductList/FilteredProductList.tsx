@@ -86,7 +86,7 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
       </View>
 
       <FilterBar openFilters={() => openModal({
-        type:"productFilter",
+        id:"productFilter",
         content:<ProductFilterBottomSheet 
         attributeFiltersData = {attributeFiltersData}
         addAttributeFilter={addAttributeFilter}

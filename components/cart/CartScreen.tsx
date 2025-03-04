@@ -175,7 +175,7 @@ const CartScreen = () => {
             <PaddedView>
             <TouchableOpacity onPress={()=>{
                 openModal({
-                    type:"Auth",
+                    id:"Auth",
                     content:<Auth />
                 })
             }}>

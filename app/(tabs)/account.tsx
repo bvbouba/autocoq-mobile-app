@@ -67,7 +67,9 @@ export default function AccountScreen() {
         <View style={styles.accountButtonContainer}>
           {!user?.id && (
             <TouchableOpacity style={styles.signUpButton} onPress={()=>{
-              openModal({type:"Auth",content:<Auth />})
+              openModal({
+                id:"Auth",
+                content:<Auth />})
             }}>
               <Text style={styles.signUpButtonText}>
                 SE CONNECTER OU CRÉER UN COMPTE
