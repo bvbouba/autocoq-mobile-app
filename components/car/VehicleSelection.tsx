@@ -1,85 +1,79 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { carType } from "@/context/useCarFilterContext";
 import { Text, View, colors, fonts } from "@/components/Themed";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useModal } from "@/context/useModal";
 import AddByCarInformation from "./AddByCarInformation";
+import { carType } from "@/context/useCarFilterContext";
 
+const AddVehicle = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (car?: carType) => void }) => {
+  const { openModal } = useModal();
 
-const AddVehicle = () => {
-  const {openModal} = useModal()
-  
   return (
+    <View style={styles.filterContainer}>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <FontAwesome name="car" size={20} color={colors.secondary} style={styles.carIcon} />
+        <View>
+          <Text style={styles.filterText}>Ajouter un véhicule</Text>
+          <Text style={styles.instructionText}>Veuillez sélectionner une option ci-dessous</Text>
+        </View>
+      </View>
 
-         
-                    <View style={styles.filterContainer}>
-          
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() =>
+          openModal({
+            id: "AddByCarInformation",
+            content: <AddByCarInformation setSelectedLocalCar={setSelectedLocalCar}/>,
+            closeButtonVisible: false,
+            height: "130%",
+            marginTop: 0,
+            disableScroll: true,
+          })
+        }
+      >
+        <Text style={styles.optionText}>Marque & Modèle</Text>
+        <Text style={styles.optionSubText}>Rechercher par Année, Marque, Modèle, Type et Version</Text>
+      </TouchableOpacity>
 
-                      <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <FontAwesome name="car" size={20} color={colors.secondary} style={styles.carIcon} />
-                        <View>
-                          <Text style={styles.filterText}>Ajouter véhicule</Text>
-                          <Text style={styles.instructionText}> Veuillez sélectionner une option ci-dessous </Text>
-                        </View>
-                      </View>
-
-                      <TouchableOpacity style={styles.option} onPress={() => openModal({
-                        id:"AddByCarInformation",
-                        content: <AddByCarInformation />,
-                        closeButtonVisible:false,
-                        height:"130%",
-                        marginTop:0,
-                        disableScroll:true
-                      })}>
-                          <Text style={styles.optionText}>
-                            Make & Model
-                          </Text>
-                          <Text style={styles.optionSubText}> 
-                            Search by Year, Make, Model and Engine
-                          </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.option} onPress={() => console.log("VIN")} >
-                    
-                          <Text style={styles.optionText}>
-                            Type VIN Manually
-                          </Text>
-                          <Text style={styles.optionSubText}> 
-                            Input Your Vehicle Information Number
-                          </Text>
-                      
-                      </TouchableOpacity>
-
-                      
-
-                     
-                    </View>
-                  
+      {/* <TouchableOpacity style={styles.option} 
+      onPress={() =>
+        openModal({
+          id: "AddByCarInformation",
+          content: <AddByVIN />,
+          closeButtonVisible: false,
+          height: "130%",
+          marginTop: 0,
+          disableScroll: true,
+        })
+      }
+      >
+        <Text style={styles.optionText}>Saisir le VIN manuellement</Text>
+        <Text style={styles.optionSubText}>Entrer votre Numéro d'Identification du Véhicule</Text>
+      </TouchableOpacity> */}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-
-  modalContainer: { backgroundColor: 'white', padding: 20, height: "100%"},
+  modalContainer: { backgroundColor: "white", padding: 20, height: "100%" },
 
   option: {
     backgroundColor: colors.background,
     borderRadius: 10,
-    padding:10,
+    padding: 10,
     margin: 5,
   },
-  optionText:{
-    color:colors.textPrimary, 
-    fontSize:fonts.h2, 
-    fontWeight:"bold" 
+  optionText: {
+    color: colors.textPrimary,
+    fontSize: fonts.h2,
+    fontWeight: "bold",
   },
-  optionSubText:{
+  optionSubText: {
     fontSize: fonts.body,
     color: "gray",
     marginBottom: 20,
     flexWrap: "wrap",
     maxWidth: "100%",
-
   },
   selectionModal: {
     backgroundColor: "white",
@@ -87,9 +81,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 10,
     position: "absolute",
-    zIndex: 10, // Bring the dropdown above other modal content
+    zIndex: 10, // Pour placer la boîte modale au-dessus des autres contenus
   },
-  
+
   button: {
     marginTop: 20,
   },
@@ -103,7 +97,7 @@ const styles = StyleSheet.create({
   filterContainer: {
     marginBottom: 20,
     width: "100%",
-    padding:20
+    padding: 20,
   },
   headerContainer: {
     flexDirection: "row",
@@ -113,7 +107,7 @@ const styles = StyleSheet.create({
   filterText: {
     fontSize: fonts.h1,
     fontWeight: "bold",
-    marginBottom:5
+    marginBottom: 5,
   },
   closeButton: {
     top: 0,
@@ -127,9 +121,8 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
   },
   buttonGroup: {
-    width: "100%"
+    width: "100%",
   },
-
 });
 
 export default AddVehicle;

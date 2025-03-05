@@ -9,6 +9,7 @@ import ImageExpand from "../ImageExpand";
 import { useModal } from "@/context/useModal";
 import { useMessage } from "@/context/MessageContext";
 import AddVehicle from "./VehicleSelection";
+import SelectVehicle from "./SelectVehicle";
 
 interface ImageProps {
   url: string;
@@ -71,10 +72,11 @@ const AddVehicleBasic = () => {
 
         <TouchableOpacity style={styles.button} onPress={() =>
           openModal({
-            id:"AddVehicle",
-            content:<AddVehicle />,
+            id:"selectVehicle",
+            content:<SelectVehicle />,
           closeButtonVisible:true,
-          marginTop:700
+          marginTop:300,
+          disableScroll:true
           }
           )
         }>
@@ -84,7 +86,7 @@ const AddVehicleBasic = () => {
             borderRadius: 5,
             color:colors.textPrimary
           }]}>
-            {selectedCar?.name ? "Changer" : "Sélectionner un véhicule"}
+            {selectedCar?.name ? "Changer" : "Sélectionnez un véhicule"}
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { getConfig } from "@/config";
-import { CategoryPathFragment, ProductFragment, useSearchProductsLazyQuery } from "@/saleor/api.generated";
+import { CategoryPathFragment, ProductFragment, SearchProductsQueryVariables, useSearchProductsLazyQuery } from "@/saleor/api.generated";
 import {
     handleErrors
 } from "./checkout";
@@ -35,7 +35,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const loading = searchProductsStatus.loading
     const loaded = searchProductsStatus.called
-    const variables= {
+    const variables:SearchProductsQueryVariables= {
         channel: getConfig().channel,
         search: searchQuery,
         categories: categoryFilters.map(cat => cat.id),
@@ -45,6 +45,7 @@ export const ProductsProvider: FC<PropsWithChildren> = ({ children }) => {
                   ...(selectedCar?.make && { carMake: [selectedCar?.make.id] }), 
                   ...(selectedCar?.model && { carModel: [selectedCar?.model.id] }),
                   ...(selectedCar?.engine && { carEngine: [selectedCar?.engine.id] }),
+                  ...(selectedCar?.variant && { carVariant: [selectedCar?.variant.id] }),
               }
             : {})
     }

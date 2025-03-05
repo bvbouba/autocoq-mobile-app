@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   container: {
-    flex: 1,
     alignItems: 'center',
   },
   box: {

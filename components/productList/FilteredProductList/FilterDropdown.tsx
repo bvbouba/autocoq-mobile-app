@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome from Expo
-import { colors, Divider, fonts } from "@/components/Themed";
+import { colors, Divider, fonts, PaddedView } from "@/components/Themed";
 import { useLoading } from "@/context/LoadingContext";
 
 export interface FilterDropdownOption {
@@ -52,7 +52,7 @@ export function FilterDropdown({
   };
 
   return (
-    <View style={styles.container}>
+    <PaddedView style={styles.container}>
       <Text style={styles.label}>{label}</Text>
 
       {options?.map((option) => (
@@ -69,7 +69,7 @@ export function FilterDropdown({
           <Text style={styles.optionText}>{option.label}</Text>
         </TouchableOpacity>
       ))}
-    </View>
+    </PaddedView>
   );
 }
 

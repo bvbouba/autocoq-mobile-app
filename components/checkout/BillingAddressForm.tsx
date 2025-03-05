@@ -116,6 +116,7 @@ const BillingAddressForm: FC<Props> = () => {
               return;
             }
           }
+          setLoading(false);
           router.push("/checkout");
         }
       } catch (e) {
@@ -128,29 +129,37 @@ const BillingAddressForm: FC<Props> = () => {
 
   const renderForm = () => (
     <View style={styles.formContainer}>
- 
-      {/* Nom */}
+
+      {/* Nom de famille */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("lastName", value)}
           value={formik.values.lastName}
-          placeholder="Nom"
-          label="Nom *"
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Nom de famille"
+          label={"Nom de famille *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("lastName")} // Mark field as touched
         />
+        {formik.touched.lastName && formik.errors.lastName && (
+            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+          )}
       </View>
 
-           {/* Prénom */}
-           <View style={styles.inputContainer}>
+      {/* Prénom */}
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("firstName", value)}
           value={formik.values.firstName}
           placeholder="Prénom"
-          label="Prénom *"
-          theme={{ colors: { primary: "black" } }}
+          label={`Prénom *`}
+          theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("firstName")} // Mark field as touched
         />
+        {formik.touched.firstName && formik.errors.firstName && (
+          <Text style={styles.errorText}>{formik.errors.firstName}</Text>
+        )}
       </View>
 
       {/* Téléphone */}
@@ -160,9 +169,13 @@ const BillingAddressForm: FC<Props> = () => {
           onChangeText={(value) => formik.setFieldValue("phone", value)}
           value={formik.values.phone}
           placeholder="Numéro de téléphone"
-          label="Numéro de téléphone *"
-          theme={{ colors: { primary: "black" } }}
+          label={"Numéro de téléphone *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("phone")} // Mark field as touched
         />
+        {formik.touched.phone && formik.errors.phone && (
+          <Text style={styles.errorText}>{formik.errors.phone}</Text>
+        )}
       </View>
 
       {/* Adresse Ligne 1 */}
@@ -172,9 +185,13 @@ const BillingAddressForm: FC<Props> = () => {
           onChangeText={(value) => formik.setFieldValue("streetAddress1", value)}
           value={formik.values.streetAddress1}
           placeholder="Adresse Ligne 1"
-          label="Adresse Ligne 1 *"
-          theme={{ colors: { primary: "black" } }}
+          label={"Adresse Ligne 1 *"}
+          theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("streetAddress1")} // Mark field as touched
         />
+        {formik.touched.streetAddress1 && formik.errors.streetAddress1 && (
+          <Text style={styles.errorText}>{formik.errors.streetAddress1}</Text>
+        )}
       </View>
 
       {/* Adresse Ligne 2 (Optionnel) */}
@@ -185,20 +202,26 @@ const BillingAddressForm: FC<Props> = () => {
           value={formik.values.streetAddress2}
           placeholder="Adresse Ligne 2"
           label="Adresse Ligne 2"
-          theme={{ colors: { primary: "black" } }}
+          theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("streetAddress2")} // Mark field as touched
+          
         />
+        {formik.touched.streetAddress2 && formik.errors.streetAddress2 && (
+          <Text style={styles.errorText}>{formik.errors.streetAddress2}</Text>
+        )}
       </View>
 
       {/* Ville */}
       <View style={styles.inputContainer}>
         <Pressable
-          style={{ width: "100%" }}
+          style={{
+            width: "100%"
+          }}
           onPress={() =>
             openModal({
-              id:"shipping",
-              content:<View style={styles.modalContent}>
+              id: "shipping",
+              content: <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
-
                 <FlatList
                   data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
                   keyExtractor={(item, idx) => `${item.name}-${idx}`}
@@ -207,43 +230,55 @@ const BillingAddressForm: FC<Props> = () => {
                   nestedScrollEnabled={true}
                   keyboardShouldPersistTaps="handled"
                 />
-              </View>
+              </View>,
             })
           }
         >
-          <TextInput
-            style={styles.input}
-            value={formik.values.city}
-            placeholder="Ville"
-            label="Ville *"
-            theme={{ colors: { primary: "black" } }}
-            editable={false}
-          />
+          <View pointerEvents="none">
+            <TextInput
+              style={styles.input}
+              value={formik.values.city}
+              placeholder="Ville"
+              label={"Ville *"}
+              theme={{ colors: { primary: colors.textPrimary } }}
+              editable={false}
+            />
+            {formik.touched.city && formik.errors.city && (
+          <Text style={styles.errorText}>{formik.errors.city}</Text>
+        )}
+          </View>
         </Pressable>
       </View>
 
-      {/* Code Postal */}
+      {/* Code postal */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("postalCode", value)}
           value={formik.values.postalCode}
-          placeholder="Code Postal"
-          label="Code Postal"
-          theme={{ colors: { primary: "black" } }}
+          placeholder="Code postal"
+          label="Code postal"
+          theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("postalCode")} // Mark field as touched
         />
       </View>
+      {formik.touched.postalCode && formik.errors.postalCode && (
+          <Text style={styles.errorText}>{formik.errors.postalCode}</Text>
+        )}
 
       {/* Bouton de soumission */}
-      <Button
+      <TouchableOpacity
         onPress={() => formik.handleSubmit()}
-        mode="contained"
         disabled={loading}
-        style={styles.submitButton}
-        labelStyle={styles.submitButtonText}
+        style={[
+          styles.submitButton,
+
+          { opacity: loading ? 0.5 : 1 }, 
+        ]}
+        activeOpacity={0.7} 
       >
-        {loading ? <ActivityIndicator color="white" /> : "CONTINUER"}
-      </Button>
+        {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>CONTINUER</Text>}
+      </TouchableOpacity>
 
       {/* Message d'erreur */}
       {error && (
@@ -277,37 +312,45 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
   },
-  formContainer:{
-    marginTop:40,
-    padding:20,
+  formContainer: {
+    marginTop: 40,
+    padding: 20,
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
     marginBottom: 16,
+    width: "100%",
   },
   input: {
     flex: 1,
-    backgroundColor: "white", // White background
-    borderWidth: 1, // 1px border
-    borderColor: colors.textSecondary, // Black border
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
     borderRadius: 4,
     paddingHorizontal: 10,
-    color: "black",
+    color: colors.textPrimary,
+    width: "100%",
   },
   mandatory: {
     color: "red",
     marginLeft: 5,
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
   },
   submitButton: {
-    backgroundColor: "black", // Black button background
+    backgroundColor: colors.primary,
     marginTop: 10,
-    borderRadius:5,
-    padding:5
+    borderRadius: 5,
+    padding: 15,
+    alignItems: "center",
   },
   submitButtonText: {
-    color: "white", // White button text
+    color: "white",
+    fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 5,
   },
   cancelButton: {
     marginTop: 10,
@@ -315,12 +358,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     marginTop: 16,
     padding: 10,
-    backgroundColor: colors.errorBg,
     borderRadius: 4,
-  },
-  errorText: {
-    color: colors.error,
-    textAlign: "center",
   },
   modalContent: {
     padding: 20,

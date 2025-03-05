@@ -69,7 +69,10 @@ export default function AccountScreen() {
             <TouchableOpacity style={styles.signUpButton} onPress={()=>{
               openModal({
                 id:"Auth",
-                content:<Auth />})
+                content:<Auth />,
+                height:"115%",
+                closeButtonVisible:true
+              })
             }}>
               <Text style={styles.signUpButtonText}>
                 SE CONNECTER OU CRÉER UN COMPTE
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
   },
   signUpButtonText: {
     color: "#fff",
-    fontWeight: "400",
+    fontWeight: "bold",
   },
   myAccount: {
     flexDirection: "row",

@@ -114,7 +114,9 @@ const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttribut
                                             attributeSlug={attribute.slug!}
                                             options={getFilterOptions(attribute, pills)}
                                             removeAttributeFilter={removeAttributeFilter}
-                                        />
+                                        />,
+                                        height:"110%",
+                                        closeButtonVisible:true
                                     })
                                 }
                             >

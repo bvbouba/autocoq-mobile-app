@@ -33,7 +33,7 @@ export const ZoneList = () => {
 
     return(<>
      <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Sélectionnez votre zone</Text>
+            <Text style={styles.modalTitle}>Sélectionner votre ville</Text>
             {loading ? (
               <Text style={styles.loadingText}>Chargement...</Text>
             ) : (

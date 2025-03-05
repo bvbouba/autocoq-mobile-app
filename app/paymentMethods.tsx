@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { useModal } from "@/context/useModal";
-import { colors, fonts } from "../components/Themed";
+import { colors, fonts, PaddedView } from "../components/Themed";
 import { useLoading } from "@/context/LoadingContext";
+import { IconButton } from "react-native-paper";
 
 const PaymentMethods = () => {
   const { checkout,setChosenGateway,chosenGateway  } = useCheckout();
@@ -19,7 +20,14 @@ const {isLoading, setLoading} = useLoading()
   };
 
   return (
-    <View style={styles.container}>
+    <PaddedView style={styles.container}>
+      <View style={{ alignItems: "flex-end" }}>
+                  <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={() => closeModal("PaymentMethod")}
+                  />
+                </View>
       <Text style={styles.title}>Méthode de paiement</Text>
 
       {paymentMethods.map((method) => (
@@ -36,7 +44,7 @@ const {isLoading, setLoading} = useLoading()
         </TouchableOpacity>
       ))}
 
-    </View>
+    </PaddedView>
   );
 };
 
@@ -46,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
     padding: 10,
+    paddingTop:50
   },
   title: {
     fontSize: fonts.h1,

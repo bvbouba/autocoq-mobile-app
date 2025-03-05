@@ -13,7 +13,7 @@ import { useMessage } from "@/context/MessageContext";
 const Auth = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const {openModal} = useModal()
+  const {openModal,closeModal} = useModal()
   const { showMessage } = useMessage();
 
   // Apollo useLazyQuery for checking phone number
@@ -25,12 +25,21 @@ const Auth = () => {
         // Redirect user based on phone number existence
         if (data.checkPhoneExists.exists) {
           openModal({
-            id:"Auth",
-            content:<SignIn phoneNumber={phoneNumber}/>})
+            id:"SignIn",
+            content:<SignIn phoneNumber={phoneNumber}/>,
+            height:"115%",
+            closeButtonVisible:true
+          })
+          closeModal("Auth")
         } else {
           openModal({
-            id:"Auth",
-            content:<SignUp phoneNumber={phoneNumber} />})
+            id:"SignUp",
+            content:<SignUp phoneNumber={phoneNumber} />,
+            height:"115%",
+            closeButtonVisible:true
+          })
+          closeModal("Auth")
+
         }
       }
     },
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontWeight: "400",
+    fontWeight: "bold",
     fontSize:fonts.body,
   },
   errorText: {

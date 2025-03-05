@@ -9,7 +9,6 @@ import {
     ActivityIndicator,
     KeyboardAvoidingView,
     Platform,
-    ScrollView,
     Keyboard,
     TouchableWithoutFeedback
 } from 'react-native';
@@ -23,6 +22,7 @@ import { debounce } from 'lodash';
 import { useModal } from '@/context/useModal';
 import { highlightMatch } from '@/utils/highlightMatch';
 import { clearRecentSearchs, getRecentSearchs, setRecentSearchs,clearRecentSearchItem } from '@/context/recentSearchs';
+import { useLoading } from '@/context/LoadingContext';
 
 interface Props {}
 
@@ -34,6 +34,7 @@ const ProductSearch: FC<Props> = () => {
     const { search: searchQueryString } = useGlobalSearchParams();
     const router = useRouter();
     const { closeModal } = useModal();
+    const {setLoading:setIsLoading} = useLoading()
     const [pressedItem, setPressedItem] = useState<string | null>(null);
     const search = Array.isArray(searchQueryString) ? searchQueryString[0] : searchQueryString;
     const [isPressed, setIsPressed] = useState(false);
@@ -93,16 +94,26 @@ const ProductSearch: FC<Props> = () => {
     });
 
     // ✅ Run search when submitting
-    const runSearch = useCallback((value: string): void => {
+    const runSearch = useCallback(async (value: string): Promise<void> => {
         if (!value.trim()) return;
+    
+        setIsLoading(true);  // ✅ Start loading
+    
+        // Introduce a small delay to ensure the UI updates
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    
         const params = new URLSearchParams();
         params.append("q", value);
-        closeModal("search")
+    
+        closeModal("search");
+    
         router.push(`/search?${params.toString()}`);
-        
-        // Save the search term to recent searches
+    
         setRecentSearchs(value);
+    
+        setIsLoading(false); // ✅ End loading
     }, []);
+    
 
     // ✅ Handle text change (Triggers debounce)
     const handleInputChange = (value: string) => {
@@ -143,6 +154,7 @@ const ProductSearch: FC<Props> = () => {
         <SafeAreaView style={styles.safeContainer}>
             <KeyboardAvoidingView
                 style={styles.keyboardContainer}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -287,6 +299,7 @@ const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: "white",
+        paddingTop: Platform.OS === 'ios' ? 0 : 40
     },
     keyboardContainer: {
         flex: 1,

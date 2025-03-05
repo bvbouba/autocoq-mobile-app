@@ -9,17 +9,17 @@ import { useNavigationContext } from "@/context/NavigationContext";
 const OrderDetailsPage = () => {
     const pathname = usePathname();
     const { orderSuccess } = useLocalSearchParams();
-    const { resetCheckoutToken} = useCheckout();
-    const {setNavigationSlug} = useNavigationContext()
-
-
-    const [orderId, setOrderId] = useState<string>();
+    const { resetCheckoutToken } = useCheckout();
+    const { setNavigationSlug } = useNavigationContext();
     
-    if (orderSuccess) {
-        resetCheckoutToken();
-        setNavigationSlug("orderSuccess")
-    }
+    const [orderId, setOrderId] = useState<string>();
 
+    useEffect(() => {
+        if (orderSuccess) {
+            resetCheckoutToken();
+            setNavigationSlug("orderSuccess");
+        }
+    }, [orderSuccess, resetCheckoutToken, setNavigationSlug]);
 
     useEffect(() => {
         if (pathname.includes("/orders/")) {
@@ -27,7 +27,6 @@ const OrderDetailsPage = () => {
         }
     }, [pathname]);
 
-    
     return <OrderDetails orderId={orderId} />;
 };
 

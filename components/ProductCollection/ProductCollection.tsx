@@ -52,6 +52,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         ...(selectedCar.make && { carMake: [selectedCar.make.id] }),
         ...(selectedCar.model && { carModel: [selectedCar.model.id] }),
         ...(selectedCar.engine && { carEngine: [selectedCar.engine.id] }),
+        ...(selectedCar.variant && { carVariant: [selectedCar.variant.id] }),
       }),
     },
     first: perPage,

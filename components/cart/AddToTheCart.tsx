@@ -13,7 +13,7 @@ const AddedToCart: React.FC = () => {
   const { closeModal } = useModal();
 
   return (
-    <PaddedView>
+    <PaddedView style={styles.container}>
       {/* Message de succès */}
       <View style={styles.successMessage}>
         <FontAwesome name="check-circle" size={24} color={colors.success} />
@@ -73,6 +73,9 @@ const AddedToCart: React.FC = () => {
 export default AddedToCart;
 
 const styles = StyleSheet.create({
+  container:{
+   padding:20
+  },
   successMessage: {
     flexDirection: "row",
     alignItems: "center",

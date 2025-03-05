@@ -36,7 +36,11 @@ const AuthPrompt = ({redirectUrl}:props) => {
                 title={`SE CONNECTER OU CRÉER UN COMPTE`}
                 onPress={()=>openModal({
                   id:"Auth",
-                  content:<Auth />})}
+                  content:<Auth />,
+                  height:"115%",
+                  closeButtonVisible:true
+                
+                })}
                 />    
       </View>
     </SurfaceView>

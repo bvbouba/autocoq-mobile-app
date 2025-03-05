@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
-import { FlatList, Pressable, StyleSheet, TouchableOpacity,  } from "react-native";
+import { FlatList, Pressable, StyleSheet, TouchableOpacity, } from "react-native";
 import { useFormik } from "formik";
-import {Text, View ,colors, fonts } from "@/components/Themed"
+import { Text, View, colors, fonts } from "@/components/Themed"
 
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
@@ -9,7 +9,7 @@ import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
-import {  useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useModal } from "@/context/useModal";
 import { useCheckout } from "@/context/CheckoutProvider";
 
@@ -39,7 +39,7 @@ const validationSchema = yup.object().shape({
 });
 
 const ShippingAddressForm: FC<Props> = () => {
-  const { checkout,checkoutToken } = useCheckout();
+  const { checkout, checkoutToken } = useCheckout();
   const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
   const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
   const [updateEmail] = useCheckoutEmailUpdateMutation();
@@ -47,17 +47,17 @@ const ShippingAddressForm: FC<Props> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const {authenticated,user} = useAuth()
-  const {openModal, closeModal} = useModal()
-  const { data:citiesData,  } = useGetCitiesQuery();
+  const { authenticated, user } = useAuth()
+  const { openModal, closeModal } = useModal()
+  const { data: citiesData, } = useGetCitiesQuery();
 
   const renderItem = ({ item }: { item: { name: string } }) => (
     <TouchableOpacity
       style={styles.zoneItem}
-      onPress={() =>{ 
+      onPress={() => {
         formik.setFieldValue("city", item.name)
-       closeModal("shipping")
-      }  
+        closeModal("shipping")
+      }
       }
     >
       <Text style={styles.zoneText}>{item.name}</Text>
@@ -99,7 +99,7 @@ const ShippingAddressForm: FC<Props> = () => {
         },
       },
     });
-  
+
     return data?.checkoutBillingAddressUpdate?.errors;
   };
 
@@ -146,7 +146,7 @@ const ShippingAddressForm: FC<Props> = () => {
               return;
             }
           }
-
+          setLoading(false);
           router.push("/checkout");
         }
       } catch (e) {
@@ -159,7 +159,7 @@ const ShippingAddressForm: FC<Props> = () => {
 
   const renderForm = () => (
     <View style={styles.formContainer}>
-     
+
       {/* Nom de famille */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -169,11 +169,15 @@ const ShippingAddressForm: FC<Props> = () => {
           placeholder="Nom de famille"
           label={"Nom de famille *"}
           theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("lastName")} // Mark field as touched
         />
+        {formik.touched.lastName && formik.errors.lastName && (
+            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+          )}
       </View>
 
-       {/* Prénom */}
-       <View style={styles.inputContainer}>
+      {/* Prénom */}
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("firstName", value)}
@@ -181,9 +185,13 @@ const ShippingAddressForm: FC<Props> = () => {
           placeholder="Prénom"
           label={`Prénom *`}
           theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("firstName")} // Mark field as touched
         />
+        {formik.touched.firstName && formik.errors.firstName && (
+          <Text style={styles.errorText}>{formik.errors.firstName}</Text>
+        )}
       </View>
-  
+
       {/* Téléphone */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -193,9 +201,13 @@ const ShippingAddressForm: FC<Props> = () => {
           placeholder="Numéro de téléphone"
           label={"Numéro de téléphone *"}
           theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("phone")} // Mark field as touched
         />
+        {formik.touched.phone && formik.errors.phone && (
+          <Text style={styles.errorText}>{formik.errors.phone}</Text>
+        )}
       </View>
-  
+
       {/* Adresse Ligne 1 */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -205,9 +217,13 @@ const ShippingAddressForm: FC<Props> = () => {
           placeholder="Adresse Ligne 1"
           label={"Adresse Ligne 1 *"}
           theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("streetAddress1")} // Mark field as touched
         />
+        {formik.touched.streetAddress1 && formik.errors.streetAddress1 && (
+          <Text style={styles.errorText}>{formik.errors.streetAddress1}</Text>
+        )}
       </View>
-  
+
       {/* Adresse Ligne 2 (Optionnel) */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -217,9 +233,14 @@ const ShippingAddressForm: FC<Props> = () => {
           placeholder="Adresse Ligne 2"
           label="Adresse Ligne 2"
           theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("streetAddress2")} // Mark field as touched
+          
         />
+        {formik.touched.streetAddress2 && formik.errors.streetAddress2 && (
+          <Text style={styles.errorText}>{formik.errors.streetAddress2}</Text>
+        )}
       </View>
-  
+
       {/* Ville */}
       <View style={styles.inputContainer}>
         <Pressable
@@ -228,16 +249,16 @@ const ShippingAddressForm: FC<Props> = () => {
           }}
           onPress={() =>
             openModal({
-              id:"shipping",
-              content:<View style={styles.modalContent}>
+              id: "shipping",
+              content: <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
                 <FlatList
                   data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
                   keyExtractor={(item, idx) => `${item.name}-${idx}`}
                   renderItem={renderItem}
                   contentContainerStyle={styles.listContainer}
-                  nestedScrollEnabled={true} 
-                  keyboardShouldPersistTaps="handled" 
+                  nestedScrollEnabled={true}
+                  keyboardShouldPersistTaps="handled"
                 />
               </View>
             })
@@ -250,12 +271,15 @@ const ShippingAddressForm: FC<Props> = () => {
               placeholder="Ville"
               label={"Ville *"}
               theme={{ colors: { primary: colors.textPrimary } }}
-              editable={false} 
+              editable={false}
             />
+            {formik.touched.city && formik.errors.city && (
+          <Text style={styles.errorText}>{formik.errors.city}</Text>
+        )}
           </View>
         </Pressable>
       </View>
-      
+
       {/* Code postal */}
       <View style={styles.inputContainer}>
         <TextInput
@@ -265,20 +289,27 @@ const ShippingAddressForm: FC<Props> = () => {
           placeholder="Code postal"
           label="Code postal"
           theme={{ colors: { primary: colors.textPrimary } }}
+          onBlur={() => formik.setFieldTouched("postalCode")} // Mark field as touched
         />
       </View>
-  
+      {formik.touched.postalCode && formik.errors.postalCode && (
+          <Text style={styles.errorText}>{formik.errors.postalCode}</Text>
+        )}
+
       {/* Bouton de soumission */}
-      <Button
+      <TouchableOpacity
         onPress={() => formik.handleSubmit()}
-        mode="contained"
         disabled={loading}
-        style={styles.submitButton}
-        labelStyle={styles.submitButtonText}
+        style={[
+          styles.submitButton,
+
+          { opacity: loading ? 0.5 : 1 }, 
+        ]}
+        activeOpacity={0.7} 
       >
-        {loading ? <ActivityIndicator color="white" /> : "CONTINUER"}
-      </Button>
-  
+        {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>CONTINUER</Text>}
+      </TouchableOpacity>
+
       {/* Message d'erreur */}
       {error && (
         <View style={styles.errorContainer}>
@@ -293,10 +324,10 @@ const ShippingAddressForm: FC<Props> = () => {
       {!showForm && authenticated ? (
         <>
           <SavedAddressSelectionList
-            updateAddressMutation={(address: Form)  => updateMutation(address)}
+            updateAddressMutation={(address: Form) => updateMutation(address)}
           />
           <Button mode="text" onPress={() => setShowForm(true)}>
-          <Text>  + Ajouter une nouvelle adresse </Text>
+            <Text>  + Ajouter une nouvelle adresse </Text>
           </Button>
         </>
       ) : (
@@ -313,21 +344,20 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
   },
-  formContainer:{
-    marginTop:40,
-    padding:20,
+  formContainer: {
+    marginTop: 40,
+    padding: 20,
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
     marginBottom: 16,
     width: "100%",
   },
   input: {
     flex: 1,
-    backgroundColor: colors.background, 
+    backgroundColor: colors.background,
     borderWidth: 1,
-    borderColor: colors.border, 
+    borderColor: colors.border,
     borderRadius: 4,
     paddingHorizontal: 10,
     color: colors.textPrimary,
@@ -336,16 +366,23 @@ const styles = StyleSheet.create({
   mandatory: {
     color: "red",
     marginLeft: 5,
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
   },
   submitButton: {
-    backgroundColor: colors.primary, 
+    backgroundColor: colors.primary,
     marginTop: 10,
-    borderRadius:5,
-    padding:5
+    borderRadius: 5,
+    padding: 15,
+    alignItems: "center",
   },
   submitButtonText: {
-    color: "white", 
+    color: "white",
+    fontWeight: "bold",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 5,
   },
   cancelButton: {
     marginTop: 10,
@@ -353,12 +390,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     marginTop: 16,
     padding: 10,
-    backgroundColor: colors.errorBg,
     borderRadius: 4,
-  },
-  errorText: {
-    color: colors.error,
-    textAlign: "center",
   },
   modalContent: {
     padding: 20,

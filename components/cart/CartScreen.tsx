@@ -176,7 +176,9 @@ const CartScreen = () => {
             <TouchableOpacity onPress={()=>{
                 openModal({
                     id:"Auth",
-                    content:<Auth />
+                    content:<Auth />,
+                    height:"115%",
+                    closeButtonVisible:true
                 })
             }}>
                 <Text style={styles.accountText}>
@@ -214,17 +216,19 @@ const CartScreen = () => {
                 </View>
 
                 <View style={styles.checkoutButtonContainer}>
-                    <Button 
-                        style={styles.checkoutButton} 
+
+                    <TouchableOpacity
                         onPress={handleSubmit} 
-                        mode="contained" 
                         disabled={loading}
-                    >
-                        {isLoading ? <ActivityIndicator color="white" /> : 
-                        <Text style={{
-                            color:"white"
-                        }}>PASSER LA COMMANDE</Text>}
-                    </Button>
+                            style={[
+                            styles.checkoutButton,
+
+                            { opacity: loading ? 0.5 : 1 }, 
+                            ]}
+                            activeOpacity={0.7} 
+                        >
+                            {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>PASSER LA COMMANDE</Text>}
+                        </TouchableOpacity>
                 </View>
             </PaddedView>
         </View>
@@ -262,8 +266,10 @@ const styles = StyleSheet.create({
     checkoutButton: {
         width: "100%",
         borderRadius: 5,
-        paddingVertical: 10,
-        backgroundColor:colors.primary
+        backgroundColor: colors.primary,
+        marginTop: 10,
+        padding: 15,
+        alignItems: "center",
     },
     accountText: {
         fontSize: fonts.body,
@@ -299,6 +305,10 @@ const styles = StyleSheet.create({
     checkoutButtonContainer: {
         marginVertical: 5,
     },
+    submitButtonText: {
+        color: "white",
+        fontWeight: "bold",
+      },
 });
 
 export default CartScreen;

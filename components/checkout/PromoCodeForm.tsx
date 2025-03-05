@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useCheckoutAddPromoCodeMutation } from "@/saleor/api.generated";
 import { useCheckout } from "@/context/CheckoutProvider";
-import { colors, fonts } from "../Themed";
-import {  TextInput } from "react-native-paper";
+import { colors, fonts, PaddedView } from "../Themed";
+import {  IconButton, TextInput } from "react-native-paper";
 import { useModal } from "@/context/useModal";
 
 
@@ -37,7 +37,7 @@ const PromoCodeForm = () => {
         } else {
           formik.resetForm(); // Clear the promo code after successful apply
           setPromoInput(""); // Also clear the local state
-          closeModal("checkout")
+          closeModal("PromoCode")
         }
       } catch (error) {
         setError("Une erreur est survenue");
@@ -52,7 +52,14 @@ const PromoCodeForm = () => {
 
   return (
     <>
-    <View style={{ gap: 10 }}>
+    <PaddedView style={{ gap: 10,     paddingTop:50 }}>
+    <View style={{ alignItems: "flex-end" }}>
+                  <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={() => closeModal("PromoCode")}
+                  />
+                </View>
                   <Text style={{ fontSize: fonts.h1, fontWeight: "bold" }}>
                     Code de réduction
                   </Text>
@@ -91,7 +98,7 @@ const PromoCodeForm = () => {
                   {error && (
                     <Text style={styles.errorText}>{error}</Text>
                   )}
-                </View>
+                </PaddedView>
     </>
   );
 };

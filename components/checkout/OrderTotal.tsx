@@ -16,7 +16,7 @@ const OrderTotal = () => {
             fontWeight: "900"
         }}>Résumé de la commande</Text>
         <Divider />
-        {checkout?.discount?.amount && 
+        {checkout?.discount && 
         <PaddedView style={styles.rowWrapper}>
             <Text>{`Réductions`}</Text>
             <Text>

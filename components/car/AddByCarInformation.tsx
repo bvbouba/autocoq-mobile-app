@@ -1,5 +1,5 @@
 import { StyleSheet, Alert, TouchableOpacity, ScrollView } from "react-native";
-import { Button, IconButton } from "react-native-paper";
+import {  IconButton } from "react-native-paper";
 import {
   useCarEnginesListQuery,
   useCarMakesListQuery,
@@ -15,6 +15,7 @@ import { PrimaryButton } from "../button";
 import { useModal } from "@/context/useModal";
 import { useLoading } from "@/context/LoadingContext";
 import ImageExpand from "../ImageExpand";
+import { setSavedVehicles } from "@/context/savedVehicles";
 
 interface optionProps {
   id: string;
@@ -91,9 +92,17 @@ const AddByCarInformation = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (c
       } else {
         setSelectedCar({ make: tempCarMake, year: tempCarYear, model: tempCarModel, variant: tempCarVariant, engine: tempCarEngine, name: carName });
       }
-
+      setSavedVehicles({
+        year:tempCarYear,
+        make:tempCarMake,
+        model:tempCarModel,
+        variant:tempCarVariant,
+        engine:tempCarEngine,
+        name:carName
+      })
       setIsSaving(false);
       closeModal("AddByCarInformation");
+      closeModal("AddVehicle");
     } else {
       setIsSaving(false);
       Alert.alert("Veuillez sélectionner toutes les options de filtrage.");
@@ -119,10 +128,10 @@ const AddByCarInformation = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (c
   };
 
   const { title, options, subTitle } = getCurrentStepOptions();
-  const expandedImage =  {
-                    url: tempCarModel?.imageUrl || "",
-                  alt: ""
-                  }
+  const expandedImage = {
+    url: tempCarModel?.imageUrl || "",
+    alt: ""
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -181,35 +190,39 @@ const AddByCarInformation = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (c
 
       <Divider />
 
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        {tempCarYear && tempCarMake && tempCarModel && tempCarVariant && tempCarEngine ? (
-          <>
-            {/* Display the selected car image */}
-           {/* {expandedImage && 
-              <ImageExpand image={expandedImage} />
-           } */}
+      {tempCarYear && tempCarMake && tempCarModel && tempCarVariant && tempCarEngine ? (
+        <>
+          {/* Display the selected car image */}
+          {expandedImage &&
+            <ImageExpand image={expandedImage} />
+          }
 
-            {/* "Add Vehicle" Button */}
+          <View style={{
+            padding: 10,
+          }}>
             <PrimaryButton
               style={styles.button}
-              title="Ajouter le véhicule"
+              title="AJOUTER"
               onPress={onSubmit}
               loading={isSaving}
+              mode="contained"
             />
-          </>
-        ) : (
-          <ScrollView contentContainerStyle={styles.scrollView}>
-            {options.map((item) => (
-              <View key={item.id}>
-                <TouchableOpacity style={styles.option} onPress={() => handleSelect(item)}>
-                  <Text style={styles.optionText}>{String(item.name)}</Text>
-                </TouchableOpacity>
-                <Divider />
-              </View>
-            ))}
-          </ScrollView>
-        )}
-      </View>
+          </View>
+
+        </>
+      ) : (
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          {options.map((item) => (
+            <View key={item.id}>
+              <TouchableOpacity style={styles.option} onPress={() => handleSelect(item)}>
+                <Text style={styles.optionText}>{String(item.name)}</Text>
+              </TouchableOpacity>
+              <Divider />
+            </View>
+          ))}
+        </ScrollView>
+      )}
+
     </View>
   );
 };
@@ -250,6 +263,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
+    padding: 10
   },
   secondaryButton: {
     backgroundColor: "white",

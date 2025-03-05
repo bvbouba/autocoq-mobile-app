@@ -4,10 +4,9 @@ import { StyleSheet, TouchableOpacity } from "react-native"
 import { carType, useCarFilter } from "@/context/useCarFilterContext"
 import { Text, View, colors } from "@/components/Themed"
 import { useModal } from "@/context/useModal"
-import VehicleSelectionFilter from "./VehicleSelection"
 import { useState } from "react"
 import { Skeleton } from "moti/skeleton"
-import AddVehicle from "./VehicleSelection"
+import SelectVehicle from "./SelectVehicle"
 
 
 interface props {
@@ -79,10 +78,11 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   ? isCompatible
                     ? <>
                       <TouchableOpacity onPress={() => openModal({
-                        id:"AddVehicle",
-                      content:<AddVehicle />,
+                        id:"selectVehicle",
+                      content:<SelectVehicle setSelectedLocalCar={setSelectedLocalCar}/>,
                       closeButtonVisible:true,
-                      marginTop:700
+                      marginTop:300,
+                      disableScroll:true
                     })}>
                         <Text style={[styles.vehicleButtonText, {
                           fontWeight: "bold"
@@ -96,10 +96,11 @@ const CompatibilityCheckBasic = ({ product }: props) => {
 
                     : <>
                       <TouchableOpacity onPress={() => openModal({
-                        id:"AddVehicle",
-                      content:<AddVehicle/>,
+                        id:"selectVehicle",
+                      content:<SelectVehicle setSelectedLocalCar={setSelectedLocalCar}/>,
                       closeButtonVisible:true,
-                       marginTop:700
+                       marginTop:300,
+                       disableScroll:true
                  }
                     )}>
                         <Text style={[styles.vehicleButtonText, {
@@ -120,10 +121,11 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   :
 
                   <TouchableOpacity onPress={() => openModal({
-                    id:"AddVehicle",
-                    content:<AddVehicle/>,
+                    id:"selectVehicle",
+                    content:<SelectVehicle setSelectedLocalCar={setSelectedLocalCar}/>,
                     closeButtonVisible:true,
-                    marginTop:700
+                    marginTop:300,
+                    disableScroll:true
                   }
                   )}>
                     <Text style={[styles.vehicleText, {

@@ -7,16 +7,8 @@ import { useCarFilter } from "@/context/useCarFilterContext";
 import { PrimaryButton } from "../button";
 import MyGarage from "../commun/MyGarage";
 import { useModal } from "@/context/useModal";
-import VehicleSelectionFilter from "./VehicleSelection";
 import AddVehicle from "./VehicleSelection";
 
-interface props {
-    carMake?:MakeDetailsFragment|null,
-    carModel?:ModelDetailsFragment|null,
-    carEngine?:EngineDetailsFragment|null,
-    carYear?: YearDetailsFragment|null,
-    clearFilter: () => void
-  }
 
   interface ImageProps {
     url: string;
@@ -81,7 +73,7 @@ const AddVehicleSection =()=>{
               <View style={{ alignItems: "flex-start" }}>
                 <Text style={styles.noVehicleText}>Aucun véhicule sélectionné</Text>
                 <Text style={styles.vehicleDescription}>
-                  Ajoutez un véhicule pour trouver des pièces compatibles
+                  Ajouter un véhicule pour trouver des pièces compatibles
                 </Text>
               </View>
               <View style={{ width: "100%" }}>

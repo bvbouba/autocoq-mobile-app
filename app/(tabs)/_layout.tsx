@@ -68,7 +68,9 @@ export default function TabLayout() {
         options={{
           title: '',
           headerShown: true,
-          header:()=><SimpleCloseHeader  title="Panier" subTitle={delivery.zone ? `Ma zone: ${delivery.zone}` : ""} />,
+          header:()=><SimpleCloseHeader  title="Panier" 
+          // subTitle={delivery.zone ? `Ma zone: ${delivery.zone}` : ""} 
+          />,
           tabBarIcon: ({ color }) => {
             const { checkout } = useCheckout();
             return <TabBarIcon

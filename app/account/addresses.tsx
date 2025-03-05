@@ -1,11 +1,9 @@
 import AddressBookCard from "@/components/address/addressBookCard";
-import Loading from "@/components/Loading";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useState } from "react";
 import {  StyleSheet, FlatList } from "react-native";
 import {fonts, PaddedView, Text, View } from "@/components/Themed"
-import { useMessage } from "@/context/MessageContext";
 import { Skeleton } from "moti/skeleton";
 
 
@@ -37,7 +35,7 @@ const CarnetDAdressesScreen = () => {
     return (
       <View style={styles.container}>
           {[...Array(2)].map((_, index) => (
-               <PaddedView>
+               <PaddedView key={index}>
                   <Skeleton colorMode="light" height={150} width="100%" />
                   </PaddedView>
           ))}

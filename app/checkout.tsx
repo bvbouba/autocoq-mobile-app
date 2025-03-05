@@ -94,7 +94,7 @@ const Checkout = () => {
                             color: colors.secondary,
                             fontSize: fonts.caption
                         }}>
-                            Veuillez saisir un mode de paiement pour valider votre commande
+                             Saisir un mode de paiement pour valider votre commande
                         </Text>
                     }
                 </View>

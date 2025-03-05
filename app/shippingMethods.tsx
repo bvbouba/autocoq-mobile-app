@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ActivityIndicator } from 'react-native-paper';
+import { Button, ActivityIndicator, IconButton } from 'react-native-paper';
 import {  colors, fonts, PaddedView, Text } from '../components/Themed';
 import { useCheckoutShippingMethodUpdateMutation } from '../saleor/api.generated';
 import { View, StyleSheet } from 'react-native';
@@ -48,14 +48,23 @@ const ShippingMethods = () => {
     if (!shippingMethods) return;
 
     return (
-        <PaddedView>
+        <PaddedView style={{
+            paddingTop:50
+        }}>
+            <View style={{ alignItems: "flex-end" }}>
+                  <IconButton
+                    icon="close"
+                    size={20}
+                    onPress={() => closeModal("ShippingMethod")}
+                  />
+                </View>
             <View>
                 <Text style={styles.title}>Modifier le mode de livraison</Text>
                 <Text style={{
                     fontSize: fonts.body,
                     color: colors.textSecondary
                 }}>
-                    Veuillez sélectionner une option ci-dessous
+                    Sélectionnez une option ci-dessous
                 </Text>
             </View>
             <View style={{

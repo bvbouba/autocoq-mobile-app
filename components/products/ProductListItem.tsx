@@ -1,11 +1,9 @@
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { FC, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { getConfig } from "@/config";
-import { ProductCardFragment, ProductFragment, useAdditionalProductDataQuery } from "@/saleor/api.generated";
+import { ProductCardFragment, useAdditionalProductDataQuery } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from './../Themed';
 import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
-import { Button } from "react-native-paper";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { useModal } from "@/context/useModal";
 import AddedToCart from "../cart/AddToTheCart";
@@ -38,6 +36,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
     const [loading, setLoading] = useState(false);
     const [isImagePressed, setIsImagePressed] = useState(false);
     const [isTitlePressed, setIsTitlePressed] = useState(false);
+    
     const { data, loading: additionalLoading, error } = useAdditionalProductDataQuery({
         variables:{
             slug:product.slug
@@ -45,7 +44,9 @@ const ProductListItem: FC<Props> = ({ product }) => {
     });
     const productDetails = data?.product
 
-
+    const condition = productDetails?.attributes.find(a=>a.attribute.slug==="condition")
+    const warranty = productDetails?.attributes.find(a=>a.attribute.slug==="garantie")
+    
     const router = useRouter();
     const searchParams = useLocalSearchParams();
     const params = new URLSearchParams();
@@ -63,7 +64,10 @@ const ProductListItem: FC<Props> = ({ product }) => {
             await onAddToCart(defaultVariant?.id || "");
             openModal({
                 id:"CartPreview", 
-                content:<AddedToCart />
+                content:<AddedToCart />,
+                height:"110%",
+                closeButtonVisible:true,
+                disableScroll:true
             });
         } finally {
             setLoading(false);
@@ -133,6 +137,16 @@ const ProductListItem: FC<Props> = ({ product }) => {
                             
                             }
                         </View>
+                        <View>
+                        {(warranty?.values && warranty?.values.length>0) && (
+                            <View style={styles.notesWrapper}>
+                                <FontAwesome name="shield" size={15} color={colors.primary}
+                                    />
+                                <Text style={styles.notesText}> {warranty.values[0].name}</Text>
+                                <Text style={styles.notesText}> Garantie</Text>
+                            </View>
+                        )}
+                        </View>
                         {additionalLoading ?
                         <Skeleton height={20} width={200} radius={2} colorMode="light" />
                         :
@@ -142,8 +156,14 @@ const ProductListItem: FC<Props> = ({ product }) => {
                         }
                         {product.category && (
                             <View style={styles.notesWrapper}>
-                                <Text style={styles.notesLabel}>Notes: </Text>
+                                <Text style={styles.notesLabel}>Catégorie: </Text>
                                 <Text style={styles.notesText}>{product.category.name}</Text>
+                            </View>
+                        )}
+                        {(condition?.values && condition?.values.length>0) && (
+                            <View style={styles.notesWrapper}>
+                                <Text style={styles.notesLabel}>Condition: </Text>
+                                <Text style={styles.notesText}>{condition.values[0].name}</Text>
                             </View>
                         )}
                         <CompatibilityCheckBasic product={product} />
@@ -218,11 +238,10 @@ const styles = StyleSheet.create({
     notesWrapper: {
         flexDirection: "row",
         alignItems: "center",
-        marginTop: 5,
     },
     notesLabel: {
         fontSize: fonts.caption,
-        fontWeight: "bold",
+        fontWeight: "400",
     },
     notesText: {
         fontSize: fonts.caption,

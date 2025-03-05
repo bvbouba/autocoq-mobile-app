@@ -1,5 +1,5 @@
 import { FC, } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Pressable } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Pressable, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper'
 import { colors, fonts } from '../Themed';
 
@@ -34,7 +34,8 @@ const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColo
                     id:"search",
                     content:<SearchUI />,
                     marginTop:0,
-                    height:"130%"
+                    height: Platform.OS === "ios" ? "130%" : "132%",
+                    disableScroll:true
                     })} >
                 <View pointerEvents="none">
                 <TextInput

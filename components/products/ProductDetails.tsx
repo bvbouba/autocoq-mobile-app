@@ -12,33 +12,35 @@ import {
   Text,
   View,
 } from "@/components/Themed";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import ProductImageCarousel from "./details/ProductImageCarousel";
 import { getConfig } from "@/config";
 import VariantSelector from "./details/VariantSelector";
 import { ScrollView } from "react-native-gesture-handler";
-import { Button } from "react-native-paper";
 import CompatibilityCheck from "../car/CompatibilityCheck";
-import Fitment from "../car/Fitment";
 import { useModal } from "@/context/useModal";
-import AddToTheCart from "../cart/AddToTheCart";
 import { useCheckout } from "@/context/CheckoutProvider";
 import DeliveryMethod from "../DeliveryMethod/DeliveryMethod";
 import { renderStars } from "@/utils/renderStars";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AddedToCart from "../cart/AddToTheCart";
 
 interface Props {
   product: ProductFragment;
 }
 
 const ProductDetails: FC<Props> = ({ product }) => {
-  const {openModal} = useModal()
+  const { openModal } = useModal()
   const [checkedId, setCheckedId] = useState<string>()
   const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
+
+  const condition = product?.attributes.find(a => a.attribute.slug === "condition")
+  const warranty = product?.attributes.find(a => a.attribute.slug === "garantie")
 
   const isUniversal = product.isUniversal || true;
   const fitments = product.fitments || [];
 
-  const { onAddToCart, loading,checkoutToken } = useCheckout();
+  const { onAddToCart, loading, checkoutToken } = useCheckout();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantFragment>(
     product.defaultVariant as ProductVariantFragment
   );
@@ -51,7 +53,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
     }
   );
 
-  
+
   const renderDescription = () => {
     if (!product.description) return null;
 
@@ -81,24 +83,40 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <View style={{ flexDirection: "column", marginBottom: 15, padding: 8 }}>
             <Text style={styles.productTitle}>{product.name}</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {product.externalReference && (
-              <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
-                Référence # {product.externalReference}
+              {product.externalReference && (
+                <Text style={{ fontSize: fonts.caption, color: colors.textSecondary }}>
+                  Référence # {product.externalReference}
+                </Text>
+              )}
+              {product.externalReference && product.defaultVariant?.sku && <Text> | </Text>}
+              {product.defaultVariant?.sku && (
+                <Text style={{ fontSize: fonts.caption, color: colors.textSecondary }}>
+                  SKU # {product.defaultVariant.sku}
+                </Text>
+              )}
+            </View>
+            {/* Rating Section */}
+            {product.rating !== undefined && (
+              <Text style={styles.ratingText}>
+                {renderStars(product.rating || 0)} ({product.rating})
               </Text>
             )}
-            {product.externalReference && product.defaultVariant?.sku && <Text> | </Text>}
-                                {product.defaultVariant?.sku && (
-                                    <Text style={{ fontSize:fonts.caption, color: colors.textSecondary }}>
-                                        SKU # {product.defaultVariant.sku}
-                                    </Text>
-                                )}
+            <View>
+              {(warranty?.values && warranty?.values.length > 0) && (
+                <View style={styles.notesWrapper}>
+                  <FontAwesome name="shield" size={15} color={colors.primary}
+                  />
+                  <Text style={styles.notesText}> {warranty.values[0].name}</Text>
+                  <Text style={styles.notesText}> Garantie</Text>
+                </View>
+              )}
             </View>
-             {/* Rating Section */}
-             {product.rating !== undefined && (
-                                <Text style={styles.ratingText}>
-                                    {renderStars(product.rating || 0)} ({product.rating})
-                                </Text>
-                            )}
+            {(condition?.values && condition?.values.length > 0) && (
+              <View style={styles.notesWrapper}>
+                <Text style={styles.notesText}>Condition: </Text>
+                <Text style={styles.notesText}>{condition.values[0].name}</Text>
+              </View>
+            )}
           </View>
         </PaddedView>
 
@@ -110,7 +128,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
           />
         </PaddedView>
         <PaddedView>
-        <CompatibilityCheck product={product} />
+          <CompatibilityCheck product={product} />
         </PaddedView>
 
         <Divider style={{ borderBottomWidth: 10 }} />
@@ -127,12 +145,12 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <Text style={styles.productPrice}>{price}</Text>
         </PaddedView>
         <Divider style={{ borderBottomWidth: 10 }} />
-        
+
         <PaddedView>
-       <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId}/> 
-       
+          <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId} />
+
         </PaddedView>
-        
+
         <Divider style={{ borderBottomWidth: 10 }} />
         <View style={styles.buttonContainer}>
           <View style={{ marginVertical: 5 }}>
@@ -143,31 +161,34 @@ const ProductDetails: FC<Props> = ({ product }) => {
             />
           </View>
 
-          <Button
-            style={styles.button}
-            mode="contained"
+          <TouchableOpacity
+            activeOpacity={0.6}
             onPress={async () => {
               await onAddToCart(selectedVariant?.id);
               if (checkedId) {
                 await shippingAddressUpdate({
                   variables: {
-                      token: checkoutToken,
-                      shippingMethodId: checkedId,
+                    token: checkoutToken,
+                    shippingMethodId: checkedId,
                   },
-              });
+                });
               }
-              
+
               openModal({
-                id:"CartPreview",
-                content:<AddToTheCart />
+                id: "CartPreview",
+                content:<AddedToCart />,
+                height: "110%",
+                closeButtonVisible: true,
+                disableScroll:true
+
               })
             }}
             disabled={loading}
+            style={styles.button}
           >
-            <Text style={styles.buttonText}>
-              {loading ? <ActivityIndicator color="white" /> : "AJOUTER AU PANIER"}
-            </Text>
-          </Button>
+            {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>AJOUTER AU PANIER</Text>}
+          </TouchableOpacity>
+
         </View>
 
         <Divider style={{ borderBottomWidth: 10 }} />
@@ -177,9 +198,9 @@ const ProductDetails: FC<Props> = ({ product }) => {
           {renderDescription()}
         </PaddedView>
 
-        <Divider style={{ borderBottomWidth: 10 }} />
+        {/* <Divider style={{ borderBottomWidth: 10 }} />
 
-        <Fitment fitmentData={fitments} isUniversal={isUniversal} />
+        <Fitment fitmentData={fitments} isUniversal={isUniversal} /> */}
       </ScrollView>
     </View>
   );
@@ -193,18 +214,18 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontWeight: "500",
-    fontSize:fonts.body,
+    fontSize: fonts.body,
   },
   productPrice: {
     fontWeight: "800",
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     transform: [{ scaleY: 1.3 }],
   },
   descriptionContainer: {
     paddingHorizontal: 16,
   },
   descriptionTitle: {
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     fontWeight: "bold",
     marginBottom: 8,
   },
@@ -212,20 +233,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   listItem: {
-    fontSize:fonts.caption,
+    fontSize: fonts.caption,
     marginBottom: 4,
   },
   priceTitle: {
-    fontSize:fonts.body,
+    fontSize: fonts.body,
     fontWeight: "bold",
     marginBottom: 0,
   },
   subtitle: {
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     marginBottom: 4,
   },
   listText: {
-    fontSize:fonts.body,
+    fontSize: fonts.body,
   },
   scrollContainer: {
     paddingBottom: 16,
@@ -238,7 +259,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 15,
     alignItems: "center",
-    width: "95%",
+    width: "100%",
+    padding: 15
   },
   buttonText: {
     color: "#fff",
@@ -253,7 +275,20 @@ const styles = StyleSheet.create({
     fontSize: fonts.caption,
     color: colors.textSecondary,
     marginVertical: 5,
-},
+  },
+  notesWrapper: {
+    marginTop:5,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  notesLabel: {
+    fontSize: fonts.caption,
+    fontWeight: "bold",
+  },
+  notesText: {
+    fontSize: fonts.caption,
+    color: colors.textSecondary,
+  },
 });
 
 export default ProductDetails;

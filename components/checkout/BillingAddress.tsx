@@ -40,7 +40,7 @@ const BillingAddress = () => {
                 <IconButton icon="chevron-down" onPress={() => router.push("/billingAddress")} style={styles.icon} />
             </View>
             <View style={styles.titleWrapper}>
-                <Text style={styles.billingAddressSummary}>Saisissez les détails de facturation</Text>
+                <Text style={styles.billingAddressSummary}>Saisir les détails de facturation</Text>
             </View>
         </View>
     </Pressable>

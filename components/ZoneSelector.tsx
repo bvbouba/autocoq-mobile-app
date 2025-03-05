@@ -17,7 +17,10 @@ const ZoneSelector: React.FC = () => {
       onPress={() =>
         openModal({
           id:"shipping",
-          content:<ZoneList />
+          content:<ZoneList />,
+          disableScroll:true,
+          closeButtonVisible:true,
+          height:"110%"
         })
       }
     >
@@ -34,7 +37,7 @@ const ZoneSelector: React.FC = () => {
       <Text style={[styles.text,{
             textDecorationLine: "underline",
       }]}>
-        Cliquer pour changer
+        Cliquez pour changer
       </Text>
     </TouchableOpacity>
   );
