@@ -14,10 +14,11 @@ export interface FilteredProductListProps {
   attributeFiltersData: AttributeFilterFragment[];
   collectionIDs?: string[];
   categoryIDs?: string[];
+  IDs:string[];
   loading?:boolean;
 }
 
-export function FilteredProductList({ attributeFiltersData, collectionIDs, categoryIDs,loading }: FilteredProductListProps) {
+export function FilteredProductList({ attributeFiltersData, collectionIDs, categoryIDs,IDs,loading }: FilteredProductListProps) {
   const [filters, setFilters] = useState<UrlFilter[]>([]);
   const [sortBy, setSortBy] = useState<UrlSorting | null>(null);
   const [inStock, setInStock] = useState<boolean>(false);
@@ -34,6 +35,7 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         attributes: [],
         categories: [],
         collections: [],
+        ids:[],
         stockAvailability: undefined, // Ensure correct typing
       };
   
@@ -42,10 +44,11 @@ export function FilteredProductList({ attributeFiltersData, collectionIDs, categ
         attributes: filters.filter((filter) => filter.values?.length),
         categories: categoryIDs?.length ? categoryIDs : prev?.categories ?? [],
         collections: collectionIDs?.length ? collectionIDs : prev?.collections ?? [],
+        ids:IDs?.length ? IDs : prev?.ids ?? [],
         stockAvailability: inStock ? "IN_STOCK" : prev?.stockAvailability ?? undefined, // Ensure correct type
       };
     });
-  }, [inStock, JSON.stringify(filters), categoryIDs, collectionIDs]);
+  }, [inStock, JSON.stringify(filters), categoryIDs, collectionIDs,IDs]);
 
   const removeAttributeFilter = (attributeSlug: string, choiceSlug: string) => {
     const newFilters = filters.reduce((result: UrlFilter[], filter: UrlFilter) => {

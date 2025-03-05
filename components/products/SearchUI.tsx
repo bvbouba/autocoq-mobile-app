@@ -154,10 +154,10 @@ const ProductSearch: FC<Props> = () => {
         <SafeAreaView style={styles.safeContainer}>
             <KeyboardAvoidingView
                 style={styles.keyboardContainer}
-                keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+                keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
                     <View style={styles.scrollContainer}>
                         <View>
                             <View style={styles.container}>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
         backgroundColor: "white",
-        paddingTop: Platform.OS === 'ios' ? 0 : 40
+        paddingTop: Platform.OS === 'ios' ? 0 : 60
     },
     keyboardContainer: {
         flex: 1,

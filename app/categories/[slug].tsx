@@ -59,6 +59,7 @@ const CategoryProductScreen = () => {
     <FilteredProductList
       attributeFiltersData={attributes}
       categoryIDs={[category?.id]}
+      IDs={[]}
       loading={categoryLoading || attributeLoading}
     />
 
