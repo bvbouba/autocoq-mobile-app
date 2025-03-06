@@ -1,4 +1,4 @@
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import { fonts, Text } from "@/components/Themed";
 import OrderContent from "@/components/orders/OrderContent";
@@ -6,6 +6,8 @@ import {  useGetOrderByIdQuery } from "@/saleor/api.generated";
 import OrderDetailsSkeleton from "@/components/skeletons/OrderDetails"
 
 const EcranNonTrouve = () => {
+    const router = useRouter()
+    router.push("/")
     return (
         <>
             <Stack.Screen options={{ title: "Oups !" }} />
