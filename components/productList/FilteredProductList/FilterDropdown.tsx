@@ -55,9 +55,9 @@ export function FilterDropdown({
     <PaddedView style={styles.container}>
       <Text style={styles.label}>{label}</Text>
 
-      {options?.map((option) => (
+      {options?.map((option,index) => (
         <TouchableOpacity
-          key={option.id}
+          key={index}
           style={styles.radioOption}
           onPress={() => handleOptionPress(option)}
           disabled={isLoading}

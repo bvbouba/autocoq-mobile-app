@@ -9,7 +9,7 @@ import {
 } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import ProductListItem from "../products/ProductListItem";
-import { SafeAreaView, StyleSheet, Animated, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StyleSheet, Animated, ActivityIndicator } from 'react-native';
 import { colors, fonts, PaddedView, Text, View } from './../Themed';
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { Button } from "react-native-paper";
@@ -28,7 +28,7 @@ export interface ProductCollectionProps {
   setCounter?: (value: number) => void;
   itemsCounter?: number;
   loading?:boolean;
-}
+  setIDs: React.Dispatch<React.SetStateAction<string[]>>}
 
 export const ProductCollection: React.FC<ProductCollectionProps> = ({
   filter,
@@ -37,6 +37,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   allowMore = true,
   perPage = 12,
   itemsCounter = 0,
+  setIDs
 }) => {
 
   const { selectedCar } = useCarFilter()
@@ -64,7 +65,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   
   const { loading, error, data, fetchMore } = useProductCollectionQuery({ variables });
   
-  const [allProducts, setAllProducts] = useState<ProductCardFragment[]>([]);
+  const [allProducts, setAllProducts] = useState<ProductCardFragment[] | undefined>(undefined);
   const [hasNextPage, setHasNextPage] = useState(false);
   
   useEffect(() => {
@@ -78,6 +79,18 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
     }
   }, [data]);
   
+  useEffect(() => {
+    if (allProducts) {
+      const productIDs = allProducts
+        .map(product => product.category?.id)
+        .filter((id): id is string => id !== undefined); 
+      
+      const uniqueProductIDs = [...new Set(productIDs)];
+      
+      setIDs(uniqueProductIDs);
+    }
+  }, [allProducts]);
+
   const onLoadMore = async () => {
     if (!hasNextPage) return;
   
@@ -89,7 +102,8 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   
         // Avoid duplicates using Set
         setAllProducts((prev) => {
-          const existingSlugs = new Set(prev.map((p) => p.slug));
+          if (!prev) return []
+          const existingSlugs = new Set(prev?.map((p) => p.slug));
           return [...prev, ...newProducts.filter((p) => !existingSlugs.has(p.slug))];
         });
   
@@ -124,7 +138,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         onEndReachedThreshold={0.3}
         ListHeaderComponent={
           <View style={{ flexDirection: "column" }}>
-            <View style={styles.header}>
+            {<View style={styles.header}>
               <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
               <Text style={{ fontSize: fonts.caption }}>
                 {itemsCounter < 2 ? " Résultat" : " Résultats"}{" "}
@@ -135,9 +149,9 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
                   </>
                 )}
               </Text>
-            </View>
+            </View>}
   
-            {!allProducts.length && (
+            {allProducts && !allProducts.length && (
               <View style={styles.noProductsContainer} testID="prod-list-safe">
                 <PaddedView style={styles.noProductsTextWrapper}>
                   <Text style={styles.noProductsText}>

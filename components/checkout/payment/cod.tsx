@@ -7,8 +7,7 @@ import { useAuth } from "@/lib/providers/authProvider";
 import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "@/saleor/api.generated";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, View, StyleSheet, Text } from "react-native";
-import { Button } from "react-native-paper";
+import {  Alert, View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export const codGatewayId = "cash.on.delivery"
 
@@ -93,16 +92,16 @@ const CodPayment = () => {
     return (
         <>
         <View>
-        <Button
+
+        <TouchableOpacity
+            activeOpacity={0.6}
             onPress={handleSubmit}
-            mode="contained"
+            disabled={isPaymentProcessing}
             style={styles.submitButton}
-            labelStyle={styles.submitButtonText}
-            disabled={!buyNowEnabled}
-        >
-            {/* {isPaymentProcessing ? <ActivityIndicator color="white" /> : "Commander et payer après la livraison"} */}
-            Commander et payer après la livraison
-        </Button>
+          >
+            <Text style={styles.submitButtonText}>TERMINER</Text>
+          </TouchableOpacity>
+          
         </View>
 
         {/* {error && (
@@ -131,14 +130,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     submitButton: {
-        backgroundColor: "#daa520",
+        backgroundColor: colors.primary,
+        alignItems:"center",
         marginHorizontal: 10,
         borderRadius: 5,
-        padding: 5
+        padding: 20
     },
     submitButtonText: {
         fontWeight: "bold",
-        color: "black", 
+        color: "white", 
     },
 });
 

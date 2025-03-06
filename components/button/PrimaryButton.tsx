@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, Pressable } from "react-native";
 import { Button } from "react-native-paper";
-import { colors } from "@/components/Themed";
+import { colors, fonts } from "@/components/Themed";
 
 interface Props {
   onPress: () => void;
@@ -48,7 +48,7 @@ export default PrimaryButton;
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    paddingVertical: 10,
+    paddingVertical: 15,
     marginVertical: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
     opacity: 0.6, // Makes the button slightly transparent when pressed
   },
   text: {
-    fontWeight: "400",
+    fontWeight: "bold",
     color: "white",
+    fontSize:fonts.body
   },
 });

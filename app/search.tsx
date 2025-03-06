@@ -1,22 +1,12 @@
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
-import { ProductFilterInput } from "@/saleor/api.generated";
-import ProductCollection from "@/components/ProductCollection/ProductCollection";
+import FilteredProductList from "@/components/productList/FilteredProductList";
 
 const ProductsResults = () => {
     const { q: searchQueryString } = useLocalSearchParams();
     
-    const [filter, setFilter] = useState<ProductFilterInput>();
-    useEffect(() => {
-        if (searchQueryString) {
-            setFilter({ search: searchQueryString as string})
-        } else {
-            setFilter({})
-        }
-    }, [searchQueryString])
     return <SafeAreaView style={{ flex: 1 }}>
-    <ProductCollection filter={filter}/>
+    <FilteredProductList searchQueryString={searchQueryString as string} />
 </SafeAreaView>
 }
 

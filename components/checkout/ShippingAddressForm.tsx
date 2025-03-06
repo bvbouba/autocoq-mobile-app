@@ -214,10 +214,10 @@ const ShippingAddressForm: FC<Props> = () => {
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress1", value)}
           value={formik.values.streetAddress1}
-          placeholder="Adresse Ligne 1"
-          label={"Adresse Ligne 1 *"}
+          // label={"Adresse Ligne 1 *"}
+          label={"Lieu de livraison (commune, quartier, rue) *"}
           theme={{ colors: { primary: colors.textPrimary } }}
-          onBlur={() => formik.setFieldTouched("streetAddress1")} // Mark field as touched
+          onBlur={() => formik.setFieldTouched("streetAddress1")}
         />
         {formik.touched.streetAddress1 && formik.errors.streetAddress1 && (
           <Text style={styles.errorText}>{formik.errors.streetAddress1}</Text>
@@ -230,10 +230,10 @@ const ShippingAddressForm: FC<Props> = () => {
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress2", value)}
           value={formik.values.streetAddress2}
-          placeholder="Adresse Ligne 2"
-          label="Adresse Ligne 2"
+          // label="Adresse Ligne 2"
+          label={"Lieu de livraison (immeuble, appartement, autre description)"}
           theme={{ colors: { primary: colors.textPrimary } }}
-          onBlur={() => formik.setFieldTouched("streetAddress2")} // Mark field as touched
+          onBlur={() => formik.setFieldTouched("streetAddress2")}
           
         />
         {formik.touched.streetAddress2 && formik.errors.streetAddress2 && (

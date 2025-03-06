@@ -104,11 +104,10 @@ const ProductSearch: FC<Props> = () => {
     
         const params = new URLSearchParams();
         params.append("q", value);
-    
-        closeModal("search");
-    
+        
         router.push(`/search?${params.toString()}`);
-    
+        closeModal("search");
+
         setRecentSearchs(value);
     
         setIsLoading(false); // ✅ End loading
@@ -232,7 +231,7 @@ const ProductSearch: FC<Props> = () => {
                                 <View style={styles.suggestionsContainer}>
                                     <FlatList
                                         data={suggestions}
-                                        keyExtractor={(item) => item}
+                                        keyExtractor={(item, index) => `${item}-${index}`}
                                         renderItem={({ item }) => (
                                             <TouchableOpacity
                                                 style={styles.suggestionItem}

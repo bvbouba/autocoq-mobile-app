@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -18,6 +18,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
+import { useLoading } from "@/context/LoadingContext";
 
 interface ProductMediaFragment {
   url: string;
@@ -39,7 +40,9 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image }) => {
   const offsetY = useSharedValue(0); // For panning Y
   const panStartX = useSharedValue(0); // Start of pan in X direction
   const panStartY = useSharedValue(0); // Start of pan in Y direction
-
+  const {setLoading:setIsLoading} = useLoading()
+  const [loading, setLoading] = useState(true);
+  
   const pinch = Gesture.Pinch()
     .onStart(() => {
       startScale.value = scale.value;
@@ -86,6 +89,18 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image }) => {
       };
     });
 
+    const handleImageLoad = () => {
+      setLoading(false);
+    };
+  
+    const handleImageError = () => {
+      setLoading(false); 
+    };
+
+    useEffect(()=>{
+      setIsLoading(loading)
+    },[loading])
+
   if (!image) return null;
 
   return (
@@ -103,7 +118,9 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image }) => {
                 <Animated.View style={[styles.box, boxAnimatedStyles]}>
                   <View style={styles.imageWrapper}>
                     <View style={styles.imageContainer}>
-                      <Image source={{ uri: image.url }} 
+                      <Image source={{ uri: image.url }}
+                       onLoad={handleImageLoad}
+                       onError={handleImageError} 
                         style={styles.image} resizeMode="contain" />
                     </View>
                   </View>

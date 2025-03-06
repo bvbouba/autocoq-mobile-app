@@ -194,7 +194,8 @@ const AddByCarInformation = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (c
         <>
           {/* Display the selected car image */}
           {expandedImage &&
-            <ImageExpand image={expandedImage} />
+            <ImageExpand image={expandedImage} 
+            />
           }
 
           <View style={{
@@ -202,7 +203,7 @@ const AddByCarInformation = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (c
           }}>
             <PrimaryButton
               style={styles.button}
-              title="AJOUTER"
+              title={setSelectedLocalCar ? "VÉRIFIER LA COMPATIBILITÉ" : "FILTRE POUR CE VÉHICULE"}
               onPress={onSubmit}
               loading={isSaving}
               mode="contained"
@@ -262,8 +263,8 @@ const styles = StyleSheet.create({
     fontSize: fonts.body,
   },
   button: {
-    marginTop: 20,
-    padding: 10
+    marginVertical: 0,
+    padding: 0
   },
   secondaryButton: {
     backgroundColor: "white",

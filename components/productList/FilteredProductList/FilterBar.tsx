@@ -36,7 +36,7 @@ const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttribut
 
     const { setCategoryFilters, selectedCategories, } = useProductContext();
 
-
+   
     useEffect(() => {
         if (categoriesQueryString && categoriesData) {
             const foundCategories: CategoryPathFragment[] = categoriesData?.categories?.edges.map(edge => edge.node)
@@ -52,7 +52,6 @@ const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttribut
 
                     return false;
                 }) || [];
-            console.log("setCategory")
             setCategoryFilters(foundCategories)
         }
         if (!categoriesQueryString) {
@@ -100,9 +99,9 @@ const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttribut
                             (attribute, index, self) =>
                                 self.findIndex((a) => a.id === attribute.id) === index
                         )
-                        .map((attribute) => (
+                        .map((attribute,index) => (
                             <TouchableOpacity
-                                key={attribute.id}
+                                key={index}
                                 style={styles.filterButton}
                                 onPress={() =>
                                     openModal({

@@ -1,12 +1,11 @@
 import { usePathname } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
-import { useCategoryBySlugQuery, useFilteringAttributesQuery, useProductListByCategoryQuery } from "@/saleor/api.generated";
-import { mapEdgesToItems } from "@/utils/map";
+import { SafeAreaView } from "react-native";
+import { useCategoryBySlugQuery } from "@/saleor/api.generated";
 import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
-import ProductCollectionSkeleton from "@/components/skeletons/ProductCollection";
 import { useMessage } from "@/context/MessageContext";
+import { useLoading } from "@/context/LoadingContext";
 
 
 
@@ -14,24 +13,19 @@ const CategoryProductScreen = () => {
   const pathname = usePathname();
   const [slug, setSlug] = useState<string>();
   const { showMessage } = useMessage();
+  const {setLoading} = useLoading()
 
-  const { data, loading: categoryLoading,error } = useCategoryBySlugQuery({
+  const { data, loading,error } = useCategoryBySlugQuery({
     skip: !slug,
     variables: {
       slug: slug || ""
     }
   })
-  const categoryID = data?.category?.id
-  const { data: attributeData, loading: attributeLoading, error:attributeError } = useFilteringAttributesQuery({
-    skip: !categoryID,
-    variables: {
-      filter: {
-        inCategory: categoryID,
-      },
-      channel: "ci",
-    }
-  })
 
+  useEffect(()=>{
+   setLoading(loading)
+  },[loading])
+ 
   useEffect(() => {
     if (pathname.includes("categories")) {
       setSlug(pathname.split("/").pop());
@@ -41,11 +35,8 @@ const CategoryProductScreen = () => {
   if (!slug) return null;
 
   const category = data?.category
-  const attributes = mapEdgesToItems(attributeData?.attributes)
-
-  if (categoryLoading || attributeLoading) return <ProductCollectionSkeleton />
   
-  if(error || (attributeError && attributeError.message)) {
+  if(error) {
     showMessage("Échec réseau")
   }
 
@@ -57,10 +48,7 @@ const CategoryProductScreen = () => {
 
   return <SafeAreaView style={{ flex: 1 }}>
     <FilteredProductList
-      attributeFiltersData={attributes}
       categoryIDs={[category?.id]}
-      IDs={[]}
-      loading={categoryLoading || attributeLoading}
     />
 
   </SafeAreaView>
