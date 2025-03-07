@@ -11,7 +11,7 @@ import { Skeleton } from "moti/skeleton";
 
 const CategoryList = () => {
     const { setLoading } = useLoading();
-    const { setNavigationParams } = useNavigationContext();
+    const { setNavigationLink } = useNavigationContext();
     const router = useRouter();
 
     const { id } = useLocalSearchParams();
@@ -40,9 +40,15 @@ const CategoryList = () => {
 
     useEffect(() => {
         if (id && !menuItemLoading && menuItemData?.menuItem) {
-            setNavigationParams(menuItemData.menuItem.parent?.id || "");
+            if(menuItemData.menuItem.parent?.id) {
+                setNavigationLink(`/shop?id=${menuItemData.menuItem.parent?.id}`)
+            } else {
+                setNavigationLink("/shop")
+            }
+        }else if (!menuLoading &&  menuData?.menu){
+            setNavigationLink("/")
         }
-    }, [id, menuItemLoading, menuItemData, setNavigationParams,menuData]);
+    }, [id, menuItemLoading, menuLoading, menuItemData, setNavigationLink,menuData]);
 
     if (menuItemLoading) {
         return (
@@ -84,6 +90,7 @@ const CategoryList = () => {
                         if (greatChild && greatChild.length > 0) {
                             router.push(`/shop?id=${child.id}`);
                         } else {
+                            setNavigationLink(`/shop?id=${id}`)
                             router.push(`/categories/${child.category?.slug}`);
                         }
                     };

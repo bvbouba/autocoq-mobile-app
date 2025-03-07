@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Banner from "./BannerSimple";
 import AddVehicleBasic from "../car/AddVehicleBasic";
 import { useNavigationContext } from "@/context/NavigationContext";
+import { useRouter } from "expo-router";
 
 interface Props {
   withBack?: boolean;
@@ -19,7 +20,8 @@ interface Props {
 
 const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  carIconColor?:string;}) => {
   const statusBarInset = useSafeAreaInsets();
-  const {handleBackNavigation} = useNavigationContext()
+  const router = useRouter()
+  const {navigationLink} = useNavigationContext()
  
 
   return (
@@ -36,7 +38,7 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
           <View style={styles.searchBarWrapper}>
             <IconButton
               icon="arrow-left"
-              onPress={() => handleBackNavigation()}
+              onPress={() => router.push(navigationLink)}
               iconColor={colors.primary}
             />
             <ProductSearch carIconColor={carIconColor}/>

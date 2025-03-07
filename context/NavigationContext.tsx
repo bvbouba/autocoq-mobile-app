@@ -1,35 +1,34 @@
-import { usePathname, useRouter } from 'expo-router';
+import { Href } from 'expo-router';
 import React, { createContext, useContext, useState } from 'react';
 
-const NavigationContext = createContext<{ setNavigationParams: (slug: string) => void; handleBackNavigation: () => void }>({
-  handleBackNavigation: () => {},
-  setNavigationParams: () => {},
+const NavigationContext = createContext<{ setNavigationLink: (slug: Href) => void; navigationLink: Href }>({
+  navigationLink: "/",
+  setNavigationLink: () => {},
 });
 
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [navigationParams, setNavigationParams] = useState<string>();
-  const router = useRouter();
-  const pathname = usePathname();
+  const [navigationLink, setNavigationLink] = useState<Href>("/");
 
-  const handleBackNavigation = () => {
-    if (navigationParams === "orderSuccess") {
-      router.push("/");
-      return;
-    }
 
-    if (pathname.includes('shop')) {
-      if (navigationParams) {
-        router.push(`/shop?id=${navigationParams}`);
-      } else {
-        router.push("/shop");
-      }
-    } else {
-      router.back();
-    }
-  };
+  // const handleBackNavigation = () => {
+  //   if (navigationParams === "orderSuccess") {
+  //     router.push("/");
+  //     return;
+  //   }
+
+  //   if (pathname.includes('shop')) {
+  //     if (navigationParams) {
+  //       router.push(`/shop?id=${navigationParams}`);
+  //     } else {
+  //       router.push("/shop");
+  //     }
+  //   } else {
+  //     router.back();
+  //   }
+  // };
 
   return (
-    <NavigationContext.Provider value={{ setNavigationParams, handleBackNavigation }}>
+    <NavigationContext.Provider value={{ setNavigationLink, navigationLink }}>
       {children}
     </NavigationContext.Provider>
   );

@@ -8,7 +8,8 @@ import { useNavigationContext } from "@/context/NavigationContext";
 const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolean }) => {
   const statusBarInset = useSafeAreaInsets();
   const logoUri = require("@/assets/images/logo.png");
-  const {handleBackNavigation} = useNavigationContext()
+  const router = useRouter()
+  const {navigationLink} = useNavigationContext()
 
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
@@ -21,7 +22,7 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
         <View style={styles.backContainer}>
           <IconButton
             icon="arrow-left"
-            onPress={() => handleBackNavigation()}
+            onPress={() => router.push(navigationLink)}
             style={{ marginLeft: Platform.OS === "android" ? -10 : 0 }}
             iconColor={colors.primary}
           />

@@ -10,16 +10,16 @@ const OrderDetailsPage = () => {
     const pathname = usePathname();
     const { orderSuccess } = useLocalSearchParams();
     const { resetCheckoutToken } = useCheckout();
-    const { setNavigationParams } = useNavigationContext();
+    const { setNavigationLink } = useNavigationContext();
     
     const [orderId, setOrderId] = useState<string>();
 
     useEffect(() => {
         if (orderSuccess) {
             resetCheckoutToken();
-            setNavigationParams("orderSuccess");
+            setNavigationLink("/");
         }
-    }, [orderSuccess, resetCheckoutToken, setNavigationParams]);
+    }, [orderSuccess, resetCheckoutToken, setNavigationLink]);
 
     useEffect(() => {
         if (pathname.includes("/orders/")) {
