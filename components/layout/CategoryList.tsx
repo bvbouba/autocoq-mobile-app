@@ -1,9 +1,8 @@
 import { View, Text, PaddedView, Divider, fonts, colors } from "@/components/Themed";
 import { StyleSheet } from "react-native";
-import { useCategoryBySlugQuery } from "@/saleor/api.generated";
+import { useGetMenuItemQuery, useGetMenuQuery } from "@/saleor/api.generated";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
-import { mapEdgesToItems } from "@/utils/map";
 import ListItem from "../ListItem";
 import { useEffect } from "react";
 import { useNavigationContext } from "@/context/NavigationContext";
@@ -12,28 +11,40 @@ import { Skeleton } from "moti/skeleton";
 
 const CategoryList = () => {
     const { setLoading } = useLoading();
-    const { setNavigationSlug } = useNavigationContext();
+    const { setNavigationParams } = useNavigationContext();
     const router = useRouter();
 
-    const { slug } = useLocalSearchParams();
-    const { data, loading, previousData } = useCategoryBySlugQuery({
+    const { id } = useLocalSearchParams();
+
+    // Fetch Level 0 menu
+    const { data: menuData, loading: menuLoading} = useGetMenuQuery({
         variables: {
-            slug: slug ? String(slug) : "pieces-auto",
+            channel: "ci",
+            slug: "shop",
         },
+        skip: !!id, // Skip if ID exists (meaning user is at a deeper level)
+    });
+
+    // Fetch Subcategories (Level 1+)
+    const { data: menuItemData, loading: menuItemLoading } = useGetMenuItemQuery({
+        variables: {
+            channel: "ci",
+            id: id ? String(id) : "",
+        },
+        skip: !id, // Skip if no ID exists (meaning user is at Level 0)
     });
 
     useEffect(() => {
-        setLoading(loading);
-    }, [loading]);
+        setLoading(menuLoading || menuItemLoading);
+    }, [menuLoading, menuItemLoading]);
 
     useEffect(() => {
-        if (!loading && data?.category) {
-            // Set the navigation slug after data is loaded
-            setNavigationSlug(data.category.parent?.slug || "");
+        if (id && !menuItemLoading && menuItemData?.menuItem) {
+            setNavigationParams(menuItemData.menuItem.parent?.id || "");
         }
-    }, [loading, data, setNavigationSlug]);
+    }, [id, menuItemLoading, menuItemData, setNavigationParams,menuData]);
 
-    if (loading && !previousData) {
+    if (menuItemLoading) {
         return (
             <View style={styles.container}>
                 <PaddedView>
@@ -50,12 +61,15 @@ const CategoryList = () => {
             </View>
         );
     }
+    
+    const menu = menuData?.menu 
+    const menuItem = menuItemData?.menuItem 
 
-    const category = data?.category || previousData?.category;
-    if (!category) return null;
+    // Ensure we don't return null for Level 0
+    if (!menuItem && !menu) return null;
 
-    const childrens = mapEdgesToItems(category.children);
-    const categoryName = childrens ? category.name : "Voir par catégorie";
+    const children = menuItem?.children || menu?.items || [];
+    const categoryName = menuItem ? menuItem.name : "Voir par catégorie";
 
     return (
         <View style={styles.container}>
@@ -63,19 +77,19 @@ const CategoryList = () => {
                 <Text style={styles.categoryListTitle}>{categoryName}</Text>
             </PaddedView>
             <PaddedView style={{ flexDirection: "column" }}>
-                {childrens.map((children) => {
-                    const child = mapEdgesToItems(children.children);
-                    const icon = children.metadata.find(m => m.key === "icon");
+                {children.map((child) => {
+                    const greatChild = child.children;
+                    const icon = child.category?.metadata.find(m => m.key === "icon");
                     const onPress = () => {
-                        if (child.length > 0) {
-                            router.push(`/shop?slug=${children.slug}`);
+                        if (greatChild && greatChild.length > 0) {
+                            router.push(`/shop?id=${child.id}`);
                         } else {
-                            router.push(`/categories/${children.slug}`);
+                            router.push(`/categories/${child.category?.slug}`);
                         }
                     };
                     return (
-                        <View key={children.id}>
-                            <ListItem name={children.name} onPress={onPress} icon={icon?.value} />
+                        <View key={child.id}>
+                            <ListItem name={child.name} onPress={onPress} icon={icon?.value} />
                             <Divider />
                         </View>
                     );
@@ -84,7 +98,6 @@ const CategoryList = () => {
         </View>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
@@ -95,7 +108,7 @@ const styles = StyleSheet.create({
         lineHeight: 34,
         fontWeight: "bold",
         textAlign: "left",
-        color:colors.textPrimary
+        color: colors.textPrimary,
     },
 });
 

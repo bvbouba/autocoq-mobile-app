@@ -3,7 +3,18 @@ fragment MenuItemFragment on MenuItem {
       name
       id
       category{
-        ...CategoryPathFragment
+         id
+        name
+        slug
+        level
+        backgroundImage {
+          url
+          alt
+        }
+         metadata{
+          key
+          value
+          }
       }
      collection {
        id
@@ -20,14 +31,36 @@ query getMainMenu($channel: String!) {
     name
     items{
       ...MenuItemFragment
+       children{
+      ...MenuItemFragment
+    }
     }
   }
 }
 
-query getmenu($slug:String!, $channel: String!) {
+query getMenu($slug:String!, $channel: String!) {
   menu(slug:$slug,channel:$channel){
     name
     items{
+      ...MenuItemFragment
+      children{
+      ...MenuItemFragment
+    }
+    }
+  }
+}
+
+
+query getMenuItem($channel:String,$id:ID!) {
+  menuItem(channel:$channel,id:$id){
+    name
+    children{
+      ...MenuItemFragment
+      children{
+      ...MenuItemFragment
+    }
+    }
+     parent{
       ...MenuItemFragment
     }
   }

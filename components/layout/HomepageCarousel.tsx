@@ -1,6 +1,6 @@
 import { View, Text, fonts, colors } from "@/components/Themed";
 import { StyleSheet, useWindowDimensions, Pressable, Image } from "react-native";
-import { useGetmenuQuery } from "@/saleor/api.generated";
+import { useGetMenuQuery } from "@/saleor/api.generated";
 import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import Carousel from "react-native-reanimated-carousel";
@@ -13,7 +13,7 @@ const HomepageCarousel = () => {
   const router = useRouter();
 
   // Fetch menu items
-  const { data, error, loading,previousData } = useGetmenuQuery({
+  const { data, error, loading,previousData } = useGetMenuQuery({
     variables: { channel: getConfig().channel, slug: "carousel" },
     fetchPolicy: "cache-first",
   });

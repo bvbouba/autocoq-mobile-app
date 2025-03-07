@@ -1,27 +1,27 @@
 import { usePathname, useRouter } from 'expo-router';
 import React, { createContext, useContext, useState } from 'react';
 
-const NavigationContext = createContext<{ setNavigationSlug: (slug: string) => void; handleBackNavigation: () => void }>({
+const NavigationContext = createContext<{ setNavigationParams: (slug: string) => void; handleBackNavigation: () => void }>({
   handleBackNavigation: () => {},
-  setNavigationSlug: () => {},
+  setNavigationParams: () => {},
 });
 
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [navigationSlug, setNavigationSlug] = useState<string>();
+  const [navigationParams, setNavigationParams] = useState<string>();
   const router = useRouter();
   const pathname = usePathname();
 
   const handleBackNavigation = () => {
-    if (navigationSlug === "orderSuccess") {
+    if (navigationParams === "orderSuccess") {
       router.push("/");
       return;
     }
 
     if (pathname.includes('shop')) {
-      if (navigationSlug) {
-        router.push(`/shop?slug=${navigationSlug}`);
+      if (navigationParams) {
+        router.push(`/shop?id=${navigationParams}`);
       } else {
-        router.back();
+        router.push("/shop");
       }
     } else {
       router.back();
@@ -29,7 +29,7 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <NavigationContext.Provider value={{ setNavigationSlug, handleBackNavigation }}>
+    <NavigationContext.Provider value={{ setNavigationParams, handleBackNavigation }}>
       {children}
     </NavigationContext.Provider>
   );
