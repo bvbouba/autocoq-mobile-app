@@ -34700,14 +34700,14 @@ export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCitiesQuery = { __typename?: 'Query', getShippingZones?: Array<{ __typename?: 'ShippingZoneBasicType', name: string } | null> | null };
 
-export type MenuItemFragment = { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null };
+export type MenuItemFragment = { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null };
 
 export type GetMainMenuQueryVariables = Exact<{
   channel: Scalars['String']['input'];
 }>;
 
 
-export type GetMainMenuQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null } | null };
+export type GetMainMenuQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null } | null };
 
 export type GetMenuQueryVariables = Exact<{
   slug: Scalars['String']['input'];
@@ -34715,7 +34715,7 @@ export type GetMenuQueryVariables = Exact<{
 }>;
 
 
-export type GetMenuQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null } | null };
+export type GetMenuQuery = { __typename?: 'Query', menu?: { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null } | null };
 
 export type GetMenuItemQueryVariables = Exact<{
   channel?: InputMaybe<Scalars['String']['input']>;
@@ -34723,7 +34723,7 @@ export type GetMenuItemQueryVariables = Exact<{
 }>;
 
 
-export type GetMenuItemQuery = { __typename?: 'Query', menuItem?: { __typename?: 'MenuItem', name: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, parent?: { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }> } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null } | null } | null };
+export type GetMenuItemQuery = { __typename?: 'Query', menuItem?: { __typename?: 'MenuItem', name: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, parent?: { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null } | null } | null };
 
 export const UserDetailsFragmentDoc = gql`
     fragment UserDetails on User {
@@ -34790,29 +34790,6 @@ export const CategoryDetailsFragmentDoc = gql`
               id
             }
           }
-        }
-      }
-    }
-  }
-}
-    `;
-export const CategoryPathFragmentDoc = gql`
-    fragment CategoryPathFragment on Category {
-  id
-  name
-  slug
-  level
-  backgroundImage {
-    url
-    alt
-  }
-  products(first: 1, channel: $channel) {
-    edges {
-      node {
-        name
-        media {
-          url
-          alt
         }
       }
     }
@@ -35367,19 +35344,35 @@ export const ProductFragmentDoc = gql`
   }
 }
     ${ProductVariantFragmentDoc}`;
+export const CategoryPathFragmentDoc = gql`
+    fragment CategoryPathFragment on Category {
+  id
+  name
+  slug
+  level
+  backgroundImage {
+    url
+    alt
+  }
+  products(first: 1, channel: $channel) {
+    edges {
+      node {
+        name
+        media {
+          url
+          alt
+        }
+      }
+    }
+  }
+}
+    `;
 export const MenuItemFragmentDoc = gql`
     fragment MenuItemFragment on MenuItem {
   name
   id
   category {
-    id
-    name
-    slug
-    level
-    backgroundImage {
-      url
-      alt
-    }
+    ...CategoryPathFragment
     metadata {
       key
       value
@@ -35394,7 +35387,7 @@ export const MenuItemFragmentDoc = gql`
     }
   }
 }
-    `;
+    ${CategoryPathFragmentDoc}`;
 export const AddressDeleteDocument = gql`
     mutation AddressDelete($id: ID!) {
   accountAddressDelete(id: $id) {

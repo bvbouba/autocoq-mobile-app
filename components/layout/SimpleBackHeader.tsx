@@ -9,7 +9,7 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
   const statusBarInset = useSafeAreaInsets();
   const logoUri = require("@/assets/images/logo.png");
   const router = useRouter()
-  const {navigationLink} = useNavigationContext()
+  const {navigationLink,setNavigationLink} = useNavigationContext()
 
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
@@ -22,7 +22,14 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
         <View style={styles.backContainer}>
           <IconButton
             icon="arrow-left"
-            onPress={() => router.push(navigationLink)}
+            onPress={() => {
+              if(navigationLink) {
+              router.push(navigationLink)
+              }else {
+                router.back()
+              }
+              setNavigationLink(undefined)
+            }}
             style={{ marginLeft: Platform.OS === "android" ? -10 : 0 }}
             iconColor={colors.primary}
           />

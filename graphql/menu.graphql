@@ -3,14 +3,7 @@ fragment MenuItemFragment on MenuItem {
       name
       id
       category{
-         id
-        name
-        slug
-        level
-        backgroundImage {
-          url
-          alt
-        }
+        ...CategoryPathFragment
          metadata{
           key
           value

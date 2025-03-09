@@ -1,13 +1,13 @@
 import { Href } from 'expo-router';
 import React, { createContext, useContext, useState } from 'react';
 
-const NavigationContext = createContext<{ setNavigationLink: (slug: Href) => void; navigationLink: Href }>({
+const NavigationContext = createContext<{ setNavigationLink: (slug: Href | undefined) => void; navigationLink: Href | undefined}>({
   navigationLink: "/",
   setNavigationLink: () => {},
 });
 
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [navigationLink, setNavigationLink] = useState<Href>("/");
+  const [navigationLink, setNavigationLink] = useState<Href | undefined>("/");
 
 
   // const handleBackNavigation = () => {

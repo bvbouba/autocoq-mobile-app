@@ -21,7 +21,7 @@ interface Props {
 const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  carIconColor?:string;}) => {
   const statusBarInset = useSafeAreaInsets();
   const router = useRouter()
-  const {navigationLink} = useNavigationContext()
+  const {navigationLink,setNavigationLink} = useNavigationContext()
  
 
   return (
@@ -38,7 +38,16 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
           <View style={styles.searchBarWrapper}>
             <IconButton
               icon="arrow-left"
-              onPress={() => router.push(navigationLink)}
+              onPress={() => 
+                {
+                  if(navigationLink) {
+                  router.push(navigationLink)
+                  }else {
+                    router.back()
+                  }
+                  setNavigationLink(undefined)
+                }
+              }
               iconColor={colors.primary}
             />
             <ProductSearch carIconColor={carIconColor}/>

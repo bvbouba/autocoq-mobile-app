@@ -13,7 +13,6 @@ interface Props {
 
 const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
     const router = useRouter();
-
     const items =
         menus.map((menu) => {
             const media = menu.category?.backgroundImage;
@@ -33,6 +32,8 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
                 slug: menu.category?.slug || "",
             };
         }) || [];
+    
+        console.log(menus)
 
     return (
         <SurfaceView style={styles.container}>

@@ -26,7 +26,7 @@ const CategoryList = () => {
     });
 
     // Fetch Subcategories (Level 1+)
-    const { data: menuItemData, loading: menuItemLoading } = useGetMenuItemQuery({
+    const { data: menuItemData, loading: menuItemLoading, previousData:previousMenuItemData } = useGetMenuItemQuery({
         variables: {
             channel: "ci",
             id: id ? String(id) : "",
@@ -50,7 +50,7 @@ const CategoryList = () => {
         }
     }, [id, menuItemLoading, menuLoading, menuItemData, setNavigationLink,menuData]);
 
-    if (menuItemLoading) {
+    if (menuItemLoading && !previousMenuItemData) {
         return (
             <View style={styles.container}>
                 <PaddedView>
@@ -69,7 +69,7 @@ const CategoryList = () => {
     }
     
     const menu = menuData?.menu 
-    const menuItem = menuItemData?.menuItem 
+    const menuItem = menuItemData?.menuItem || previousMenuItemData?.menuItem
 
     // Ensure we don't return null for Level 0
     if (!menuItem && !menu) return null;

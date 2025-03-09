@@ -1,58 +1,48 @@
 import { usePathname } from "expo-router";
-import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { useCategoryBySlugQuery } from "@/saleor/api.generated";
 import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
 import { useMessage } from "@/context/MessageContext";
 import { useLoading } from "@/context/LoadingContext";
-
-
+import { useEffect } from "react";
 
 const CategoryProductScreen = () => {
   const pathname = usePathname();
-  const [slug, setSlug] = useState<string>();
   const { showMessage } = useMessage();
-  const {setLoading} = useLoading()
+  const { setLoading } = useLoading();
 
-  const { data, loading,error } = useCategoryBySlugQuery({
+  // Extract slug directly
+  const slug = pathname.includes("categories") ? pathname.split("/").pop() : undefined;
+
+  const { data, loading, error } = useCategoryBySlugQuery({
     skip: !slug,
-    variables: {
-      slug: slug || ""
-    }
-  })
+    variables: { slug: slug || "" },
+  });
 
   useEffect(()=>{
-   setLoading(loading)
+    setLoading(loading);
   },[loading])
  
-  useEffect(() => {
-    if (pathname.includes("categories")) {
-      setSlug(pathname.split("/").pop());
-    }
-  }, [pathname]);
 
-  if (!slug) return null;
+  if (loading) return null; // Avoid rendering NotFoundScreen too early
 
-  const category = data?.category
-  
-  if(error) {
-    showMessage("Échec réseau")
+  if (error) {
+    showMessage("Échec réseau");
+    return null;
   }
+
+  const category = data?.category;
 
   if (!category) {
     return <NotFoundScreen />;
   }
 
-  
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <FilteredProductList categoryIDs={[category.id]} />
+    </SafeAreaView>
+  );
+};
 
-  return <SafeAreaView style={{ flex: 1 }}>
-    <FilteredProductList
-      categoryIDs={[category?.id]}
-    />
-
-  </SafeAreaView>
-}
-
-export default CategoryProductScreen
-
+export default CategoryProductScreen;
