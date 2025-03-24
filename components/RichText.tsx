@@ -75,6 +75,7 @@ export function RichText({ jsonStringData, stylesOverride = {} }: RichTextProps)
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    backgroundColor:"inherit"
   },
   paragraph: {
     fontSize:fonts.body,

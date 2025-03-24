@@ -18,7 +18,7 @@ const ProductDetailsId = () => {
             channel: getConfig().channel,
         }
     })
-
+console.log(error)
 if(loading) return <ProductDetailsSkeleton />
 
     if(error) {

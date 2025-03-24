@@ -11,11 +11,12 @@ import { Skeleton } from "moti/skeleton";
 interface Props {
   variant?: ProductVariantFragment | null;
   setCheckedId: React.Dispatch<React.SetStateAction<string | undefined>>
+  isAvailable?:boolean
 }
 
 
 
-const DeliveryMethod = ({ variant,setCheckedId }: Props) => {
+const DeliveryMethod = ({ variant,setCheckedId,isAvailable }: Props) => {
   const [selectedOption, setSelectedOption] = useState<string>();
   const {delivery:{zone},checkout} = useCheckout()
   const subtotalPrice = checkout?.subtotalPrice.gross
@@ -49,6 +50,7 @@ const DeliveryMethod = ({ variant,setCheckedId }: Props) => {
     selectedOption={selectedOption || ""}
     handleSelect={handleSelect}
     availableShippingMethods={availableShippingMethods}
+    isAvailable={isAvailable}
     />
   );
 };

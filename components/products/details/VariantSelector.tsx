@@ -19,7 +19,7 @@ const VariantSelector: FC<Props> = ({ product, selectedVariant, onSelect }) => {
         <PaddedView style={styles.container}>
 
             {variants?.map(variant => <Pressable onPress={() => onSelect(variant)}>
-                <View style={selectedVariant.id === variant.id ? styles.selectedVariantBox : styles.variantBox}>
+                <View key={variant.id} style={selectedVariant.id === variant.id ? styles.selectedVariantBox : styles.variantBox}>
                   <Text style={styles.variantName}>{variant.name}</Text>
                     <Text style={styles.variantPrice}>
                         {variant.pricing?.price?.gross.amount.toLocaleString(getConfig().locale, {

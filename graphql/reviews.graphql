@@ -1,0 +1,56 @@
+fragment ReviewFragment on Review { 
+        id
+        firstname
+        contact
+        car
+        content
+        rating
+        isVerified
+        created
+}
+query reviewList(
+  $filter: ReviewFilterInput
+  $first: Int = 10
+) {    
+  reviews(first: $first, filter: $filter) {
+    edges {
+      node {
+        ...ReviewFragment
+      }
+    }
+    totalCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+
+
+mutation createReview (
+    $product:ID!
+    $rating:Int! 
+    $content:String!
+    $contact:String!
+    $firstname:String!
+    $car:String!
+    ){
+  reviewCreate(
+    input:{
+      product:$product,
+      rating:$rating,
+      content:$content,
+      contact:$contact,
+      firstname:$firstname,
+      car:$car
+    }
+  ){
+    errors{
+      message
+      code
+      field
+    }
+  }
+}

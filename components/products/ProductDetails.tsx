@@ -12,7 +12,7 @@ import {
   Text,
   View,
 } from "@/components/Themed";
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity,Image } from "react-native";
 import ProductImageCarousel from "./details/ProductImageCarousel";
 import { getConfig } from "@/config";
 import VariantSelector from "./details/VariantSelector";
@@ -24,10 +24,17 @@ import DeliveryMethod from "../DeliveryMethod/DeliveryMethod";
 import { renderStars } from "@/utils/renderStars";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AddedToCart from "../cart/AddToTheCart";
+import Review from "./Review";
+import ProductSpecifications from "./ProductSpecifications";
+import RecommendedProducts from "./RecommendedProducts";
+import ItemNotAvailable from "../ItemNotAvailable";
 
 interface Props {
   product: ProductFragment;
 }
+
+const defaultImageUrl = require("../../assets/images/photo-unavailable.png")
+
 
 const ProductDetails: FC<Props> = ({ product }) => {
   const { openModal } = useModal()
@@ -36,9 +43,10 @@ const ProductDetails: FC<Props> = ({ product }) => {
 
   const condition = product?.attributes.find(a => a.attribute.slug === "condition")
   const warranty = product?.attributes.find(a => a.attribute.slug === "garantie")
+  
+  const media = product.media || []
 
-  const isUniversal = product.isUniversal || true;
-  const fitments = product.fitments || [];
+  // const isUniversal = product.isUniversal || true;
 
   const { onAddToCart, loading, checkoutToken } = useCheckout();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantFragment>(
@@ -96,9 +104,9 @@ const ProductDetails: FC<Props> = ({ product }) => {
               )}
             </View>
             {/* Rating Section */}
-            {product.rating !== undefined && (
+            {product.averageRating !== undefined && (
               <Text style={styles.ratingText}>
-                {renderStars(product.rating || 0)} ({product.rating})
+                {renderStars(product.averageRating || 0)} {product?.averageRating} ({product.reviewCount})
               </Text>
             )}
             <View>
@@ -121,11 +129,17 @@ const ProductDetails: FC<Props> = ({ product }) => {
         </PaddedView>
 
         <PaddedView>
-          <ProductImageCarousel
+          {media.length > 0 ? <ProductImageCarousel
             images={
               product.media?.map((m, idx) => ({ url: m.url, alt: m.alt, id: idx })) || []
             }
-          />
+          /> : 
+          <View
+          style={{
+            alignItems:"center"
+          }}
+          ><Image source={defaultImageUrl} style={styles.image} /></View>
+          }
         </PaddedView>
         <PaddedView>
           <CompatibilityCheck product={product} />
@@ -147,7 +161,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
         <Divider style={{ borderBottomWidth: 10 }} />
 
         <PaddedView>
-          <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId} />
+          <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId} isAvailable={product.isAvailable || undefined} />
 
         </PaddedView>
 
@@ -183,11 +197,20 @@ const ProductDetails: FC<Props> = ({ product }) => {
 
               })
             }}
-            disabled={loading}
-            style={styles.button}
+            disabled={loading || !product.isAvailable}
+            style={[styles.button, 
+              !product.isAvailable && {
+                backgroundColor: colors.background,
+            }
+            ]}
           >
-            {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>AJOUTER AU PANIER</Text>}
+            {loading ? <ActivityIndicator color="white" /> : <Text style={[styles.buttonText,
+              !product.isAvailable && {
+                color: colors.textPrimary,
+            }
+            ]}>AJOUTER AU PANIER</Text>}
           </TouchableOpacity>
+          <ItemNotAvailable />
 
         </View>
 
@@ -198,9 +221,18 @@ const ProductDetails: FC<Props> = ({ product }) => {
           {renderDescription()}
         </PaddedView>
 
-        {/* <Divider style={{ borderBottomWidth: 10 }} />
-
-        <Fitment fitmentData={fitments} isUniversal={isUniversal} /> */}
+        {(product?.attributes && product.attributes.length > 0) && 
+        <>
+        <Divider style={{ borderBottomWidth: 10 }} />   
+        <ProductSpecifications product={product}/>
+        </>
+        }
+        {product.category?.id && <>
+          <Divider style={{ borderBottomWidth: 10 }} />
+        <RecommendedProducts categoryID={product.category?.id}/></>}
+        {/* <Fitment fitmentData={fitments} isUniversal={isUniversal} /> */}
+        <Divider style={{ borderBottomWidth: 10 }} />
+      <Review product={product} />
       </ScrollView>
     </View>
   );
@@ -227,7 +259,7 @@ const styles = StyleSheet.create({
   descriptionTitle: {
     fontSize: fonts.h2,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   listBlock: {
     marginBottom: 8,
@@ -289,6 +321,11 @@ const styles = StyleSheet.create({
     fontSize: fonts.caption,
     color: colors.textSecondary,
   },
+  image:{
+    width: 200,
+    height: 200,
+    flexShrink: 0,
+  }
 });
 
 export default ProductDetails;

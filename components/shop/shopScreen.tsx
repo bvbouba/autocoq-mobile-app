@@ -1,6 +1,7 @@
 import { View,StyleSheet,ScrollView,Image } from "react-native"
 import CategoryList from "../layout/CategoryList";
 import CategoryShortList from "../layout/CategoryShortList";
+import ContactUS from "../contactUs/ContactUs";
 
 const uri = require("../../assets/images/bg.jpg");
 
@@ -23,6 +24,7 @@ const ShopScreen = () => {
            <CategoryShortList  />
        
            <CategoryList  />
+           <ContactUS />
            </ScrollView>
             
         </View>

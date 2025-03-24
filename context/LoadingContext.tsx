@@ -1,5 +1,7 @@
+import { colors } from "@/components/Themed";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { ActivityIndicator } from 'react-native-paper';
 
 type LoadingContextType = {
   isLoading: boolean;
@@ -19,7 +21,7 @@ export const LoadingProvider: React.FC<{ children: ReactNode }> = ({ children })
         {children}
         {isLoading && (
           <View style={styles.overlay}>
-            <ActivityIndicator size="large" color="white" />
+            <ActivityIndicator size="large" animating={true} color={colors.primary} />  
           </View>
         )}
       </View>
@@ -39,7 +41,7 @@ export const useLoading = () => {
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)", // Dark transparent overlay
+    backgroundColor: "rgba(255,255,255,0.6)", // Lighter transparent white
     alignItems: "center",
     justifyContent: "center",
   },

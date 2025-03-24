@@ -33,12 +33,18 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
             };
         }) || [];
     
-        console.log(menus)
 
     return (
         <SurfaceView style={styles.container}>
             <View style={styles.paddedTitle}>
-                <Text style={styles.collectionListTitle}>{"Catégories Populaires"}</Text>
+            <View style={{
+                        borderBottomWidth: 2, 
+                        borderBottomColor: colors.primary,
+                        paddingBottom: 0,
+                    }}>
+                <Text style={styles.collectionListTitle}>
+                    {"Catégories Populaires"}</Text>
+                    </View>
                 <TouchableOpacity onPress={() => router.push("/shop?slug=pieces-auto")}>
                     <Text style={styles.viewAll}>Tout voir</Text>
                 </TouchableOpacity>

@@ -77,10 +77,18 @@ fragment ProductFragment on Product {
   name
   description
   slug
-  rating
+  isAvailable
+  reviewCount
+  averageRating
+  reviews5Stars
+  reviews4Stars
+  reviews3Stars
+  reviews2Stars
+  reviews1Star
   category {
     slug
     name
+    id
   }
   media {
     url
@@ -121,13 +129,6 @@ fragment ProductFragment on Product {
   }
   externalReference
   isUniversal
-  fitments {
-    carMakeName
-    carModelName
-    carEngineName
-    carStartYear
-    carEndYear
-  }
 }
 
 query getProductById(
@@ -180,4 +181,26 @@ query searchProducts(
       }
     }
   }
+}
+
+
+fragment FitmentFragment on Fitments {
+        carMakeName
+        carModelName
+        carEngineName
+        carStartYear
+        carEndYear
+}
+
+
+
+query fitmentList($filter:FitmentsFilterInput) {
+  fitments(first:100, filter:$filter){
+    edges {
+      node{
+        ...FitmentFragment
+      }
+    }
+  }
+
 }

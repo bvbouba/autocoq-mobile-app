@@ -11,21 +11,24 @@ fragment ProductCardFragment on Product {
     alt
     type
   }
+  isAvailable
+  pricing {
+      priceRange {
+        start {
+          gross {
+            amount
+            currency
+          }
+        }
+      }
+    }
 }
 
 query AdditionalProductData($slug: String!) {
   product(slug: $slug) {
     externalReference
-    rating
-    pricing {
-      priceRange {
-        start {
-          gross {
-            amount
-          }
-        }
-      }
-    }
+    reviewCount
+    averageRating
     attributes {
       attribute {
         slug

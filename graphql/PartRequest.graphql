@@ -1,0 +1,14 @@
+mutation AddPartRequest(
+    $name: String!
+    $contact: String! 
+    $partDetails: String! 
+    $carDetails:String!) {
+  partRequestAdd(name:$name,contact:$contact,partDetails:$partDetails,carDetails:$carDetails){
+    errors{
+      message
+      field
+      code
+    }
+  }
+}
+

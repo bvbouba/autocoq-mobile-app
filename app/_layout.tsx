@@ -22,6 +22,7 @@ import { ModalProvider } from "@/context/useModal";
 import { CheckoutProvider } from "@/context/CheckoutProvider";
 import { LoadingProvider } from "@/context/LoadingContext";
 import { MessageProvider } from "@/context/MessageContext";
+import { MenuProvider } from "@/context/MenuProvider";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -81,6 +82,7 @@ function RootLayoutNav() {
           <NavigationProvider>
             <CarFilterProvider>
                 <CheckoutProvider>
+                <MenuProvider>
                   <OrderProvider>
                       <ModalProvider>
                         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -161,6 +163,7 @@ function RootLayoutNav() {
                         </GestureHandlerRootView>
                       </ModalProvider>
                   </OrderProvider>
+                  </MenuProvider>
                 </CheckoutProvider>
             </CarFilterProvider>
           </NavigationProvider>

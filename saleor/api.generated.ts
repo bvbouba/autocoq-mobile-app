@@ -3121,7 +3121,7 @@ export type CarError = {
   /** Additional information about the error. */
   additionalInfo?: Maybe<Scalars['String']['output']>;
   /** The error code. */
-  code: CarErrorCode;
+  code: ErrorCode;
   /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
   field?: Maybe<Scalars['String']['output']>;
   /** List of field names which caused the error. */
@@ -3129,15 +3129,6 @@ export type CarError = {
   /** The error message. */
   message?: Maybe<Scalars['String']['output']>;
 };
-
-export type CarErrorCode =
-  | 'DUPLICATED_INPUT_ITEM'
-  | 'GRAPHQL_ERROR'
-  | 'INVALID'
-  | 'NOT_FOUND'
-  | 'RELATION_EXISTS'
-  | 'REQUIRED'
-  | 'UNIQUE';
 
 export type CarFilterInput = {
   makeIds?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -7531,6 +7522,15 @@ export type DraftOrderUpdated = Event & {
   version?: Maybe<Scalars['String']['output']>;
 };
 
+export type ErrorCode =
+  | 'DUPLICATED_INPUT_ITEM'
+  | 'GRAPHQL_ERROR'
+  | 'INVALID'
+  | 'NOT_FOUND'
+  | 'RELATION_EXISTS'
+  | 'REQUIRED'
+  | 'UNIQUE';
+
 export type ErrorPolicyEnum =
   /** Save what is possible within a single row. If there are errors in an input data row, try to save it partially and skip the invalid part. */
   | 'IGNORE_FAILED'
@@ -8056,6 +8056,7 @@ export type FitmentsCountableEdge = {
 export type FitmentsFilterInput = {
   carModelIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   metadata?: InputMaybe<Array<MetadataFilter>>;
+  product?: InputMaybe<Scalars['String']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -12826,6 +12827,10 @@ export type Mutation = {
    * Requires one of the following permissions: MANAGE_PAGES.
    */
   pageUpdate?: Maybe<PageUpdate>;
+  /** Create a new part request. */
+  partRequestAdd?: Maybe<PartRequestAdd>;
+  /** Delete an existing part request. */
+  partRequestDelete?: Maybe<PartRequestDelete>;
   /**
    * Change the password of the logged in user.
    *
@@ -13319,6 +13324,10 @@ export type Mutation = {
    * - STAFF_SET_PASSWORD_REQUESTED (async): Setting a new password for the staff account is requested.
    */
   requestPasswordReset?: Maybe<RequestPasswordReset>;
+  /** Create a review */
+  reviewCreate?: Maybe<ReviewCreateMutation>;
+  /** Update a review by ID */
+  reviewUpdate?: Maybe<ReviewUpdateMutation>;
   /**
    * Deletes sales.
    *
@@ -15078,6 +15087,19 @@ export type MutationPageUpdateArgs = {
 };
 
 
+export type MutationPartRequestAddArgs = {
+  carDetails: Scalars['String']['input'];
+  contact: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  partDetails: Scalars['String']['input'];
+};
+
+
+export type MutationPartRequestDeleteArgs = {
+  requestId: Scalars['ID']['input'];
+};
+
+
 export type MutationPasswordChangeArgs = {
   newPassword: Scalars['String']['input'];
   oldPassword?: InputMaybe<Scalars['String']['input']>;
@@ -15460,6 +15482,16 @@ export type MutationRequestPasswordResetArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   redirectUrl: Scalars['String']['input'];
+};
+
+
+export type MutationReviewCreateArgs = {
+  input: ReviewCreateInput;
+};
+
+
+export type MutationReviewUpdateArgs = {
+  input: ReviewUpdateInput;
 };
 
 
@@ -19358,6 +19390,64 @@ export type PageUpdated = Event & {
   version?: Maybe<Scalars['String']['output']>;
 };
 
+/** Represents a part request. */
+export type PartRequest = Node & {
+  __typename?: 'PartRequest';
+  /** Car details. */
+  carDetails?: Maybe<Scalars['String']['output']>;
+  /** Timestamp of creation. */
+  createdAt: Scalars['DateTime']['output'];
+  /** ID of the request. */
+  id: Scalars['ID']['output'];
+  /** Name of the request. */
+  name: Scalars['String']['output'];
+  /** Part details. */
+  partDetails?: Maybe<Scalars['String']['output']>;
+};
+
+/** Create a new part request. */
+export type PartRequestAdd = {
+  __typename?: 'PartRequestAdd';
+  /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
+  carErrors: Array<CarError>;
+  errors: Array<CarError>;
+  /** The created part request. */
+  partRequest?: Maybe<PartRequest>;
+};
+
+export type PartRequestCountableConnection = {
+  __typename?: 'PartRequestCountableConnection';
+  edges: Array<PartRequestCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type PartRequestCountableEdge = {
+  __typename?: 'PartRequestCountableEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: PartRequest;
+};
+
+/** Delete an existing part request. */
+export type PartRequestDelete = {
+  __typename?: 'PartRequestDelete';
+  /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
+  carErrors: Array<CarError>;
+  errors: Array<CarError>;
+  /** Confirmation message after deletion. */
+  successMessage?: Maybe<Scalars['String']['output']>;
+};
+
+export type PartRequestFilterInput = {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  metadata?: InputMaybe<Array<MetadataFilter>>;
+  search?: InputMaybe<Scalars['String']['input']>;
+};
+
 /**
  * Change the password of the logged in user.
  *
@@ -20620,6 +20710,8 @@ export type Product = Node & ObjectWithMetadata & {
   availableForPurchase?: Maybe<Scalars['Date']['output']>;
   /** Date when product is available for purchase. */
   availableForPurchaseAt?: Maybe<Scalars['DateTime']['output']>;
+  /** Average rating for the product. */
+  averageRating?: Maybe<Scalars['Float']['output']>;
   category?: Maybe<Category>;
   /** Channel given to retrieve this product. Also used by federation gateway to resolve this object in a federated query. */
   channel?: Maybe<Scalars['String']['output']>;
@@ -20656,8 +20748,6 @@ export type Product = Node & ObjectWithMetadata & {
    * Added in Saleor 3.10.
    */
   externalReference?: Maybe<Scalars['String']['output']>;
-  /** List of cars compatible with this product. */
-  fitments?: Maybe<Array<Maybe<Fitments>>>;
   /** The ID of the product. */
   id: Scalars['ID']['output'];
   /**
@@ -20720,6 +20810,18 @@ export type Product = Node & ObjectWithMetadata & {
   productType: ProductType;
   /** Rating of the product. */
   rating?: Maybe<Scalars['Float']['output']>;
+  /** Total number of reviews for the product. */
+  reviewCount?: Maybe<Scalars['Int']['output']>;
+  /** Number of reviews with a rating between 1 and 1.9. */
+  reviews1Star?: Maybe<Scalars['Int']['output']>;
+  /** Number of reviews with a rating between 2 and 2.9. */
+  reviews2Stars?: Maybe<Scalars['Int']['output']>;
+  /** Number of reviews with a rating between 3 and 3.9. */
+  reviews3Stars?: Maybe<Scalars['Int']['output']>;
+  /** Number of reviews with a rating between 4 and 4.9. */
+  reviews4Stars?: Maybe<Scalars['Int']['output']>;
+  /** Number of reviews with a 5-star rating. */
+  reviews5Stars?: Maybe<Scalars['Int']['output']>;
   /** SEO description of the product. */
   seoDescription?: Maybe<Scalars['String']['output']>;
   /** SEO title of the product. */
@@ -25076,6 +25178,10 @@ export type Query = {
   pageTypes?: Maybe<PageTypeCountableConnection>;
   /** List of the shop's pages. */
   pages?: Maybe<PageCountableConnection>;
+  /** Look up a request by ID. */
+  partRequest?: Maybe<PartRequest>;
+  /** List of all part requests. */
+  partRequests?: Maybe<PartRequestCountableConnection>;
   /**
    * Look up a payment by ID.
    *
@@ -25151,6 +25257,10 @@ export type Query = {
    * @deprecated This field will be removed in Saleor 4.0.
    */
   reportProductSales?: Maybe<ProductVariantCountableConnection>;
+  /** Look up a review by ID. */
+  review?: Maybe<Review>;
+  /** List of reviews. */
+  reviews?: Maybe<ReviewCountableConnection>;
   /**
    * Look up a sale by ID.
    *
@@ -25768,6 +25878,20 @@ export type QueryPagesArgs = {
 };
 
 
+export type QueryPartRequestArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryPartRequestsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<PartRequestFilterInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryPaymentArgs = {
   id: Scalars['ID']['input'];
 };
@@ -25891,6 +26015,21 @@ export type QueryReportProductSalesArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   period: ReportingPeriod;
+};
+
+
+export type QueryReviewArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryReviewsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<ReviewFilterInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<ReviewSortingInput>;
 };
 
 
@@ -26167,6 +26306,126 @@ export type RequestPasswordReset = {
   /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
   accountErrors: Array<AccountError>;
   errors: Array<AccountError>;
+};
+
+/** Represents a product review. */
+export type Review = Node & {
+  __typename?: 'Review';
+  /** Details about the reviewer's car. */
+  car: Scalars['String']['output'];
+  /** Reviewer's contact (10-digit phone number). */
+  contact: Scalars['String']['output'];
+  /** Review content. */
+  content: Scalars['String']['output'];
+  /** Timestamp of creation. */
+  created: Scalars['DateTime']['output'];
+  /** First name of the reviewer. */
+  firstname: Scalars['String']['output'];
+  /** ID of the review. */
+  id: Scalars['ID']['output'];
+  /** Whether the review is verified or not. */
+  isVerified: Scalars['Boolean']['output'];
+  /** Product related to the review. */
+  product?: Maybe<Product>;
+  /** Rating value (1-5). */
+  rating: Scalars['Int']['output'];
+};
+
+export type ReviewCountableConnection = {
+  __typename?: 'ReviewCountableConnection';
+  edges: Array<ReviewCountableEdge>;
+  /** Pagination data for this connection. */
+  pageInfo: PageInfo;
+  /** A total count of items in the collection. */
+  totalCount?: Maybe<Scalars['Int']['output']>;
+};
+
+export type ReviewCountableEdge = {
+  __typename?: 'ReviewCountableEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Review;
+};
+
+export type ReviewCreateInput = {
+  /** Details about the reviewer's car (e.g., make, model, year). */
+  car: Scalars['String']['input'];
+  /** Reviewer's contact information (10-digit phone number or email). */
+  contact: Scalars['String']['input'];
+  /** Review content. */
+  content: Scalars['String']['input'];
+  /** First name of the reviewer. */
+  firstname: Scalars['String']['input'];
+  /** ID of the product being reviewed. */
+  product: Scalars['ID']['input'];
+  /** Rating value (1-5). */
+  rating: Scalars['Int']['input'];
+};
+
+/** Create a review */
+export type ReviewCreateMutation = {
+  __typename?: 'ReviewCreateMutation';
+  errors: Array<ReviewError>;
+  review?: Maybe<Review>;
+  /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
+  reviewsErrors: Array<ReviewError>;
+};
+
+/** Custom error type for review mutations. */
+export type ReviewError = {
+  __typename?: 'ReviewError';
+  code?: Maybe<ReviewErrorCode>;
+  /** Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field. */
+  field?: Maybe<Scalars['String']['output']>;
+  /** The error message. */
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+/** Custom error codes for reviews. */
+export type ReviewErrorCode =
+  | 'EXISTS'
+  | 'INVALID_RATING'
+  | 'REQUESTOR_NOT_AUTHOR';
+
+export type ReviewFilterInput = {
+  product?: InputMaybe<Scalars['String']['input']>;
+  rating?: InputMaybe<IntRangeInput>;
+};
+
+export type ReviewSortField =
+  /** Sort reviews by creation date. */
+  | 'CREATION_DATE'
+  /** Sort reviews by rating. */
+  | 'RATING';
+
+export type ReviewSortingInput = {
+  /** Specifies the direction in which to sort review. */
+  direction: OrderDirection;
+  /** Sort review by the selected field. */
+  field: ReviewSortField;
+};
+
+export type ReviewUpdateInput = {
+  /** Updated car details. */
+  car: Scalars['String']['input'];
+  /** Updated reviewer's contact information. */
+  contact: Scalars['String']['input'];
+  /** Updated review content. */
+  content?: InputMaybe<Scalars['String']['input']>;
+  /** ID of the review to update. */
+  id: Scalars['ID']['input'];
+  /** Updated rating value (1-5). */
+  rating?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** Update a review by ID */
+export type ReviewUpdateMutation = {
+  __typename?: 'ReviewUpdateMutation';
+  errors: Array<ReviewError>;
+  review?: Maybe<Review>;
+  /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
+  reviewsErrors: Array<ReviewError>;
 };
 
 export type RewardTypeEnum =
@@ -34597,14 +34856,24 @@ export type PageQueryVariables = Exact<{
 
 export type PageQuery = { __typename?: 'Query', page?: { __typename?: 'Page', id: string, title: string, seoTitle?: string | null, seoDescription?: string | null, slug: string, created: string, content?: string | null } | null };
 
-export type ProductCardFragment = { __typename?: 'Product', id: string, slug: string, name: string, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null };
+export type AddPartRequestMutationVariables = Exact<{
+  name: Scalars['String']['input'];
+  contact: Scalars['String']['input'];
+  partDetails: Scalars['String']['input'];
+  carDetails: Scalars['String']['input'];
+}>;
+
+
+export type AddPartRequestMutation = { __typename?: 'Mutation', partRequestAdd?: { __typename?: 'PartRequestAdd', errors: Array<{ __typename?: 'CarError', message?: string | null, field?: string | null, code: ErrorCode }> } | null };
+
+export type ProductCardFragment = { __typename?: 'Product', id: string, slug: string, name: string, isAvailable?: boolean | null, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null } | null };
 
 export type AdditionalProductDataQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type AdditionalProductDataQuery = { __typename?: 'Query', product?: { __typename?: 'Product', externalReference?: string | null, rating?: number | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null } | null };
+export type AdditionalProductDataQuery = { __typename?: 'Query', product?: { __typename?: 'Product', externalReference?: string | null, reviewCount?: number | null, averageRating?: number | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null } | null };
 
 export type ProductCollectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -34616,7 +34885,7 @@ export type ProductCollectionQueryVariables = Exact<{
 }>;
 
 
-export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, slug: string, name: string, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+export type ProductCollectionQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ProductCountableEdge', cursor: string, node: { __typename?: 'Product', id: string, slug: string, name: string, isAvailable?: boolean | null, category?: { __typename?: 'Category', id: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string, type: ProductMediaType }> | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null } | null } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
 export type SearchByProductNameQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -34645,7 +34914,7 @@ export type ProductListByCategoryQueryVariables = Exact<{
 }>;
 
 
-export type ProductListByCategoryQuery = { __typename?: 'Query', category?: { __typename?: 'Category', name: string, description?: string | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } }> } | null } | null };
+export type ProductListByCategoryQuery = { __typename?: 'Query', category?: { __typename?: 'Category', name: string, description?: string | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, isAvailable?: boolean | null, reviewCount?: number | null, averageRating?: number | null, reviews5Stars?: number | null, reviews4Stars?: number | null, reviews3Stars?: number | null, reviews2Stars?: number | null, reviews1Star?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string, id: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null } }> } | null } | null };
 
 export type ShippingMethodFragment = { __typename?: 'ShippingMethod', id: string, name: string, description?: string | null, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, price: { __typename?: 'Money', amount: number, currency: string }, minimumOrderPrice?: { __typename?: 'Money', amount: number, currency: string } | null, maximumOrderPrice?: { __typename?: 'Money', amount: number, currency: string } | null };
 
@@ -34661,7 +34930,7 @@ export type GetAvailableShippingMethodsQueryVariables = Exact<{
 
 export type GetAvailableShippingMethodsQuery = { __typename?: 'Query', productVariant?: { __typename?: 'ProductVariant', availableShippingMethods?: Array<{ __typename?: 'ShippingMethod', id: string, name: string, description?: string | null, minimumDeliveryDays?: number | null, maximumDeliveryDays?: number | null, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, price: { __typename?: 'Money', amount: number, currency: string }, minimumOrderPrice?: { __typename?: 'Money', amount: number, currency: string } | null, maximumOrderPrice?: { __typename?: 'Money', amount: number, currency: string } | null }> | null } | null };
 
-export type ProductFragment = { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null };
+export type ProductFragment = { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, isAvailable?: boolean | null, reviewCount?: number | null, averageRating?: number | null, reviews5Stars?: number | null, reviews4Stars?: number | null, reviews3Stars?: number | null, reviews2Stars?: number | null, reviews1Star?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string, id: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null };
 
 export type GetProductByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -34669,7 +34938,7 @@ export type GetProductByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProductByIdQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } | null };
+export type GetProductByIdQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, isAvailable?: boolean | null, reviewCount?: number | null, averageRating?: number | null, reviews5Stars?: number | null, reviews4Stars?: number | null, reviews3Stars?: number | null, reviews2Stars?: number | null, reviews1Star?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string, id: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null } | null };
 
 export type GetProductsListQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -34680,7 +34949,7 @@ export type GetProductsListQueryVariables = Exact<{
 }>;
 
 
-export type GetProductsListQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } }> } | null };
+export type GetProductsListQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, isAvailable?: boolean | null, reviewCount?: number | null, averageRating?: number | null, reviews5Stars?: number | null, reviews4Stars?: number | null, reviews3Stars?: number | null, reviews2Stars?: number | null, reviews1Star?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string, id: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null } }> } | null };
 
 export type SearchProductsQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -34693,7 +34962,16 @@ export type SearchProductsQueryVariables = Exact<{
 }>;
 
 
-export type SearchProductsQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, rating?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, fitments?: Array<{ __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } | null> | null } }> } | null };
+export type SearchProductsQuery = { __typename?: 'Query', products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', id: string, name: string, description?: string | null, slug: string, isAvailable?: boolean | null, reviewCount?: number | null, averageRating?: number | null, reviews5Stars?: number | null, reviews4Stars?: number | null, reviews3Stars?: number | null, reviews2Stars?: number | null, reviews1Star?: number | null, externalReference?: string | null, isUniversal?: boolean | null, category?: { __typename?: 'Category', slug: string, name: string, id: string } | null, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null, pricing?: { __typename?: 'ProductPricingInfo', priceRange?: { __typename?: 'TaxedMoneyRange', start?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number } } | null } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null, reference?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null } }> } | null };
+
+export type FitmentFragment = { __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null };
+
+export type FitmentListQueryVariables = Exact<{
+  filter?: InputMaybe<FitmentsFilterInput>;
+}>;
+
+
+export type FitmentListQuery = { __typename?: 'Query', fitments?: { __typename?: 'FitmentsCountableConnection', edges: Array<{ __typename?: 'FitmentsCountableEdge', node: { __typename?: 'Fitments', carMakeName?: string | null, carModelName?: string | null, carEngineName?: string | null, carStartYear?: string | null, carEndYear?: string | null } }> } | null };
 
 export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -34701,6 +34979,8 @@ export type GetCitiesQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetCitiesQuery = { __typename?: 'Query', getShippingZones?: Array<{ __typename?: 'ShippingZoneBasicType', name: string } | null> | null };
 
 export type MenuItemFragment = { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null };
+
+export type MenuFragment = { __typename?: 'Menu', name: string, items?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null };
 
 export type GetMainMenuQueryVariables = Exact<{
   channel: Scalars['String']['input'];
@@ -34724,6 +35004,28 @@ export type GetMenuItemQueryVariables = Exact<{
 
 
 export type GetMenuItemQuery = { __typename?: 'Query', menuItem?: { __typename?: 'MenuItem', name: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, children?: Array<{ __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null }> | null, parent?: { __typename?: 'MenuItem', name: string, id: string, category?: { __typename?: 'Category', id: string, name: string, slug: string, level: number, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null } | null, collection?: { __typename?: 'Collection', id: string, slug: string, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null } | null } | null } | null };
+
+export type ReviewFragment = { __typename?: 'Review', id: string, firstname: string, contact: string, car: string, content: string, rating: number, isVerified: boolean, created: string };
+
+export type ReviewListQueryVariables = Exact<{
+  filter?: InputMaybe<ReviewFilterInput>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type ReviewListQuery = { __typename?: 'Query', reviews?: { __typename?: 'ReviewCountableConnection', totalCount?: number | null, edges: Array<{ __typename?: 'ReviewCountableEdge', node: { __typename?: 'Review', id: string, firstname: string, contact: string, car: string, content: string, rating: number, isVerified: boolean, created: string } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+
+export type CreateReviewMutationVariables = Exact<{
+  product: Scalars['ID']['input'];
+  rating: Scalars['Int']['input'];
+  content: Scalars['String']['input'];
+  contact: Scalars['String']['input'];
+  firstname: Scalars['String']['input'];
+  car: Scalars['String']['input'];
+}>;
+
+
+export type CreateReviewMutation = { __typename?: 'Mutation', reviewCreate?: { __typename?: 'ReviewCreateMutation', errors: Array<{ __typename?: 'ReviewError', message?: string | null, code?: ReviewErrorCode | null, field?: string | null }> } | null };
 
 export const UserDetailsFragmentDoc = gql`
     fragment UserDetails on User {
@@ -35249,6 +35551,17 @@ export const ProductCardFragmentDoc = gql`
     alt
     type
   }
+  isAvailable
+  pricing {
+    priceRange {
+      start {
+        gross {
+          amount
+          currency
+        }
+      }
+    }
+  }
 }
     `;
 export const ProductVariantFragmentDoc = gql`
@@ -35291,10 +35604,18 @@ export const ProductFragmentDoc = gql`
   name
   description
   slug
-  rating
+  isAvailable
+  reviewCount
+  averageRating
+  reviews5Stars
+  reviews4Stars
+  reviews3Stars
+  reviews2Stars
+  reviews1Star
   category {
     slug
     name
+    id
   }
   media {
     url
@@ -35335,15 +35656,17 @@ export const ProductFragmentDoc = gql`
   }
   externalReference
   isUniversal
-  fitments {
-    carMakeName
-    carModelName
-    carEngineName
-    carStartYear
-    carEndYear
-  }
 }
     ${ProductVariantFragmentDoc}`;
+export const FitmentFragmentDoc = gql`
+    fragment FitmentFragment on Fitments {
+  carMakeName
+  carModelName
+  carEngineName
+  carStartYear
+  carEndYear
+}
+    `;
 export const CategoryPathFragmentDoc = gql`
     fragment CategoryPathFragment on Category {
   id
@@ -35388,6 +35711,29 @@ export const MenuItemFragmentDoc = gql`
   }
 }
     ${CategoryPathFragmentDoc}`;
+export const MenuFragmentDoc = gql`
+    fragment MenuFragment on Menu {
+  name
+  items {
+    ...MenuItemFragment
+    children {
+      ...MenuItemFragment
+    }
+  }
+}
+    ${MenuItemFragmentDoc}`;
+export const ReviewFragmentDoc = gql`
+    fragment ReviewFragment on Review {
+  id
+  firstname
+  contact
+  car
+  content
+  rating
+  isVerified
+  created
+}
+    `;
 export const AddressDeleteDocument = gql`
     mutation AddressDelete($id: ID!) {
   accountAddressDelete(id: $id) {
@@ -37126,20 +37472,57 @@ export type PageQueryHookResult = ReturnType<typeof usePageQuery>;
 export type PageLazyQueryHookResult = ReturnType<typeof usePageLazyQuery>;
 export type PageSuspenseQueryHookResult = ReturnType<typeof usePageSuspenseQuery>;
 export type PageQueryResult = Apollo.QueryResult<PageQuery, PageQueryVariables>;
+export const AddPartRequestDocument = gql`
+    mutation AddPartRequest($name: String!, $contact: String!, $partDetails: String!, $carDetails: String!) {
+  partRequestAdd(
+    name: $name
+    contact: $contact
+    partDetails: $partDetails
+    carDetails: $carDetails
+  ) {
+    errors {
+      message
+      field
+      code
+    }
+  }
+}
+    `;
+export type AddPartRequestMutationFn = Apollo.MutationFunction<AddPartRequestMutation, AddPartRequestMutationVariables>;
+
+/**
+ * __useAddPartRequestMutation__
+ *
+ * To run a mutation, you first call `useAddPartRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPartRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPartRequestMutation, { data, loading, error }] = useAddPartRequestMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      contact: // value for 'contact'
+ *      partDetails: // value for 'partDetails'
+ *      carDetails: // value for 'carDetails'
+ *   },
+ * });
+ */
+export function useAddPartRequestMutation(baseOptions?: Apollo.MutationHookOptions<AddPartRequestMutation, AddPartRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddPartRequestMutation, AddPartRequestMutationVariables>(AddPartRequestDocument, options);
+      }
+export type AddPartRequestMutationHookResult = ReturnType<typeof useAddPartRequestMutation>;
+export type AddPartRequestMutationResult = Apollo.MutationResult<AddPartRequestMutation>;
+export type AddPartRequestMutationOptions = Apollo.BaseMutationOptions<AddPartRequestMutation, AddPartRequestMutationVariables>;
 export const AdditionalProductDataDocument = gql`
     query AdditionalProductData($slug: String!) {
   product(slug: $slug) {
     externalReference
-    rating
-    pricing {
-      priceRange {
-        start {
-          gross {
-            amount
-          }
-        }
-      }
-    }
+    reviewCount
+    averageRating
     attributes {
       attribute {
         slug
@@ -37594,6 +37977,50 @@ export type SearchProductsQueryHookResult = ReturnType<typeof useSearchProductsQ
 export type SearchProductsLazyQueryHookResult = ReturnType<typeof useSearchProductsLazyQuery>;
 export type SearchProductsSuspenseQueryHookResult = ReturnType<typeof useSearchProductsSuspenseQuery>;
 export type SearchProductsQueryResult = Apollo.QueryResult<SearchProductsQuery, SearchProductsQueryVariables>;
+export const FitmentListDocument = gql`
+    query fitmentList($filter: FitmentsFilterInput) {
+  fitments(first: 100, filter: $filter) {
+    edges {
+      node {
+        ...FitmentFragment
+      }
+    }
+  }
+}
+    ${FitmentFragmentDoc}`;
+
+/**
+ * __useFitmentListQuery__
+ *
+ * To run a query within a React component, call `useFitmentListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFitmentListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFitmentListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useFitmentListQuery(baseOptions?: Apollo.QueryHookOptions<FitmentListQuery, FitmentListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FitmentListQuery, FitmentListQueryVariables>(FitmentListDocument, options);
+      }
+export function useFitmentListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FitmentListQuery, FitmentListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FitmentListQuery, FitmentListQueryVariables>(FitmentListDocument, options);
+        }
+export function useFitmentListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FitmentListQuery, FitmentListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FitmentListQuery, FitmentListQueryVariables>(FitmentListDocument, options);
+        }
+export type FitmentListQueryHookResult = ReturnType<typeof useFitmentListQuery>;
+export type FitmentListLazyQueryHookResult = ReturnType<typeof useFitmentListLazyQuery>;
+export type FitmentListSuspenseQueryHookResult = ReturnType<typeof useFitmentListSuspenseQuery>;
+export type FitmentListQueryResult = Apollo.QueryResult<FitmentListQuery, FitmentListQueryVariables>;
 export const GetCitiesDocument = gql`
     query getCities {
   getShippingZones {
@@ -37636,16 +38063,10 @@ export type GetCitiesQueryResult = Apollo.QueryResult<GetCitiesQuery, GetCitiesQ
 export const GetMainMenuDocument = gql`
     query getMainMenu($channel: String!) {
   menu(slug: "homepage", channel: $channel) {
-    name
-    items {
-      ...MenuItemFragment
-      children {
-        ...MenuItemFragment
-      }
-    }
+    ...MenuFragment
   }
 }
-    ${MenuItemFragmentDoc}`;
+    ${MenuFragmentDoc}`;
 
 /**
  * __useGetMainMenuQuery__
@@ -37776,6 +38197,102 @@ export type GetMenuItemQueryHookResult = ReturnType<typeof useGetMenuItemQuery>;
 export type GetMenuItemLazyQueryHookResult = ReturnType<typeof useGetMenuItemLazyQuery>;
 export type GetMenuItemSuspenseQueryHookResult = ReturnType<typeof useGetMenuItemSuspenseQuery>;
 export type GetMenuItemQueryResult = Apollo.QueryResult<GetMenuItemQuery, GetMenuItemQueryVariables>;
+export const ReviewListDocument = gql`
+    query reviewList($filter: ReviewFilterInput, $first: Int = 10) {
+  reviews(first: $first, filter: $filter) {
+    edges {
+      node {
+        ...ReviewFragment
+      }
+    }
+    totalCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+    ${ReviewFragmentDoc}`;
+
+/**
+ * __useReviewListQuery__
+ *
+ * To run a query within a React component, call `useReviewListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReviewListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReviewListQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      first: // value for 'first'
+ *   },
+ * });
+ */
+export function useReviewListQuery(baseOptions?: Apollo.QueryHookOptions<ReviewListQuery, ReviewListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReviewListQuery, ReviewListQueryVariables>(ReviewListDocument, options);
+      }
+export function useReviewListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReviewListQuery, ReviewListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReviewListQuery, ReviewListQueryVariables>(ReviewListDocument, options);
+        }
+export function useReviewListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ReviewListQuery, ReviewListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ReviewListQuery, ReviewListQueryVariables>(ReviewListDocument, options);
+        }
+export type ReviewListQueryHookResult = ReturnType<typeof useReviewListQuery>;
+export type ReviewListLazyQueryHookResult = ReturnType<typeof useReviewListLazyQuery>;
+export type ReviewListSuspenseQueryHookResult = ReturnType<typeof useReviewListSuspenseQuery>;
+export type ReviewListQueryResult = Apollo.QueryResult<ReviewListQuery, ReviewListQueryVariables>;
+export const CreateReviewDocument = gql`
+    mutation createReview($product: ID!, $rating: Int!, $content: String!, $contact: String!, $firstname: String!, $car: String!) {
+  reviewCreate(
+    input: {product: $product, rating: $rating, content: $content, contact: $contact, firstname: $firstname, car: $car}
+  ) {
+    errors {
+      message
+      code
+      field
+    }
+  }
+}
+    `;
+export type CreateReviewMutationFn = Apollo.MutationFunction<CreateReviewMutation, CreateReviewMutationVariables>;
+
+/**
+ * __useCreateReviewMutation__
+ *
+ * To run a mutation, you first call `useCreateReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReviewMutation, { data, loading, error }] = useCreateReviewMutation({
+ *   variables: {
+ *      product: // value for 'product'
+ *      rating: // value for 'rating'
+ *      content: // value for 'content'
+ *      contact: // value for 'contact'
+ *      firstname: // value for 'firstname'
+ *      car: // value for 'car'
+ *   },
+ * });
+ */
+export function useCreateReviewMutation(baseOptions?: Apollo.MutationHookOptions<CreateReviewMutation, CreateReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReviewMutation, CreateReviewMutationVariables>(CreateReviewDocument, options);
+      }
+export type CreateReviewMutationHookResult = ReturnType<typeof useCreateReviewMutation>;
+export type CreateReviewMutationResult = Apollo.MutationResult<CreateReviewMutation>;
+export type CreateReviewMutationOptions = Apollo.BaseMutationOptions<CreateReviewMutation, CreateReviewMutationVariables>;
 export type AccountAddressCreateKeySpecifier = ('accountErrors' | 'address' | 'errors' | 'user' | AccountAddressCreateKeySpecifier)[];
 export type AccountAddressCreateFieldPolicy = {
 	accountErrors?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -40643,7 +41160,7 @@ export type MoneyRangeFieldPolicy = {
 	start?: FieldPolicy<any> | FieldReadFunction<any>,
 	stop?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('accountAddressCreate' | 'accountAddressDelete' | 'accountAddressUpdate' | 'accountDelete' | 'accountRegister' | 'accountRequestDeletion' | 'accountSetDefaultAddress' | 'accountUpdate' | 'addressCreate' | 'addressDelete' | 'addressSetDefault' | 'addressUpdate' | 'appActivate' | 'appCreate' | 'appDeactivate' | 'appDelete' | 'appDeleteFailedInstallation' | 'appFetchManifest' | 'appInstall' | 'appRetryInstall' | 'appTokenCreate' | 'appTokenDelete' | 'appTokenVerify' | 'appUpdate' | 'assignNavigation' | 'assignWarehouseShippingZone' | 'attributeBulkCreate' | 'attributeBulkDelete' | 'attributeBulkTranslate' | 'attributeBulkUpdate' | 'attributeCreate' | 'attributeDelete' | 'attributeReorderValues' | 'attributeTranslate' | 'attributeUpdate' | 'attributeValueBulkDelete' | 'attributeValueBulkTranslate' | 'attributeValueCreate' | 'attributeValueDelete' | 'attributeValueTranslate' | 'attributeValueUpdate' | 'carCreate' | 'carMakeCreate' | 'carMakeDelete' | 'carMakeUpdate' | 'carModelCreate' | 'carModelDelete' | 'carModelUpdate' | 'categoryBulkDelete' | 'categoryCreate' | 'categoryDelete' | 'categoryTranslate' | 'categoryUpdate' | 'channelActivate' | 'channelCreate' | 'channelDeactivate' | 'channelDelete' | 'channelReorderWarehouses' | 'channelUpdate' | 'checkoutAddPromoCode' | 'checkoutBillingAddressUpdate' | 'checkoutComplete' | 'checkoutCreate' | 'checkoutCreateFromOrder' | 'checkoutCustomerAttach' | 'checkoutCustomerDetach' | 'checkoutDeliveryMethodUpdate' | 'checkoutEmailUpdate' | 'checkoutLanguageCodeUpdate' | 'checkoutLineDelete' | 'checkoutLinesAdd' | 'checkoutLinesDelete' | 'checkoutLinesUpdate' | 'checkoutPaymentCreate' | 'checkoutRemovePromoCode' | 'checkoutShippingAddressUpdate' | 'checkoutShippingMethodUpdate' | 'collectionAddProducts' | 'collectionBulkDelete' | 'collectionChannelListingUpdate' | 'collectionCreate' | 'collectionDelete' | 'collectionRemoveProducts' | 'collectionReorderProducts' | 'collectionTranslate' | 'collectionUpdate' | 'confirmAccount' | 'confirmEmailChange' | 'createWarehouse' | 'customerBulkDelete' | 'customerBulkUpdate' | 'customerCarAdd' | 'customerCarDelete' | 'customerCreate' | 'customerDelete' | 'customerUpdate' | 'deleteMetadata' | 'deletePrivateMetadata' | 'deleteWarehouse' | 'digitalContentCreate' | 'digitalContentDelete' | 'digitalContentUpdate' | 'digitalContentUrlCreate' | 'draftOrderBulkDelete' | 'draftOrderComplete' | 'draftOrderCreate' | 'draftOrderDelete' | 'draftOrderLinesBulkDelete' | 'draftOrderUpdate' | 'eventDeliveryRetry' | 'exportGiftCards' | 'exportProducts' | 'exportVoucherCodes' | 'externalAuthenticationUrl' | 'externalLogout' | 'externalNotificationTrigger' | 'externalObtainAccessTokens' | 'externalRefresh' | 'externalVerify' | 'fileUpload' | 'giftCardActivate' | 'giftCardAddNote' | 'giftCardBulkActivate' | 'giftCardBulkCreate' | 'giftCardBulkDeactivate' | 'giftCardBulkDelete' | 'giftCardCreate' | 'giftCardDeactivate' | 'giftCardDelete' | 'giftCardResend' | 'giftCardSettingsUpdate' | 'giftCardUpdate' | 'invoiceCreate' | 'invoiceDelete' | 'invoiceRequest' | 'invoiceRequestDelete' | 'invoiceSendNotification' | 'invoiceUpdate' | 'menuBulkDelete' | 'menuCreate' | 'menuDelete' | 'menuItemBulkDelete' | 'menuItemCreate' | 'menuItemDelete' | 'menuItemMove' | 'menuItemTranslate' | 'menuItemUpdate' | 'menuUpdate' | 'orderAddNote' | 'orderBulkCancel' | 'orderBulkCreate' | 'orderCancel' | 'orderCapture' | 'orderConfirm' | 'orderCreateFromCheckout' | 'orderDiscountAdd' | 'orderDiscountDelete' | 'orderDiscountUpdate' | 'orderFulfill' | 'orderFulfillmentApprove' | 'orderFulfillmentCancel' | 'orderFulfillmentRefundProducts' | 'orderFulfillmentReturnProducts' | 'orderFulfillmentUpdateTracking' | 'orderGrantRefundCreate' | 'orderGrantRefundUpdate' | 'orderLineDelete' | 'orderLineDiscountRemove' | 'orderLineDiscountUpdate' | 'orderLineUpdate' | 'orderLinesCreate' | 'orderMarkAsPaid' | 'orderNoteAdd' | 'orderNoteUpdate' | 'orderRefund' | 'orderSettingsUpdate' | 'orderUpdate' | 'orderUpdateShipping' | 'orderVoid' | 'pageAttributeAssign' | 'pageAttributeUnassign' | 'pageBulkDelete' | 'pageBulkPublish' | 'pageCreate' | 'pageDelete' | 'pageReorderAttributeValues' | 'pageTranslate' | 'pageTypeBulkDelete' | 'pageTypeCreate' | 'pageTypeDelete' | 'pageTypeReorderAttributes' | 'pageTypeUpdate' | 'pageUpdate' | 'passwordChange' | 'paymentCapture' | 'paymentCheckBalance' | 'paymentGatewayInitialize' | 'paymentGatewayInitializeTokenization' | 'paymentInitialize' | 'paymentMethodInitializeTokenization' | 'paymentMethodProcessTokenization' | 'paymentRefund' | 'paymentVoid' | 'permissionGroupCreate' | 'permissionGroupDelete' | 'permissionGroupUpdate' | 'pluginUpdate' | 'productAttributeAssign' | 'productAttributeAssignmentUpdate' | 'productAttributeUnassign' | 'productBulkCreate' | 'productBulkDelete' | 'productBulkTranslate' | 'productChannelListingUpdate' | 'productCreate' | 'productDelete' | 'productMediaBulkDelete' | 'productMediaCreate' | 'productMediaDelete' | 'productMediaReorder' | 'productMediaUpdate' | 'productReorderAttributeValues' | 'productTranslate' | 'productTypeBulkDelete' | 'productTypeCreate' | 'productTypeDelete' | 'productTypeReorderAttributes' | 'productTypeUpdate' | 'productUpdate' | 'productVariantBulkCreate' | 'productVariantBulkDelete' | 'productVariantBulkTranslate' | 'productVariantBulkUpdate' | 'productVariantChannelListingUpdate' | 'productVariantCreate' | 'productVariantDelete' | 'productVariantPreorderDeactivate' | 'productVariantReorder' | 'productVariantReorderAttributeValues' | 'productVariantSetDefault' | 'productVariantStocksCreate' | 'productVariantStocksDelete' | 'productVariantStocksUpdate' | 'productVariantTranslate' | 'productVariantUpdate' | 'promotionBulkDelete' | 'promotionCreate' | 'promotionDelete' | 'promotionRuleCreate' | 'promotionRuleDelete' | 'promotionRuleTranslate' | 'promotionRuleUpdate' | 'promotionTranslate' | 'promotionUpdate' | 'requestEmailChange' | 'requestPasswordReset' | 'saleBulkDelete' | 'saleCataloguesAdd' | 'saleCataloguesRemove' | 'saleChannelListingUpdate' | 'saleCreate' | 'saleDelete' | 'saleTranslate' | 'saleUpdate' | 'sendConfirmationEmail' | 'sendOtp' | 'setPassword' | 'shippingMethodChannelListingUpdate' | 'shippingPriceBulkDelete' | 'shippingPriceCreate' | 'shippingPriceDelete' | 'shippingPriceExcludeProducts' | 'shippingPriceRemoveProductFromExclude' | 'shippingPriceTranslate' | 'shippingPriceUpdate' | 'shippingZoneBulkDelete' | 'shippingZoneCreate' | 'shippingZoneDelete' | 'shippingZoneUpdate' | 'shopAddressUpdate' | 'shopDomainUpdate' | 'shopFetchTaxRates' | 'shopSettingsTranslate' | 'shopSettingsUpdate' | 'staffBulkDelete' | 'staffCreate' | 'staffDelete' | 'staffNotificationRecipientCreate' | 'staffNotificationRecipientDelete' | 'staffNotificationRecipientUpdate' | 'staffUpdate' | 'stockBulkUpdate' | 'storedPaymentMethodRequestDelete' | 'taxClassCreate' | 'taxClassDelete' | 'taxClassUpdate' | 'taxConfigurationUpdate' | 'taxCountryConfigurationDelete' | 'taxCountryConfigurationUpdate' | 'taxExemptionManage' | 'tenantCreate' | 'tenantDelete' | 'tenantUpdate' | 'tokenCreate' | 'tokenRefresh' | 'tokenVerify' | 'tokensDeactivateAll' | 'transactionCreate' | 'transactionEventReport' | 'transactionInitialize' | 'transactionProcess' | 'transactionRequestAction' | 'transactionRequestRefundForGrantedRefund' | 'transactionUpdate' | 'unassignWarehouseShippingZone' | 'updateMetadata' | 'updatePrivateMetadata' | 'updateWarehouse' | 'userAvatarDelete' | 'userAvatarUpdate' | 'userBulkSetActive' | 'variantMediaAssign' | 'variantMediaUnassign' | 'verifyOtp' | 'vinPatternCreate' | 'vinPatternDelete' | 'vinPatternPartRelationBulkAdd' | 'vinPatternPartRelationBulkDelete' | 'vinPatternUpdate' | 'voucherBulkDelete' | 'voucherCataloguesAdd' | 'voucherCataloguesRemove' | 'voucherChannelListingUpdate' | 'voucherCodeBulkDelete' | 'voucherCreate' | 'voucherDelete' | 'voucherTranslate' | 'voucherUpdate' | 'webhookCreate' | 'webhookDelete' | 'webhookDryRun' | 'webhookTrigger' | 'webhookUpdate' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('accountAddressCreate' | 'accountAddressDelete' | 'accountAddressUpdate' | 'accountDelete' | 'accountRegister' | 'accountRequestDeletion' | 'accountSetDefaultAddress' | 'accountUpdate' | 'addressCreate' | 'addressDelete' | 'addressSetDefault' | 'addressUpdate' | 'appActivate' | 'appCreate' | 'appDeactivate' | 'appDelete' | 'appDeleteFailedInstallation' | 'appFetchManifest' | 'appInstall' | 'appRetryInstall' | 'appTokenCreate' | 'appTokenDelete' | 'appTokenVerify' | 'appUpdate' | 'assignNavigation' | 'assignWarehouseShippingZone' | 'attributeBulkCreate' | 'attributeBulkDelete' | 'attributeBulkTranslate' | 'attributeBulkUpdate' | 'attributeCreate' | 'attributeDelete' | 'attributeReorderValues' | 'attributeTranslate' | 'attributeUpdate' | 'attributeValueBulkDelete' | 'attributeValueBulkTranslate' | 'attributeValueCreate' | 'attributeValueDelete' | 'attributeValueTranslate' | 'attributeValueUpdate' | 'carCreate' | 'carMakeCreate' | 'carMakeDelete' | 'carMakeUpdate' | 'carModelCreate' | 'carModelDelete' | 'carModelUpdate' | 'categoryBulkDelete' | 'categoryCreate' | 'categoryDelete' | 'categoryTranslate' | 'categoryUpdate' | 'channelActivate' | 'channelCreate' | 'channelDeactivate' | 'channelDelete' | 'channelReorderWarehouses' | 'channelUpdate' | 'checkoutAddPromoCode' | 'checkoutBillingAddressUpdate' | 'checkoutComplete' | 'checkoutCreate' | 'checkoutCreateFromOrder' | 'checkoutCustomerAttach' | 'checkoutCustomerDetach' | 'checkoutDeliveryMethodUpdate' | 'checkoutEmailUpdate' | 'checkoutLanguageCodeUpdate' | 'checkoutLineDelete' | 'checkoutLinesAdd' | 'checkoutLinesDelete' | 'checkoutLinesUpdate' | 'checkoutPaymentCreate' | 'checkoutRemovePromoCode' | 'checkoutShippingAddressUpdate' | 'checkoutShippingMethodUpdate' | 'collectionAddProducts' | 'collectionBulkDelete' | 'collectionChannelListingUpdate' | 'collectionCreate' | 'collectionDelete' | 'collectionRemoveProducts' | 'collectionReorderProducts' | 'collectionTranslate' | 'collectionUpdate' | 'confirmAccount' | 'confirmEmailChange' | 'createWarehouse' | 'customerBulkDelete' | 'customerBulkUpdate' | 'customerCarAdd' | 'customerCarDelete' | 'customerCreate' | 'customerDelete' | 'customerUpdate' | 'deleteMetadata' | 'deletePrivateMetadata' | 'deleteWarehouse' | 'digitalContentCreate' | 'digitalContentDelete' | 'digitalContentUpdate' | 'digitalContentUrlCreate' | 'draftOrderBulkDelete' | 'draftOrderComplete' | 'draftOrderCreate' | 'draftOrderDelete' | 'draftOrderLinesBulkDelete' | 'draftOrderUpdate' | 'eventDeliveryRetry' | 'exportGiftCards' | 'exportProducts' | 'exportVoucherCodes' | 'externalAuthenticationUrl' | 'externalLogout' | 'externalNotificationTrigger' | 'externalObtainAccessTokens' | 'externalRefresh' | 'externalVerify' | 'fileUpload' | 'giftCardActivate' | 'giftCardAddNote' | 'giftCardBulkActivate' | 'giftCardBulkCreate' | 'giftCardBulkDeactivate' | 'giftCardBulkDelete' | 'giftCardCreate' | 'giftCardDeactivate' | 'giftCardDelete' | 'giftCardResend' | 'giftCardSettingsUpdate' | 'giftCardUpdate' | 'invoiceCreate' | 'invoiceDelete' | 'invoiceRequest' | 'invoiceRequestDelete' | 'invoiceSendNotification' | 'invoiceUpdate' | 'menuBulkDelete' | 'menuCreate' | 'menuDelete' | 'menuItemBulkDelete' | 'menuItemCreate' | 'menuItemDelete' | 'menuItemMove' | 'menuItemTranslate' | 'menuItemUpdate' | 'menuUpdate' | 'orderAddNote' | 'orderBulkCancel' | 'orderBulkCreate' | 'orderCancel' | 'orderCapture' | 'orderConfirm' | 'orderCreateFromCheckout' | 'orderDiscountAdd' | 'orderDiscountDelete' | 'orderDiscountUpdate' | 'orderFulfill' | 'orderFulfillmentApprove' | 'orderFulfillmentCancel' | 'orderFulfillmentRefundProducts' | 'orderFulfillmentReturnProducts' | 'orderFulfillmentUpdateTracking' | 'orderGrantRefundCreate' | 'orderGrantRefundUpdate' | 'orderLineDelete' | 'orderLineDiscountRemove' | 'orderLineDiscountUpdate' | 'orderLineUpdate' | 'orderLinesCreate' | 'orderMarkAsPaid' | 'orderNoteAdd' | 'orderNoteUpdate' | 'orderRefund' | 'orderSettingsUpdate' | 'orderUpdate' | 'orderUpdateShipping' | 'orderVoid' | 'pageAttributeAssign' | 'pageAttributeUnassign' | 'pageBulkDelete' | 'pageBulkPublish' | 'pageCreate' | 'pageDelete' | 'pageReorderAttributeValues' | 'pageTranslate' | 'pageTypeBulkDelete' | 'pageTypeCreate' | 'pageTypeDelete' | 'pageTypeReorderAttributes' | 'pageTypeUpdate' | 'pageUpdate' | 'partRequestAdd' | 'partRequestDelete' | 'passwordChange' | 'paymentCapture' | 'paymentCheckBalance' | 'paymentGatewayInitialize' | 'paymentGatewayInitializeTokenization' | 'paymentInitialize' | 'paymentMethodInitializeTokenization' | 'paymentMethodProcessTokenization' | 'paymentRefund' | 'paymentVoid' | 'permissionGroupCreate' | 'permissionGroupDelete' | 'permissionGroupUpdate' | 'pluginUpdate' | 'productAttributeAssign' | 'productAttributeAssignmentUpdate' | 'productAttributeUnassign' | 'productBulkCreate' | 'productBulkDelete' | 'productBulkTranslate' | 'productChannelListingUpdate' | 'productCreate' | 'productDelete' | 'productMediaBulkDelete' | 'productMediaCreate' | 'productMediaDelete' | 'productMediaReorder' | 'productMediaUpdate' | 'productReorderAttributeValues' | 'productTranslate' | 'productTypeBulkDelete' | 'productTypeCreate' | 'productTypeDelete' | 'productTypeReorderAttributes' | 'productTypeUpdate' | 'productUpdate' | 'productVariantBulkCreate' | 'productVariantBulkDelete' | 'productVariantBulkTranslate' | 'productVariantBulkUpdate' | 'productVariantChannelListingUpdate' | 'productVariantCreate' | 'productVariantDelete' | 'productVariantPreorderDeactivate' | 'productVariantReorder' | 'productVariantReorderAttributeValues' | 'productVariantSetDefault' | 'productVariantStocksCreate' | 'productVariantStocksDelete' | 'productVariantStocksUpdate' | 'productVariantTranslate' | 'productVariantUpdate' | 'promotionBulkDelete' | 'promotionCreate' | 'promotionDelete' | 'promotionRuleCreate' | 'promotionRuleDelete' | 'promotionRuleTranslate' | 'promotionRuleUpdate' | 'promotionTranslate' | 'promotionUpdate' | 'requestEmailChange' | 'requestPasswordReset' | 'reviewCreate' | 'reviewUpdate' | 'saleBulkDelete' | 'saleCataloguesAdd' | 'saleCataloguesRemove' | 'saleChannelListingUpdate' | 'saleCreate' | 'saleDelete' | 'saleTranslate' | 'saleUpdate' | 'sendConfirmationEmail' | 'sendOtp' | 'setPassword' | 'shippingMethodChannelListingUpdate' | 'shippingPriceBulkDelete' | 'shippingPriceCreate' | 'shippingPriceDelete' | 'shippingPriceExcludeProducts' | 'shippingPriceRemoveProductFromExclude' | 'shippingPriceTranslate' | 'shippingPriceUpdate' | 'shippingZoneBulkDelete' | 'shippingZoneCreate' | 'shippingZoneDelete' | 'shippingZoneUpdate' | 'shopAddressUpdate' | 'shopDomainUpdate' | 'shopFetchTaxRates' | 'shopSettingsTranslate' | 'shopSettingsUpdate' | 'staffBulkDelete' | 'staffCreate' | 'staffDelete' | 'staffNotificationRecipientCreate' | 'staffNotificationRecipientDelete' | 'staffNotificationRecipientUpdate' | 'staffUpdate' | 'stockBulkUpdate' | 'storedPaymentMethodRequestDelete' | 'taxClassCreate' | 'taxClassDelete' | 'taxClassUpdate' | 'taxConfigurationUpdate' | 'taxCountryConfigurationDelete' | 'taxCountryConfigurationUpdate' | 'taxExemptionManage' | 'tenantCreate' | 'tenantDelete' | 'tenantUpdate' | 'tokenCreate' | 'tokenRefresh' | 'tokenVerify' | 'tokensDeactivateAll' | 'transactionCreate' | 'transactionEventReport' | 'transactionInitialize' | 'transactionProcess' | 'transactionRequestAction' | 'transactionRequestRefundForGrantedRefund' | 'transactionUpdate' | 'unassignWarehouseShippingZone' | 'updateMetadata' | 'updatePrivateMetadata' | 'updateWarehouse' | 'userAvatarDelete' | 'userAvatarUpdate' | 'userBulkSetActive' | 'variantMediaAssign' | 'variantMediaUnassign' | 'verifyOtp' | 'vinPatternCreate' | 'vinPatternDelete' | 'vinPatternPartRelationBulkAdd' | 'vinPatternPartRelationBulkDelete' | 'vinPatternUpdate' | 'voucherBulkDelete' | 'voucherCataloguesAdd' | 'voucherCataloguesRemove' | 'voucherChannelListingUpdate' | 'voucherCodeBulkDelete' | 'voucherCreate' | 'voucherDelete' | 'voucherTranslate' | 'voucherUpdate' | 'webhookCreate' | 'webhookDelete' | 'webhookDryRun' | 'webhookTrigger' | 'webhookUpdate' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	accountAddressCreate?: FieldPolicy<any> | FieldReadFunction<any>,
 	accountAddressDelete?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -40838,6 +41355,8 @@ export type MutationFieldPolicy = {
 	pageTypeReorderAttributes?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageTypeUpdate?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageUpdate?: FieldPolicy<any> | FieldReadFunction<any>,
+	partRequestAdd?: FieldPolicy<any> | FieldReadFunction<any>,
+	partRequestDelete?: FieldPolicy<any> | FieldReadFunction<any>,
 	passwordChange?: FieldPolicy<any> | FieldReadFunction<any>,
 	paymentCapture?: FieldPolicy<any> | FieldReadFunction<any>,
 	paymentCheckBalance?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -40901,6 +41420,8 @@ export type MutationFieldPolicy = {
 	promotionUpdate?: FieldPolicy<any> | FieldReadFunction<any>,
 	requestEmailChange?: FieldPolicy<any> | FieldReadFunction<any>,
 	requestPasswordReset?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviewCreate?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviewUpdate?: FieldPolicy<any> | FieldReadFunction<any>,
 	saleBulkDelete?: FieldPolicy<any> | FieldReadFunction<any>,
 	saleCataloguesAdd?: FieldPolicy<any> | FieldReadFunction<any>,
 	saleCataloguesRemove?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -41812,6 +42333,37 @@ export type PageUpdatedFieldPolicy = {
 	recipient?: FieldPolicy<any> | FieldReadFunction<any>,
 	version?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type PartRequestKeySpecifier = ('carDetails' | 'createdAt' | 'id' | 'name' | 'partDetails' | PartRequestKeySpecifier)[];
+export type PartRequestFieldPolicy = {
+	carDetails?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	name?: FieldPolicy<any> | FieldReadFunction<any>,
+	partDetails?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type PartRequestAddKeySpecifier = ('carErrors' | 'errors' | 'partRequest' | PartRequestAddKeySpecifier)[];
+export type PartRequestAddFieldPolicy = {
+	carErrors?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	partRequest?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type PartRequestCountableConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | PartRequestCountableConnectionKeySpecifier)[];
+export type PartRequestCountableConnectionFieldPolicy = {
+	edges?: FieldPolicy<any> | FieldReadFunction<any>,
+	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type PartRequestCountableEdgeKeySpecifier = ('cursor' | 'node' | PartRequestCountableEdgeKeySpecifier)[];
+export type PartRequestCountableEdgeFieldPolicy = {
+	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
+	node?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type PartRequestDeleteKeySpecifier = ('carErrors' | 'errors' | 'successMessage' | PartRequestDeleteKeySpecifier)[];
+export type PartRequestDeleteFieldPolicy = {
+	carErrors?: FieldPolicy<any> | FieldReadFunction<any>,
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	successMessage?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type PasswordChangeKeySpecifier = ('accountErrors' | 'errors' | 'user' | PasswordChangeKeySpecifier)[];
 export type PasswordChangeFieldPolicy = {
 	accountErrors?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -42193,12 +42745,13 @@ export type PreorderThresholdFieldPolicy = {
 	quantity?: FieldPolicy<any> | FieldReadFunction<any>,
 	soldUnits?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type ProductKeySpecifier = ('attribute' | 'attributes' | 'availableForPurchase' | 'availableForPurchaseAt' | 'category' | 'channel' | 'channelListings' | 'chargeTaxes' | 'collections' | 'created' | 'defaultVariant' | 'description' | 'descriptionJson' | 'externalReference' | 'fitments' | 'id' | 'imageById' | 'images' | 'isAvailable' | 'isAvailableForPurchase' | 'isUniversal' | 'media' | 'mediaById' | 'metadata' | 'metafield' | 'metafields' | 'name' | 'pricing' | 'privateMetadata' | 'privateMetafield' | 'privateMetafields' | 'productType' | 'rating' | 'seoDescription' | 'seoTitle' | 'slug' | 'taxClass' | 'taxType' | 'thumbnail' | 'translation' | 'updatedAt' | 'variant' | 'variants' | 'weight' | ProductKeySpecifier)[];
+export type ProductKeySpecifier = ('attribute' | 'attributes' | 'availableForPurchase' | 'availableForPurchaseAt' | 'averageRating' | 'category' | 'channel' | 'channelListings' | 'chargeTaxes' | 'collections' | 'created' | 'defaultVariant' | 'description' | 'descriptionJson' | 'externalReference' | 'id' | 'imageById' | 'images' | 'isAvailable' | 'isAvailableForPurchase' | 'isUniversal' | 'media' | 'mediaById' | 'metadata' | 'metafield' | 'metafields' | 'name' | 'pricing' | 'privateMetadata' | 'privateMetafield' | 'privateMetafields' | 'productType' | 'rating' | 'reviewCount' | 'reviews1Star' | 'reviews2Stars' | 'reviews3Stars' | 'reviews4Stars' | 'reviews5Stars' | 'seoDescription' | 'seoTitle' | 'slug' | 'taxClass' | 'taxType' | 'thumbnail' | 'translation' | 'updatedAt' | 'variant' | 'variants' | 'weight' | ProductKeySpecifier)[];
 export type ProductFieldPolicy = {
 	attribute?: FieldPolicy<any> | FieldReadFunction<any>,
 	attributes?: FieldPolicy<any> | FieldReadFunction<any>,
 	availableForPurchase?: FieldPolicy<any> | FieldReadFunction<any>,
 	availableForPurchaseAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	averageRating?: FieldPolicy<any> | FieldReadFunction<any>,
 	category?: FieldPolicy<any> | FieldReadFunction<any>,
 	channel?: FieldPolicy<any> | FieldReadFunction<any>,
 	channelListings?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -42209,7 +42762,6 @@ export type ProductFieldPolicy = {
 	description?: FieldPolicy<any> | FieldReadFunction<any>,
 	descriptionJson?: FieldPolicy<any> | FieldReadFunction<any>,
 	externalReference?: FieldPolicy<any> | FieldReadFunction<any>,
-	fitments?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	imageById?: FieldPolicy<any> | FieldReadFunction<any>,
 	images?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -42228,6 +42780,12 @@ export type ProductFieldPolicy = {
 	privateMetafields?: FieldPolicy<any> | FieldReadFunction<any>,
 	productType?: FieldPolicy<any> | FieldReadFunction<any>,
 	rating?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviewCount?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviews1Star?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviews2Stars?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviews3Stars?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviews4Stars?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviews5Stars?: FieldPolicy<any> | FieldReadFunction<any>,
 	seoDescription?: FieldPolicy<any> | FieldReadFunction<any>,
 	seoTitle?: FieldPolicy<any> | FieldReadFunction<any>,
 	slug?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -43162,7 +43720,7 @@ export type PromotionUpdatedEventFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
 	type?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('_entities' | '_service' | 'address' | 'addressValidationRules' | 'app' | 'appExtension' | 'appExtensions' | 'apps' | 'appsInstallations' | 'attribute' | 'attributes' | 'car' | 'carEngine' | 'carEngines' | 'carMake' | 'carMakes' | 'carModel' | 'carModels' | 'carPartRelations' | 'carVariant' | 'carVariants' | 'carYears' | 'cars' | 'categories' | 'category' | 'channel' | 'channels' | 'checkPhoneExists' | 'checkProductCompatibility' | 'checkout' | 'checkoutLines' | 'checkouts' | 'collection' | 'collections' | 'customerCar' | 'customerCars' | 'customers' | 'digitalContent' | 'digitalContents' | 'draftOrders' | 'exportFile' | 'exportFiles' | 'fitment' | 'fitments' | 'getShippingZones' | 'giftCard' | 'giftCardCurrencies' | 'giftCardSettings' | 'giftCardTags' | 'giftCards' | 'homepageEvents' | 'me' | 'menu' | 'menuItem' | 'menuItems' | 'menus' | 'order' | 'orderByToken' | 'orderSettings' | 'orders' | 'ordersTotal' | 'page' | 'pageType' | 'pageTypes' | 'pages' | 'payment' | 'payments' | 'permissionGroup' | 'permissionGroups' | 'plugin' | 'plugins' | 'product' | 'productType' | 'productTypes' | 'productVariant' | 'productVariants' | 'products' | 'promotion' | 'promotions' | 'reportProductSales' | 'sale' | 'sales' | 'shippingZone' | 'shippingZones' | 'shop' | 'staffUsers' | 'stock' | 'stocks' | 'taxClass' | 'taxClasses' | 'taxConfiguration' | 'taxConfigurations' | 'taxCountryConfiguration' | 'taxCountryConfigurations' | 'taxTypes' | 'tenant' | 'tenantWarehouse' | 'tenantWarehouses' | 'tenants' | 'transaction' | 'translation' | 'translations' | 'user' | 'vinPattern' | 'vinPatternPartRelation' | 'vinPatterns' | 'voucher' | 'vouchers' | 'warehouse' | 'warehouses' | 'webhook' | 'webhookEvents' | 'webhookSamplePayload' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('_entities' | '_service' | 'address' | 'addressValidationRules' | 'app' | 'appExtension' | 'appExtensions' | 'apps' | 'appsInstallations' | 'attribute' | 'attributes' | 'car' | 'carEngine' | 'carEngines' | 'carMake' | 'carMakes' | 'carModel' | 'carModels' | 'carPartRelations' | 'carVariant' | 'carVariants' | 'carYears' | 'cars' | 'categories' | 'category' | 'channel' | 'channels' | 'checkPhoneExists' | 'checkProductCompatibility' | 'checkout' | 'checkoutLines' | 'checkouts' | 'collection' | 'collections' | 'customerCar' | 'customerCars' | 'customers' | 'digitalContent' | 'digitalContents' | 'draftOrders' | 'exportFile' | 'exportFiles' | 'fitment' | 'fitments' | 'getShippingZones' | 'giftCard' | 'giftCardCurrencies' | 'giftCardSettings' | 'giftCardTags' | 'giftCards' | 'homepageEvents' | 'me' | 'menu' | 'menuItem' | 'menuItems' | 'menus' | 'order' | 'orderByToken' | 'orderSettings' | 'orders' | 'ordersTotal' | 'page' | 'pageType' | 'pageTypes' | 'pages' | 'partRequest' | 'partRequests' | 'payment' | 'payments' | 'permissionGroup' | 'permissionGroups' | 'plugin' | 'plugins' | 'product' | 'productType' | 'productTypes' | 'productVariant' | 'productVariants' | 'products' | 'promotion' | 'promotions' | 'reportProductSales' | 'review' | 'reviews' | 'sale' | 'sales' | 'shippingZone' | 'shippingZones' | 'shop' | 'staffUsers' | 'stock' | 'stocks' | 'taxClass' | 'taxClasses' | 'taxConfiguration' | 'taxConfigurations' | 'taxCountryConfiguration' | 'taxCountryConfigurations' | 'taxTypes' | 'tenant' | 'tenantWarehouse' | 'tenantWarehouses' | 'tenants' | 'transaction' | 'translation' | 'translations' | 'user' | 'vinPattern' | 'vinPatternPartRelation' | 'vinPatterns' | 'voucher' | 'vouchers' | 'warehouse' | 'warehouses' | 'webhook' | 'webhookEvents' | 'webhookSamplePayload' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	_entities?: FieldPolicy<any> | FieldReadFunction<any>,
 	_service?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -43229,6 +43787,8 @@ export type QueryFieldPolicy = {
 	pageType?: FieldPolicy<any> | FieldReadFunction<any>,
 	pageTypes?: FieldPolicy<any> | FieldReadFunction<any>,
 	pages?: FieldPolicy<any> | FieldReadFunction<any>,
+	partRequest?: FieldPolicy<any> | FieldReadFunction<any>,
+	partRequests?: FieldPolicy<any> | FieldReadFunction<any>,
 	payment?: FieldPolicy<any> | FieldReadFunction<any>,
 	payments?: FieldPolicy<any> | FieldReadFunction<any>,
 	permissionGroup?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -43244,6 +43804,8 @@ export type QueryFieldPolicy = {
 	promotion?: FieldPolicy<any> | FieldReadFunction<any>,
 	promotions?: FieldPolicy<any> | FieldReadFunction<any>,
 	reportProductSales?: FieldPolicy<any> | FieldReadFunction<any>,
+	review?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviews?: FieldPolicy<any> | FieldReadFunction<any>,
 	sale?: FieldPolicy<any> | FieldReadFunction<any>,
 	sales?: FieldPolicy<any> | FieldReadFunction<any>,
 	shippingZone?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -43300,6 +43862,47 @@ export type RequestPasswordResetKeySpecifier = ('accountErrors' | 'errors' | Req
 export type RequestPasswordResetFieldPolicy = {
 	accountErrors?: FieldPolicy<any> | FieldReadFunction<any>,
 	errors?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReviewKeySpecifier = ('car' | 'contact' | 'content' | 'created' | 'firstname' | 'id' | 'isVerified' | 'product' | 'rating' | ReviewKeySpecifier)[];
+export type ReviewFieldPolicy = {
+	car?: FieldPolicy<any> | FieldReadFunction<any>,
+	contact?: FieldPolicy<any> | FieldReadFunction<any>,
+	content?: FieldPolicy<any> | FieldReadFunction<any>,
+	created?: FieldPolicy<any> | FieldReadFunction<any>,
+	firstname?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	isVerified?: FieldPolicy<any> | FieldReadFunction<any>,
+	product?: FieldPolicy<any> | FieldReadFunction<any>,
+	rating?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReviewCountableConnectionKeySpecifier = ('edges' | 'pageInfo' | 'totalCount' | ReviewCountableConnectionKeySpecifier)[];
+export type ReviewCountableConnectionFieldPolicy = {
+	edges?: FieldPolicy<any> | FieldReadFunction<any>,
+	pageInfo?: FieldPolicy<any> | FieldReadFunction<any>,
+	totalCount?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReviewCountableEdgeKeySpecifier = ('cursor' | 'node' | ReviewCountableEdgeKeySpecifier)[];
+export type ReviewCountableEdgeFieldPolicy = {
+	cursor?: FieldPolicy<any> | FieldReadFunction<any>,
+	node?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReviewCreateMutationKeySpecifier = ('errors' | 'review' | 'reviewsErrors' | ReviewCreateMutationKeySpecifier)[];
+export type ReviewCreateMutationFieldPolicy = {
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	review?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviewsErrors?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReviewErrorKeySpecifier = ('code' | 'field' | 'message' | ReviewErrorKeySpecifier)[];
+export type ReviewErrorFieldPolicy = {
+	code?: FieldPolicy<any> | FieldReadFunction<any>,
+	field?: FieldPolicy<any> | FieldReadFunction<any>,
+	message?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReviewUpdateMutationKeySpecifier = ('errors' | 'review' | 'reviewsErrors' | ReviewUpdateMutationKeySpecifier)[];
+export type ReviewUpdateMutationFieldPolicy = {
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	review?: FieldPolicy<any> | FieldReadFunction<any>,
+	reviewsErrors?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type SaleKeySpecifier = ('categories' | 'channelListings' | 'collections' | 'created' | 'currency' | 'discountValue' | 'endDate' | 'id' | 'metadata' | 'metafield' | 'metafields' | 'name' | 'privateMetadata' | 'privateMetafield' | 'privateMetafields' | 'products' | 'startDate' | 'translation' | 'type' | 'updatedAt' | 'variants' | SaleKeySpecifier)[];
 export type SaleFieldPolicy = {
@@ -47039,6 +47642,26 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | PageUpdatedKeySpecifier | (() => undefined | PageUpdatedKeySpecifier),
 		fields?: PageUpdatedFieldPolicy,
 	},
+	PartRequest?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PartRequestKeySpecifier | (() => undefined | PartRequestKeySpecifier),
+		fields?: PartRequestFieldPolicy,
+	},
+	PartRequestAdd?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PartRequestAddKeySpecifier | (() => undefined | PartRequestAddKeySpecifier),
+		fields?: PartRequestAddFieldPolicy,
+	},
+	PartRequestCountableConnection?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PartRequestCountableConnectionKeySpecifier | (() => undefined | PartRequestCountableConnectionKeySpecifier),
+		fields?: PartRequestCountableConnectionFieldPolicy,
+	},
+	PartRequestCountableEdge?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PartRequestCountableEdgeKeySpecifier | (() => undefined | PartRequestCountableEdgeKeySpecifier),
+		fields?: PartRequestCountableEdgeFieldPolicy,
+	},
+	PartRequestDelete?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PartRequestDeleteKeySpecifier | (() => undefined | PartRequestDeleteKeySpecifier),
+		fields?: PartRequestDeleteFieldPolicy,
+	},
 	PasswordChange?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | PasswordChangeKeySpecifier | (() => undefined | PasswordChangeKeySpecifier),
 		fields?: PasswordChangeFieldPolicy,
@@ -47754,6 +48377,30 @@ export type StrictTypedTypePolicies = {
 	RequestPasswordReset?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | RequestPasswordResetKeySpecifier | (() => undefined | RequestPasswordResetKeySpecifier),
 		fields?: RequestPasswordResetFieldPolicy,
+	},
+	Review?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReviewKeySpecifier | (() => undefined | ReviewKeySpecifier),
+		fields?: ReviewFieldPolicy,
+	},
+	ReviewCountableConnection?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReviewCountableConnectionKeySpecifier | (() => undefined | ReviewCountableConnectionKeySpecifier),
+		fields?: ReviewCountableConnectionFieldPolicy,
+	},
+	ReviewCountableEdge?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReviewCountableEdgeKeySpecifier | (() => undefined | ReviewCountableEdgeKeySpecifier),
+		fields?: ReviewCountableEdgeFieldPolicy,
+	},
+	ReviewCreateMutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReviewCreateMutationKeySpecifier | (() => undefined | ReviewCreateMutationKeySpecifier),
+		fields?: ReviewCreateMutationFieldPolicy,
+	},
+	ReviewError?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReviewErrorKeySpecifier | (() => undefined | ReviewErrorKeySpecifier),
+		fields?: ReviewErrorFieldPolicy,
+	},
+	ReviewUpdateMutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReviewUpdateMutationKeySpecifier | (() => undefined | ReviewUpdateMutationKeySpecifier),
+		fields?: ReviewUpdateMutationFieldPolicy,
 	},
 	Sale?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | SaleKeySpecifier | (() => undefined | SaleKeySpecifier),

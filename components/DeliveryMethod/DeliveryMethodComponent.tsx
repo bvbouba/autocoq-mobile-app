@@ -20,9 +20,10 @@ interface OptionProps {
 interface props {
     availableShippingMethods:ShippingMethodFragment[];
     selectedOption: string;
-    handleSelect: (id: string) => void
+    handleSelect: (id: string) => void;
+    isAvailable?:boolean
 }
-export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption,handleSelect}:props) => {
+export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption,handleSelect,isAvailable}:props) => {
   const getShippingMethodById = (shippingId: string) => {
         return availableShippingMethods?.find(method =>
           method.metadata.some(meta => meta.key === "id" && meta.value === shippingId)
@@ -74,23 +75,33 @@ export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption
       {options.map(option => (
         <TouchableOpacity
           key={option.methodId}
-          style={[styles.option, selectedOption === option.methodId && styles.selectedOption]}
+          style={[styles.option,
+            !isAvailable && {
+              backgroundColor:colors.background
+            }
+            , selectedOption === option.methodId && styles.selectedOption]}
           onPress={() => handleSelect(option.methodId)}
+          disabled={!isAvailable}
         >
           <View style={styles.optionContent}>
             <View style={styles.iconTextContainer}>
-              <FontAwesome name={option.icon} size={20} color="black" />
+              <FontAwesome name={option.icon} size={20} color={isAvailable ? "black" : colors.textSecondary} />
               <View>
-                <Text style={styles.title}>{option.title}</Text>
+                <Text style={[styles.title, !isAvailable && {
+                  color:colors.textSecondary
+                }]}>{option.title}</Text>
                 <RichText jsonStringData={option.description} stylesOverride={{
                   paragraph:{
                   fontSize:fonts.sm,
                   lineHeight: 20,
+                  color:isAvailable ? "black" :colors.textSecondary
                   }
                 }}/>
               </View>
             </View>
-            <View style={[styles.radio, selectedOption === option.methodId && styles.radioSelected]} >
+            <View style={[styles.radio, 
+              !isAvailable && {borderColor:colors.textSecondary},
+              selectedOption === option.methodId && styles.radioSelected]} >
               
               {(selectedOption === option.methodId) && <View style={styles.innerCircle} />}
               </View>

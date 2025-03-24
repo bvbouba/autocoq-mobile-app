@@ -5,11 +5,10 @@ import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
 import { getConfig } from "@/config";
 import CategoriesScroll from "../Dashboard/CategoriesScroll";
-import AuthPrompt from "../AuthPrompt";
-import { useAuth } from "@/lib/providers/authProvider";
 import { useLoading } from "@/context/LoadingContext";
 import HomepageCarousel from "../layout/HomepageCarousel";
 import { useMessage } from "@/context/MessageContext";
+import ContactUS from "../contactUs/ContactUs";
 
 
 
@@ -63,7 +62,8 @@ const DashboardScreen = () => {
             loading={loading}
           />
           <Divider />
-
+          
+          <ContactUS />
 
         </PaddedView>
 

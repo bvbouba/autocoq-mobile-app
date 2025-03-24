@@ -13,6 +13,8 @@ import { renderStars } from "@/utils/renderStars";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { Skeleton } from "moti/skeleton";
 
+const dummyUri = require("../../assets/images/photo-unavailable.png");
+
 interface Props {
     product: ProductCardFragment
 }
@@ -27,7 +29,7 @@ const ProductImage: FC<{ product: ProductCardFragment, isPressed: boolean }> = (
             }}
         />
     }
-    return <>No Image</>
+    return <Image source={dummyUri} style={styles.tinyLogo} />
 }
 
 const ProductListItem: FC<Props> = ({ product }) => {
@@ -42,7 +44,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
             slug:product.slug
         }
     });
-    const productDetails = data?.product
+    const productDetails = data?.product 
 
     const condition = productDetails?.attributes.find(a=>a.attribute.slug==="condition")
     const warranty = productDetails?.attributes.find(a=>a.attribute.slug==="garantie")
@@ -74,8 +76,6 @@ const ProductListItem: FC<Props> = ({ product }) => {
         }
     };
 
-    // Convert rating value to stars
-
     return (
         <>
             <View style={styles.productItem}>
@@ -102,8 +102,8 @@ const ProductListItem: FC<Props> = ({ product }) => {
                                     <Text style={[styles.productTitle, isTitlePressed && styles.pressedText]} numberOfLines={2}>
                                         {product.name}
                                     </Text>
-                                    <FontAwesome name="arrow-right" size={15} color={colors.primary}
-                                    />
+                                    {/* <FontAwesome name="arrow-right" size={15} color={colors.primary}
+                                    /> */}
                                 </View>
                             </TouchableOpacity>
                             {/* Reference and SKU */}
@@ -129,9 +129,9 @@ const ProductListItem: FC<Props> = ({ product }) => {
                             <View style={{marginVertical:10}}>
                             <Skeleton height={20} width={200} radius={2} colorMode="light"/>
                             </View>:
-                            productDetails?.rating !== undefined && (
+                            productDetails?.averageRating !== undefined && (
                                 <Text style={styles.ratingText}>
-                                    {renderStars(productDetails?.rating || 0)} ({productDetails?.rating})
+                                    {renderStars(productDetails?.averageRating || 0)} {productDetails?.averageRating} ({productDetails?.reviewCount})
                                 </Text>
                             ) 
                             
@@ -172,10 +172,16 @@ const ProductListItem: FC<Props> = ({ product }) => {
                             <TouchableOpacity
                                 activeOpacity={0.6} 
                                 onPress={handleAddItem}
-                                disabled={loading}
-                                style={styles.button}
+                                disabled={loading || !product.isAvailable}
+                                style={[styles.button, !product.isAvailable && {
+                                    backgroundColor: colors.background,
+                                }]}
                             >
-                                {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>AJOUTER AU PANIER</Text>}
+                                {loading ? <ActivityIndicator color="white" /> : <Text style={[styles.buttonText,
+                                    !product.isAvailable && {
+                                        color: colors.textPrimary,
+                                    }
+                                ]}>AJOUTER AU PANIER</Text>}
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -203,6 +209,7 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 10,
         paddingHorizontal: 5,
+        paddingLeft:10
     },
     tinyLogo: {
         width: 100,

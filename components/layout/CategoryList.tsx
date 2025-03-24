@@ -1,6 +1,6 @@
 import { View, Text, PaddedView, Divider, fonts, colors } from "@/components/Themed";
 import { StyleSheet } from "react-native";
-import { useGetMenuItemQuery, useGetMenuQuery } from "@/saleor/api.generated";
+import { useGetMenuItemQuery } from "@/saleor/api.generated";
 import { useLocalSearchParams, useRouter } from "expo-router";
 
 import ListItem from "../ListItem";
@@ -8,25 +8,20 @@ import { useEffect } from "react";
 import { useNavigationContext } from "@/context/NavigationContext";
 import { useLoading } from "@/context/LoadingContext";
 import { Skeleton } from "moti/skeleton";
+import { useMenuContext } from "@/context/MenuProvider";
+import CategoryGrid from "./CategoryGrid";
 
 const CategoryList = () => {
     const { setLoading } = useLoading();
     const { setNavigationLink } = useNavigationContext();
     const router = useRouter();
-
+    const { menu } = useMenuContext(); 
+    
     const { id } = useLocalSearchParams();
 
-    // Fetch Level 0 menu
-    const { data: menuData, loading: menuLoading} = useGetMenuQuery({
-        variables: {
-            channel: "ci",
-            slug: "shop",
-        },
-        skip: !!id, // Skip if ID exists (meaning user is at a deeper level)
-    });
 
     // Fetch Subcategories (Level 1+)
-    const { data: menuItemData, loading: menuItemLoading, previousData:previousMenuItemData } = useGetMenuItemQuery({
+    const { data: menuItemData, loading, previousData } = useGetMenuItemQuery({
         variables: {
             channel: "ci",
             id: id ? String(id) : "",
@@ -35,74 +30,43 @@ const CategoryList = () => {
     });
 
     useEffect(() => {
-        setLoading(menuLoading || menuItemLoading);
-    }, [menuLoading, menuItemLoading]);
+        setLoading(loading);
+    }, [ loading]);
 
     useEffect(() => {
-        if (id && !menuItemLoading && menuItemData?.menuItem) {
+        if (menuItemData?.menuItem) {
             if(menuItemData.menuItem.parent?.id) {
                 setNavigationLink(`/shop?id=${menuItemData.menuItem.parent?.id}`)
-            } else {
+            }else {
                 setNavigationLink("/shop")
-            }
-        }else if (!menuLoading &&  menuData?.menu){
-            setNavigationLink("/")
+            } 
         }
-    }, [id, menuItemLoading, menuLoading, menuItemData, setNavigationLink,menuData]);
+    }, [id, menuItemData, setNavigationLink,menu]);
 
-    if (menuItemLoading && !previousMenuItemData) {
+    if (loading) {
         return (
-            <View style={styles.container}>
-                <PaddedView>
-                    <Skeleton colorMode="light" height={30} width={180} radius={2} />
-                </PaddedView>
-                <PaddedView style={{ flexDirection: "column" }}>
-                    {[...Array(4)].map((_, index) => (
-                        <View key={index}>
-                            <Skeleton colorMode="light" height={20} width="100%" radius={2} />
-                            <Divider />
-                        </View>
-                    ))}
-                </PaddedView>
-            </View>
+            <CategoryGrid  
+                menuItem={previousData?.menuItem?.children|| menu?.items || []}
+                categoryName={previousData?.menuItem ? previousData.menuItem?.name : "Voir par catégorie"}
+                id={id}
+                />
         );
     }
     
-    const menu = menuData?.menu 
-    const menuItem = menuItemData?.menuItem || previousMenuItemData?.menuItem
+    const menuItem = menuItemData?.menuItem 
 
     // Ensure we don't return null for Level 0
     if (!menuItem && !menu) return null;
 
     const children = menuItem?.children || menu?.items || [];
     const categoryName = menuItem ? menuItem.name : "Voir par catégorie";
-
+    
     return (
-        <View style={styles.container}>
-            <PaddedView>
-                <Text style={styles.categoryListTitle}>{categoryName}</Text>
-            </PaddedView>
-            <PaddedView style={{ flexDirection: "column" }}>
-                {children.map((child) => {
-                    const greatChild = child.children;
-                    const icon = child.category?.metadata.find(m => m.key === "icon");
-                    const onPress = () => {
-                        if (greatChild && greatChild.length > 0) {
-                            router.push(`/shop?id=${child.id}`);
-                        } else {
-                            setNavigationLink(`/shop?id=${id}`)
-                            router.push(`/categories/${child.category?.slug}`);
-                        }
-                    };
-                    return (
-                        <View key={child.id}>
-                            <ListItem name={child.name} onPress={onPress} icon={icon?.value} />
-                            <Divider />
-                        </View>
-                    );
-                })}
-            </PaddedView>
-        </View>
+        <CategoryGrid  
+        menuItem={children}
+        categoryName={categoryName}
+        id={id}
+        />
     );
 };
 

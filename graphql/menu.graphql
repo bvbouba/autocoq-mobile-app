@@ -19,15 +19,19 @@ fragment MenuItemFragment on MenuItem {
   }
 }
 
-query getMainMenu($channel: String!) {
-  menu(slug:"homepage",channel:$channel){
-    name
+fragment MenuFragment on Menu {
+  name
     items{
       ...MenuItemFragment
        children{
       ...MenuItemFragment
     }
     }
+}
+
+query getMainMenu($channel: String!) {
+  menu(slug:"homepage",channel:$channel){
+    ...MenuFragment
   }
 }
 

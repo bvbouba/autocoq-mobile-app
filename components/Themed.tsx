@@ -115,7 +115,8 @@ export const colors = {
 
 export const fonts = {
   h1: 25, 
-  h2: 18,
+  h2: 22, 
+  h3: 18,
   body:14,
   caption:12,
   button:14,
