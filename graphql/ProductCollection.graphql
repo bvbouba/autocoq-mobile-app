@@ -37,9 +37,6 @@ query AdditionalProductData($slug: String!) {
         name
       }
     }
-    variants {
-    ...ProductVariantFragment
-  }
     defaultVariant {
     ...ProductVariantFragment
     }

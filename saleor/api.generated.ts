@@ -34640,14 +34640,14 @@ export type CompatibilityCheckQueryVariables = Exact<{
 
 export type CompatibilityCheckQuery = { __typename?: 'Query', checkProductCompatibility?: boolean | null };
 
-export type CategoryDetailsFragment = { __typename?: 'Category', id: string, name: string, slug: string, parent?: { __typename?: 'Category', slug: string } | null, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string } }> } | null } }> } | null };
+export type CategoryDetailsFragment = { __typename?: 'Category', id: string, name: string, slug: string };
 
 export type CategoryBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input'];
 }>;
 
 
-export type CategoryBySlugQuery = { __typename?: 'Query', category?: { __typename?: 'Category', id: string, name: string, slug: string, parent?: { __typename?: 'Category', slug: string } | null, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string, name: string, slug: string, metadata: Array<{ __typename?: 'MetadataItem', key: string, value: string }>, children?: { __typename?: 'CategoryCountableConnection', edges: Array<{ __typename?: 'CategoryCountableEdge', node: { __typename?: 'Category', id: string } }> } | null } }> } | null } | null };
+export type CategoryBySlugQuery = { __typename?: 'Query', category?: { __typename?: 'Category', id: string, name: string, slug: string } | null };
 
 export type CategoryPathFragment = { __typename?: 'Category', id: string, name: string, slug: string, level: number, backgroundImage?: { __typename?: 'Image', url: string, alt?: string | null } | null, products?: { __typename?: 'ProductCountableConnection', edges: Array<{ __typename?: 'ProductCountableEdge', node: { __typename?: 'Product', name: string, media?: Array<{ __typename?: 'ProductMedia', url: string, alt: string }> | null } }> } | null };
 
@@ -34873,7 +34873,7 @@ export type AdditionalProductDataQueryVariables = Exact<{
 }>;
 
 
-export type AdditionalProductDataQuery = { __typename?: 'Query', product?: { __typename?: 'Product', externalReference?: string | null, reviewCount?: number | null, averageRating?: number | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }>, variants?: Array<{ __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> }> | null, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null } | null };
+export type AdditionalProductDataQuery = { __typename?: 'Query', product?: { __typename?: 'Product', externalReference?: string | null, reviewCount?: number | null, averageRating?: number | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', slug?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null }> }>, defaultVariant?: { __typename?: 'ProductVariant', id: string, sku?: string | null, name: string, media?: Array<{ __typename?: 'ProductMedia', id: string, alt: string, url: string }> | null, pricing?: { __typename?: 'VariantPricingInfo', price?: { __typename?: 'TaxedMoney', gross: { __typename?: 'Money', amount: number, currency: string } } | null } | null, attributes: Array<{ __typename?: 'SelectedAttribute', attribute: { __typename?: 'Attribute', id: string, slug?: string | null, name?: string | null }, values: Array<{ __typename?: 'AttributeValue', name?: string | null, slug?: string | null, value?: string | null, boolean?: boolean | null, plainText?: string | null }> }> } | null } | null };
 
 export type ProductCollectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
@@ -35073,29 +35073,6 @@ export const CategoryDetailsFragmentDoc = gql`
   id
   name
   slug
-  parent {
-    slug
-  }
-  children(first: 20) {
-    edges {
-      node {
-        id
-        name
-        slug
-        metadata {
-          key
-          value
-        }
-        children(first: 1) {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-      }
-    }
-  }
 }
     `;
 export const ShippingMethodFragmentDoc = gql`
@@ -37530,9 +37507,6 @@ export const AdditionalProductDataDocument = gql`
       values {
         name
       }
-    }
-    variants {
-      ...ProductVariantFragment
     }
     defaultVariant {
       ...ProductVariantFragment

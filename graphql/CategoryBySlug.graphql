@@ -2,29 +2,6 @@ fragment CategoryDetailsFragment on Category {
   id
   name
   slug
-   parent{
-        slug
-      }
-  children(first: 20) {
-    edges {
-      node {
-        id
-        name
-        slug
-        metadata{
-          key
-          value
-          }
-        children(first:1){
-          edges{
-            node{
-              id
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 

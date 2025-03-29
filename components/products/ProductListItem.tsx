@@ -56,11 +56,10 @@ const ProductListItem: FC<Props> = ({ product }) => {
         params.append(key, value as string);
     });
 
-    const variants = productDetails?.variants || [];
+    // const variants = productDetails?.variants || [];
     const defaultVariant = productDetails?.defaultVariant;
 
     const handleAddItem = async () => {
-        if (!(variants.length > 0)) return;
         setLoading(true);
         try {
             await onAddToCart(defaultVariant?.id || "");
@@ -167,7 +166,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                             </View>
                         )}
                         <CompatibilityCheckBasic product={product} />
-                        {defaultVariant && <DeliveryMethodBasic variant={defaultVariant} />}
+                        {/* {defaultVariant && <DeliveryMethodBasic variant={defaultVariant} />} */}
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 activeOpacity={0.6} 
