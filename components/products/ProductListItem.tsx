@@ -76,23 +76,14 @@ const ProductListItem: FC<Props> = ({ product }) => {
     };
 
     return (
-        <>
+        < TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}>
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper} testID="product-image-wrapper">
                     <View>
-                        <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}
-                            onPressIn={() => setIsImagePressed(true)}
-                            onPressOut={() => setIsImagePressed(false)}
-                        >
                             <ProductImage product={product} isPressed={isImagePressed} />
-                        </TouchableOpacity>
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
-                            <TouchableOpacity onPress={() => router.push(`/products/${product.id}?${params.toString()}`)}
-                                onPressIn={() => setIsTitlePressed(true)}
-                                onPressOut={() => setIsTitlePressed(false)}
-                            >
                                 <View
                                     style={{
                                         flexDirection: "row",
@@ -104,7 +95,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                                     {/* <FontAwesome name="arrow-right" size={15} color={colors.primary}
                                     /> */}
                                 </View>
-                            </TouchableOpacity>
+
                             {/* Reference and SKU */}
                             {additionalLoading ? <Skeleton height={20} width={200} radius={2} colorMode="light" /> :
                              <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -187,7 +178,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                 </View>
             </View>
             <Divider style={{ borderBottomWidth: 10, marginTop: 0, marginBottom: 0 }} />
-        </>
+        </TouchableOpacity>
     );
 };
 
