@@ -7,7 +7,6 @@ import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { useModal } from "@/context/useModal";
 import AddedToCart from "../cart/AddToTheCart";
-import DeliveryMethodBasic from "../DeliveryMethod/DeliveryMethodBasic";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { renderStars } from "@/utils/renderStars";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
@@ -19,10 +18,10 @@ interface Props {
     product: ProductCardFragment
 }
 
-const ProductImage: FC<{ product: ProductCardFragment, isPressed: boolean }> = ({ product, isPressed }) => {
+const ProductImage: FC<{ product: ProductCardFragment }> = ({ product }) => {
     if (product.media && product.media.length > 0) {
         return <Image
-            style={[styles.tinyLogo, isPressed && styles.pressedImage]} // Add pressed styles here
+            style={[styles.tinyLogo]} // Add pressed styles here
             resizeMode="contain"
             source={{
                 uri: product?.media[0].url
@@ -36,8 +35,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
     const { onAddToCart } = useCheckout();
     const { openModal } = useModal();
     const [loading, setLoading] = useState(false);
-    const [isImagePressed, setIsImagePressed] = useState(false);
-    const [isTitlePressed, setIsTitlePressed] = useState(false);
+
     
     const { data, loading: additionalLoading, error } = useAdditionalProductDataQuery({
         variables:{
@@ -80,7 +78,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
             <View style={styles.productItem}>
                 <View style={styles.imageWrapper} testID="product-image-wrapper">
                     <View>
-                            <ProductImage product={product} isPressed={isImagePressed} />
+                            <ProductImage product={product} />
                     </View>
                     <View style={styles.productDetailWrapper}>
                         <View>
@@ -89,7 +87,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                                         flexDirection: "row",
                                         justifyContent: "space-between",
                                     }}>
-                                    <Text style={[styles.productTitle, isTitlePressed && styles.pressedText]} numberOfLines={2}>
+                                    <Text style={[styles.productTitle]} numberOfLines={2}>
                                         {product.name}
                                     </Text>
                                     {/* <FontAwesome name="arrow-right" size={15} color={colors.primary}

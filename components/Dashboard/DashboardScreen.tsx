@@ -4,11 +4,11 @@ import { useRouter } from "expo-router";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
 import { getConfig } from "@/config";
-import CategoriesScroll from "../Dashboard/CategoriesScroll";
 import { useLoading } from "@/context/LoadingContext";
 import HomepageCarousel from "../layout/HomepageCarousel";
 import { useMessage } from "@/context/MessageContext";
 import ContactUS from "../contactUs/ContactUs";
+import PopularCategoryGrid from "./PopularCategoryGrid";
 
 
 
@@ -56,9 +56,8 @@ const DashboardScreen = () => {
           />
           <Divider /> */}
           {/* Catégories */}
-          <CategoriesScroll
+          <PopularCategoryGrid
             menus={categoriesData?.menu?.items || previousData?.menu?.items ||[]}
-            onClick={(slug) => router.push(`/categories/${slug}`)}
             loading={loading}
           />
           <Divider />

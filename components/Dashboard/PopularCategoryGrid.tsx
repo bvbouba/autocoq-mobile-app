@@ -7,11 +7,10 @@ import { Skeleton } from "moti/skeleton";
 
 interface Props {
     menus: MenuItemFragment[];
-    onClick: (category: string) => void;
     loading?: boolean;
 }
 
-const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
+const PopularCategoryGrid: FC<Props> = ({ menus, loading }) => {
     const router = useRouter();
     const items =
         menus.map((menu) => {
@@ -30,6 +29,7 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
                 alt: media?.alt || productMedia?.alt,
                 name: menu.name,
                 slug: menu.category?.slug || "",
+                id:menu.category?.id 
             };
         }) || [];
     
@@ -66,12 +66,19 @@ const CategoriesScroll: FC<Props> = ({ menus, onClick, loading }) => {
                         </View>
                     ))
                     : items.map((item, index) => (
-                        <Pressable key={index} onPress={() => onClick(item.slug)} style={styles.gridItem}>
-                            <View style={styles.imageContainer}>
-                                <Image source={{ uri: item.url }} resizeMode="contain" style={styles.image} />
-                            </View>
-                            <Text style={styles.itemText}>{item.name}</Text>
-                        </Pressable>
+                        <Pressable 
+                        key={index}
+                        onPress={() => router.push(`/categories/${item.id}`)}
+                        style={({ pressed }) => [
+                            styles.gridItem,
+                            { opacity: pressed ? 0.3 : 1 } // Reduce opacity when pressed
+                        ]}
+                    >
+                        <View style={styles.imageContainer}>
+                            <Image source={{ uri: item.url }} resizeMode="contain" style={styles.image} />
+                        </View>
+                        <Text style={styles.itemText}>{item.name}</Text>
+                    </Pressable>
                     ))}
             </View>
         </SurfaceView>
@@ -142,4 +149,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CategoriesScroll;
+export default PopularCategoryGrid;

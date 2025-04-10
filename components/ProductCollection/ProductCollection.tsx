@@ -26,9 +26,10 @@ export interface ProductCollectionProps {
   allowMore?: boolean;
   perPage?: number;
   setCounter?: (value: number) => void;
-  itemsCounter?: number;
-  loading?:boolean;
-  setIDs: React.Dispatch<React.SetStateAction<string[]>>}
+  itemsCounter?: number | null;
+  loading?: boolean;
+  setIDs: React.Dispatch<React.SetStateAction<string[]>>
+}
 
 export const ProductCollection: React.FC<ProductCollectionProps> = ({
   filter,
@@ -42,7 +43,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
 
   const { selectedCar } = useCarFilter()
   const router = useRouter()
-  const {showMessage} = useMessage()
+  const { showMessage } = useMessage()
 
 
   const variables: ProductCollectionQueryVariables = {
@@ -62,51 +63,51 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       sortBy: { direction: sortBy.direction, field: sortBy.field },
     }),
   };
-  
+
   const { loading, error, data, fetchMore } = useProductCollectionQuery({ variables });
-  
+
   const [allProducts, setAllProducts] = useState<ProductCardFragment[] | undefined>(undefined);
   const [hasNextPage, setHasNextPage] = useState(false);
-  
+
   useEffect(() => {
     if (setCounter) setCounter(data?.products?.totalCount || 0);
   }, [setCounter, data?.products?.totalCount]);
-  
+
   useEffect(() => {
     if (data?.products?.edges) {
       setAllProducts(mapEdgesToItems(data.products));
       setHasNextPage(data.products.pageInfo.hasNextPage);
     }
   }, [data]);
-  
+
   useEffect(() => {
     if (allProducts) {
       const productIDs = allProducts
         .map(product => product.category?.id)
-        .filter((id): id is string => id !== undefined); 
-      
+        .filter((id): id is string => id !== undefined);
+
       const uniqueProductIDs = [...new Set(productIDs)];
-      
+
       setIDs(uniqueProductIDs);
     }
   }, [allProducts]);
 
   const onLoadMore = async () => {
     if (!hasNextPage) return;
-  
+
     try {
       const result = await fetchMore({ variables: { after: pageInfo?.endCursor } });
-  
+
       if (result.data?.products?.edges) {
         const newProducts = mapEdgesToItems(result.data.products);
-  
+
         // Avoid duplicates using Set
         setAllProducts((prev) => {
           if (!prev) return []
           const existingSlugs = new Set(prev?.map((p) => p.slug));
           return [...prev, ...newProducts.filter((p) => !existingSlugs.has(p.slug))];
         });
-  
+
         setHasNextPage(result.data.products.pageInfo.hasNextPage);
       }
     } catch (error) {
@@ -114,9 +115,9 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       showMessage("Erreur");
     }
   };
-  
+
   const pageInfo = data?.products?.pageInfo;
-  
+
   if (loading)
     return (
       <View style={{ padding: 10 }}>
@@ -125,9 +126,9 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         ))}
       </View>
     );
-  
+
   if (error) showMessage("Échec réseau");
-  
+
   return (
     <SafeAreaView style={styles.container} testID="prod-list-safe">
       <Animated.FlatList
@@ -138,19 +139,25 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
         onEndReachedThreshold={0.3}
         ListHeaderComponent={
           <View style={{ flexDirection: "column" }}>
-            {<View style={styles.header}>
-              <Text style={{ fontWeight: "bold", fontSize: fonts.caption }}>{itemsCounter}</Text>
-              <Text style={{ fontSize: fonts.caption }}>
-                {itemsCounter < 2 ? " Résultat" : " Résultats"}{" "}
-                {filter?.search && (
-                  <>
-                    {" pour "}
-                    <Text style={{ fontWeight: "bold" }}>{filter.search}</Text>
-                  </>
-                )}
-              </Text>
-            </View>}
-  
+            {
+              <View style={styles.header}>
+                {itemsCounter ? (
+                  <View style={styles.header}>
+                    <Text style={{ fontSize: fonts.caption }}>
+                      <Text style={{ fontWeight: "bold" }}>{itemsCounter}</Text>{" "}
+                      {itemsCounter < 2 ? "Résultat" : "Résultats"}
+                      {filter?.search && (
+                        <>
+                          {" pour "}
+                          <Text style={{ fontWeight: "bold" }}>{filter.search}</Text>
+                        </>
+                      )}
+                    </Text>
+                  </View>
+                ) : null}
+              </View>
+            }
+
             {allProducts && !allProducts.length && (
               <View style={styles.noProductsContainer} testID="prod-list-safe">
                 <PaddedView style={styles.noProductsTextWrapper}>
@@ -184,7 +191,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       />
     </SafeAreaView>
   );
-  };
+};
 
 const styles = StyleSheet.create({
   container: {

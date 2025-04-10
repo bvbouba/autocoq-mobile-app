@@ -17,7 +17,7 @@ interface Props {
     removeAttributeFilter: (attributeSlug: string, choiceSlug: string) => void,
     setSortBy: (value: React.SetStateAction<UrlSorting | null>) => void,
     sortBy: UrlSorting | null,
-    itemsCounter: number
+    itemsCounter: number | null
 }
 
 
@@ -40,9 +40,9 @@ const ProductFilterBottomSheet: FC<Props> = ({
             <View>
                 <Text style={styles.bigTitle}>Filtrer et trier</Text>
                 <View style={{ flexDirection: "row" }}>
-                    <Text style={{ fontSize: fonts.caption }}>
+                    {itemsCounter && <Text style={{ fontSize: fonts.caption }}>
                         {itemsCounter} {`${itemsCounter < 2 ? " Résultat" : " Résultats"}`}
-                    </Text>
+                    </Text>}
                 </View>
             </View>
 

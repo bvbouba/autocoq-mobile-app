@@ -34,7 +34,6 @@ const ProductSearch: FC<Props> = () => {
     const { search: searchQueryString } = useGlobalSearchParams();
     const router = useRouter();
     const { closeModal } = useModal();
-    const {setLoading:setIsLoading} = useLoading()
     const [pressedItem, setPressedItem] = useState<string | null>(null);
     const search = Array.isArray(searchQueryString) ? searchQueryString[0] : searchQueryString;
     const [isPressed, setIsPressed] = useState(false);
@@ -96,9 +95,7 @@ const ProductSearch: FC<Props> = () => {
     // ✅ Run search when submitting
     const runSearch = useCallback(async (value: string): Promise<void> => {
         if (!value.trim()) return;
-    
-        setIsLoading(true);  // ✅ Start loading
-    
+        
         // Introduce a small delay to ensure the UI updates
         await new Promise((resolve) => setTimeout(resolve, 100));
     
@@ -110,7 +107,6 @@ const ProductSearch: FC<Props> = () => {
 
         setRecentSearchs(value);
     
-        setIsLoading(false); // ✅ End loading
     }, []);
     
 

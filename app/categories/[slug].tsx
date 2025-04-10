@@ -5,42 +5,26 @@ import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
 import { useMessage } from "@/context/MessageContext";
 import { useLoading } from "@/context/LoadingContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const CategoryProductScreen = () => {
   const pathname = usePathname();
   const { showMessage } = useMessage();
   const { setLoading } = useLoading();
-
-  // Extract slug directly
-  const slug = pathname.includes("categories") ? pathname.split("/").pop() : undefined;
-
-  const { data, loading, error } = useCategoryBySlugQuery({
-    skip: !slug,
-    variables: { slug: slug || "" },
-  });
-
-  useEffect(()=>{
-    setLoading(loading);
-  },[loading])
+  const [categoryID,setCategoryID] = useState<string | undefined>()
  
 
-  if (loading) return null; // Avoid rendering NotFoundScreen too early
+  useEffect(() => {
+    setCategoryID(pathname.includes("categories") ? pathname.split("/").pop() : undefined)
+  }, []);
 
-  if (error) {
-    showMessage("Échec réseau");
-    return null;
-  }
-
-  const category = data?.category;
-
-  if (!category) {
+  if (!categoryID) {
     return <NotFoundScreen />;
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <FilteredProductList categoryIDs={[category.id]} />
+      <FilteredProductList categoryIDs={[categoryID]} />
     </SafeAreaView>
   );
 };

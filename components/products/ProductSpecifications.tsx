@@ -10,30 +10,26 @@ const ProductSpecifications = ({ product }: { product: ProductFragment }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Spécifications du produit</Text>
-      <FlatList
-        data={product.attributes}
-        keyExtractor={(item) => item.attribute.id}
-        renderItem={({ item, index }) => {
-          // Get the first available value from the attribute
-          const value =
-            item.values?.[0]?.plainText ||
-            item.values?.[0]?.name ||
-            item.values?.[0]?.value ||
-            "Non spécifié";
+      {product.attributes.map((item, index) => {
+        const value =
+          item.values?.[0]?.plainText ||
+          item.values?.[0]?.name ||
+          item.values?.[0]?.value ||
+          "Non spécifié";
 
-          return (
-            <View
-              style={[
-                styles.specRow,
-                { backgroundColor: index % 2 === 0 ? "white" : colors.background },
-              ]}
-            >
-              <Text style={styles.specKey}>{item.attribute.name}:</Text>
-              <Text style={styles.specValue}>{value}</Text>
-            </View>
-          );
-        }}
-      />
+        return (
+          <View
+            key={item.attribute.id}
+            style={[
+              styles.specRow,
+              { backgroundColor: index % 2 === 0 ? "white" : colors.background },
+            ]}
+          >
+            <Text style={styles.specKey}>{item.attribute.name}:</Text>
+            <Text style={styles.specValue}>{value}</Text>
+          </View>
+        );
+      })}
     </View>
   );
 };

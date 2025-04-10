@@ -30,7 +30,7 @@ const CategoryGrid = ({ menuItem,categoryName,id }: Props) => {
                             router.push(`/shop?id=${child.id}`);
                         } else {
                             setNavigationLink(`/shop?id=${id}`)
-                            router.push(`/categories/${child.category?.slug}`);
+                            router.push(`/categories/${child.category?.id}`);
                         }
                     };
                     return (
