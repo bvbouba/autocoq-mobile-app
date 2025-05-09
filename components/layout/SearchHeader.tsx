@@ -64,7 +64,7 @@ const SearchHeader: FC<Props> = ({
   cleanSearch,
   companyName,
   searchOnLoad = true,
-  withVehicle=true,
+  withVehicle=false,
   carIconColor
 }) => {
   const statusBarInset = useSafeAreaInsets();

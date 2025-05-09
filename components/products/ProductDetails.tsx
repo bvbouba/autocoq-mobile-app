@@ -141,9 +141,9 @@ const ProductDetails: FC<Props> = ({ product }) => {
           ><Image source={defaultImageUrl} style={styles.image} /></View>
           }
         </PaddedView>
-        <PaddedView>
+        {/* <PaddedView>
           <CompatibilityCheck product={product} />
-        </PaddedView>
+        </PaddedView> */}
 
         <Divider style={{ borderBottomWidth: 10 }} />
 

@@ -88,7 +88,7 @@ const CompatibilityCheck = ({ product }: props) => {
                     }}>Compatible avec votre </Text>{car?.name}</>
                     : <>
                       <Text style={{
-                        fontWeight: "bold"
+                        fontWeight: "bold",
                       }}> Non compatible </Text>avec votre véhicule {car?.name} </>
                   : "Vérifiez si votre véhicule est compatible"}
               </Text>

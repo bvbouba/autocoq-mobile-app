@@ -154,7 +154,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
                                 <Text style={styles.notesText}>{condition.values[0].name}</Text>
                             </View>
                         )}
-                        <CompatibilityCheckBasic product={product} />
+                        {/* <CompatibilityCheckBasic product={product} /> */}
                         {/* {defaultVariant && <DeliveryMethodBasic variant={defaultVariant} />} */}
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity

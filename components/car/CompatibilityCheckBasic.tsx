@@ -129,7 +129,7 @@ const CompatibilityCheckBasic = ({ product }: props) => {
                   }
                   )}>
                     <Text style={[styles.vehicleText, {
-                      textDecorationLine: "underline"
+                      textDecorationLine: "underline",
                     }]}>
                       {`Vérifiez si votre véhicule est compatible`}
                     </Text>
