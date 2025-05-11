@@ -55,7 +55,8 @@ export default () => ({
       }
     ],
     "expo-router",
-    ["expo-updates", { "useClassicUpdates": false }]
+    ["expo-updates", { "useClassicUpdates": false }],
+    "expo-asset"
   ],
   "experiments": {
     "typedRoutes": true,

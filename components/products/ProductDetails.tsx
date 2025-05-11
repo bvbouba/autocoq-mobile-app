@@ -158,12 +158,12 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <Text style={styles.priceTitle}>Prix</Text>
           <Text style={styles.productPrice}>{price}</Text>
         </PaddedView>
-        <Divider style={{ borderBottomWidth: 10 }} />
+        {/* <Divider style={{ borderBottomWidth: 10 }} />
 
         <PaddedView>
           <DeliveryMethod variant={product.defaultVariant} setCheckedId={setCheckedId} isAvailable={product.isAvailable || undefined} />
 
-        </PaddedView>
+        </PaddedView> */}
 
         <Divider style={{ borderBottomWidth: 10 }} />
         <View style={styles.buttonContainer}>
