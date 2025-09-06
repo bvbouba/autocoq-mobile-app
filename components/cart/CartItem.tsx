@@ -127,6 +127,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: fonts.caption,
         marginBottom: 8,
+        flexShrink: 1,      
+       flexWrap: "wrap",  
     },
     productVariant: {
         textAlign: "left",
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     productDetailWrapper: {
-        display: "flex",
+        flex: 1, 
         flexDirection: "column",
         justifyContent: "flex-start",
         padding: 10,

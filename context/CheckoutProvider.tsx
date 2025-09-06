@@ -134,7 +134,6 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
           lines: [{ quantity: 1, variantId: selectedVariantID }],
         },
       });
-
       if (createCheckoutData?.checkoutCreate?.checkout) {
         setCheckout(createCheckoutData.checkoutCreate.checkout);
         setCheckoutToken(createCheckoutData.checkoutCreate.checkout.token);

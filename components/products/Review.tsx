@@ -121,6 +121,8 @@ const Review = ({ product }: { product: ProductFragment }) => {
             </View>
           );
         }}
+        scrollEnabled={false}
+        nestedScrollEnabled={true}
       />
       </>
       }

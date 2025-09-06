@@ -1,7 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { useColorScheme, StyleSheet } from 'react-native';
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {  colors, Text, View } from '@/components/Themed';
 import Colors from '@/constants/Colors';
 import SearchHeader from '@/components/layout/SearchHeader';
@@ -26,13 +26,13 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const companyName = "AUTOCOQ";
-  const {delivery} = useCheckout()
+  const insets = useSafeAreaInsets(); 
   return (
     <Tabs
       screenOptions={{
         tabBarStyle: {
-          height: 70,
-          paddingBottom: 10,
+          height: 70 + insets.bottom, // 👈 make room for Android nav bar / iPhone notch
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 10, // dynamic bottom padding
           paddingTop: 5,
         },
         tabBarIconStyle: {

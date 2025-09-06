@@ -160,7 +160,6 @@ const SignUp: FC<Props> = ({ phoneNumber, defaultCC, fullPhoneNumber }) => {
                         closeModal("SignUp");
                         return;
                     }
-                    console.log(data)
                     const { data: otpData, errors } = await sendCode({
                         variables: { phoneNumber: formik.values.phone },
                     });

@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import {
   ProductFragment,
   ProductVariantFragment,
-  useCheckoutShippingMethodUpdateMutation,
 } from "@/saleor/api.generated";
 import {
   colors,
@@ -17,10 +16,8 @@ import ProductImageCarousel from "./details/ProductImageCarousel";
 import { getConfig } from "@/config";
 import VariantSelector from "./details/VariantSelector";
 import { ScrollView } from "react-native-gesture-handler";
-import CompatibilityCheck from "../car/CompatibilityCheck";
 import { useModal } from "@/context/useModal";
 import { useCheckout } from "@/context/CheckoutProvider";
-import DeliveryMethod from "../DeliveryMethod/DeliveryMethod";
 import { renderStars } from "@/utils/renderStars";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AddedToCart from "../cart/AddToTheCart";
@@ -38,8 +35,6 @@ const defaultImageUrl = require("../../assets/images/photo-unavailable.png")
 
 const ProductDetails: FC<Props> = ({ product }) => {
   const { openModal } = useModal()
-  const [checkedId, setCheckedId] = useState<string>()
-  const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
 
   const condition = product?.attributes.find(a => a.attribute.slug === "condition")
   const warranty = product?.attributes.find(a => a.attribute.slug === "garantie")
@@ -47,8 +42,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
   const media = product.media || []
 
   // const isUniversal = product.isUniversal || true;
-
-  const { onAddToCart, loading, checkoutToken } = useCheckout();
+  const { onAddToCart, loading } = useCheckout();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariantFragment>(
     product.defaultVariant as ProductVariantFragment
   );
@@ -179,15 +173,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
             activeOpacity={0.6}
             onPress={async () => {
               await onAddToCart(selectedVariant?.id);
-              if (checkedId) {
-                await shippingAddressUpdate({
-                  variables: {
-                    token: checkoutToken,
-                    shippingMethodId: checkedId,
-                  },
-                });
-              }
-
+        
               openModal({
                 id: "CartPreview",
                 content:<AddedToCart />,
