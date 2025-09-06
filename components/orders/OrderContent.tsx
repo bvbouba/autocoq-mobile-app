@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
         color: "#888"
     },
     addressTitle: {
-        fontSize:fonts.h2,
+        fontSize:fonts.h3,
         fontWeight: "bold",
         color: "#444",
         marginBottom:10,

@@ -23,7 +23,7 @@ export const OrderItemImage: FC<{ variant: OrderLineVariantFragment }> = ({ vari
             style={styles.tinyLogo}
             source={{
                 uri: media[0].url
-            }} 
+            }}
             resizeMode="contain"
         />
     }
@@ -41,7 +41,7 @@ const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
     if (!lineItem) {
         return <></>
     }
-    
+
     return <Pressable onPress={() => router.push(`/products/${lineItem.variant?.product.id}`)}>
         <View style={styles.productItem}>
             <View style={styles.imageWrapper} testID="product-image-wrapper">
@@ -50,7 +50,7 @@ const OrderLineItemComponent: FC<Props> = ({ lineItem }) => {
                     <Text style={styles.productTitle} >
                         {lineItem.variant?.product.name}
                     </Text>
-                    <Text style={styles.productVariant} numberOfLines={1} >
+                    <Text style={styles.productVariant} >
                         {lineItem.variant?.name}
                     </Text>
                     <Text style={styles.productPrice} >
@@ -70,27 +70,26 @@ const styles = StyleSheet.create({
         width: "100%",
         maxWidth: 600,
         marginBottom: 16,
+        padding:4
     },
     tinyLogo: {
         width: 70,
         height: 70,
     },
+    productTitle: {
+        fontWeight: 'bold',
+        fontSize: fonts.body,
+        marginBottom: 8,
+        flexShrink: 1,
+    },
     productVariant: {
         textAlign: "left",
-        fontSize:fonts.body,
+        fontSize: fonts.body,
         marginBottom: 16,
-        overflow: "hidden",
-        width: "90%"
-    },
-    productTitle: {
-        textAlign: "left",
-        fontWeight: 'bold',
-        fontSize:fonts.body,
-        marginBottom: 8
     },
     productPrice: {
         textAlign: "left",
-        fontSize:fonts.h2,
+        fontSize: fonts.h2,
         fontWeight: "800",
         marginBottom: 8,
         // transform: [{ scaleY: 1.3 }],
@@ -104,7 +103,8 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
     },
     productDetailWrapper: {
-        display: "flex",
+        flex: 1,                 
+        flexShrink: 1,          
         flexDirection: "column",
         justifyContent: "flex-start",
         margin: 8,

@@ -10,8 +10,7 @@ export const ZoneList = () => {
     const { delivery, setDelivery } = useCheckout();
     const { data, loading } = useGetCitiesQuery();
     const {  closeModal } = useModal();
-
-
+    
      // Function to handle zone selection
   const handleSelectZone = (zone: string) => {
     setZoneName(zone)
@@ -31,7 +30,7 @@ export const ZoneList = () => {
     </TouchableOpacity>
   );
 
-    return(<>
+   return(<>
      <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Sélectionner votre ville</Text>
             {loading ? (

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { FlatList, Pressable, StyleSheet, TouchableOpacity, } from "react-native";
 import { useFormik } from "formik";
 import { Text, View, colors, fonts } from "@/components/Themed"
@@ -6,12 +6,14 @@ import { Text, View, colors, fonts } from "@/components/Themed"
 import * as yup from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
+import { CountryCode, useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useCheckoutShippingAddressUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useRouter } from "expo-router";
 import { useModal } from "@/context/useModal";
 import { useCheckout } from "@/context/CheckoutProvider";
+import PhoneInput from "react-native-phone-number-input";
+import { parsePhone } from "@/utils/parsePhone";
 
 interface Props {
   onSubmit: () => void;
@@ -50,7 +52,9 @@ const ShippingAddressForm: FC<Props> = () => {
   const { authenticated, user } = useAuth()
   const { openModal, closeModal } = useModal()
   const { data: citiesData, } = useGetCitiesQuery();
-
+  const phoneInput = useRef<PhoneInput>(null);
+  const parsedPhone = parsePhone(checkout?.shippingAddress?.phone || checkout?.billingAddress?.phone || checkout?.email?.split('@')[0] || "")
+  const [countryCode, setCountryCode] = useState<CountryCode>(parsedPhone.countryCode as CountryCode) 
   const renderItem = ({ item }: { item: { name: string } }) => (
     <TouchableOpacity
       style={styles.zoneItem}
@@ -63,7 +67,6 @@ const ShippingAddressForm: FC<Props> = () => {
       <Text style={styles.zoneText}>{item.name}</Text>
     </TouchableOpacity>
   );
-
   const updateMutation = async (formData: Form) => {
     const { data } = await updateShippingAddress({
       variables: {
@@ -71,12 +74,13 @@ const ShippingAddressForm: FC<Props> = () => {
         shippingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
-          country: "CI",
+          country: countryCode,
           firstName: formData.firstName,
           lastName: formData.lastName,
           postalCode: formData.postalCode,
           phone: formData.phone,
           city: formData.city,
+          countryArea:"ON"
         },
       },
     });
@@ -90,12 +94,13 @@ const ShippingAddressForm: FC<Props> = () => {
         billingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
-          country: "CI",
+          country: countryCode,
           firstName: formData.firstName,
           lastName: formData.lastName,
           postalCode: formData.postalCode,
           phone: formData.phone,
           city: formData.city,
+          countryArea:"ON"
         },
       },
     });
@@ -103,21 +108,31 @@ const ShippingAddressForm: FC<Props> = () => {
     return data?.checkoutBillingAddressUpdate?.errors;
   };
 
-
-  const phoneNumber = checkout?.email?.split('@')[0]
-
+  const handlePhoneValidation = () => {
+    if (phoneInput.current) {
+      const isValid = phoneInput.current?.isValidNumber(formik.values.phone);
+      if (!isValid) {
+        formik.setFieldError("phone", "Numéro de téléphone invalide");
+      }
+      return isValid;
+    }
+    return false;
+  };
   const formik = useFormik<Form>({
     initialValues: {
       firstName: checkout?.shippingAddress?.firstName || checkout?.billingAddress?.firstName || "",
       lastName: checkout?.shippingAddress?.lastName || checkout?.billingAddress?.lastName || "",
-      phone: checkout?.shippingAddress?.phone || checkout?.billingAddress?.phone || phoneNumber || "",
+      phone: parsedPhone.nationalNumber,
       streetAddress1: checkout?.shippingAddress?.streetAddress1 || checkout?.billingAddress?.streetAddress1 || "",
       streetAddress2: checkout?.shippingAddress?.streetAddress2 || checkout?.billingAddress?.streetAddress2 || "",
-      postalCode: checkout?.shippingAddress?.postalCode || "225",
+      postalCode: checkout?.shippingAddress?.postalCode || checkout?.billingAddress?.postalCode || "",
       city: checkout?.shippingAddress?.city || checkout?.billingAddress?.city || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      const valid = handlePhoneValidation();
+      if (!valid) return;
+
       setLoading(true);
       setError(null);
       try {
@@ -156,7 +171,6 @@ const ShippingAddressForm: FC<Props> = () => {
       }
     },
   });
-
   const renderForm = () => (
     <View style={styles.formContainer}>
 
@@ -172,8 +186,8 @@ const ShippingAddressForm: FC<Props> = () => {
           onBlur={() => formik.setFieldTouched("lastName")} // Mark field as touched
         />
         {formik.touched.lastName && formik.errors.lastName && (
-            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
-          )}
+          <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+        )}
       </View>
 
       {/* Prénom */}
@@ -194,7 +208,7 @@ const ShippingAddressForm: FC<Props> = () => {
 
       {/* Téléphone */}
       <View style={styles.inputContainer}>
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("phone", value)}
           value={formik.values.phone}
@@ -202,6 +216,26 @@ const ShippingAddressForm: FC<Props> = () => {
           label={"Numéro de téléphone *"}
           theme={{ colors: { primary: colors.textPrimary } }}
           onBlur={() => formik.setFieldTouched("phone")} // Mark field as touched
+        /> */}
+        <PhoneInput
+          ref={phoneInput}
+          defaultValue={parsedPhone.nationalNumber}   // no "+"
+          defaultCode={parsedPhone.countryCode}    // ensures correct CC
+          layout="first"
+          onChangeFormattedText={(text) => {
+            formik.setFieldValue("phone", text); // saves full +E164
+          }}
+          onChangeCountry={(country) => {
+            // country.cca2 gives ISO2 code (e.g. "CI", "CA")
+            setCountryCode(country.cca2 as CountryCode);
+          }}
+          containerStyle={styles.input}
+          textContainerStyle={{ borderRadius: 0 }}
+          placeholder="Numéro de téléphone"
+          countryPickerProps={{
+            countryCodes: ["CI", "CA"],
+            translation: "fra",
+          }}
         />
         {formik.touched.phone && formik.errors.phone && (
           <Text style={styles.errorText}>{formik.errors.phone}</Text>
@@ -234,7 +268,7 @@ const ShippingAddressForm: FC<Props> = () => {
           label={"Lieu de livraison (immeuble, appartement, autre description)"}
           theme={{ colors: { primary: colors.textPrimary } }}
           onBlur={() => formik.setFieldTouched("streetAddress2")}
-          
+
         />
         {formik.touched.streetAddress2 && formik.errors.streetAddress2 && (
           <Text style={styles.errorText}>{formik.errors.streetAddress2}</Text>
@@ -253,7 +287,9 @@ const ShippingAddressForm: FC<Props> = () => {
               content: <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
                 <FlatList
-                  data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
+                  data={citiesData?.getShippingZones
+                    ?.filter((zone) => zone?.countries?.includes(countryCode)) 
+                    ?.filter((zone) => zone !== null) as { name: string }[]}
                   keyExtractor={(item, idx) => `${item.name}-${idx}`}
                   renderItem={renderItem}
                   contentContainerStyle={styles.listContainer}
@@ -274,8 +310,8 @@ const ShippingAddressForm: FC<Props> = () => {
               editable={false}
             />
             {formik.touched.city && formik.errors.city && (
-          <Text style={styles.errorText}>{formik.errors.city}</Text>
-        )}
+              <Text style={styles.errorText}>{formik.errors.city}</Text>
+            )}
           </View>
         </Pressable>
       </View>
@@ -293,8 +329,8 @@ const ShippingAddressForm: FC<Props> = () => {
         />
       </View>
       {formik.touched.postalCode && formik.errors.postalCode && (
-          <Text style={styles.errorText}>{formik.errors.postalCode}</Text>
-        )}
+        <Text style={styles.errorText}>{formik.errors.postalCode}</Text>
+      )}
 
       {/* Bouton de soumission */}
       <TouchableOpacity
@@ -303,9 +339,9 @@ const ShippingAddressForm: FC<Props> = () => {
         style={[
           styles.submitButton,
 
-          { opacity: loading ? 0.5 : 1 }, 
+          { opacity: loading ? 0.5 : 1 },
         ]}
-        activeOpacity={0.7} 
+        activeOpacity={0.7}
       >
         {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>CONTINUER</Text>}
       </TouchableOpacity>

@@ -20,7 +20,7 @@ export const MenuProvider: FC<PropsWithChildren> = ({ children }) => {
     const { data, loading } = useGetMenuQuery({
         variables: {
             channel: "ci",
-            slug: "shop",
+            slug: "navbar",
         },
     });
 

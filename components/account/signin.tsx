@@ -20,10 +20,10 @@ const validationSchema = yup.object().shape({
     password: yup.string().required("Le mot de passe est requis"),
 });
 interface props {
-    phoneNumber?: string,
+    fullPhoneNumber?: string,
 }
 
-const SignIn: FC<props> = ({ phoneNumber }) => {
+const SignIn: FC<props> = ({ fullPhoneNumber }) => {
     const [useLogin] = useCreateTokenMutation();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -34,7 +34,7 @@ const SignIn: FC<props> = ({ phoneNumber }) => {
 
     const formik = useFormik<Form>({
         initialValues: {
-            identifier: phoneNumber ? String(phoneNumber) : '', // Set phone number if available
+            identifier: fullPhoneNumber ? String(fullPhoneNumber) : '', // Set phone number if available
             password: '',
         },
         validationSchema: validationSchema,

@@ -210,7 +210,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
             }
             ]}>AJOUTER AU PANIER</Text>}
           </TouchableOpacity>
-          <ItemNotAvailable />
+          {!loading && !product.isAvailable &&           <ItemNotAvailable />          }
 
         </View>
 

@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import { FC } from "react";
 import { Pressable, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useCheckout } from "@/context/CheckoutProvider";
@@ -6,13 +5,15 @@ import { Text, View, colors, fonts } from "@/components/Themed"
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { useModal } from "@/context/useModal";
 import ShippingMethods from "@/app/shippingMethods";
+import { CheckoutWithZoneFragment } from "@/saleor/api.generated";
 
 
 const ShippingMethodSelector: FC = () => {
-  const { checkout ,delivery} = useCheckout();
+  const { delivery} = useCheckout();
+  const checkout = useCheckout().checkout as CheckoutWithZoneFragment
   const { openModal } = useModal()
-  const shippingMethods = checkout && checkout.shippingMethods;
-  const deliveryMethod = shippingMethods?.find((s) => s.id === delivery.methodId);
+  const availableShippingMethods = checkout && checkout.availableShippingMethods;
+  const deliveryMethod = availableShippingMethods?.find((s) => s.id === delivery.methodId);
 
   // Calculate the estimated delivery date
   const getEstimatedDeliveryDate = (maxDays: number | undefined) => {

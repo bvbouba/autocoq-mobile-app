@@ -1,17 +1,18 @@
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { Pressable, ScrollView } from "react-native-gesture-handler";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
-import { useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
+import { CountryCode, useCheckoutBillingAddressUpdateMutation, useCheckoutEmailUpdateMutation, useGetCitiesQuery } from "@/saleor/api.generated";
 import SavedAddressSelectionList from "../address/savedAddressSelectionList";
 import { useAuth } from "@/lib/providers/authProvider";
-import {Text, View ,colors, fonts } from "@/components/Themed"
+import { Text, View, colors, fonts } from "@/components/Themed"
 import { useModal } from "@/context/useModal";
 import { useRouter } from "expo-router";
 import { useCheckout } from "@/context/CheckoutProvider";
-
+import PhoneInput from "react-native-phone-number-input";
+import { parsePhone } from "@/utils/parsePhone";
 
 interface Props {
 
@@ -48,6 +49,9 @@ const BillingAddressForm: FC<Props> = () => {
   const { openModal, closeModal } = useModal();
   const { data: citiesData } = useGetCitiesQuery();
   const router = useRouter();
+  const phoneInput = useRef<PhoneInput>(null);
+  const parsedPhone = parsePhone(checkout?.billingAddress?.phone || checkout?.email?.split('@')[0] || "")
+  const [countryCode, setCountryCode] = useState<CountryCode>(parsedPhone.countryCode as CountryCode)
 
   const renderItem = ({ item }: { item: { name: string } }) => (
     <TouchableOpacity
@@ -68,32 +72,44 @@ const BillingAddressForm: FC<Props> = () => {
         billingAddress: {
           streetAddress1: formData.streetAddress1,
           streetAddress2: formData.streetAddress2,
-          country: "CI",
+          country: countryCode,
           firstName: formData.firstName,
           lastName: formData.lastName,
           postalCode: formData.postalCode,
           phone: formData.phone,
           city: formData.city,
+          countryArea:"ON"
         },
       },
     });
     return data?.checkoutBillingAddressUpdate?.errors;
   };
 
-  const phoneNumber = checkout?.email?.split("@")[0];
+  const handlePhoneValidation = () => {
+    if (phoneInput.current) {
+      const isValid = phoneInput.current?.isValidNumber(formik.values.phone);
+      if (!isValid) {
+        formik.setFieldError("phone", "Numéro de téléphone invalide");
+      }
+      return isValid;
+    }
+    return false;
+  };
 
   const formik = useFormik<Form>({
     initialValues: {
       firstName: checkout?.billingAddress?.firstName || "",
       lastName: checkout?.billingAddress?.lastName || "",
-      phone: checkout?.billingAddress?.phone || phoneNumber || "",
+      phone: parsedPhone.nationalNumber,
       streetAddress1: checkout?.billingAddress?.streetAddress1 || "",
       streetAddress2: checkout?.billingAddress?.streetAddress2 || "",
-      postalCode: checkout?.billingAddress?.postalCode || "225",
+      postalCode: checkout?.billingAddress?.postalCode || "",
       city: checkout?.billingAddress?.city || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (data) => {
+      const valid = handlePhoneValidation();
+      if (!valid) return;
       setLoading(true);
       setError(null);
       try {
@@ -142,8 +158,8 @@ const BillingAddressForm: FC<Props> = () => {
           onBlur={() => formik.setFieldTouched("lastName")} // Mark field as touched
         />
         {formik.touched.lastName && formik.errors.lastName && (
-            <Text style={styles.errorText}>{formik.errors.lastName}</Text>
-          )}
+          <Text style={styles.errorText}>{formik.errors.lastName}</Text>
+        )}
       </View>
 
       {/* Prénom */}
@@ -164,7 +180,7 @@ const BillingAddressForm: FC<Props> = () => {
 
       {/* Téléphone */}
       <View style={styles.inputContainer}>
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("phone", value)}
           value={formik.values.phone}
@@ -172,14 +188,36 @@ const BillingAddressForm: FC<Props> = () => {
           label={"Numéro de téléphone *"}
           theme={{ colors: { primary: colors.textPrimary } }}
           onBlur={() => formik.setFieldTouched("phone")} // Mark field as touched
+        /> */}
+
+        <PhoneInput
+          ref={phoneInput}
+          defaultValue={parsedPhone.nationalNumber}   // no "+"
+          defaultCode={parsedPhone.countryCode}    // ensures correct CC
+          layout="first"
+          onChangeFormattedText={(text) => {
+            formik.setFieldValue("phone", text); // saves full +E164
+          }}
+          onChangeCountry={(country) => {
+            // country.cca2 gives ISO2 code (e.g. "CI", "CA")
+            setCountryCode(country.cca2 as CountryCode);
+          }}
+          containerStyle={styles.input}
+          textContainerStyle={{ borderRadius: 0 }}
+          placeholder="Numéro de téléphone"
+          countryPickerProps={{
+            countryCodes: ["CI", "CA"],
+            translation: "fra",
+          }}
         />
+
         {formik.touched.phone && formik.errors.phone && (
           <Text style={styles.errorText}>{formik.errors.phone}</Text>
         )}
       </View>
 
-     {/* Adresse Ligne 1 */}
-     <View style={styles.inputContainer}>
+      {/* Adresse Ligne 1 */}
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={(value) => formik.setFieldValue("streetAddress1", value)}
@@ -204,7 +242,7 @@ const BillingAddressForm: FC<Props> = () => {
           label={"Lieu de facturation (immeuble, appartement, autre description)"}
           theme={{ colors: { primary: colors.textPrimary } }}
           onBlur={() => formik.setFieldTouched("streetAddress2")}
-          
+
         />
         {formik.touched.streetAddress2 && formik.errors.streetAddress2 && (
           <Text style={styles.errorText}>{formik.errors.streetAddress2}</Text>
@@ -223,7 +261,9 @@ const BillingAddressForm: FC<Props> = () => {
               content: <View style={styles.modalContent}>
                 <Text style={styles.modalTitle}>Sélectionnez votre ville</Text>
                 <FlatList
-                  data={citiesData?.getShippingZones?.filter((zone) => zone !== null) as { name: string }[]}
+                  data={citiesData?.getShippingZones
+                    ?.filter((zone) => zone?.countries?.includes(countryCode)) 
+                    ?.filter((zone) => zone !== null) as { name: string }[]}
                   keyExtractor={(item, idx) => `${item.name}-${idx}`}
                   renderItem={renderItem}
                   contentContainerStyle={styles.listContainer}
@@ -244,8 +284,8 @@ const BillingAddressForm: FC<Props> = () => {
               editable={false}
             />
             {formik.touched.city && formik.errors.city && (
-          <Text style={styles.errorText}>{formik.errors.city}</Text>
-        )}
+              <Text style={styles.errorText}>{formik.errors.city}</Text>
+            )}
           </View>
         </Pressable>
       </View>
@@ -263,8 +303,8 @@ const BillingAddressForm: FC<Props> = () => {
         />
       </View>
       {formik.touched.postalCode && formik.errors.postalCode && (
-          <Text style={styles.errorText}>{formik.errors.postalCode}</Text>
-        )}
+        <Text style={styles.errorText}>{formik.errors.postalCode}</Text>
+      )}
 
       {/* Bouton de soumission */}
       <TouchableOpacity
@@ -273,9 +313,9 @@ const BillingAddressForm: FC<Props> = () => {
         style={[
           styles.submitButton,
 
-          { opacity: loading ? 0.5 : 1 }, 
+          { opacity: loading ? 0.5 : 1 },
         ]}
-        activeOpacity={0.7} 
+        activeOpacity={0.7}
       >
         {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>CONTINUER</Text>}
       </TouchableOpacity>
@@ -295,7 +335,7 @@ const BillingAddressForm: FC<Props> = () => {
         <>
           <SavedAddressSelectionList updateAddressMutation={(address: Form) => updateMutation(address)} />
           <Button mode="text" onPress={() => setShowForm(true)}>
-           <Text>+ Ajouter une nouvelle adresse</Text> 
+            <Text>+ Ajouter une nouvelle adresse</Text>
           </Button>
         </>
       ) : (

@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
-import { ApolloClient, ApolloError, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client/main.cjs";
 import {
   CurrentUserDocument,
   useCreateTokenMutation,

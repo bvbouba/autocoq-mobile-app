@@ -1,4 +1,3 @@
-import { ApolloError } from "@apollo/client";
 import React, { createContext, useContext, ReactNode, useState, useEffect } from "react";
 
 import { useAsyncStorage } from "@/lib/hooks/useLocalStorage";

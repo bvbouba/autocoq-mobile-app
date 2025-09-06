@@ -1,11 +1,12 @@
 import { View, Text, colors, PaddedView, fonts } from "@/components/Themed";
 import { StyleSheet, useWindowDimensions, Pressable } from "react-native";
-import {  useGetMainMenuQuery } from "@/saleor/api.generated";
+import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import Carousel from "react-native-reanimated-carousel";
 import { useState } from "react";
 import { Skeleton } from "moti/skeleton";
+import { Button } from "react-native-paper";
 
 
 const CategoryShortList = () => {
@@ -16,14 +17,14 @@ const CategoryShortList = () => {
     variables: { channel: getConfig().channel },
   });
 
-  if (loading) return  <View style={styles.skeletonContainer}>
-                    {[...Array(5)].map((_, index) => (
-                      <View key={index} style={styles.skeletonButton}>
-                        <Skeleton colorMode="light" height={30} width={width * 7 / 20} radius={2} />
-                      </View>
-                    ))}
-                  </View>;
-                  
+  if (loading) return <View style={styles.skeletonContainer}>
+    {[...Array(5)].map((_, index) => (
+      <View key={index} style={styles.skeletonButton}>
+        <Skeleton colorMode="light" height={30} width={width * 7 / 20} radius={2} />
+      </View>
+    ))}
+  </View>;
+
   if (!categoriesData?.menu?.items) return null;
 
   return (
@@ -37,24 +38,29 @@ const CategoryShortList = () => {
           autoPlay={false}
           vertical={false}
           loop={false}
-          width={width *7/20}
+          width={width * 7 / 20}
           snapEnabled
           onSnapToItem={(index) => setCurrentIndex(index)}
           data={categoriesData.menu?.items.map(menu => {
             return {
               slug: menu.category?.slug,
               name: menu.name,
-              id: menu.id,
+              id: menu.category?.id,
             };
           }) || []}
           defaultIndex={0}
           renderItem={({ index, item }) =>
             item ? (
-              <Pressable onPress={() => router.push(`/categories/${item.slug}`)}>
-                <View style={styles.button} key={index}>
-                  <Text style={styles.buttonText}>{item.name}</Text>
-                </View>
-              </Pressable>
+              <Button
+                onPress={() => router.push(`/categories/${item.id}`)}
+                style={[
+                  styles.button,
+                ]}
+              >
+                  <Text style={[styles.buttonText]}>
+                    {item.name}
+                  </Text>
+              </Button>
             ) : <View></View>
           }
         />
@@ -74,19 +80,30 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     fontWeight: 'bold',
     textAlign: 'left',
-    color:colors.textPrimary
+    color: colors.textPrimary
   },
 
   button: {
     borderWidth: 1,
     margin: 5,
     borderRadius: 5,
-    alignItems:"center"
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 0,
+    height: 40,
+    borderColor: colors.textPrimary,
+  },
+  buttonHovered: {
+    borderColor: "gray",
   },
   buttonText: {
-    padding: 5,
-    fontSize:fonts.body,
-    color:colors.textPrimary
+    padding: 0,
+    fontSize: fonts.body,
+    color: colors.textPrimary,
+    flexShrink: 1,
+  },
+  buttonTextHovered: {
+    color: "gray",
   },
   skeletonContainer: {
     flexDirection: "row",

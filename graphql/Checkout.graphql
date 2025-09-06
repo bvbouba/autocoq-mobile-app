@@ -43,9 +43,6 @@ fragment CheckoutFragment on Checkout {
   deliveryMethod {
     __typename
   }
-  shippingMethods {
-    ...ShippingMethodFragment
-  }
   totalPrice {
     tax {
       currency
@@ -176,7 +173,7 @@ fragment CheckoutFragment on Checkout {
 fragment CheckoutWithZoneFragment on Checkout {
   ...CheckoutFragment
   availableShippingMethods(zoneName: $zoneName) {
-    ...DeliveryMethod
+    ...ShippingMethodFragment
   }
 }
 

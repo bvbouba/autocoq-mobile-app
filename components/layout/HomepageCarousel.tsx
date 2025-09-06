@@ -22,7 +22,7 @@ const HomepageCarousel = () => {
   if (!data?.menu?.items) return null;
    
   const items = data.menu.items || previousData?.menu?.items
-
+ 
   const carouselItems = items.map(menu => ({
     slug: menu.collection?.slug,
     name: menu.name,

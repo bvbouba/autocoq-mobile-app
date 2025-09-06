@@ -1,4 +1,4 @@
-import { ApolloError } from "@apollo/client";
+import { ApolloError } from "@apollo/client/main.cjs";
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { OrderFragment, useGetOrderByIdLazyQuery, useUpdateOrderMutation } from "../saleor/api.generated";
 import {

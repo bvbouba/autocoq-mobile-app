@@ -5,7 +5,6 @@ import OrderListItem from "./OrderListItem";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useOrdersQuery } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
-import { useState, useEffect } from "react";
 import { MotiView } from "moti";
 import { Skeleton } from "moti/skeleton";
 
@@ -73,7 +72,6 @@ const OrdersList = () => {
             </View>
         );
     }
-
     return (
         <>
             {uniqueOrders.map((order) => (

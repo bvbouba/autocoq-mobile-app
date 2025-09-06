@@ -19,7 +19,7 @@ import ProductFilterBottomSheet from "./ProductFilterBottomSheet";
 import { useModal } from "@/context/useModal";
 import { mapEdgesToItems } from "@/utils/map";
 import { getConfig } from "@/config";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client/main.cjs";
 
 const apiUrl = getConfig().saleorApi;
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, ActivityIndicator, IconButton } from 'react-native-paper';
 import {  colors, fonts, PaddedView, Text } from '../components/Themed';
-import { useCheckoutShippingMethodUpdateMutation } from '../saleor/api.generated';
+import { CheckoutWithZoneFragment, useCheckoutShippingMethodUpdateMutation } from '../saleor/api.generated';
 import { View, StyleSheet } from 'react-native';
 import { useCheckout } from '@/context/CheckoutProvider';
 import DeliveryMethodComponent from '@/components/DeliveryMethod/DeliveryMethodComponent';
@@ -10,16 +10,15 @@ import { useMessage } from '@/context/MessageContext';
 
 const ShippingMethods = () => {
     const { closeModal } = useModal();
-    const { checkout, checkoutToken,setDelivery,delivery } = useCheckout();
+    const {  checkoutToken,setDelivery,delivery } = useCheckout();
+    const checkout = useCheckout().checkout as CheckoutWithZoneFragment;
     const [shippingAddressUpdate] = useCheckoutShippingMethodUpdateMutation();
     const { showMessage } = useMessage();
 
-    const shippingMethods = checkout && checkout.shippingMethods;
-    const firstMethod = shippingMethods && shippingMethods?.length > 0 ? shippingMethods[0].id : undefined;
-
-    const [checked, setChecked] = React.useState(firstMethod || "");
+    const shippingMethods = checkout && checkout.availableShippingMethods;
+    // const firstMethod = shippingMethods && shippingMethods?.length > 0 ? shippingMethods[0].id : undefined;
+    const [checked, setChecked] = React.useState("");
     const [loading, setLoading] = React.useState(false); // État pour gérer le chargement
-
     const updateShippingMethod = async () => {
         setLoading(true); // Démarrer le chargement
         try {
@@ -44,7 +43,6 @@ const ShippingMethods = () => {
     const handleSelect = (id: string) => {
         setChecked(id);
     };
-
     if (!shippingMethods) return;
 
     return (

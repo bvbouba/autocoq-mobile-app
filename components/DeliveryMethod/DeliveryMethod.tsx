@@ -50,7 +50,6 @@ const DeliveryMethod = ({ variant,setCheckedId,isAvailable }: Props) => {
     selectedOption={selectedOption || ""}
     handleSelect={handleSelect}
     availableShippingMethods={availableShippingMethods}
-    isAvailable={isAvailable}
     />
   );
 };

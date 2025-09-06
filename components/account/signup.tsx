@@ -1,19 +1,24 @@
-import React, { FC, useState } from 'react';
-import { StyleSheet, ActivityIndicator,  } from 'react-native';
+import React, { FC, useState, useRef } from 'react';
+import { StyleSheet, ActivityIndicator, } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
-import {  useCreateTokenMutation, useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
-import {  useRouter } from 'expo-router';
-import {Text, View , PaddedView,colors, fonts } from "@/components/Themed"
+import { useCreateTokenMutation, CheckPhoneNumberDocument,useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation, useCheckPhoneNumberQuery } from '@/saleor/api.generated';
+import { Text, View, PaddedView, colors, fonts } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';
 import Logo from '../Logo';
 import { useMessage } from '@/context/MessageContext';
+import PhoneInput from "react-native-phone-number-input";
+import type { CountryCode } from "react-native-country-picker-modal";
+import SignIn from './signin';
+import { useLazyQuery } from "@apollo/client/main.cjs";
 
 
 interface Props {
     phoneNumber?: string;
+    defaultCC?: CountryCode;
+    fullPhoneNumber?: string;
 }
 
 interface Form {
@@ -27,8 +32,7 @@ interface Form {
 const validationSchema = yup.object().shape({
     phone: yup
         .string()
-        .required("Le numéro de téléphone est requis")
-        .matches(/^\d{10}$/, "Le numéro de téléphone doit contenir exactement 10 chiffres"),
+        .required("Le numéro de téléphone est requis"),
     verificationCode: yup.string().required("Le code de vérification est requis"),
     username: yup.string().required("Le nom d'utilisateur est requis"),
     password: yup
@@ -41,7 +45,7 @@ const validationSchema = yup.object().shape({
         .required("La confirmation du mot de passe est requise"),
 });
 
-const SignUp: FC<Props> = ({phoneNumber:phone}) => {
+const SignUp: FC<Props> = ({ phoneNumber, defaultCC, fullPhoneNumber }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [currentStep, setCurrentStep] = useState(1);
@@ -49,14 +53,20 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
     const [sendCode] = useSendCodeMutation();
     const [verifyCode] = useVerifyCodeMutation();
     const [userRegister] = useUserRegisterMutation();
-   const {closeModal} = useModal()
-   const [useLogin] = useCreateTokenMutation();
-   const {setRefreshToken,setToken} = useAuth()
-   const { showMessage } = useMessage();
+    const { closeModal,openModal } = useModal()
+    const [useLogin] = useCreateTokenMutation();
+    const { setRefreshToken, setToken } = useAuth()
+    const { showMessage } = useMessage();
+    const phoneInput = useRef<PhoneInput>(null);
+    const [checkPhoneExists] = useLazyQuery(CheckPhoneNumberDocument, {
+        fetchPolicy: "network-only",
+      });
+
+
 
     const formik = useFormik<Form>({
         initialValues: {
-            phone: phone ? String(phone) : '',
+            phone: fullPhoneNumber ? String(fullPhoneNumber) : '',
             verificationCode: '',
             username: '',
             password: '',
@@ -81,33 +91,33 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                 });
 
                 const errorMsg = response?.accountRegister?.errors?.[0]?.message || errors?.[0]?.message || '';
-                
+
                 if (errorMsg) {
                     setError(errorMsg);
                 } else {
                     try {
-                const { data:loginData } = await useLogin({
-                        variables: {
-                        email: `${data.phone}@autocoq.com`,
-                        password: data.password,
-                    },
+                        const { data: loginData } = await useLogin({
+                            variables: {
+                                email: `${data.phone}@autocoq.com`,
+                                password: data.password,
+                            },
                         });
-                    const loginError = loginData?.tokenCreate?.errors || [];
-                        if (loginError.length>0) {
-                            showMessage("La connexion a échoué. Veuillez réessayer sur la page de connexion.")                         
+                        const loginError = loginData?.tokenCreate?.errors || [];
+                        if (loginError.length > 0) {
+                            showMessage("La connexion a échoué. Veuillez réessayer sur la page de connexion.")
                         } else {
                             if (loginData?.tokenCreate?.token) {
                                 setToken(loginData?.tokenCreate?.token);
                                 setRefreshToken(loginData?.tokenCreate?.refreshToken || "");
                                 closeModal("SignUp")
                             } else {
-                                showMessage("Échec de l’authentification. Veuillez réessayer.") 
+                                showMessage("Échec de l’authentification. Veuillez réessayer.")
                             }
                         }
                     } catch (err) {
                         console.error('Login error:', err);
-                        showMessage("Erreur de connexion") 
-                    } 
+                        showMessage("Erreur de connexion")
+                    }
                 }
             } catch {
                 setError("L'inscription a échoué. Veuillez réessayer.");
@@ -130,17 +140,43 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                     setLoading(false);
                     return;
                 }
-                const { data, errors } = await sendCode({
-                    variables: { phoneNumber: `+225${formik.values.phone}` },
-                });
-
-                const errorMsg = data?.sendOtp?.error || errors?.[0]?.message || '';
-
-                if (errorMsg) {
-                    setError(errorMsg);
-                } else {
-                    setCurrentStep(2);
+                const isValid = phoneInput.current?.isValidNumber(formik.values.phone);
+                if (!isValid) {
+                    setError("Le numéro de téléphone n'est pas valide.");
+                    return;
                 }
+                try {
+                    const { data } = await checkPhoneExists({
+                        variables: { phoneNumber: formik.values.phone },
+                      });
+
+                    if (data?.checkPhoneExists?.exists) {
+                        openModal({
+                            id: "SignIn",
+                            content: <SignIn fullPhoneNumber={formik.values.phone} />,
+                            height: "115%",
+                            closeButtonVisible: true,
+                        });
+                        closeModal("SignUp");
+                        return;
+                    }
+                    console.log(data)
+                    const { data: otpData, errors } = await sendCode({
+                        variables: { phoneNumber: formik.values.phone },
+                    });
+
+                    const errorMsg = otpData?.sendOtp?.error || errors?.[0]?.message || "";
+                    if (errorMsg) {
+                        setError(errorMsg);
+                    } else {
+                        setCurrentStep(2);
+                    }
+                } catch (err) {
+                    console.error("GraphQL Error:", err);
+                    setError("Une erreur est survenue. Veuillez réessayer.");
+                }
+
+
             } else if (currentStep === 2) {
                 if (formErrors.verificationCode) {
                     setError(formErrors.verificationCode);
@@ -149,7 +185,7 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                 }
                 const { data, errors } = await verifyCode({
                     variables: {
-                        phoneNumber: `+225${formik.values.phone}`,
+                        phoneNumber: `${formik.values.phone}`,
                         otp: formik.values.verificationCode,
                     },
                 });
@@ -181,17 +217,26 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                             Créez un nouveau compte dès aujourd'hui !
                         </Text>
                         <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={formik.handleChange('phone')}
-                                value={formik.values.phone}
-                                placeholder="Numéro de téléphone"
-                                label="Entrez votre numéro de téléphone"
-                                keyboardType="phone-pad"
-                                error={!!formik.errors.phone}
-                                outlineColor={colors.border}
-                                underlineColor={colors.border}
+
+                            <PhoneInput
+                                ref={phoneInput}
+                                defaultValue={phoneNumber}
+                                defaultCode={defaultCC}
+                                layout="first"
+                                onChangeFormattedText={(text) => {
+                                    formik.setFieldValue('phone', text);
+                                }}
+                                containerStyle={styles.input}
+                                textContainerStyle={{
+                                    borderRadius: 5,
+                                    backgroundColor: "white",
+                                }}
+                                countryPickerProps={{
+                                    countryCodes: ["CI", "CA"],
+                                    translation: "fra",
+                                }}
                             />
+
                             <Button style={styles.button} onPress={handleNext} mode="contained" disabled={loading}>
                                 {loading ? <ActivityIndicator color="white" /> : 'Continuer'}
                             </Button>
@@ -204,7 +249,7 @@ const SignUp: FC<Props> = ({phoneNumber:phone}) => {
                         <Text style={styles.subtitle}>
                             Veuillez entrer le code de vérification envoyé à{' '}
                             <Text style={styles.phoneNumber}>
-                                +225{formik.values.phone.slice(0, 8).replace(/\d/g, '*')}{formik.values.phone.slice(8)}
+                                {formik.values.phone}
                             </Text>
                         </Text>
                         <View style={styles.inputContainer}>
@@ -301,7 +346,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 5,
         marginBottom: 15,
-        fontSize:fonts.h2,
+        fontSize: fonts.h2,
     },
     button: {
         backgroundColor: colors.primary,
@@ -312,7 +357,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: "white",
         fontWeight: "400",
-        fontSize:fonts.body,
+        fontSize: fonts.body,
     },
     error: {
         color: 'red',
@@ -328,12 +373,12 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     title: {
-        fontSize:fonts.body,
+        fontSize: fonts.body,
         fontWeight: "bold",
         marginBottom: 10,
     },
     subtitle: {
-        fontSize:fonts.body,
+        fontSize: fonts.body,
         color: "#666",
         marginBottom: 20,
         textAlign: "left",

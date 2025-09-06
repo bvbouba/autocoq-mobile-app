@@ -32,7 +32,7 @@ const CartScreen = () => {
     const router = useRouter()
     const {openModal} = useModal()
     const {showMessage} = useMessage()
-    
+
 
     const { data, loading: aloading } = useCurrentUserAddressesQuery({
         skip: !authenticated,
@@ -172,7 +172,7 @@ const CartScreen = () => {
             </PaddedView>
 
             {/* Sign-in prompt */}
-            <PaddedView>
+            {!authenticated && <PaddedView>
             <TouchableOpacity onPress={()=>{
                 openModal({
                     id:"Auth",
@@ -187,7 +187,7 @@ const CartScreen = () => {
                     {" "}pour voir votre panier.
                 </Text>
                 </TouchableOpacity>
-            </PaddedView>
+            </PaddedView>}
         </View>
         );
     }

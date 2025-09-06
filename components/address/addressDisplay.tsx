@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   text: {
-    fontSize:fonts.h2,
+    fontSize:fonts.h3,
     marginBottom: 4,
   },
   phone: {
-    fontSize:fonts.h2,
+    fontSize:fonts.h3,
     fontWeight: "bold",
   },
 });

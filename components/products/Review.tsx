@@ -29,7 +29,6 @@ const Review = ({ product }: { product: ProductFragment }) => {
   const { data, refetch } = useReviewListQuery({ variables: { filter: { product: product.id } } });
 
   const reviews = mapEdgesToItems(data?.reviews);
-
   // Total Reviews & Star Counts
   const totalReviews = product.reviewCount || 0;
   const starCounts = {
@@ -39,7 +38,6 @@ const Review = ({ product }: { product: ProductFragment }) => {
     2: product.reviews2Stars || 0,
     1: product.reviews1Star || 0,
   };
-
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -74,7 +72,7 @@ const Review = ({ product }: { product: ProductFragment }) => {
           </Text>
         </View>
       </View>
-
+       
       {(reviews && reviews.length >0) &&
         <>
       <Divider style={{ borderBottomWidth: 10 }} />

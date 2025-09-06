@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../../simulation/frontend/apps"
+		},
+		{
+			"path": "../../../../test"
 		}
 	],
 	"settings": {}
