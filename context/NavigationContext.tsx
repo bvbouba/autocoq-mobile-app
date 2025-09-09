@@ -7,7 +7,7 @@ const NavigationContext = createContext<{ setNavigationLink: (slug: Href | undef
 });
 
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [navigationLink, setNavigationLink] = useState<Href | undefined>("/");
+  const [navigationLink, setNavigationLink] = useState<Href | undefined>(undefined);
 
 
   // const handleBackNavigation = () => {
