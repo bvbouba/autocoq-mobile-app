@@ -1,12 +1,10 @@
-import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator,Platform } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import {Text, View , Divider,colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
-import BannerAds from '@/components/layout/BannerAds';
-import Loading from '@/components/Loading';
 import { useModal } from '@/context/useModal';
 import Auth from '@/components/account/auth';
 import { useLoading } from '@/context/LoadingContext';

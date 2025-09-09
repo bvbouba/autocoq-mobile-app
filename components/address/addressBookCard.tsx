@@ -1,7 +1,7 @@
 import { AddressDetailsFragment, useAddressDeleteMutation, useSetAddressDefaultMutation } from "@/saleor/api.generated";
 import { StyleSheet, TouchableOpacity, Alert } from "react-native";
 import AddressDisplay from "./addressDisplay";
-import { Ionicons } from "@expo/vector-icons"; // Use FontAwesome if preferred
+// Use FontAwesome if preferred
 import {colors, fonts, Text, View  } from "@/components/Themed"
 import { IconButton } from "react-native-paper";
 

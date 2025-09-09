@@ -16,6 +16,7 @@ import { Button } from "react-native-paper";
 import { useRouter } from "expo-router";
 import ProductListItemSkeleton from "../skeletons/ProductListItem";
 import { useMessage } from "@/context/MessageContext";
+import { getConfig } from "@/config";
 
 export interface ProductCollectionProps {
   filter?: ProductFilterInput;
@@ -58,7 +59,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       }),
     },
     first: perPage,
-    channel: "ci",
+    channel: getConfig().channel,
     ...(sortBy?.field && sortBy?.direction && {
       sortBy: { direction: sortBy.direction, field: sortBy.field },
     }),

@@ -3,7 +3,6 @@ import { FC, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { ProductCardFragment, useAdditionalProductDataQuery } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from './../Themed';
-import CompatibilityCheckBasic from "../car/CompatibilityCheckBasic";
 import { useCheckout } from "@/context/CheckoutProvider";
 import { useModal } from "@/context/useModal";
 import AddedToCart from "../cart/AddToTheCart";
@@ -37,7 +36,7 @@ const ProductListItem: FC<Props> = ({ product }) => {
     const [loading, setLoading] = useState(false);
 
     
-    const { data, loading: additionalLoading, error } = useAdditionalProductDataQuery({
+    const { data, loading: additionalLoading } = useAdditionalProductDataQuery({
         variables:{
             slug:product.slug
         }

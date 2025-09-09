@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { useRouter } from "expo-router";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
 import { getConfig } from "@/config";
@@ -13,8 +12,6 @@ import PopularCategoryGrid from "./PopularCategoryGrid";
 
 
 const DashboardScreen = () => {
-  const router = useRouter();
-  // const { authenticated } = useAuth();
   const { setLoading } = useLoading()
   const { showMessage } = useMessage();
 

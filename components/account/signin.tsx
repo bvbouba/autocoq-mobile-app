@@ -7,130 +7,93 @@ import { useAuth } from '@/lib/providers/authProvider';
 import { Text, View, PaddedView, colors, fonts } from "@/components/Themed"
 import { useModal } from '@/context/useModal';
 import Logo from '../Logo';
-import { useCreateTokenMutation } from '@/saleor/api.generated';
 import { useMessage } from '@/context/MessageContext';
 
 interface Form {
-    identifier: string;
-    password: string;
+  identifier: string;
+  password: string;
 }
 
 const validationSchema = yup.object().shape({
-    identifier: yup.string().required("Le numéro de téléphone est requis"),
-    password: yup.string().required("Le mot de passe est requis"),
+  identifier: yup.string().required("Le numéro de téléphone est requis"),
+  password: yup.string().required("Le mot de passe est requis"),
 });
-interface props {
-    fullPhoneNumber?: string,
+
+interface Props {
+  fullPhoneNumber?: string,
 }
 
-const SignIn: FC<props> = ({ fullPhoneNumber }) => {
-    const [useLogin] = useCreateTokenMutation();
-    const [showPassword, setShowPassword] = useState(false);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);  
-    const { closeModal } = useModal()
-    const {setToken,setRefreshToken} = useAuth()
-    const { showMessage } = useMessage();
+const SignIn: FC<Props> = ({ fullPhoneNumber }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const { closeModal } = useModal();
+  const { login, error, loading } = useAuth(); // ✅ use login from AuthProvider
+  const { showMessage } = useMessage();
 
-    const formik = useFormik<Form>({
-        initialValues: {
-            identifier: fullPhoneNumber ? String(fullPhoneNumber) : '', // Set phone number if available
-            password: '',
-        },
-        validationSchema: validationSchema,
-        validateOnChange: false,
-        validateOnBlur: false,
-        onSubmit: async (formData) => {
-            setLoading(true);
-            setError(null);
-            try {
-                const { data } = await useLogin({
-                    variables: {
-                        email: `${formData.identifier}@autocoq.com`,
-                        password: formData.password,
-                    },
-                });
-                const errors = data?.tokenCreate?.errors || [];
-                if (errors.length > 0) {
-                    if(errors[0].field==="email"){
-                        setError("Veuillez saisir des informations valides")
-                    }else{
-                    // setError(data?.tokenCreate?.errors[0]?.message || 'Une erreur inconnue est survenue.');
-                    showMessage('Une erreur inconnue est survenue.')
-                    }
-                } else {
-                    if (data?.tokenCreate?.token) {
-                        setToken(data?.tokenCreate?.token);
-                        setRefreshToken(data?.tokenCreate?.refreshToken || "");
-                        closeModal("SignIn")
-                    } else {
-                        showMessage('Échec de l’authentification. Veuillez réessayer.')
+  const formik = useFormik<Form>({
+    initialValues: {
+      identifier: fullPhoneNumber ? String(fullPhoneNumber) : '',
+      password: '',
+    },
+    validationSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: async (formData) => {
+      try {
+        await login({
+          email: `${formData.identifier}@autocoq.com`,
+          password: formData.password,
+        });
+        closeModal("SignIn");
+      } catch (err) {
+        console.error('Login error:', err);
+        showMessage("Impossible de se connecter. Veuillez réessayer.");
+      }
+    },
+  });
 
-                    }
-                }
-            } catch (err) {
-                console.error('Login error:', err);
-                showMessage("Impossible de se connecter. Veuillez réessayer.")
-            } finally {
-                setLoading(false);
+  return (
+    <PaddedView>
+      <Logo />
+      <View style={styles.container}>
+        <Text style={styles.subtitle}>Entrez votre mot de passe</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={formik.handleChange('password')}
+            value={formik.values.password}
+            placeholder="Mot de passe"
+            label="Mot de passe"
+            error={!!formik.errors.password}
+            secureTextEntry={!showPassword}
+            outlineColor={colors.border}
+            underlineColor={colors.border}
+            right={
+              <TextInput.Icon
+                icon={showPassword ? 'eye-off' : 'eye'}
+                onPress={() => setShowPassword((prev) => !prev)}
+              />
             }
-        },
-    });
+          />
+          {formik.errors.password && <Text style={styles.error}>{formik.errors.password}</Text>}
 
-    return (
-        <PaddedView>
-            <Logo />
-            <View style={styles.container}>
-                {/* <TextInput
-                    style={styles.input}
-                    onChangeText={formik.handleChange('identifier')}
-                    value={formik.values.identifier}
-                    placeholder="Numéro de téléphone"
-                    label="Numéro de téléphone"
-                    error={!!formik.errors.identifier}
-                    keyboardType="phone-pad"
-                />
-                {formik.errors.identifier && <Text style={styles.error}>{formik.errors.identifier}</Text>} */}
-                <Text style={styles.subtitle}>
-                    Entrez votre mot de passe
-                </Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={formik.handleChange('password')}
-                        value={formik.values.password}
-                        placeholder="Mot de passe"
-                        label="Mot de passe"
-                        error={!!formik.errors.password}
-                        secureTextEntry={!showPassword}
-                        outlineColor={colors.border}
-                        underlineColor={colors.border}
-                        right={
-                            <TextInput.Icon
-                                icon={showPassword ? 'eye-off' : 'eye'}
-                                onPress={() => setShowPassword((prev) => !prev)}
-                            />
-                        }
-                    />
-                    {formik.errors.password && <Text style={styles.error}>{formik.errors.password}</Text>}
+          <Button
+            style={styles.button}
+            onPress={() => formik.handleSubmit()}
+            mode="contained"
+            disabled={loading}
+          >
+            {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>{'Connexion'}</Text>}
+          </Button>
 
-                    <Button
-                        style={styles.button}
-                        onPress={() => formik.handleSubmit()}
-                        mode="contained"
-                        disabled={loading}
-                    >
-                        {loading ? <ActivityIndicator color="white" /> : <Text style={styles.buttonText}>{'Connexion'}</Text>}
-                    </Button>
-
-                    {error && <Text style={styles.errorText}>{error}</Text>}
-                </View>
-            </View>
-        </PaddedView>
-    );
+          {error && <Text style={styles.errorText}>{error}</Text>}
+        </View>
+      </View>
+    </PaddedView>
+  );
 };
 
 export default SignIn;
+
 
 const styles = StyleSheet.create({
     container: {

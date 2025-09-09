@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator, } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
-import { useCreateTokenMutation, CheckPhoneNumberDocument,useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation, useCheckPhoneNumberQuery } from '@/saleor/api.generated';
+import { useCreateTokenMutation, CheckPhoneNumberDocument,useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
 import { Text, View, PaddedView, colors, fonts } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';
@@ -53,156 +53,145 @@ const SignUp: FC<Props> = ({ phoneNumber, defaultCC, fullPhoneNumber }) => {
     const [sendCode] = useSendCodeMutation();
     const [verifyCode] = useVerifyCodeMutation();
     const [userRegister] = useUserRegisterMutation();
-    const { closeModal,openModal } = useModal()
-    const [useLogin] = useCreateTokenMutation();
-    const { setRefreshToken, setToken } = useAuth()
+    const { closeModal, openModal } = useModal();
+    const { login } = useAuth(); // ✅ use AuthProvider login
     const { showMessage } = useMessage();
     const phoneInput = useRef<PhoneInput>(null);
     const [checkPhoneExists] = useLazyQuery(CheckPhoneNumberDocument, {
-        fetchPolicy: "network-only",
-      });
-
-
-
-    const formik = useFormik<Form>({
-        initialValues: {
-            phone: fullPhoneNumber ? String(fullPhoneNumber) : '',
-            verificationCode: '',
-            username: '',
-            password: '',
-            confirmPassword: '',
-        },
-        validationSchema,
-        validateOnChange: false,
-        validateOnBlur: false,
-        onSubmit: async (data) => {
-            setLoading(true);
-            setError(null);
-
-            try {
-                const { data: response, errors } = await userRegister({
-                    variables: {
-                        input: {
-                            email: `${data.phone}@autocoq.com`,
-                            password: data.password,
-                            firstName: data.username,
-                        },
-                    },
-                });
-
-                const errorMsg = response?.accountRegister?.errors?.[0]?.message || errors?.[0]?.message || '';
-
-                if (errorMsg) {
-                    setError(errorMsg);
-                } else {
-                    try {
-                        const { data: loginData } = await useLogin({
-                            variables: {
-                                email: `${data.phone}@autocoq.com`,
-                                password: data.password,
-                            },
-                        });
-                        const loginError = loginData?.tokenCreate?.errors || [];
-                        if (loginError.length > 0) {
-                            showMessage("La connexion a échoué. Veuillez réessayer sur la page de connexion.")
-                        } else {
-                            if (loginData?.tokenCreate?.token) {
-                                setToken(loginData?.tokenCreate?.token);
-                                setRefreshToken(loginData?.tokenCreate?.refreshToken || "");
-                                closeModal("SignUp")
-                            } else {
-                                showMessage("Échec de l’authentification. Veuillez réessayer.")
-                            }
-                        }
-                    } catch (err) {
-                        console.error('Login error:', err);
-                        showMessage("Erreur de connexion")
-                    }
-                }
-            } catch {
-                setError("L'inscription a échoué. Veuillez réessayer.");
-            } finally {
-                setLoading(false);
-            }
-        },
+      fetchPolicy: "network-only",
     });
-
-    const handleNext = async () => {
-        setError(null);
+  
+    const formik = useFormik<Form>({
+      initialValues: {
+        phone: fullPhoneNumber ? String(fullPhoneNumber) : "",
+        verificationCode: "",
+        username: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema,
+      validateOnChange: false,
+      validateOnBlur: false,
+      onSubmit: async (data) => {
         setLoading(true);
-
+        setError(null);
+  
         try {
-            const formErrors = await formik.validateForm();
-
-            if (currentStep === 1) {
-                if (formErrors.phone) {
-                    setError(formErrors.phone);
-                    setLoading(false);
-                    return;
-                }
-                const isValid = phoneInput.current?.isValidNumber(formik.values.phone);
-                if (!isValid) {
-                    setError("Le numéro de téléphone n'est pas valide.");
-                    return;
-                }
-                try {
-                    const { data } = await checkPhoneExists({
-                        variables: { phoneNumber: formik.values.phone },
-                      });
-
-                    if (data?.checkPhoneExists?.exists) {
-                        openModal({
-                            id: "SignIn",
-                            content: <SignIn fullPhoneNumber={formik.values.phone} />,
-                            height: "115%",
-                            closeButtonVisible: true,
-                        });
-                        closeModal("SignUp");
-                        return;
-                    }
-                    const { data: otpData, errors } = await sendCode({
-                        variables: { phoneNumber: formik.values.phone },
-                    });
-
-                    const errorMsg = otpData?.sendOtp?.error || errors?.[0]?.message || "";
-                    if (errorMsg) {
-                        setError(errorMsg);
-                    } else {
-                        setCurrentStep(2);
-                    }
-                } catch (err) {
-                    console.error("GraphQL Error:", err);
-                    setError("Une erreur est survenue. Veuillez réessayer.");
-                }
-
-
-            } else if (currentStep === 2) {
-                if (formErrors.verificationCode) {
-                    setError(formErrors.verificationCode);
-                    setLoading(false);
-                    return;
-                }
-                const { data, errors } = await verifyCode({
-                    variables: {
-                        phoneNumber: `${formik.values.phone}`,
-                        otp: formik.values.verificationCode,
-                    },
-                });
-
-                const errorMsg = data?.verifyOtp?.error || errors?.[0]?.message || '';
-
-                if (errorMsg) {
-                    setError(errorMsg);
-                } else {
-                    setCurrentStep(3);
-                }
+          const { data: response, errors } = await userRegister({
+            variables: {
+              input: {
+                email: `${data.phone}@autocoq.com`,
+                password: data.password,
+                firstName: data.username,
+              },
+            },
+          });
+  
+          const errorMsg =
+            response?.accountRegister?.errors?.[0]?.message ||
+            errors?.[0]?.message ||
+            "";
+  
+          if (errorMsg) {
+            setError(errorMsg);
+          } else {
+            try {
+              // ✅ Call login from AuthProvider instead of mutation
+              await login({
+                email: `${data.phone}@autocoq.com`,
+                password: data.password,
+              });
+              closeModal("SignUp");
+            } catch (err) {
+              console.error("Login error:", err);
+              showMessage(
+                "La connexion a échoué. Veuillez réessayer sur la page de connexion."
+              );
             }
+          }
         } catch {
-            setError("Une erreur s'est produite. Veuillez réessayer.");
+          setError("L'inscription a échoué. Veuillez réessayer.");
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
+      },
+    });
+  
+    const handleNext = async () => {
+      setError(null);
+      setLoading(true);
+  
+      try {
+        const formErrors = await formik.validateForm();
+  
+        if (currentStep === 1) {
+          if (formErrors.phone) {
+            setError(formErrors.phone);
+            setLoading(false);
+            return;
+          }
+          const isValid = phoneInput.current?.isValidNumber(formik.values.phone);
+          if (!isValid) {
+            setError("Le numéro de téléphone n'est pas valide.");
+            return;
+          }
+          try {
+            const { data } = await checkPhoneExists({
+              variables: { phoneNumber: formik.values.phone },
+            });
+  
+            if (data?.checkPhoneExists?.exists) {
+              openModal({
+                id: "SignIn",
+                content: <SignIn fullPhoneNumber={formik.values.phone} />,
+                height: "115%",
+                closeButtonVisible: true,
+              });
+              closeModal("SignUp");
+              return;
+            }
+            const { data: otpData, errors } = await sendCode({
+              variables: { phoneNumber: formik.values.phone },
+            });
+  
+            const errorMsg = otpData?.sendOtp?.error || errors?.[0]?.message || "";
+            if (errorMsg) {
+              setError(errorMsg);
+            } else {
+              setCurrentStep(2);
+            }
+          } catch (err) {
+            console.error("GraphQL Error:", err);
+            setError("Une erreur est survenue. Veuillez réessayer.");
+          }
+        } else if (currentStep === 2) {
+          if (formErrors.verificationCode) {
+            setError(formErrors.verificationCode);
+            setLoading(false);
+            return;
+          }
+          const { data, errors } = await verifyCode({
+            variables: {
+              phoneNumber: `${formik.values.phone}`,
+              otp: formik.values.verificationCode,
+            },
+          });
+  
+          const errorMsg = data?.verifyOtp?.error || errors?.[0]?.message || "";
+  
+          if (errorMsg) {
+            setError(errorMsg);
+          } else {
+            setCurrentStep(3);
+          }
+        }
+      } catch {
+        setError("Une erreur s'est produite. Veuillez réessayer.");
+      } finally {
+        setLoading(false);
+      }
     };
+  
 
     return (
         <PaddedView>

@@ -1,14 +1,12 @@
-import { StyleSheet, Alert, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import { StyleSheet, Alert, TextInput } from "react-native";
 import { IconButton } from "react-native-paper";
 import { useState } from "react";
 import { Text, View, colors, fonts } from "@/components/Themed";
 import { PrimaryButton } from "../button";
 import { useModal } from "@/context/useModal";
-import { useLoading } from "@/context/LoadingContext";
 
-const AddByVIN = ({ setSelectedLocalCar }: { setSelectedLocalCar?: (car?: any) => void }) => {
+const AddByVIN = () => {
   const { closeModal } = useModal();
-  const { setLoading } = useLoading();
   const [vin, setVin] = useState<string>("");
 
   const onSubmit = () => {

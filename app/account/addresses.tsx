@@ -2,16 +2,15 @@ import AddressBookCard from "@/components/address/addressBookCard";
 import { useAuth } from "@/lib/providers/authProvider";
 import { useCurrentUserAddressesQuery } from "@/saleor/api.generated";
 import { useState } from "react";
-import {  StyleSheet, FlatList } from "react-native";
-import {fonts, PaddedView, Text, View } from "@/components/Themed"
+import { StyleSheet, FlatList } from "react-native";
+import { fonts, PaddedView, Text, View } from "@/components/Themed";
 import { Skeleton } from "moti/skeleton";
 
-
 const CarnetDAdressesScreen = () => {
-  const { authenticated, token, checkAndRefreshToken } = useAuth();
+  const { authenticated, token } = useAuth(); // removed checkAndRefreshToken
   const [isValidatingToken, setIsValidatingToken] = useState(true);
-  
-  // Requête pour les adresses de l'utilisateur actuel
+
+  // Query user addresses
   const { loading, error, data, refetch } = useCurrentUserAddressesQuery({
     skip: !authenticated,
     fetchPolicy: "network-only",
@@ -23,10 +22,9 @@ const CarnetDAdressesScreen = () => {
     onCompleted: () => {
       setIsValidatingToken(false);
     },
-    onError: async (error) => {
-      if (error.message.includes("Signature has expired")) {
-        await checkAndRefreshToken();
-      }
+    onError: (error) => {
+      // No need to manually refresh anymore — tokenRefreshLink handles it
+      console.error("Address fetch error:", error);
       setIsValidatingToken(false);
     },
   });
@@ -34,13 +32,13 @@ const CarnetDAdressesScreen = () => {
   if (loading || isValidatingToken) {
     return (
       <View style={styles.container}>
-          {[...Array(2)].map((_, index) => (
-               <PaddedView key={index}>
-                  <Skeleton colorMode="light" height={150} width="100%" />
-                  </PaddedView>
-          ))}
+        {[...Array(2)].map((_, index) => (
+          <PaddedView key={index}>
+            <Skeleton colorMode="light" height={150} width="100%" />
+          </PaddedView>
+        ))}
       </View>
-  );
+    );
   }
 
   if (error) {
@@ -68,7 +66,8 @@ const CarnetDAdressesScreen = () => {
       renderItem={({ item }) => (
         <AddressBookCard address={item} onRefreshBook={() => refetch()} />
       )}
-      contentContainerStyle={styles.container}
+      contentContainerStyle={{ padding: 10 }}
+      style={{ flex: 1 }}
     />
   );
 };
@@ -76,12 +75,11 @@ const CarnetDAdressesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    padding:10
+    backgroundColor: "#fff",
   },
   error: {
     color: "red",
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     textAlign: "center",
     marginTop: 20,
   },

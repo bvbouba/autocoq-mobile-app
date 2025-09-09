@@ -9,7 +9,6 @@ import {
     View,
     ActivityIndicator,
     Image,
-    Text,
 } from "react-native";
 
 interface Props {
@@ -23,7 +22,6 @@ interface Props {
 const ProductImage: React.FC<Props> = ({
     style,
     index: _index,
-    showIndex = true,
     url,
     alt
 }) => {

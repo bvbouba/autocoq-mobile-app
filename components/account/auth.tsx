@@ -1,5 +1,5 @@
 import { useState,useRef } from "react";
-import { TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
+import { TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { useLazyQuery } from "@apollo/client/main.cjs";
 import { CheckPhoneNumberDocument } from "@/saleor/api.generated";
 import { Text, View, colors, fonts } from "@/components/Themed";

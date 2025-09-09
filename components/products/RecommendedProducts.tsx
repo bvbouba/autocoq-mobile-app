@@ -6,6 +6,7 @@ import { fonts } from "../Themed";
 import ProductCard from "./ProductCard";
 import Carousel from "react-native-reanimated-carousel";
 import { useState } from "react";
+import { getConfig } from "@/config";
 
 const diviserTableau = (tableau: any[], taille: number) => {
   return Array.from({ length: Math.ceil(tableau.length / taille) }, (_, index) =>
@@ -15,7 +16,7 @@ const diviserTableau = (tableau: any[], taille: number) => {
 
 const ProduitsRecommandés = ({ categoryID, perPage }: { perPage?: number; categoryID: string }) => {
   const { selectedCar } = useCarFilter();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [, setCurrentIndex] = useState(0);
   const { width } = useWindowDimensions(); // Récupère la largeur de l'écran
 
   const largeurArticle = width / 2 - 15; // Chaque produit occupe la moitié de l'écran moins la marge
@@ -32,7 +33,7 @@ const ProduitsRecommandés = ({ categoryID, perPage }: { perPage?: number; categ
       }),
     },
     first: perPage,
-    channel: "ci",
+    channel: getConfig().channel,
   };
 
   const { loading, error, data } = useProductCollectionQuery({ variables });

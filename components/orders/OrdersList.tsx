@@ -9,7 +9,7 @@ import { MotiView } from "moti";
 import { Skeleton } from "moti/skeleton";
 
 const OrdersList = () => {
-    const { authenticated, token, checkAndRefreshToken } = useAuth();
+    const { authenticated, token } = useAuth();
     const { orders: localOrders,loading:loadingOrders } = useOrderContext();
     // const [isValidatingToken, setIsValidatingToken] = useState(true);
 
@@ -31,10 +31,7 @@ const OrdersList = () => {
             // setIsValidatingToken(false);
         },
         onError: async (error) => {
-            if (error.message.includes("Signature has expired")) {
-                await checkAndRefreshToken();
-            }
-            // setIsValidatingToken(false);
+            console.error("Order query error:", error);
         },
     });
 

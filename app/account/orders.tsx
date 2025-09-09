@@ -1,18 +1,17 @@
 import { StyleSheet, View } from 'react-native';
 import { Divider, fonts, PaddedView, Text } from '@/components/Themed';
 import OrdersList from '@/components/orders/OrdersList';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 
 export default function Orders() {
   return (
     <View style={styles.scrollContainer}>
-      <ScrollView style={styles.scroll}>
+      <ScrollView contentContainerStyle={styles.scroll}>
         <PaddedView>
-          {/* <Text style={styles.title}>Vos commandes</Text> */}
           <Text style={styles.subTitle}>Afficher et gérer vos commandes</Text>
         </PaddedView>
         <Divider />
-        <OrdersList /> 
+        <OrdersList />
       </ScrollView>
     </View>
   );
@@ -21,19 +20,19 @@ export default function Orders() {
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "white"
+    backgroundColor: "white", 
   },
   scroll: {
+    flexGrow: 1,   
     width: "100%",
+    padding: 16,   
   },
   title: {
     textAlign: "left",
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     fontWeight: 'bold',
   },
   subTitle: {
-    marginBottom: 16
-  }
+    marginBottom: 16,
+  },
 });

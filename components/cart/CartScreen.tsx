@@ -25,16 +25,16 @@ import { useMessage } from "@/context/MessageContext";
 
 const CartScreen = () => {
     const { checkout,checkoutToken, loading } = useCheckout();
-    const { authenticated, token, checkAndRefreshToken } = useAuth();
+    const { authenticated, token } = useAuth();
     const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
     const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
-    const [isLoading,setLoading] = useState(false)
+    const [,setLoading] = useState(false)
     const router = useRouter()
     const {openModal} = useModal()
     const {showMessage} = useMessage()
 
 
-    const { data, loading: aloading } = useCurrentUserAddressesQuery({
+    const { data} = useCurrentUserAddressesQuery({
         skip: !authenticated,
         fetchPolicy: "network-only",
         context: {
@@ -43,9 +43,7 @@ const CartScreen = () => {
             },
         },
         onError: async (error) => {
-            if (error.message.includes("Signature has expired")) {
-                await checkAndRefreshToken();
-            }
+            console.error("Cart query error:", error);
         },
     });
 

@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { colors, fonts } from "@/components/Themed";
+import { colors } from "@/components/Themed";
 
 
 export const StarRating = ({ rating,size=12 }: { rating: number ,size?:number}) => (

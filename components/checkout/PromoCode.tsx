@@ -1,4 +1,3 @@
-import  { useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useCheckout } from "@/context/CheckoutProvider";
 import {  Divider, fonts, PaddedView } from "../Themed";
@@ -19,7 +18,7 @@ const PromoCode = () => {
   const onDelete = async () => {
     try {
        setLoading(true)
-      const {data} = await checkoutRemovePromoCode({
+      await checkoutRemovePromoCode({
         variables:{
                checkoutId:checkout?.id,
                promoCode:checkout?.voucherCode,

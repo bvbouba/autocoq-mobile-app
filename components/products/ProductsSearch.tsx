@@ -15,11 +15,8 @@ interface Props {
     carIconColor?:string;
 }
 
-interface Form {
-    search: string;
-}
 
-const ProductSearch: FC<Props> = ({ cleanSearch, searchOnLoad = true,carIconColor }) => {
+const ProductSearch: FC<Props> = ({ carIconColor }) => {
     // Use the correct hook from expo-router
     const router = useRouter();
     const { checkout } = useCheckout();

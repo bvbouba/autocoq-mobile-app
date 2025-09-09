@@ -2,9 +2,8 @@ import { StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { ProductVariantFragment, useGetAvailableShippingMethodsQuery } from "@/saleor/api.generated";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
-import {colors, Text, View } from "@/components/Themed"
+import { Text, View } from "@/components/Themed"
 import { useCheckout } from "@/context/CheckoutProvider";
-import { ActivityIndicator } from "react-native-paper";
 import ZoneSelector from "../ZoneSelector";
 import { Skeleton } from "moti/skeleton";
 
@@ -62,12 +61,9 @@ const DeliveryMethodBasic = ({ variant }: Props) => {
   const homeDelivery = getShippingMethodById("home-delivery") || getShippingMethodById("home-delivery-free") ;
 
   // Calculate time difference from now to 20:00 (8 PM)
-  const currentTime = new Date();
   const targetTime = new Date();
   targetTime.setHours(20, 0, 0, 0);
-  const diffMs = Math.max(targetTime.getTime() - currentTime.getTime(), 0);
 
-  
   
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);

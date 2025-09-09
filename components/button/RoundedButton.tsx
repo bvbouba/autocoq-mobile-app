@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, Pressable } from "react-native";
-import { Button } from "react-native-paper";
 import { colors } from "@/components/Themed";
 
 interface Props {
@@ -15,7 +14,6 @@ export const RoundedButton: React.FC<Props> = ({
   onPress,
   title,
   loading = false,
-  disabled = false,
   style = {},
 }) => {
   const [isPressed, setIsPressed] = useState(false);

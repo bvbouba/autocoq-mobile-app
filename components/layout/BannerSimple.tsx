@@ -38,7 +38,7 @@ export function RichText({ jsonStringData }: RichTextProps) {
   }
 
 const BannerSimple = () => {
-  const { data, loading, error } = usePageQuery({
+  const { data, loading } = usePageQuery({
     variables: {
       slug: "banner",
     },

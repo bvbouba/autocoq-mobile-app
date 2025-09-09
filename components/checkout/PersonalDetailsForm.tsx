@@ -28,7 +28,6 @@ const PersonalDetailsForm: FC<Props> = ({ onSubmit, onCancel }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     
-    const email = user?.email || checkout?.email
     const phoneNumber = user?.email.split("@")[0];
 
     const formik = useFormik<Form>({

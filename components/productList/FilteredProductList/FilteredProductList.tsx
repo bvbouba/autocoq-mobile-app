@@ -11,7 +11,7 @@ import {
 } from "@/saleor/api.generated";
 
 import { getPillsData, UrlFilter } from "./attributes";
-import FilterPills, { FilterPill } from "./FilterPills";
+import { FilterPill } from "./FilterPills";
 import { ProductCollection } from "@/components/ProductCollection";
 import { UrlSorting } from "./sorting";
 import FilterBar from "./FilterBar";
@@ -61,7 +61,7 @@ export function FilteredProductList({ collectionIDs, categoryIDs, searchQueryStr
     skip: Object.keys(attributeFilterCondition).length === 0,
     variables: {
       filter: attributeFilterCondition,
-      channel: "ci",
+      channel: getConfig().channel,
     },
   });
 
@@ -75,7 +75,7 @@ export function FilteredProductList({ collectionIDs, categoryIDs, searchQueryStr
           IDs.map((categoryID) =>
             apolloClient.query<FilteringAttributesQuery, FilteringAttributesQueryVariables>({
               query: FilteringAttributesQueryDocument,
-              variables: { filter: { inCategory: categoryID }, channel: "ci" },
+              variables: { filter: { inCategory: categoryID }, channel: getConfig().channel },
             })
           )
         );

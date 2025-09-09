@@ -1,5 +1,5 @@
 import { View, Text, colors, PaddedView, fonts } from "@/components/Themed";
-import { StyleSheet, useWindowDimensions, Pressable } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
@@ -10,10 +10,10 @@ import { Button } from "react-native-paper";
 
 
 const CategoryShortList = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [, setCurrentIndex] = useState(0);
   const { width } = useWindowDimensions();
   const router = useRouter();
-  const { data: categoriesData, error: catError, loading } = useGetMainMenuQuery({
+  const { data: categoriesData, loading } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
   });
 
@@ -49,7 +49,7 @@ const CategoryShortList = () => {
             };
           }) || []}
           defaultIndex={0}
-          renderItem={({ index, item }) =>
+          renderItem={({ item }) =>
             item ? (
               <Button
                 onPress={() => router.push(`/categories/${item.id}`)}

@@ -22,7 +22,7 @@ const ShippingMethods = () => {
     const updateShippingMethod = async () => {
         setLoading(true); // Démarrer le chargement
         try {
-            const res = await shippingAddressUpdate({
+            await shippingAddressUpdate({
                 variables: {
                     token: checkoutToken,
                     shippingMethodId: checked,

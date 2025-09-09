@@ -6,7 +6,6 @@ import { View, Text } from "react-native";
 import RichText from "../RichText";
 import { colors, fonts } from "../Themed";
 import { ShippingMethodFragment } from "@/saleor/api.generated";
-import { RadioButton } from "react-native-paper";
 import { useCheckout } from "@/context/CheckoutProvider";
 
 type IconType = "shopping-bag" | "clock-o" | "truck";
@@ -116,7 +115,7 @@ export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption
             />
             <View>
               <Text style={[styles.title]}>{option.title}</Text>
-              <RichText
+              {option.description && (<RichText
                 jsonStringData={option.description}
                 stylesOverride={{
                   paragraph: {
@@ -125,7 +124,7 @@ export const DeliveryMethodComponent = ({availableShippingMethods,selectedOption
                     color: colors.textSecondary,
                   },
                 }}
-              />
+              />)}
             </View>
           </View>
           <View

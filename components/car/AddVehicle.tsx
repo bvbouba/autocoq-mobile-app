@@ -1,7 +1,6 @@
 import {  TouchableOpacity, Image,StyleSheet } from "react-native";
 import {SurfaceView, Text, View , colors, fonts } from "@/components/Themed"
 import ImageExpand from "../ImageExpand";
-import { EngineDetailsFragment, MakeDetailsFragment, ModelDetailsFragment, YearDetailsFragment } from "@/saleor/api.generated";
 import { useState } from "react";
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { PrimaryButton } from "../button";

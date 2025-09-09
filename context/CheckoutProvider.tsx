@@ -5,7 +5,6 @@ import {
   CheckoutError,
   CheckoutFragment,
   CheckoutWithZoneFragment,
-  DeliveryMethodFragment,
   useCheckoutAddProductLineMutation,
   useCheckoutByTokenQuery,
   useCheckoutLineUpdateMutation,
@@ -14,6 +13,7 @@ import {
 } from "@/saleor/api.generated";
 import { useAuth } from "@/lib/providers/authProvider";
 import { getZoneName } from "./zone";
+import { getConfig } from "@/config";
 
 interface DeliveryState {
   zone: string | undefined;
@@ -61,7 +61,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
   const [checkout, setCheckout] = useState<CheckoutWithZoneFragment | CheckoutFragment | undefined>(undefined);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [checkoutLineUpdateMutation, { loading: loadingLineUpdate }] = useCheckoutLineUpdateMutation();
+  const [checkoutLineUpdateMutation] = useCheckoutLineUpdateMutation();
   const [removeProductFromCheckout] = useRemoveProductFromCheckoutMutation();
   const [chosenGateway, setChosenGateway] = useState<string>("");
 
@@ -130,7 +130,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
       const { data: createCheckoutData } = await createCheckout({
         variables: {
           email: user?.email,
-          channel: "ci",
+          channel: getConfig().channel,
           lines: [{ quantity: 1, variantId: selectedVariantID }],
         },
       });

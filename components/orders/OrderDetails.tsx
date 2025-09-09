@@ -1,6 +1,3 @@
-import { Link, Stack, useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
-import { fonts, Text } from "@/components/Themed";
 import OrderContent from "@/components/orders/OrderContent";
 import {  useGetOrderByIdQuery } from "@/saleor/api.generated";
 import OrderDetailsSkeleton from "@/components/skeletons/OrderDetails"
@@ -38,25 +35,5 @@ export const DetailsCommande = ({ orderId }: { orderId: string | undefined}) => 
     return <OrderContent order={order} />;
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 20,
-    },
-    title: {
-        fontSize: fonts.h2,
-        fontWeight: "bold",
-    },
-    link: {
-        marginTop: 15,
-        paddingVertical: 15,
-    },
-    linkText: {
-        fontSize: fonts.body,
-        color: "#2e78b7",
-    },
-});
 
 export default DetailsCommande;

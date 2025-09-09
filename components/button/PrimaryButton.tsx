@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, Pressable } from "react-native";
-import { Button } from "react-native-paper";
 import { colors, fonts } from "@/components/Themed";
 
 interface Props {
@@ -17,7 +16,6 @@ export const PrimaryButton: React.FC<Props> = ({
   title,
   loading = false,
   disabled = false,
-  mode = "contained",
   style = {},
 }) => {
   const [isPressed, setIsPressed] = useState(false);

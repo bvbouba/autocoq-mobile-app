@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { 
-  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Platform 
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator 
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";

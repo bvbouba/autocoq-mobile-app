@@ -1,20 +1,15 @@
-import { View, Text, PaddedView, Divider, fonts, colors } from "@/components/Themed";
-import { StyleSheet } from "react-native";
 import { useGetMenuItemQuery } from "@/saleor/api.generated";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
-import ListItem from "../ListItem";
 import { useEffect } from "react";
 import { useNavigationContext } from "@/context/NavigationContext";
 import { useLoading } from "@/context/LoadingContext";
-import { Skeleton } from "moti/skeleton";
 import { useMenuContext } from "@/context/MenuProvider";
 import CategoryGrid from "./CategoryGrid";
 
 const CategoryList = () => {
     const { setLoading } = useLoading();
     const { setNavigationLink } = useNavigationContext();
-    const router = useRouter();
     const { menu } = useMenuContext(); 
     
     const { id } = useLocalSearchParams();
@@ -70,17 +65,6 @@ const CategoryList = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        width: "100%",
-    },
-    categoryListTitle: {
-        fontSize: fonts.h2,
-        lineHeight: 34,
-        fontWeight: "bold",
-        textAlign: "left",
-        color: colors.textPrimary,
-    },
-});
+
 
 export default CategoryList;

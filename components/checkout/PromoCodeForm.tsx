@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useCheckoutAddPromoCodeMutation } from "@/saleor/api.generated";

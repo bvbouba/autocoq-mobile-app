@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome for the close icon
 import { colors, fonts } from "@/components/Themed";
 import { Button } from "react-native-paper";

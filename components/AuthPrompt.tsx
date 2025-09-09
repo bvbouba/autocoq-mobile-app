@@ -4,11 +4,8 @@ import {colors, fonts, SurfaceView, Text, View  } from "@/components/Themed"
 import { useModal } from "@/context/useModal";
 import Auth from "./account/auth";
 
-interface props {
-  redirectUrl:string
-}
 
-const AuthPrompt = ({redirectUrl}:props) => {
+const AuthPrompt = () => {
   const {openModal} = useModal()
 
   return (

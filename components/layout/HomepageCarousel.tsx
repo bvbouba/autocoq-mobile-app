@@ -13,7 +13,7 @@ const HomepageCarousel = () => {
   const router = useRouter();
 
   // Fetch menu items
-  const { data, error, loading,previousData } = useGetMenuQuery({
+  const { data, loading,previousData } = useGetMenuQuery({
     variables: { channel: getConfig().channel, slug: "carousel" },
     fetchPolicy: "cache-first",
   });

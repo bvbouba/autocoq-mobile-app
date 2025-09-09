@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useProductContext } from '@/context/useProductContext';
 
@@ -6,11 +6,10 @@ import { useLocalSearchParams } from 'expo-router';
 import { getConfig } from '@/config';
 import { AttributeFilterFragment, CategoryPathFragment, useCategoryPathsQuery, } from '@/saleor/api.generated';
 import { colors, fonts, Text, View } from '@/components/Themed';
-import { Button, IconButton } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
-import FilterPills, { FilterPill } from './FilterPills';
+import { FilterPill } from './FilterPills';
 import { useModal } from '@/context/useModal';
-import FilterDropdown, { FilterDropdownOption } from './FilterDropdown';
+import FilterDropdown from './FilterDropdown';
 import { getFilterOptions } from './attributes';
 
 interface Props {
@@ -22,7 +21,7 @@ interface Props {
     addAttributeFilter: (attributeSlug: string, choiceSlug: string) => void
 }
 
-const FilterBar: FC<Props> = ({ openFilters, pills, clearFilters, removeAttributeFilter, attributeFiltersData,
+const FilterBar: FC<Props> = ({ openFilters, pills, removeAttributeFilter, attributeFiltersData,
     addAttributeFilter
 
 }) => {

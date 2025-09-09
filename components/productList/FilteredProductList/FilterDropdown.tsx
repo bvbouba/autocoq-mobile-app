@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome from Expo
-import { colors, Divider, fonts, PaddedView } from "@/components/Themed";
+import { colors, fonts, PaddedView } from "@/components/Themed";
 import { useLoading } from "@/context/LoadingContext";
 
 export interface FilterDropdownOption {

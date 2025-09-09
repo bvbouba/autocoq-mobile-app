@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, Pressable } from "react-native";
-import { Button } from "react-native-paper";
+import { StyleSheet, Text, Pressable } from "react-native";
 import { colors, fonts } from "@/components/Themed";
 
 interface Props {

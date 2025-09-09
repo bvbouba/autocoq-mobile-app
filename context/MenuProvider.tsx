@@ -1,5 +1,6 @@
 import React, { createContext, FC, PropsWithChildren, useContext } from "react";
-import { Menu, MenuFragment, MenuItemFragment, useGetMenuQuery } from "@/saleor/api.generated";
+import { MenuFragment, useGetMenuQuery } from "@/saleor/api.generated";
+import { getConfig } from "@/config";
 
 interface MenuContextModel {
     menu?: MenuFragment | null;
@@ -19,7 +20,7 @@ export const useMenuContext = () => {
 export const MenuProvider: FC<PropsWithChildren> = ({ children }) => {
     const { data, loading } = useGetMenuQuery({
         variables: {
-            channel: "ci",
+            channel: getConfig().channel,
             slug: "navbar",
         },
     });

@@ -22,7 +22,7 @@ import { debounce } from 'lodash';
 import { useModal } from '@/context/useModal';
 import { highlightMatch } from '@/utils/highlightMatch';
 import { clearRecentSearchs, getRecentSearchs, setRecentSearchs,clearRecentSearchItem } from '@/context/recentSearchs';
-import { useLoading } from '@/context/LoadingContext';
+import { getConfig } from '@/config';
 
 interface Props {}
 
@@ -52,7 +52,7 @@ const ProductSearch: FC<Props> = () => {
                 setSuggestions(categories);
             } else {
                 // If no categories, search by product name
-                searchByProductName({ variables: { first: 10, filter: { search: formik.values.search }, channel: "ci" } });
+                searchByProductName({ variables: { first: 10, filter: { search: formik.values.search }, channel: getConfig().channel, } });
             }
             setLoading(false);
         },

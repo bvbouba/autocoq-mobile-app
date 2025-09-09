@@ -28,7 +28,7 @@ const ProductCard = ({ product }: {  product: ProductCardFragment }) => {
   const router = useRouter()
   
 
-  const { data, loading: additionalLoading, error } = useAdditionalProductDataQuery({
+  const { data } = useAdditionalProductDataQuery({
     variables:{
         slug:product.slug
     }

@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router';
 import { View } from 'react-native';
 import BillingAddressForm from '../components/checkout/BillingAddressForm';
 import { PaddedView, Text } from '../components/Themed';
@@ -6,7 +5,6 @@ import { useCheckout } from '@/context/CheckoutProvider';
 
 const BillingAddressScreen = () => {
     const { checkout } = useCheckout();
-    const router = useRouter()
 
     if (!checkout || checkout.lines.length === 0) {
         return <View>

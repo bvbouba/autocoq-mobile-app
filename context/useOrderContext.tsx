@@ -1,6 +1,6 @@
 import { ApolloError } from "@apollo/client/main.cjs";
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from "react";
-import { OrderFragment, useGetOrderByIdLazyQuery, useUpdateOrderMutation } from "../saleor/api.generated";
+import { OrderFragment, useGetOrderByIdLazyQuery } from "../saleor/api.generated";
 import {
     handleErrors
 } from "./checkout";
@@ -33,7 +33,6 @@ export const OrderProvider: FC<PropsWithChildren> = ({ children }) => {
     const [savedOrders, setSavedOrders] = useState<OrderFragment[]>([])
     const [recentOrderId, setRecentOrderId] = useState<string | undefined>(undefined);
     const [recentOrder, setRecentOrder] = useState<OrderFragment | undefined>(undefined);
-    const [updateOrder] = useUpdateOrderMutation()
     const [getOrderById, getOrderByIdStatus] = useGetOrderByIdLazyQuery()
     const loading = getOrderByIdStatus.loading
     const loaded = getOrderByIdStatus.called

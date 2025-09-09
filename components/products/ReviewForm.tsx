@@ -25,7 +25,7 @@ const ReviewSchema = Yup.object().shape({
 const ReviewForm = ({ product, refetchReviews }: { product: ProductFragment; refetchReviews: () => void }) => {
   const images = product?.media || [];  
   const [createReview] = useCreateReviewMutation();
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const {closeModal} = useModal()
 

@@ -12,7 +12,7 @@ import {  Alert, View, StyleSheet, Text, TouchableOpacity } from "react-native";
 export const codGatewayId = "cash.on.delivery"
 
 const CodPayment = () => {
-    const { checkout, checkoutToken, resetCheckoutToken ,chosenGateway} = useCheckout();
+    const { checkout, checkoutToken } = useCheckout();
     const router = useRouter();
     const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
     const [checkoutPaymentCreateMutation] = useCheckoutPaymentCreateMutation();
@@ -21,13 +21,6 @@ const CodPayment = () => {
     const { setRecentOrderId: setOrderId } = useOrderContext();
     const {showMessage} = useMessage()
     const {setLoading}=useLoading()
-
-
-    const buyNowEnabled = !!checkout?.email &&
-    !!checkout?.billingAddress &&
-    (!checkout?.isShippingRequired || !!checkout?.shippingAddress) &&
-    !!checkout?.deliveryMethod && // Ensure delivery method is set
-    !!chosenGateway; // Ensure payment gateway is chosen
 
 
     const redirectToOrderDetailsPage = async (orderId: string) => {

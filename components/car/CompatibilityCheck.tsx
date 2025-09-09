@@ -1,6 +1,6 @@
 import { ProductFragment, useCompatibilityCheckQuery } from "@/saleor/api.generated"
 import FontAwesome from "@expo/vector-icons/FontAwesome"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { PaddedView, Text, View, colors, fonts } from "@/components/Themed"
 

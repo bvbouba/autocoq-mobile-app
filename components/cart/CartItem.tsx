@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { CheckoutLine, useRemoveProductFromCheckoutMutation } from "@/saleor/api.generated";
+import { CheckoutLine } from "@/saleor/api.generated";
 import { Text, View, Divider, colors, fonts } from "@/components/Themed"
 
 import { Image, Pressable, StyleSheet, TouchableOpacity } from 'react-native';

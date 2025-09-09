@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { FlatList, Pressable, StyleSheet, TouchableOpacity, } from "react-native";
 import { useFormik } from "formik";
 import { Text, View, colors, fonts } from "@/components/Themed"
@@ -293,10 +293,10 @@ const ShippingAddressForm: FC<Props> = () => {
                   keyExtractor={(item, idx) => `${item.name}-${idx}`}
                   renderItem={renderItem}
                   contentContainerStyle={styles.listContainer}
-                  nestedScrollEnabled={true}
                   keyboardShouldPersistTaps="handled"
                 />
-              </View>
+              </View>,
+              disableScroll:true
             })
           }
         >

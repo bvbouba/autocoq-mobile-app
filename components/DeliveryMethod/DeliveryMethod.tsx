@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { ProductVariantFragment, useGetAvailableShippingMethodsQuery } from "@/saleor/api.generated";
-import {colors } from "@/components/Themed"
 import { useCheckout } from "@/context/CheckoutProvider";
-import { ActivityIndicator } from "react-native-paper";
 import ZoneSelector from "../ZoneSelector";
 import DeliveryMethodComponent from "./DeliveryMethodComponent";
 import { Skeleton } from "moti/skeleton";
@@ -11,12 +9,11 @@ import { Skeleton } from "moti/skeleton";
 interface Props {
   variant?: ProductVariantFragment | null;
   setCheckedId: React.Dispatch<React.SetStateAction<string | undefined>>
-  isAvailable?:boolean
 }
 
 
 
-const DeliveryMethod = ({ variant,setCheckedId,isAvailable }: Props) => {
+const DeliveryMethod = ({ variant,setCheckedId }: Props) => {
   const [selectedOption, setSelectedOption] = useState<string>();
   const {delivery:{zone},checkout} = useCheckout()
   const subtotalPrice = checkout?.subtotalPrice.gross

@@ -6,7 +6,7 @@ import * as yup from "yup";
 import CheckBoxWithLabel from "@/utils/CheckboxWithLabel";
 import { getConfig } from "@/config";
 import { useProductContext } from "@/context/useProductContext";
-import { CategoryPathFragment, useCategoryPathsQuery, useGetCollectionsQuery } from "@/saleor/api.generated";
+import { CategoryPathFragment, useCategoryPathsQuery } from "@/saleor/api.generated";
 import { colors, Divider, fonts, Text, View } from "@/components/Themed";
 
 interface Props {
@@ -31,7 +31,6 @@ const validationSchema = yup.object().shape({
 
 const ProductFilterBottomSheet: FC<Props> = ({ open, onClose, onApply }) => {
 
-    const { data: collectionsData } = useGetCollectionsQuery();
     const { data: categoriesData } = useCategoryPathsQuery({
         variables: {
             channel: getConfig().channel
