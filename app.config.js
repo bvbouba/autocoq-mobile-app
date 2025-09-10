@@ -19,7 +19,7 @@ export default () => ({
   "userInterfaceStyle": "automatic",
   "splash": {
     "image": "./assets/images/splash-icon.png",
-    "resizeMode": "contain",
+    "resizeMode": "cover",
     "backgroundColor": "#ffffff"
   },
   "assetBundlePatterns": ["**/*"],
