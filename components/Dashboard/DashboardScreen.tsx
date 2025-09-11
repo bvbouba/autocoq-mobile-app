@@ -1,4 +1,4 @@
-import { useEffect,useMemo } from "react";
+import { useEffect } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
@@ -14,14 +14,9 @@ import PopularCategoryGrid from "./PopularCategoryGrid";
 const DashboardScreen = () => {
   // const { setLoading } = useLoading()
   const { showMessage } = useMessage();
-  
-  const variables = useMemo(() => ({
-    channel: getConfig().channel,
-  }), [getConfig().channel]);
 
   const { data: categoriesData, error: catError, loading, previousData } = useGetMainMenuQuery({
-    variables,
-    fetchPolicy: "cache-first",
+    variables: { channel: getConfig().channel },
   });
 
   useEffect(() => {
