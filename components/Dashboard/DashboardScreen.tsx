@@ -18,7 +18,6 @@ const DashboardScreen = () => {
   const { data: categoriesData, error: catError, loading, previousData } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
     fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-and-network", // Fetches fresh data in the background while showing cache first
   });
 
   useEffect(() => {
