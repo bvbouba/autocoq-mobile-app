@@ -26,10 +26,10 @@ const DashboardScreen = () => {
   }, [catError]);
 
   
-
-  // useEffect(() => {
-  // if (loading !== null) setLoading(loading);
-  //  }, [loading]);
+  console.log(`loading:${loading}`)
+  useEffect(() => {
+  if (loading !== null) setLoading(loading);
+   }, [loading]);
 
 
   return (

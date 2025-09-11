@@ -14,7 +14,6 @@ const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 // Loading Provider Component
 export const LoadingProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoading, setLoading] = useState(false);
-  console.log("...loading...")
   return (
     <LoadingContext.Provider value={{ isLoading, setLoading }}>
       <View style={{ flex: 1 }}>

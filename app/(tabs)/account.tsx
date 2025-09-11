@@ -3,11 +3,11 @@ import { FontAwesome } from '@expo/vector-icons';
 import {Text, View , Divider,colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';
 import Auth from '@/components/account/auth';
-import { useLoading } from '@/context/LoadingContext';
+// import { useLoading } from '@/context/LoadingContext';
 import { useMessage } from '@/context/MessageContext';
 
 export default function AccountScreen() {
@@ -15,12 +15,12 @@ export default function AccountScreen() {
   const { user, loading, logout,authenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const {openModal} = useModal()
-  const {setLoading} = useLoading()
+  // const {setLoading} = useLoading()
   const { showMessage } = useMessage();
 
-  useEffect(()=>{
-    setLoading(loading)
-  },[loading])
+  // useEffect(()=>{
+  //   setLoading(loading)
+  // },[loading])
 
   const handleSignOut = async () => {
     setIsLoading(true); 

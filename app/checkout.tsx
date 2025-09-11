@@ -9,20 +9,20 @@ import ShippingMethodSelector from '@/components/checkout/ShippingMethodSelector
 import ShippingAddress from '@/components/checkout/ShippingAddress';
 import { FontAwesome } from '@expo/vector-icons';
 import { useCheckout } from '@/context/CheckoutProvider';
-import { useEffect } from 'react';
-import { useLoading } from '@/context/LoadingContext';
+// import { useEffect } from 'react';
+// import { useLoading } from '@/context/LoadingContext';
 import PromoCode from '@/components/checkout/PromoCode';
 
 const Checkout = () => {
     const { checkout,loading,chosenGateway } = useCheckout();
     const router = useRouter();
-    const {setLoading} = useLoading()
+    // const {setLoading} = useLoading()
 
     const buyNowEnabled = !!checkout?.email && !!checkout?.billingAddress && (!checkout?.isShippingRequired || !!checkout?.shippingAddress) &&!!checkout?.deliveryMethod && !!chosenGateway; 
     
-    useEffect(()=>{ 
-    setLoading(loading)
-    },[loading])
+    // useEffect(()=>{ 
+    // setLoading(loading)
+    // },[loading])
     
 
     const Component = paymentMethodToComponent[buyNowEnabled ? chosenGateway : "dummy"];
