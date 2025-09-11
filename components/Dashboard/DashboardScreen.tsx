@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
 import { getConfig } from "@/config";
-import { useLoading } from "@/context/LoadingContext";
+// import { useLoading } from "@/context/LoadingContext";
 import HomepageCarousel from "../layout/HomepageCarousel";
 import { useMessage } from "@/context/MessageContext";
 import ContactUS from "../contactUs/ContactUs";
@@ -12,7 +12,7 @@ import PopularCategoryGrid from "./PopularCategoryGrid";
 
 
 const DashboardScreen = () => {
-  const { setLoading } = useLoading()
+  // const { setLoading } = useLoading()
   const { showMessage } = useMessage();
 
   const { data: categoriesData, error: catError, loading, previousData } = useGetMainMenuQuery({
@@ -26,10 +26,9 @@ const DashboardScreen = () => {
   }, [catError]);
 
   
-  console.log(`loading:${loading}`)
-  useEffect(() => {
-  if (loading !== null) setLoading(loading);
-   }, [loading]);
+  // useEffect(() => {
+  // if (loading !== null) setLoading(loading);
+  //  }, [loading]);
 
 
   return (

@@ -5,7 +5,7 @@ import { useCollectionBySlugQuery} from "@/saleor/api.generated";
 import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
 import { useMessage } from "@/context/MessageContext";
-import { useLoading } from "@/context/LoadingContext";
+// import { useLoading } from "@/context/LoadingContext";
 
 
 
@@ -13,7 +13,7 @@ const CollectionProductScreen = () => {
     const pathname = usePathname();
     const [slug, setSlug] = useState<string>();
     const { showMessage } = useMessage();
-    const {setLoading} = useLoading()
+    // const {setLoading} = useLoading()
 
      const {data, loading, error} = useCollectionBySlugQuery({
       skip:!slug,
@@ -22,9 +22,9 @@ const CollectionProductScreen = () => {
       }
     })
 
-    useEffect(()=>{
-      setLoading(loading)
-     },[loading])
+    // useEffect(()=>{
+    //   setLoading(loading)
+    //  },[loading])
     
  
     useEffect(() => {

@@ -7,7 +7,7 @@ import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
 import { useCheckout } from "@/context/CheckoutProvider";
-import { useLoading } from "@/context/LoadingContext";
+// import { useLoading } from "@/context/LoadingContext";
 
 interface Props {
     lineItem: CheckoutLine;
@@ -37,11 +37,11 @@ const CartImage: FC<{ line: CheckoutLine }> = ({ line }) => {
 const CartItem: FC<Props> = ({ lineItem }) => {
     const router = useRouter();
     const { onQuantityUpdate, loading, onCheckoutLineDelete } = useCheckout();
-    const {setLoading} = useLoading()
+    // const {setLoading} = useLoading()
     
-    useEffect(()=>{
-      setLoading(loading)
-    },[loading])
+    // useEffect(()=>{
+    //   setLoading(loading)
+    // },[loading])
 
     const formatter = new Intl.NumberFormat(getConfig().locale, {
         style: 'currency',

@@ -18,7 +18,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { useLoading } from "@/context/LoadingContext";
+// import { useLoading } from "@/context/LoadingContext";
 
 interface ProductMediaFragment {
   url: string;
@@ -40,7 +40,7 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image }) => {
   const offsetY = useSharedValue(0); // For panning Y
   const panStartX = useSharedValue(0); // Start of pan in X direction
   const panStartY = useSharedValue(0); // Start of pan in Y direction
-  const {setLoading:setIsLoading} = useLoading()
+  // const {setLoading:setIsLoading} = useLoading()
   const [loading, setLoading] = useState(true);
   
   const pinch = Gesture.Pinch()
@@ -97,9 +97,9 @@ const ImageExpand: React.FC<ImageExpandProps> = ({ image }) => {
       setLoading(false); 
     };
 
-    useEffect(()=>{
-      setIsLoading(loading)
-    },[loading])
+    // useEffect(()=>{
+    //   setIsLoading(loading)
+    // },[loading])
 
   if (!image) return null;
 
