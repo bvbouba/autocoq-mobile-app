@@ -27,9 +27,9 @@ const DashboardScreen = () => {
 
   
 
-  useEffect(() => {
-  if (loading !== null) setLoading(loading);
-   }, [loading]);
+  // useEffect(() => {
+  // if (loading !== null) setLoading(loading);
+  //  }, [loading]);
 
 
   return (
