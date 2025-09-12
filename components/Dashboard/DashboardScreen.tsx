@@ -17,8 +17,9 @@ const DashboardScreen = () => {
 
   const { data: categoriesData, error: catError, loading, previousData } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
+    fetchPolicy: "cache-first",
   });
-
+  console.log(`previousData:${previousData}`)
   useEffect(() => {
     if (catError) showMessage("Erreur lors du chargement des catégories", 10000);
   }, [catError]);
