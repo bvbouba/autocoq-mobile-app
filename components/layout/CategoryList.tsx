@@ -3,12 +3,12 @@ import { useLocalSearchParams } from "expo-router";
 
 import { useEffect } from "react";
 import { useNavigationContext } from "@/context/NavigationContext";
-// import { useLoading } from "@/context/LoadingContext";
+import { useLoading } from "@/context/LoadingContext";
 import { useMenuContext } from "@/context/MenuProvider";
 import CategoryGrid from "./CategoryGrid";
 
 const CategoryList = () => {
-    // const { setLoading } = useLoading();
+    const { setLoading } = useLoading();
     const { setNavigationLink } = useNavigationContext();
     const { menu } = useMenuContext(); 
     
@@ -24,9 +24,9 @@ const CategoryList = () => {
         skip: !id, // Skip if no ID exists (meaning user is at Level 0)
     });
 
-    // useEffect(() => {
-    //     setLoading(loading);
-    // }, [ loading]);
+    useEffect(() => {
+        setLoading(loading);
+    }, [ loading]);
 
     useEffect(() => {
         if (menuItemData?.menuItem) {
