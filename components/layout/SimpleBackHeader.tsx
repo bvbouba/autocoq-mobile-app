@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Platform, SafeAreaView, StyleSheet, Image } from "react-native";
+import { Platform, StyleSheet, Image } from "react-native";
 import { Text, View, colors, fonts } from "@/components/Themed";
 import { IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -13,7 +13,7 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
 
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
-      <SafeAreaView
+      <View
         style={{
           ...styles.container,
           marginTop: statusBarInset.top + 10,
@@ -38,7 +38,7 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
         <View style={{ width: "100%", alignItems: "center" }}>
           {hasLogo && <Image source={logoUri} style={styles.logo} />}
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 };

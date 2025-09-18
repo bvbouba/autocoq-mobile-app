@@ -1,5 +1,5 @@
 import { FC, } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, TouchableOpacity, Pressable, Platform } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Pressable, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper'
 import { colors, fonts } from '../Themed';
 
@@ -25,7 +25,7 @@ const ProductSearch: FC<Props> = ({ carIconColor }) => {
     const number = checkout && checkout.lines.length > 0 ? checkout.lines.map(line => line.quantity).reduce((prev, curr) => prev + curr, 0) : undefined
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.textInputWrapper}>
                 <Pressable onPress={() => openModal({
                     id:"search",
@@ -60,7 +60,7 @@ const ProductSearch: FC<Props> = ({ carIconColor }) => {
                 )}
             </View>
             </TouchableOpacity>
-        </SafeAreaView>
+        </View>
     );
 };
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         width: "100%",
         flexDirection: "row",
         alignItems: "center",
-        gap:4
+        gap:4,
     },
     textInputWrapper: {
         display: "flex",

@@ -1,6 +1,5 @@
 import {  usePathname } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
 import { useCollectionBySlugQuery} from "@/saleor/api.generated";
 import FilteredProductList from "@/components/productList/FilteredProductList";
 import NotFoundScreen from "../+not-found";
@@ -45,12 +44,10 @@ const CollectionProductScreen = () => {
       return <NotFoundScreen />;
     }
 
-    return <SafeAreaView style={{ flex: 1 }}>
-         <FilteredProductList
+    return <FilteredProductList
             collectionIDs={[collection?.id]}
           />
                 
-</SafeAreaView>
 }
 
 export default CollectionProductScreen

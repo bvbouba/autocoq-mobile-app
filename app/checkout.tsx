@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import {  ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View, Divider, PaddedView, colors, fonts } from "@/components/Themed";
 import { Button } from 'react-native-paper';
 import PaymentMethodSelector from '@/components/checkout/PaymentMethodSelector';
@@ -48,7 +48,7 @@ const Checkout = () => {
     }
 
     return (
-        <SafeAreaView style={styles.container} testID="cart-list-safe">
+        <View style={styles.container} testID="cart-list-safe">
             <ScrollView testID="cart-list-scroll">
                 <View>
                     <View style={{ margin: 12, flexDirection: "row" }}>
@@ -100,7 +100,7 @@ const Checkout = () => {
                 </View>
                 <Component />
             </View>
-        </SafeAreaView>
+        </View>
     );
 }
 

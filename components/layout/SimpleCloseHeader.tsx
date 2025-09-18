@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Platform, SafeAreaView, StyleSheet, Text } from "react-native";
+import { Platform, StyleSheet, Text } from "react-native";
 import { Divider, IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {  View, colors, fonts } from "@/components/Themed";
@@ -10,7 +10,7 @@ const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: str
 
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
-      <SafeAreaView style={{ ...styles.container, 
+      <View style={{ ...styles.container, 
         marginTop: statusBarInset.top ,
         }}>
         <View style={styles.headerContainer}>
@@ -27,7 +27,7 @@ const SimpleCloseHeader = ({ title, subTitle }: { title?: string; subTitle?: str
             {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
           </View>
         </View>
-      </SafeAreaView>
+      </View>
       <Divider />
     </View>
   );

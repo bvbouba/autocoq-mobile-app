@@ -1,7 +1,7 @@
 import { View, colors, fonts } from "@/components/Themed";
 import { IconButton } from "react-native-paper";
 import ProductSearch from "../products/ProductsSearch";
-import { SafeAreaView, StyleSheet, Text, Image } from "react-native";
+import { StyleSheet, Text, Image } from "react-native";
 import { FC, } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Banner from "./BannerSimple";
@@ -26,7 +26,7 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
 
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
-      <SafeAreaView
+      <View
         style={{
           ...styles.container,
           marginTop: statusBarInset.top,
@@ -53,7 +53,7 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
             <ProductSearch carIconColor={carIconColor}/>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
       {withVehicle && <AddVehicleBasic />}
       </View>
   );

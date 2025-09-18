@@ -5,24 +5,25 @@ import { Stack } from "expo-router";
 import { useEffect } from "react";
 import { LogBox } from "react-native";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { colors } from "../components/Themed";
-import SearchHeader from "../components/layout/SearchHeader";
-import { OrderProvider } from "../context/useOrderContext";
-export {
-  ErrorBoundary
-} from "expo-router";
-import { getConfig } from "../config";
-import SimpleBackHeader from "../components/layout/SimpleBackHeader";
-import * as SplashScreen from 'expo-splash-screen'; // Corrected import
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+import { colors } from "@/components/Themed";
+import SearchHeader from "@/components/layout/SearchHeader";
+import SimpleBackHeader from "@/components/layout/SimpleBackHeader";
+import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
+
+import { getConfig } from "@/config";
+
+import { OrderProvider } from "@/context/useOrderContext";
 import { CarFilterProvider } from "@/context/useCarFilterContext";
 import { AuthProvider } from "@/lib/providers/authProvider";
-import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
-import { NavigationProvider } from "@/context/NavigationContext";
+// import { NavigationProvider } from "@/context/NavigationContext"; // REMOVE THIS IMPORT
 import { ModalProvider } from "@/context/useModal";
 import { CheckoutProvider } from "@/context/CheckoutProvider";
 import { LoadingProvider } from "@/context/LoadingContext";
 import { MessageProvider } from "@/context/MessageContext";
 import { MenuProvider } from "@/context/MenuProvider";
+import { NavigationProvider } from "@/context/NavigationContext";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -34,29 +35,19 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Gérer l'erreur lors du chargement des polices
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   useEffect(() => {
     if (!loaded) {
-      SplashScreen.preventAutoHideAsync(); // Empêcher l'écran de démarrage de se cacher
+      import("expo-splash-screen").then(SplashScreen => SplashScreen.preventAutoHideAsync());
     } else {
-      SplashScreen.hideAsync(); // Masquer l'écran de démarrage après le chargement des polices
+      import("expo-splash-screen").then(SplashScreen => SplashScreen.hideAsync());
     }
   }, [loaded]);
 
-  return (
-    <>
-      {!loaded ? (
-        // Pas besoin de rendre explicitement SplashScreen en tant que composant
-        <></>
-      ) : (
-        <RootLayoutNav />
-      )}
-    </>
-  );
+  return !loaded ? null : <RootLayoutNav />;
 }
 
 LogBox.ignoreAllLogs();
@@ -75,101 +66,118 @@ function RootLayoutNav() {
   };
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <AuthProvider>
+    <SafeAreaProvider>
+    <SafeAreaView style={{ flex: 1 }} edges={[]}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ApolloProvider client={apolloClient}>
       <MessageProvider>
-        <LoadingProvider>
-          <NavigationProvider>
-            <CarFilterProvider>
-                <CheckoutProvider>
+        <AuthProvider>
+          <CheckoutProvider>
+            <ModalProvider>
                 <MenuProvider>
-                  <OrderProvider>
-                      <ModalProvider>
-                        <GestureHandlerRootView style={{ flex: 1 }}>
-                          <Stack>
-                            <Stack.Screen
-                              name="(tabs)"
-                              options={{
-                                headerShown: false,
-                              }}
-                            />
-                            <Stack.Screen
-                              name="search"
-                              options={{
-                                headerStyle: {
-                                  backgroundColor: colors.background,
-                                },
-                                header: () => <SearchHeader withBack />,
-                              }}
-                            />
-                            <Stack.Screen
-                              name="categories/[slug]"
-                              options={{
-                                headerStyle: {
-                                  backgroundColor: colors.background,
-                                },
-                                header: () => <SearchHeader withBack />,
-                              }}
-                            />
-                             <Stack.Screen
-                              name="collections/[slug]"
-                              options={{
-                                headerStyle: {
-                                  backgroundColor: colors.background,
-                                },
-                                header: () => <SearchHeader withBack />,
-                              }}
-                            />
-                            <Stack.Screen name="products/[id]"
-                              options={{
-                                header: () => <SearchHeader withBack withVehicle={false} />
-
-                              }}
-                            />
-                            <Stack.Screen name="checkout" options={{
-                              header: () => <SimpleCloseHeader title="Commande" subTitle="Paiement et Révision" />
-                            }} />
-                            <Stack.Screen name="personalDetails" options={baseHeaderProps} />
-                            <Stack.Screen name="shippingAddress" options={{
-                              header: () => <SimpleCloseHeader title="Commande" subTitle="Addresse de Livraison" />
-                            }} />
-                            <Stack.Screen name="billingAddress" options={{
-                              header: () => <SimpleCloseHeader title="Commande" subTitle="Addresse de Facturation" />
-                            }} />
-                            <Stack.Screen name="shippingMethods" options={baseHeaderProps} />
-                            <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
-                            <Stack.Screen name="orders/[id]" options={baseHeaderProps} />
-                            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-                            <Stack.Screen name="account/profile" options={{ 
-                              header: () => <SimpleBackHeader hasLogo={false} title="Mon profil"/>,
-                              }} />
-                            <Stack.Screen name="account/faq" options={{
-                                header: () => <SimpleBackHeader hasLogo={false} title="FAQ"/>,
-                              
-                            }} />
-                            <Stack.Screen name="account/terms" options={{ 
-                                 header: () => <SimpleBackHeader hasLogo={false} title="Termes et conditions"/>,                             
-                               }} />
-                
-               
-                            <Stack.Screen name="account/addresses" options={{ 
-                                header: () => <SimpleBackHeader hasLogo={false} title="Mes Adresses"/>,
-                             }} />
-                            <Stack.Screen name="account/orders" options={{
-                              header: () => <SimpleBackHeader hasLogo={false} title="Mes commandes"/>,
-
-                            }} />
-                          </Stack>
-                        </GestureHandlerRootView>
-                      </ModalProvider>
-                  </OrderProvider>
-                  </MenuProvider>
-                </CheckoutProvider>
-            </CarFilterProvider>
-          </NavigationProvider>
-        </LoadingProvider>
+                  <CarFilterProvider>
+                    <LoadingProvider>
+                      <NavigationProvider>
+                        <Stack>
+                          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                          <Stack.Screen
+                            name="search"
+                            options={{
+                              headerStyle: { backgroundColor: colors.background },
+                              header: () => <SearchHeader withBack />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="categories/[slug]"
+                            options={{
+                              headerStyle: { backgroundColor: colors.background },
+                              header: () => <SearchHeader withBack />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="collections/[slug]"
+                            options={{
+                              headerStyle: { backgroundColor: colors.background },
+                              header: () => <SearchHeader withBack />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="products/[id]"
+                            options={{
+                              header: () => <SearchHeader withBack withVehicle={false} />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="checkout"
+                            options={{
+                              header: () => (
+                                <SimpleCloseHeader title="Commande" subTitle="Paiement et Révision" />
+                              ),
+                            }}
+                          />
+                          <Stack.Screen name="personalDetails" options={baseHeaderProps} />
+                          <Stack.Screen
+                            name="shippingAddress"
+                            options={{
+                              header: () => (
+                                <SimpleCloseHeader title="Commande" subTitle="Addresse de Livraison" />
+                              ),
+                            }}
+                          />
+                          <Stack.Screen
+                            name="billingAddress"
+                            options={{
+                              header: () => (
+                                <SimpleCloseHeader title="Commande" subTitle="Addresse de Facturation" />
+                              ),
+                            }}
+                          />
+                          <Stack.Screen name="shippingMethods" options={baseHeaderProps} />
+                          <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
+                          <Stack.Screen name="orders/[id]" options={baseHeaderProps} />
+                          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+                          <Stack.Screen
+                            name="account/profile"
+                            options={{
+                              header: () => <SimpleBackHeader hasLogo={false} title="Mon profil" />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="account/faq"
+                            options={{
+                              header: () => <SimpleBackHeader hasLogo={false} title="FAQ" />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="account/terms"
+                            options={{
+                              header: () => <SimpleBackHeader hasLogo={false} title="Termes et conditions" />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="account/addresses"
+                            options={{
+                              header: () => <SimpleBackHeader hasLogo={false} title="Mes Adresses" />,
+                            }}
+                          />
+                          <Stack.Screen
+                            name="account/orders"
+                            options={{
+                              header: () => <SimpleBackHeader hasLogo={false} title="Mes commandes" />,
+                            }}
+                          />
+                        </Stack>
+                      </NavigationProvider>
+                    </LoadingProvider>
+                  </CarFilterProvider>
+                </MenuProvider>
+            </ModalProvider>
+          </CheckoutProvider>
+        </AuthProvider>
         </MessageProvider>
-      </AuthProvider>
-    </ApolloProvider>
+      </ApolloProvider>
+    </GestureHandlerRootView>
+    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

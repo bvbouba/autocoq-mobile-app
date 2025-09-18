@@ -8,26 +8,27 @@ import HomepageCarousel from "../layout/HomepageCarousel";
 import { useMessage } from "@/context/MessageContext";
 import ContactUS from "../contactUs/ContactUs";
 import PopularCategoryGrid from "./PopularCategoryGrid";
+import { useLoading } from "@/context/LoadingContext";
 
 
 
 const DashboardScreen = () => {
-  // const { setLoading } = useLoading()
+  const { setLoading } = useLoading()
   const { showMessage } = useMessage();
 
   const { data: categoriesData, error: catError, loading, previousData } = useGetMainMenuQuery({
     variables: { channel: getConfig().channel },
     fetchPolicy: "cache-first",
   });
-  console.log(`previousData:${previousData}`)
+
   useEffect(() => {
     if (catError) showMessage("Erreur lors du chargement des catégories", 10000);
   }, [catError]);
 
   
-  // useEffect(() => {
-  // if (loading !== null) setLoading(loading);
-  //  }, [loading]);
+  useEffect(() => {
+  if (loading !== null) setLoading(loading);
+   }, [loading]);
 
 
   return (

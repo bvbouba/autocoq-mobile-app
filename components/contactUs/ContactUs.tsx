@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { View, colors, fonts } from "@/components/Themed";
 import { useModal } from "@/context/useModal";
 import PartRequestForm from "./form";
@@ -8,7 +8,7 @@ const ContactUS = () => {
 
   return (
     <View style={styles.wrapper}>
-      <SafeAreaView style={{ ...styles.container}}>
+      <View style={{ ...styles.container}}>
       
       <TouchableOpacity
           onPress={()=>openModal({
@@ -28,7 +28,7 @@ const ContactUS = () => {
         </TouchableOpacity>
       
       
-      </SafeAreaView>
+      </View>
     </View>
   );
 };

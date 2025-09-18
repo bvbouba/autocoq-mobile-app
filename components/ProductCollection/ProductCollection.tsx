@@ -9,7 +9,8 @@ import {
 } from "@/saleor/api.generated";
 import { mapEdgesToItems } from "@/utils/map";
 import ProductListItem from "../products/ProductListItem";
-import { SafeAreaView, StyleSheet, Animated, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Animated, ActivityIndicator } from 'react-native';
 import { colors, fonts, PaddedView, Text, View } from './../Themed';
 import { useCarFilter } from "@/context/useCarFilterContext";
 import { Button } from "react-native-paper";
@@ -131,7 +132,7 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
   if (error) showMessage("Échec réseau");
 
   return (
-    <SafeAreaView style={styles.container} testID="prod-list-safe">
+    <SafeAreaView edges={[]} style={styles.container} testID="prod-list-safe" >
       <Animated.FlatList
         data={allProducts}
         keyExtractor={(item, index) => `${item.slug}-${index}`} // Ensure unique keys
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: "white"
+    backgroundColor: "white",
   },
   header: {
     padding: 15,

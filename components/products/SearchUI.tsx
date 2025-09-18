@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useState, useEffect } from 'react';
 import {
-    SafeAreaView,
     StyleSheet,
     View,
     Text,
@@ -12,6 +11,7 @@ import {
     Keyboard,
     TouchableWithoutFeedback
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { TextInput } from 'react-native-paper';
 import { colors, Divider, fonts } from '../Themed';
 import { useRouter, useGlobalSearchParams } from 'expo-router';

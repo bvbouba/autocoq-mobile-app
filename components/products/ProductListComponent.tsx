@@ -1,13 +1,14 @@
 import { FC } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { Text, View } from './../Themed';
 import ProductListItem from './ProductListItem';
-import { ProductFragment } from '@/saleor/api.generated';
+import { ProductCardFragment } from '@/saleor/api.generated';
 
 
 interface Props {
-    products:ProductFragment[]
+    products:ProductCardFragment[]
 }
 
 const ProductListComponent: FC<Props> = ({ products }) => {
@@ -21,7 +22,7 @@ const ProductListComponent: FC<Props> = ({ products }) => {
     }
 
     return (
-        <SafeAreaView style={styles.container} testID="prod-list-safe">
+        <View style={styles.container} testID="prod-list-safe">
             
             <ScrollView contentContainerStyle={styles.scrollViewContent} testID="prod-list-scroll">
                 {(products || []).map((product) => {
@@ -34,7 +35,7 @@ const ProductListComponent: FC<Props> = ({ products }) => {
                 })}
             </ScrollView>
 
-        </SafeAreaView>
+        </View>
     );
 }
 
