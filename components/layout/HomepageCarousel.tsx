@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import Carousel from "react-native-reanimated-carousel";
 import { useState } from "react";
 import { Skeleton } from "moti/skeleton";
+import * as Sentry from '@sentry/react-native';
 
 const HomepageCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,6 +52,10 @@ const HomepageCarousel = () => {
                     source={{ uri: item.image }}
                     style={styles.image}
                     resizeMode="stretch"
+                    onError={(error) => {
+                      Sentry.captureException(error.nativeEvent.error);
+                      console.log('Image failed to load:', error.nativeEvent.error);
+                    }}
                   />
                 </View>
               </Pressable>

@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { colors, fonts } from "../Themed";
 import { renderStars } from "@/utils/renderStars";
+import * as Sentry from '@sentry/react-native';
 
 const defaultImageUrl = require("../../assets/images/photo-unavailable.png")
 
@@ -17,6 +18,10 @@ const ProductImage: FC<{ product: ProductCardFragment }> = ({ product }) => {
             resizeMode="contain"
             source={{
                 uri: product?.media[0].url
+            }}
+            onError={(error) => {
+              Sentry.captureException(error.nativeEvent.error);
+              console.log('Image failed to load:', error.nativeEvent.error);
             }}
         />
     }
