@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useGetMainMenuQuery } from "@/saleor/api.generated";
 import { colors, Divider, PaddedView } from "@/components/Themed";
 import { getConfig } from "@/config";
@@ -9,7 +9,6 @@ import { useMessage } from "@/context/MessageContext";
 import ContactUS from "../contactUs/ContactUs";
 import PopularCategoryGrid from "./PopularCategoryGrid";
 import { useLoading } from "@/context/LoadingContext";
-import * as Sentry from '@sentry/react-native';
 
 
 
@@ -60,7 +59,7 @@ const DashboardScreen = () => {
           <Divider />
           
           <ContactUS />
-          <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
+          
 
         </PaddedView>
 
