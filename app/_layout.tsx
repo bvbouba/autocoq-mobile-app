@@ -17,19 +17,38 @@ import { getConfig } from "@/config";
 import { OrderProvider } from "@/context/useOrderContext";
 import { CarFilterProvider } from "@/context/useCarFilterContext";
 import { AuthProvider } from "@/lib/providers/authProvider";
-// import { NavigationProvider } from "@/context/NavigationContext"; // REMOVE THIS IMPORT
 import { ModalProvider } from "@/context/useModal";
 import { CheckoutProvider } from "@/context/CheckoutProvider";
 import { LoadingProvider } from "@/context/LoadingContext";
 import { MessageProvider } from "@/context/MessageContext";
 import { MenuProvider } from "@/context/MenuProvider";
 import { NavigationProvider } from "@/context/NavigationContext";
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'https://52e1edc32f09d618306384d6b24ae402@o4508599315529728.ingest.us.sentry.io/4510047000133632',
+
+  // Adds more context data to events (IP address, cookies, user, etc.)
+  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
+  sendDefaultPii: true,
+
+  // Enable Logs
+  enableLogs: true,
+
+  // Configure Session Replay
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1,
+  integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
+
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // spotlight: __DEV__,
+});
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
 
-export default function RootLayout() {
+export default Sentry.wrap(function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -48,7 +67,7 @@ export default function RootLayout() {
   }, [loaded]);
 
   return !loaded ? null : <RootLayoutNav />;
-}
+});
 
 LogBox.ignoreAllLogs();
 

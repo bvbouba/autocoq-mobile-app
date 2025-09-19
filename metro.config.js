@@ -1,8 +1,10 @@
-const { getDefaultConfig } = require("expo/metro-config");
 const path = require("path");
+const {
+  getSentryExpoConfig
+} = require("@sentry/react-native/metro");
 
 module.exports = (() => {
-  const config = getDefaultConfig(__dirname);
+  const config = getSentryExpoConfig(__dirname);
 
   // Ensure .svg and .mjs files are correctly resolved
   config.resolver.assetExts = config.resolver.assetExts.filter((ext) => ext !== "svg");
