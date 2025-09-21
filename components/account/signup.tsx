@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator, } from 'react-native';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextInput } from 'react-native-paper';
-import { useCreateTokenMutation, CheckPhoneNumberDocument,useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
+import {  CheckPhoneNumberDocument,useSendCodeMutation, useUserRegisterMutation, useVerifyCodeMutation } from '@/saleor/api.generated';
 import { Text, View, PaddedView, colors, fonts } from "@/components/Themed"
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';

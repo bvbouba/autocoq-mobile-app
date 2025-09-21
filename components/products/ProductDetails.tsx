@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState,useEffect } from "react";
 import {
   ProductFragment,
   ProductVariantFragment,
@@ -25,6 +25,7 @@ import Review from "./Review";
 import ProductSpecifications from "./ProductSpecifications";
 import RecommendedProducts from "./RecommendedProducts";
 import ItemNotAvailable from "../ItemNotAvailable";
+import * as Analytics from 'expo-firebase-analytics';
 
 interface Props {
   product: ProductFragment;
@@ -47,6 +48,13 @@ const ProductDetails: FC<Props> = ({ product }) => {
     product.defaultVariant as ProductVariantFragment
   );
 
+  useEffect(() => {
+    Analytics.logEvent('view_product', {
+      id: product.id,
+      name: product.name,
+    });
+  }, [product]);
+  
   const price = selectedVariant?.pricing?.price?.gross.amount.toLocaleString(
     getConfig().locale,
     {

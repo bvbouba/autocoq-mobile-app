@@ -27,7 +27,7 @@ export interface UserConsumerProps {
   error: string | null;
   loading: boolean;
   authenticated: boolean;
-  login: (credentials: { email: string; password: string }) => Promise<void>;
+  login: (credentials: { email: string; password: string }) => Promise<boolean>;
 }
 
 const AuthContext = createContext<UserConsumerProps | undefined>(undefined);
@@ -72,12 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data?.tokenCreate?.token) {
         setToken(data.tokenCreate.token);
         setRefreshToken(data.tokenCreate.refreshToken || "");
+        return true
       } else {
-        setError("Login failed");
+        setError("Échec de la connexion");
+        return false
       }
     } catch (err) {
       console.error(err);
-      setError("Login failed");
+      setError("Échec de la connexion");
+      return false
     } finally {
       setLoading(false);
     }

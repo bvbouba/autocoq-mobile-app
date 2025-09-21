@@ -24,6 +24,8 @@ import { MessageProvider } from "@/context/MessageContext";
 import { MenuProvider } from "@/context/MenuProvider";
 import { NavigationProvider } from "@/context/NavigationContext";
 import * as Sentry from '@sentry/react-native';
+import * as Analytics from 'expo-firebase-analytics';
+
 
 Sentry.init({
   dsn: 'https://52e1edc32f09d618306384d6b24ae402@o4508599315529728.ingest.us.sentry.io/4510047000133632',
@@ -83,6 +85,10 @@ function RootLayoutNav() {
     headerTitle: "",
     header: () => <SimpleBackHeader />,
   };
+
+  useEffect(() => {
+    Analytics.setDebugModeEnabled(true); // optional for debugging
+  }, []);
 
   return (
     <SafeAreaProvider>

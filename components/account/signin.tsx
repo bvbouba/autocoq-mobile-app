@@ -39,11 +39,13 @@ const SignIn: FC<Props> = ({ fullPhoneNumber }) => {
     validateOnBlur: false,
     onSubmit: async (formData) => {
       try {
-        await login({
+        const res = await login({
           email: `${formData.identifier}@autocoq.com`,
           password: formData.password,
         });
+        if(res) {
         closeModal("SignIn");
+        }
       } catch (err) {
         console.error('Login error:', err);
         showMessage("Impossible de se connecter. Veuillez réessayer.");

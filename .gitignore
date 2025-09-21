@@ -38,3 +38,7 @@ yarn-error.*
 /ios
 
 .env.local
+
+# Firebase credentials
+google-services.json
+GoogleService-Info.plist

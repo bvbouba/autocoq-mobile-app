@@ -28,14 +28,16 @@ export default () => ({
     "bundleIdentifier": "com.anonymous.exposhop",
     "infoPlist": {
       "ITSAppUsesNonExemptEncryption": false
-    }
+    },
+    "googleServicesFile": "./GoogleService-Info.plist"
   },
   "android": {
     "adaptiveIcon": {
       "foregroundImage": "./assets/images/adaptive-icon.png",
       "backgroundColor": "#ffffff"
     },
-    "package": "com.anonymous.exposhop"
+    "package": "com.anonymous.exposhop",
+    "googleServicesFile": "./google-services.json"
   },
   "web": {
     "bundler": "metro",
