@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "960209971662",
+    "firebase_url": "https://autocoq-2e746-default-rtdb.firebaseio.com",
+    "project_id": "autocoq-2e746",
+    "storage_bucket": "autocoq-2e746.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960209971662:android:7e097fe9a41548ad7ee39f",
+        "android_client_info": {
+          "package_name": "com.anonymous.exposhop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFfVQcqe6zZcloerxrgdBlcIzSZAXSEvE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
