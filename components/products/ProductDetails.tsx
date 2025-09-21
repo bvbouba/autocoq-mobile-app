@@ -25,7 +25,7 @@ import Review from "./Review";
 import ProductSpecifications from "./ProductSpecifications";
 import RecommendedProducts from "./RecommendedProducts";
 import ItemNotAvailable from "../ItemNotAvailable";
-import * as Analytics from 'expo-firebase-analytics';
+import analytics from '@react-native-firebase/analytics';
 
 interface Props {
   product: ProductFragment;
@@ -49,7 +49,7 @@ const ProductDetails: FC<Props> = ({ product }) => {
   );
 
   useEffect(() => {
-    Analytics.logEvent('view_product', {
+    analytics().logEvent('view_product', {
       id: product.id,
       name: product.name,
     });

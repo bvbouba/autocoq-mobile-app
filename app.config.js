@@ -58,7 +58,9 @@ export default () => ({
     ],
     "expo-router",
     ["expo-updates", { "useClassicUpdates": false }],
-    "expo-asset"
+    "expo-asset",
+    "@react-native-firebase/app",
+    "@react-native-firebase/analytics",
   ],
   "experiments": {
     "typedRoutes": true,
