@@ -23,6 +23,7 @@ import { useModal } from '@/context/useModal';
 import { highlightMatch } from '@/utils/highlightMatch';
 import { clearRecentSearchs, getRecentSearchs, setRecentSearchs,clearRecentSearchItem } from '@/context/recentSearchs';
 import { getConfig } from '@/config';
+import analytics from '@react-native-firebase/analytics'; 
 
 interface Props {}
 
@@ -95,6 +96,11 @@ const ProductSearch: FC<Props> = () => {
     // ✅ Run search when submitting
     const runSearch = useCallback(async (value: string): Promise<void> => {
         if (!value.trim()) return;
+
+        // Analytics event 
+        analytics().logEvent('search', {
+            search_term: value,
+        });
         
         // Introduce a small delay to ensure the UI updates
         await new Promise((resolve) => setTimeout(resolve, 100));

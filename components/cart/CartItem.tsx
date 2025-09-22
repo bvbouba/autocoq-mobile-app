@@ -7,6 +7,8 @@ import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
 import { useCheckout } from "@/context/CheckoutProvider";
+import analytics from '@react-native-firebase/analytics';
+
 // import { useLoading } from "@/context/LoadingContext";
 
 interface Props {
@@ -83,7 +85,18 @@ const CartItem: FC<Props> = ({ lineItem }) => {
                 }}>
                     <View style={{ width: "auto" }}>
                         <TouchableOpacity
-                            onPress={async () => await onCheckoutLineDelete(lineItem.id)
+                            onPress={async () => {
+                                // remove_from_cart analytics event here
+                                analytics().logEvent('remove_from_cart', {
+                                    items: [{
+                                        item_id: lineItem.variant.id,
+                                        item_name: lineItem.variant.product.name,
+                                        item_category: lineItem.variant.product.category?.name || 'N/A',
+                                        price: lineItem.undiscountedUnitPrice.amount,
+                                        quantity: lineItem.quantity,
+                                    }],
+                                });
+                                await onCheckoutLineDelete(lineItem.id)}
                             }
                         >
                             <Text style={{ textDecorationLine: "underline" }}>

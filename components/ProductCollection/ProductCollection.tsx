@@ -18,6 +18,8 @@ import { useRouter } from "expo-router";
 import ProductListItemSkeleton from "../skeletons/ProductListItem";
 import { useMessage } from "@/context/MessageContext";
 import { getConfig } from "@/config";
+import analytics from '@react-native-firebase/analytics';
+
 
 export interface ProductCollectionProps {
   filter?: ProductFilterInput;
@@ -81,6 +83,33 @@ export const ProductCollection: React.FC<ProductCollectionProps> = ({
       setHasNextPage(data.products.pageInfo.hasNextPage);
     }
   }, [data]);
+
+  // analytics event
+  useEffect(() => {
+    if (allProducts && allProducts.length > 0) {
+      const productIDs = allProducts
+        .map(product => product.category?.id)
+        .filter((id): id is string => id !== undefined);
+
+      const uniqueProductIDs = [...new Set(productIDs)];
+      setIDs(uniqueProductIDs);
+
+      const items = allProducts.map((product, index) => ({
+        item_id: product.id,
+        item_name: product.name,
+        item_category: product.category?.name || 'N/A',
+        price: product.pricing?.priceRange?.start?.gross.amount || 0,
+        index: index,
+      }));
+
+      // Log the view_item_list event
+      analytics().logEvent('view_item_list', {
+        item_list_id: 'filtered_product_list',
+        item_list_name: 'Filtered Products',
+        items: items,
+      });
+    }
+  }, [allProducts]);
 
   useEffect(() => {
     if (allProducts) {

@@ -49,11 +49,20 @@ const ProductDetails: FC<Props> = ({ product }) => {
   );
 
   useEffect(() => {
-    analytics().logEvent('view_product', {
-      id: product.id,
-      name: product.name,
-    });
-  }, [product]);
+    if (product) {
+        analytics().logEvent('view_item', {
+            item_list_name: 'Product Details Page',
+            items: [{
+                item_id: product.id,
+                item_name: product.name,
+                item_category: product.category?.name || 'N/A', 
+                price: product.pricing?.priceRange?.start?.gross.amount || 0,
+                item_variant: selectedVariant?.name || 'N/A',
+                quantity: 1,
+            }]
+        });
+    }
+}, [product, selectedVariant]);
   
   const price = selectedVariant?.pricing?.price?.gross.amount.toLocaleString(
     getConfig().locale,
@@ -180,6 +189,19 @@ const ProductDetails: FC<Props> = ({ product }) => {
           <TouchableOpacity
             activeOpacity={0.6}
             onPress={async () => {
+
+              // add_to_cart analytics event here
+              analytics().logEvent('add_to_cart', {
+                items: [{
+                  item_id: selectedVariant?.id,
+                  item_name: product.name,
+                  item_category: product.category?.name || 'N/A',
+                  price: selectedVariant?.pricing?.price?.gross.amount || 0,
+                  item_variant: selectedVariant?.name || 'N/A',
+                  quantity: 1, 
+                }],
+              });
+
               await onAddToCart(selectedVariant?.id);
         
               openModal({

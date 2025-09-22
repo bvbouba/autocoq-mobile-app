@@ -22,6 +22,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useModal } from "@/context/useModal";
 import Auth from "../account/auth";
 import { useMessage } from "@/context/MessageContext";
+import analytics from '@react-native-firebase/analytics'; 
 
 const CartScreen = () => {
     const { checkout,checkoutToken, loading } = useCheckout();
@@ -54,6 +55,20 @@ const CartScreen = () => {
     const navigation = useRouter();
 
     const handleSubmit = async () => {
+
+        // begin_checkout analytics event here
+        if (checkout) {
+            analytics().logEvent('begin_checkout', {
+              value: checkout.totalPrice?.gross.amount || 0,
+              currency: checkout.totalPrice?.gross.currency || 'USD',
+              items: checkout.lines.map(line => ({
+                item_id: line?.variant.id,
+                item_name: line?.variant.product.name,
+                price: line?.totalPrice.gross.amount || 0,
+                quantity: line?.quantity || 1,
+              })),
+            });
+          }
  
         if (checkout?.shippingAddress && checkout?.billingAddress) {
             navigation.push('/checkout');

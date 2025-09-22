@@ -25,6 +25,6 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ],
+, "firebaseConfig.js"  ],
   "extends": "expo/tsconfig.base"
 }

@@ -4,6 +4,7 @@ import { useModal } from "@/context/useModal";
 import { colors, fonts, PaddedView } from "../components/Themed";
 import { useLoading } from "@/context/LoadingContext";
 import { IconButton } from "react-native-paper";
+import analytics from '@react-native-firebase/analytics';
 
 const PaymentMethods = () => {
   const { checkout,setChosenGateway,chosenGateway  } = useCheckout();
@@ -14,6 +15,24 @@ const PaymentMethods = () => {
 const {isLoading, setLoading} = useLoading()
   const handleSelect = async (methodId: string) => {
     setLoading(true);
+
+    const selectedMethod = paymentMethods.find(method => method.id === methodId);
+
+    // add_payment_info analytics event here
+    if (checkout && selectedMethod) {
+      analytics().logEvent('add_payment_info', {
+        payment_type: selectedMethod.name,
+        value: checkout.totalPrice?.gross.amount || 0,
+        currency: checkout.totalPrice?.gross.currency || 'USD',
+        items: checkout.lines.map(line => ({
+          item_id: line?.variant.id,
+          item_name: line?.variant.product.name,
+          price: line?.totalPrice.gross.amount || 0,
+          quantity: line?.quantity || 1,
+        })),
+      });
+    }
+
     setChosenGateway(methodId);
     closeModal("PaymentMethod");
     setLoading(false);

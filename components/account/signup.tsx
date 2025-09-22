@@ -13,7 +13,7 @@ import PhoneInput from "react-native-phone-number-input";
 import type { CountryCode } from "react-native-country-picker-modal";
 import SignIn from './signin';
 import { useLazyQuery } from "@apollo/client/main.cjs";
-
+import analytics from '@react-native-firebase/analytics';
 
 interface Props {
     phoneNumber?: string;
@@ -96,7 +96,11 @@ const SignUp: FC<Props> = ({ phoneNumber, defaultCC, fullPhoneNumber }) => {
             setError(errorMsg);
           } else {
             try {
-              // ✅ Call login from AuthProvider instead of mutation
+              // Add sign_up event here, as registration was successful
+              await analytics().logEvent('sign_up', {
+                method: 'phone_otp',
+              });
+              // Call login from AuthProvider instead of mutation
               await login({
                 email: `${data.phone}@autocoq.com`,
                 password: data.password,

@@ -60,6 +60,14 @@ export default () => ({
     ["expo-updates", { "useClassicUpdates": false }],
     "expo-asset",
     "@react-native-firebase/app",
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "useFrameworks": "static"
+        }
+      }
+    ]
   ],
   "experiments": {
     "typedRoutes": true,

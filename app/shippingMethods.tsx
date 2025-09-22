@@ -7,6 +7,7 @@ import { useCheckout } from '@/context/CheckoutProvider';
 import DeliveryMethodComponent from '@/components/DeliveryMethod/DeliveryMethodComponent';
 import { useModal } from '@/context/useModal';
 import { useMessage } from '@/context/MessageContext';
+import analytics from '@react-native-firebase/analytics';
 
 const ShippingMethods = () => {
     const { closeModal } = useModal();
@@ -20,7 +21,24 @@ const ShippingMethods = () => {
     const [checked, setChecked] = React.useState("");
     const [loading, setLoading] = React.useState(false); // État pour gérer le chargement
     const updateShippingMethod = async () => {
-        setLoading(true); // Démarrer le chargement
+        setLoading(true); 
+        const selectedShippingMethod = shippingMethods?.find(method => method.id === checked);
+
+        // add_shipping_info analytics event here
+        if (checkout && selectedShippingMethod) {
+            analytics().logEvent('add_shipping_info', {
+                shipping_tier: selectedShippingMethod.name,
+                value: checkout.totalPrice?.gross.amount || 0,
+                currency: checkout.totalPrice?.gross.currency || 'USD',
+                items: checkout.lines.map(line => ({
+                    item_id: line?.variant.id,
+                    item_name: line?.variant.product.name,
+                    price: line?.totalPrice.gross.amount || 0,
+                    quantity: line?.quantity || 1,
+                })),
+            });
+        }
+
         try {
             await shippingAddressUpdate({
                 variables: {

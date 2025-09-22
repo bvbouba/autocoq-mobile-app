@@ -9,6 +9,7 @@ import {
 import { getConfig } from "@/config";
 import { useAsyncStorage } from "../hooks/useLocalStorage";
 import { jwtDecode } from "jwt-decode";
+import analytics from '@react-native-firebase/analytics';
 
 const apiUrl = getConfig().saleorApi;
 
@@ -22,7 +23,7 @@ interface JwtPayload {
 export interface UserConsumerProps {
   token: string | null;
   setToken: (token: string) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   user: UserDetailsFragment | undefined | null;
   error: string | null;
   loading: boolean;
@@ -72,6 +73,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data?.tokenCreate?.token) {
         setToken(data.tokenCreate.token);
         setRefreshToken(data.tokenCreate.refreshToken || "");
+
+        // Assuming your tokenCreate mutation returns user info
+        // If not, you'll need to fetch it separately after setting the token
+        if (email) {
+          await analytics().setUserId(email);
+          await analytics().setUserProperty('logged_in', 'true');
+        }
+        
         return true
       } else {
         setError("Échec de la connexion");
@@ -117,19 +126,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         },
       });
       setUser(data.me);
+      // Set user ID after successfully fetching user data
+      if (data.me?.email) {
+        await analytics().setUserId(data.me?.email);
+        await analytics().setUserProperty('logged_in', 'true');
+    }
     } catch (err) {
       console.error("Failed to fetch user:", err);
       setUser(null);
+      await analytics().setUserId(null); // Clear user ID on fetch failure
+      await analytics().setUserProperty('logged_in', 'false');
     } finally {
       setLoading(false);
     }
   };
 
   // Logout
-  const logout = () => {
+  const logout = async () => {
     setToken("");
     setRefreshToken("");
     setUser(null);
+    // Reset user ID and logged_in property on logout
+    await analytics().setUserId(null); 
+    await analytics().setUserProperty('logged_in', 'false');
   };
 
   // Auto-refresh on app start
@@ -137,6 +156,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const initAuth = async () => {
       if (!token && !refreshToken) {
         setLoading(false);
+        // Ensure no user ID is set if not authenticated
+        await analytics().setUserId(null);
+        await analytics().setUserProperty('logged_in', 'false');
         return;
       }
 
@@ -149,6 +171,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!currentToken) {
         setUser(null);
         setLoading(false);
+        await analytics().setUserId(null);
+        await analytics().setUserProperty('logged_in', 'false');
         return;
       }
 

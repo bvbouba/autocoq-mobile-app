@@ -8,6 +8,7 @@ import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {  Alert, View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import analytics from '@react-native-firebase/analytics';
 
 export const codGatewayId = "cash.on.delivery"
 
@@ -70,6 +71,21 @@ const CodPayment = () => {
         const order = completeData?.checkoutComplete?.order;
         // Si aucune erreur ne survient, la commande doit être créée
         if (order) {
+
+          // purchase analytics event here
+          analytics().logEvent('purchase', {
+            transaction_id: order.id,
+            value: checkout?.totalPrice?.gross.amount || 0,
+            currency: checkout?.totalPrice?.gross.currency || 'USD',
+            shipping: checkout?.shippingPrice?.gross.amount || 0,
+            items: checkout?.lines.map(line => ({
+                item_id: line?.variant.id,
+                item_name: line?.variant.product.name,
+                price: line?.totalPrice.gross.amount || 0,
+                quantity: line?.quantity || 1,
+            })),
+        });
+
             if(!authenticated){
                 setOrderId(order.id)
                 }
