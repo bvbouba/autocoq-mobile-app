@@ -7,32 +7,32 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "channel": "development"
+      "channel": "development",
+      "env": {
+        "NODE_VERSION": "20",
+        "EXPO_USE_NODE_VERSION": "true"
+      }
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "NODE_VERSION": "20",
+        "EXPO_USE_NODE_VERSION": "true"
+      }
     },
     "production": {
-  "autoIncrement": true,
-  "channel": "production",
-  "android": {
-    "image": "sdk-52",
-    "env": {
-      "NODE_VERSION": "20"
+      "autoIncrement": true,
+      "channel": "production",
+      "env": {
+        "NODE_VERSION": "20",
+        "EXPO_USE_NODE_VERSION": "true"
+      },
+      "android": {
+        "image": "sdk-52"
+      },
+      "ios": {}
     }
-  },
-  "ios": {
-    "env": {
-      "NODE_VERSION": "20"
-    }
-  },
-  "env": {
-    "NODE_VERSION": "20",
-    "EXPO_USE_NODE_VERSION": "true"
-  }
-}
-
   },
   "submit": {
     "production": {}
