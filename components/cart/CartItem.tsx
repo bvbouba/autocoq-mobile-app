@@ -7,7 +7,7 @@ import { getConfig } from "@/config";
 import { useRouter } from "expo-router";
 import CartItemQuantityPicker from "./CartItemQuantityPicker";
 import { useCheckout } from "@/context/CheckoutProvider";
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 // import { useLoading } from "@/context/LoadingContext";
 

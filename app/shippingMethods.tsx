@@ -7,7 +7,7 @@ import { useCheckout } from '@/context/CheckoutProvider';
 import DeliveryMethodComponent from '@/components/DeliveryMethod/DeliveryMethodComponent';
 import { useModal } from '@/context/useModal';
 import { useMessage } from '@/context/MessageContext';
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 const ShippingMethods = () => {
     const { closeModal } = useModal();

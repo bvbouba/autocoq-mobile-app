@@ -10,7 +10,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { renderStars } from "@/utils/renderStars";
 import { convertMoneyToString } from "@/utils/convertMoneytoString";
 import { Skeleton } from "moti/skeleton";
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 const dummyUri = require("../../assets/images/photo-unavailable.png");
 

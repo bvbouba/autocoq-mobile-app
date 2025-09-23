@@ -18,7 +18,7 @@ import { useRouter } from "expo-router";
 import ProductListItemSkeleton from "../skeletons/ProductListItem";
 import { useMessage } from "@/context/MessageContext";
 import { getConfig } from "@/config";
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 
 export interface ProductCollectionProps {

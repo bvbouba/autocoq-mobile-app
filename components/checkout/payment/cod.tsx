@@ -8,7 +8,7 @@ import { useCheckoutCompleteMutation, useCheckoutPaymentCreateMutation } from "@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {  Alert, View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 export const codGatewayId = "cash.on.delivery"
 

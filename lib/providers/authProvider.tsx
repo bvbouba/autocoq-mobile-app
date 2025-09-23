@@ -9,7 +9,7 @@ import {
 import { getConfig } from "@/config";
 import { useAsyncStorage } from "../hooks/useLocalStorage";
 import { jwtDecode } from "jwt-decode";
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 const apiUrl = getConfig().saleorApi;
 

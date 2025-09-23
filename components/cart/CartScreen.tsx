@@ -22,7 +22,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useModal } from "@/context/useModal";
 import Auth from "../account/auth";
 import { useMessage } from "@/context/MessageContext";
-import analytics from '@react-native-firebase/analytics'; 
+import analytics from '@/lib/analytics';
 
 const CartScreen = () => {
     const { checkout,checkoutToken, loading } = useCheckout();

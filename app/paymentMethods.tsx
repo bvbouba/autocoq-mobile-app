@@ -4,7 +4,7 @@ import { useModal } from "@/context/useModal";
 import { colors, fonts, PaddedView } from "../components/Themed";
 import { useLoading } from "@/context/LoadingContext";
 import { IconButton } from "react-native-paper";
-import analytics from '@react-native-firebase/analytics';
+import analytics from "@/lib/analytics";
 
 const PaymentMethods = () => {
   const { checkout,setChosenGateway,chosenGateway  } = useCheckout();

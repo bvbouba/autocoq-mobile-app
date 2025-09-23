@@ -25,7 +25,7 @@ import Review from "./Review";
 import ProductSpecifications from "./ProductSpecifications";
 import RecommendedProducts from "./RecommendedProducts";
 import ItemNotAvailable from "../ItemNotAvailable";
-import analytics from '@react-native-firebase/analytics';
+import analytics from '@/lib/analytics';
 
 interface Props {
   product: ProductFragment;

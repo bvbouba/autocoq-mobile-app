@@ -6,7 +6,7 @@ export default () => ({
     channel: process.env.EXPO_PUBLIC_CHANNEL || "ci",
     locale: process.env.EXPO_PUBLIC_LOCALE?.split(",") || ["fr"],
     "eas": {
-              "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
+      "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
     },
   },
   "name": "AutoCoq",
@@ -32,6 +32,11 @@ export default () => ({
     "googleServicesFile": "./GoogleService-Info.plist"
   },
   "android": {
+    "splash": {
+      "image": "./assets/images/splash-android.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
     "adaptiveIcon": {
       "foregroundImage": "./assets/images/adaptive-icon.png",
       "backgroundColor": "#ffffff"

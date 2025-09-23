@@ -23,7 +23,7 @@ import { useModal } from '@/context/useModal';
 import { highlightMatch } from '@/utils/highlightMatch';
 import { clearRecentSearchs, getRecentSearchs, setRecentSearchs,clearRecentSearchItem } from '@/context/recentSearchs';
 import { getConfig } from '@/config';
-import analytics from '@react-native-firebase/analytics'; 
+import analytics from '@/lib/analytics';
 
 interface Props {}
 
