@@ -49,7 +49,7 @@ export default function TabLayout() {
           title: '',
           headerShown: true,
          header: () => <SearchHeader withBack={false} cleanSearch companyName={companyName} carIconColor={colors.textPrimary} />,
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarIcon: ({ color }:{color:string}) => <TabBarIcon name="home" color={color} />,
           tabBarLabel: 'Accueil',
         }}
       />
@@ -58,8 +58,8 @@ export default function TabLayout() {
         options={{
           title: '',
           headerShown: true,
-          header: () => <SearchHeader withBack={true}  cleanSearch companyName={companyName}/>,
-          tabBarIcon: ({ color }) => <TabBarIcon name="shopping-bag" color={color} />,
+          header: () => <SearchHeader withBack={true}  hasNavigationLink={true} cleanSearch companyName={companyName}/>,
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="shopping-bag" color={color} />,
           tabBarLabel: 'Boutique',
         }}
       />
@@ -71,7 +71,7 @@ export default function TabLayout() {
           header:()=><SimpleCloseHeader  title="Panier" 
           // subTitle={delivery.zone ? `Ma zone: ${delivery.zone}` : ""} 
           />,
-          tabBarIcon: ({ color }) => {
+          tabBarIcon: ({ color }: { color: string }) => {
             const { checkout } = useCheckout();
             return <TabBarIcon
               name="shopping-cart"
@@ -88,7 +88,7 @@ export default function TabLayout() {
           title: '',
           headerShown: false,
           header: () => <SearchHeader withBack={false} cleanSearch companyName={companyName}/>,
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="user" color={color} />,
           tabBarLabel: 'Compte',
         }}
       />

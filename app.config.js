@@ -73,8 +73,8 @@ export default () => ({
       {
         ios: {
           useFrameworks: "static",
-          // isable building React Native from source
-          buildReactNativeFromSource: false,
+          buildReactNativeFromSource: true,
+          useNewArch: true,
         },
       },
     ],

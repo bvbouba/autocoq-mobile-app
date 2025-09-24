@@ -14,7 +14,6 @@ import SimpleCloseHeader from "@/components/layout/SimpleCloseHeader";
 
 import { getConfig } from "@/config";
 
-import { OrderProvider } from "@/context/useOrderContext";
 import { CarFilterProvider } from "@/context/useCarFilterContext";
 import { AuthProvider } from "@/lib/providers/authProvider";
 import { ModalProvider } from "@/context/useModal";
@@ -111,7 +110,7 @@ function RootLayoutNav() {
                             name="categories/[slug]"
                             options={{
                               headerStyle: { backgroundColor: colors.background },
-                              header: () => <SearchHeader withBack />,
+                              header: () => <SearchHeader withBack hasNavigationLink={true} />,
                             }}
                           />
                           <Stack.Screen
@@ -154,7 +153,10 @@ function RootLayoutNav() {
                           />
                           <Stack.Screen name="shippingMethods" options={baseHeaderProps} />
                           <Stack.Screen name="paymentMethods" options={baseHeaderProps} />
-                          <Stack.Screen name="orders/[id]" options={baseHeaderProps} />
+                          <Stack.Screen name="orders/[id]" options={{
+                             headerTitle: "",
+                             header: () => <SimpleBackHeader hasNavigationLink={true} />,
+                          }} />
                           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
                           <Stack.Screen
                             name="account/profile"

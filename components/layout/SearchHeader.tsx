@@ -11,6 +11,7 @@ import { useRouter } from "expo-router";
 
 interface Props {
   withBack?: boolean;
+  hasNavigationLink?:boolean;
   cleanSearch?: boolean;
   searchOnLoad?: boolean;
   companyName?: string;
@@ -18,7 +19,9 @@ interface Props {
   carIconColor?:string;
 }
 
-const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  carIconColor?:string;}) => {
+
+const SearchHeaderWithBack = ({withVehicle,carIconColor,hasNavigationLink}:{withVehicle:boolean,  carIconColor?:string; hasNavigationLink?:boolean;
+}) => {
   const statusBarInset = useSafeAreaInsets();
   const router = useRouter()
   const {navigationLink,setNavigationLink} = useNavigationContext()
@@ -40,6 +43,10 @@ const SearchHeaderWithBack = ({withVehicle,carIconColor}:{withVehicle:boolean,  
               icon="arrow-left"
               onPress={() => 
                 {
+                  if(!hasNavigationLink) {
+                    router.back()
+                    return
+                  }
                   if(navigationLink) {
                   router.push(navigationLink)
                   }else {
@@ -65,7 +72,8 @@ const SearchHeader: FC<Props> = ({
   companyName,
   searchOnLoad = true,
   withVehicle=false,
-  carIconColor
+  carIconColor,
+  hasNavigationLink
 }) => {
   const statusBarInset = useSafeAreaInsets();
   
@@ -81,8 +89,10 @@ const SearchHeader: FC<Props> = ({
   };
 
   if (withBack) {
-    return <SearchHeaderWithBack withVehicle={withVehicle} carIconColor={carIconColor}/>;
-  }
+    return <SearchHeaderWithBack withVehicle={withVehicle} carIconColor={carIconColor} hasNavigationLink={hasNavigationLink}/>;
+  } 
+
+
   return (
     <View style={{ display: "flex", justifyContent: "flex-start", backgroundColor: "white" }}>
 

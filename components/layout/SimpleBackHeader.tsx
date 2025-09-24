@@ -5,7 +5,7 @@ import { IconButton } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigationContext } from "@/context/NavigationContext";
 
-const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolean }) => {
+const SimpleBackHeader = ({ title, hasLogo,hasNavigationLink }: { title?: string; hasLogo?: boolean;hasNavigationLink?:boolean }) => {
   const statusBarInset = useSafeAreaInsets();
   const logoUri = require("@/assets/images/logo.png");
   const router = useRouter()
@@ -23,6 +23,10 @@ const SimpleBackHeader = ({ title, hasLogo }: { title?: string; hasLogo?: boolea
           <IconButton
             icon="arrow-left"
             onPress={() => {
+              if(!hasNavigationLink) {
+                router.back()
+                return
+              }
               if(navigationLink) {
               router.push(navigationLink)
               }else {
