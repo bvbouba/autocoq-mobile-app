@@ -1,82 +1,86 @@
 export default () => ({
-  "owner": "vaflaly",
-  "extra": {
-    saleorApi: process.env.EXPO_PUBLIC_SALEOR_API_URL || "https://django.autocoq.com/graphql/",
+  owner: "vaflaly",
+  extra: {
+    saleorApi:
+      process.env.EXPO_PUBLIC_SALEOR_API_URL ||
+      "https://django.autocoq.com/graphql/",
     stripePK: process.env.EXPO_PUBLIC_STRIPE_PK || "",
     channel: process.env.EXPO_PUBLIC_CHANNEL || "ci",
     locale: process.env.EXPO_PUBLIC_LOCALE?.split(",") || ["fr"],
-    "eas": {
-      "projectId": "1b5a74aa-d133-4c94-9651-4dba78bf303f"
+    eas: {
+      projectId: "1b5a74aa-d133-4c94-9651-4dba78bf303f",
     },
   },
-  "name": "AutoCoq",
-  "slug": "autocoq",
-  "newArchEnabled": true,
-  "version": "1.0.0",
-  "orientation": "portrait",
-  "icon": "./assets/images/icon.png",
-  "scheme": "myapp",
-  "userInterfaceStyle": "automatic",
-  "splash": {
-    "image": "./assets/images/splash-icon.png",
-    "resizeMode": "cover",
-    "backgroundColor": "#ffffff"
+  name: "AutoCoq",
+  slug: "autocoq",
+  // 👇 Disable new architecture for now
+  newArchEnabled: true,
+  version: "1.0.0",
+  orientation: "portrait",
+  icon: "./assets/images/icon.png",
+  scheme: "myapp",
+  userInterfaceStyle: "automatic",
+  splash: {
+    image: "./assets/images/splash-icon.png",
+    resizeMode: "cover",
+    backgroundColor: "#ffffff",
   },
-  "assetBundlePatterns": ["**/*"],
-  "ios": {
-    "supportsTablet": true,
-    "bundleIdentifier": "com.anonymous.exposhop",
-    "infoPlist": {
-      "ITSAppUsesNonExemptEncryption": false
+  assetBundlePatterns: ["**/*"],
+  ios: {
+    supportsTablet: true,
+    bundleIdentifier: "com.anonymous.exposhop",
+    infoPlist: {
+      ITSAppUsesNonExemptEncryption: false,
     },
-    "googleServicesFile": "./GoogleService-Info.plist"
+    googleServicesFile: "./GoogleService-Info.plist",
   },
-  "android": {
-    "splash": {
-      "image": "./assets/images/splash-android.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+  android: {
+    splash: {
+      image: "./assets/images/splash-android.png",
+      resizeMode: "cover",
+      backgroundColor: "#ffffff",
     },
-    "adaptiveIcon": {
-      "foregroundImage": "./assets/images/adaptive-icon.png",
-      "backgroundColor": "#ffffff"
+    adaptiveIcon: {
+      foregroundImage: "./assets/images/adaptive-icon.png",
+      backgroundColor: "#ffffff",
     },
-    "package": "com.anonymous.exposhop",
-    "googleServicesFile": "./google-services.json"
+    package: "com.anonymous.exposhop",
+    googleServicesFile: "./google-services.json",
   },
-  "web": {
-    "bundler": "metro",
-    "output": "static",
-    "favicon": "./assets/images/favicon.png"
+  web: {
+    bundler: "metro",
+    output: "static",
+    favicon: "./assets/images/favicon.png",
   },
-  "updates": {
-    "url": "https://u.expo.dev/1b5a74aa-d133-4c94-9651-4dba78bf303f"
+  updates: {
+    url: "https://u.expo.dev/1b5a74aa-d133-4c94-9651-4dba78bf303f",
   },
-  "runtimeVersion": "1.0.0",
-  "plugins": [
+  runtimeVersion: "1.0.0",
+  plugins: [
     [
       "@stripe/stripe-react-native",
       {
-        "merchantIdentifier": "",
-        "enableGooglePay": false
-      }
+        merchantIdentifier: "",
+        enableGooglePay: false,
+      },
     ],
     "expo-router",
-    ["expo-updates", { "useClassicUpdates": false }],
+    ["expo-updates", { useClassicUpdates: false }],
     "expo-asset",
     "@react-native-firebase/app",
     [
       "expo-build-properties",
       {
-        "ios": {
-          "useFrameworks": "static",
-          "buildReactNativeFromSource": true
-        }
-      }
-    ]
+        ios: {
+          useFrameworks: "static",
+          // isable building React Native from source
+          buildReactNativeFromSource: false,
+        },
+      },
+    ],
   ],
-  "experiments": {
-    "typedRoutes": true,
-    "newArchEnabled": true
-  }
+  experiments: {
+    typedRoutes: true,
+    newArchEnabled: true,
+  },
 });

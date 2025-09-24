@@ -18,7 +18,9 @@
       "channel": "preview",
       "env": {
         "NODE_VERSION": "20",
-        "EXPO_USE_NODE_VERSION": "true"
+        "EXPO_USE_NODE_VERSION": "true",
+        "RCT_NEW_ARCH_ENABLED": "1",
+        "EXPO_USE_NEW_ARCHITECTURE": "true"
       }
     },
     "production": {
@@ -26,7 +28,9 @@
       "channel": "production",
       "env": {
         "NODE_VERSION": "20",
-        "EXPO_USE_NODE_VERSION": "true"
+        "EXPO_USE_NODE_VERSION": "true",
+         "RCT_NEW_ARCH_ENABLED": "1",
+        "EXPO_USE_NEW_ARCHITECTURE": "true"
       },
       "android": {
         "image": "sdk-52"
