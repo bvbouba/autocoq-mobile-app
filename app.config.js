@@ -72,7 +72,7 @@ export default () => ({
       "expo-build-properties",
       {
         ios: {
-          useFrameworks: "static",
+          // useFrameworks: "static",
           // isable building React Native from source
           buildReactNativeFromSource: false,
         },
