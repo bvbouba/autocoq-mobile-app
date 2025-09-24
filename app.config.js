@@ -78,7 +78,7 @@ export default () => ({
         },
       },
     ],
-    "./plugins/withRNFBModularHeaders.js"
+    "./plugins/withDisableNonModularHeadersWarning.js"
   ],
   experiments: {
     typedRoutes: true,
