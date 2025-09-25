@@ -92,10 +92,10 @@ function RootLayoutNav() {
       <MessageProvider>
         <AuthProvider>
           <CheckoutProvider>
+          <LoadingProvider>
             <ModalProvider>
                 <MenuProvider>
                   <CarFilterProvider>
-                    <LoadingProvider>
                       <NavigationProvider>
                         <Stack>
                           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -190,10 +190,10 @@ function RootLayoutNav() {
                           />
                         </Stack>
                       </NavigationProvider>
-                    </LoadingProvider>
                   </CarFilterProvider>
                 </MenuProvider>
             </ModalProvider>
+           </LoadingProvider>
           </CheckoutProvider>
         </AuthProvider>
         </MessageProvider>

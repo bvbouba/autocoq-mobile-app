@@ -35,6 +35,7 @@ export default () => ({
     googleServicesFile: "./GoogleService-Info.plist",
   },
   android: {
+    versionCode: 2,
     splash: {
       image: "./assets/images/splash-android.png",
       resizeMode: "cover",

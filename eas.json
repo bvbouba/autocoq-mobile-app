@@ -25,20 +25,31 @@
     },
     "production": {
       "autoIncrement": true,
+      "distribution": "store",          
       "channel": "production",
       "env": {
         "NODE_VERSION": "20",
         "EXPO_USE_NODE_VERSION": "true",
-         "RCT_NEW_ARCH_ENABLED": "1",
+        "RCT_NEW_ARCH_ENABLED": "1",
         "EXPO_USE_NEW_ARCHITECTURE": "true"
       },
       "android": {
-        "image": "sdk-52"
+        "image": "sdk-52",
+        "buildType": "app-bundle"      
       },
-      "ios": {}
+      "ios": {
+        "image": "latest"              
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "track": "production"          
+      },
+      "ios": {
+        "ascAppId": "YOUR_APP_STORE_CONNECT_APP_ID" 
+      }
+    }
   }
 }
