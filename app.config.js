@@ -43,18 +43,8 @@ export default () => ({
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
-    usesCleartextTraffic: true, 
     package: "com.anonymous.exposhop",
     googleServicesFile: "./google-services.json",
-    /**
-     * 👇 Explicitly declare permissions to exclude AD_ID
-     * Add only the permissions you actually need (INTERNET is added by default)
-     */
-    permissions: [
-      "android.permission.INTERNET",
-      "android.permission.ACCESS_NETWORK_STATE",
-      // add others you really need here (camera, location, etc.)
-    ],
   },
   web: {
     bundler: "metro",
@@ -84,7 +74,6 @@ export default () => ({
             "android.permission.INTERNET",
             "android.permission.ACCESS_NETWORK_STATE",
           ],
-          removePermissions: ["com.google.android.gms.permission.AD_ID"],
         },
       },
     ],
