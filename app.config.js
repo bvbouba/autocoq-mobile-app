@@ -4,7 +4,6 @@ export default () => ({
     saleorApi:
       process.env.EXPO_PUBLIC_SALEOR_API_URL ||
       "https://django.autocoq.com/graphql/",
-    stripePK: process.env.EXPO_PUBLIC_STRIPE_PK || "",
     channel: process.env.EXPO_PUBLIC_CHANNEL || "ci",
     locale: process.env.EXPO_PUBLIC_LOCALE?.split(",") || ["fr"],
     eas: {
@@ -13,7 +12,6 @@ export default () => ({
   },
   name: "AutoCoq",
   slug: "autocoq",
-  // 👇 Disable new architecture for now
   newArchEnabled: true,
   version: "1.0.0",
   orientation: "portrait",
@@ -47,6 +45,15 @@ export default () => ({
     },
     package: "com.anonymous.exposhop",
     googleServicesFile: "./google-services.json",
+    /**
+     * 👇 Explicitly declare permissions to exclude AD_ID
+     * Add only the permissions you actually need (INTERNET is added by default)
+     */
+    permissions: [
+      "android.permission.INTERNET",
+      "android.permission.ACCESS_NETWORK_STATE",
+      // add others you really need here (camera, location, etc.)
+    ],
   },
   web: {
     bundler: "metro",
@@ -58,13 +65,6 @@ export default () => ({
   },
   runtimeVersion: "1.0.0",
   plugins: [
-    [
-      "@stripe/stripe-react-native",
-      {
-        merchantIdentifier: "",
-        enableGooglePay: false,
-      },
-    ],
     "expo-router",
     ["expo-updates", { useClassicUpdates: false }],
     "expo-asset",
@@ -77,9 +77,16 @@ export default () => ({
           buildReactNativeFromSource: true,
           useNewArch: true,
         },
+        android: {
+          // also here for good measure
+          permissions: [
+            "android.permission.INTERNET",
+            "android.permission.ACCESS_NETWORK_STATE",
+          ],
+        },
       },
     ],
-    "./plugins/withDisableNonModularHeadersWarning.js"
+    "./plugins/withDisableNonModularHeadersWarning.js",
   ],
   experiments: {
     typedRoutes: true,

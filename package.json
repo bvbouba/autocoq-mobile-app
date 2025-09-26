@@ -26,7 +26,6 @@
     "@react-native-firebase/app": "^23.3.1",
     "@react-native-picker/picker": "2.11.1",
     "@sentry/react-native": "^7.1.0",
-    "@stripe/stripe-react-native": "0.50.3",
     "apollo-link-token-refresh": "^0.7.0",
     "date-fns": "^4.1.0",
     "expo": "54.0.4",
