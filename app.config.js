@@ -43,6 +43,7 @@ export default () => ({
       foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundColor: "#ffffff",
     },
+    usesCleartextTraffic: true, 
     package: "com.anonymous.exposhop",
     googleServicesFile: "./google-services.json",
     /**
