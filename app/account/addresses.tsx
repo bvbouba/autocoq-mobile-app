@@ -7,7 +7,7 @@ import { fonts, PaddedView, Text, View } from "@/components/Themed";
 import { Skeleton } from "moti/skeleton";
 
 const CarnetDAdressesScreen = () => {
-  const { authenticated, token } = useAuth(); // removed checkAndRefreshToken
+  const { authenticated, token,refreshAccessToken } = useAuth(); // removed checkAndRefreshToken
   const [isValidatingToken, setIsValidatingToken] = useState(true);
 
   // Query user addresses
@@ -22,10 +22,11 @@ const CarnetDAdressesScreen = () => {
     onCompleted: () => {
       setIsValidatingToken(false);
     },
-    onError: (error) => {
-      // No need to manually refresh anymore — tokenRefreshLink handles it
-      console.error("Address fetch error:", error);
-      setIsValidatingToken(false);
+    onError: async (error) => {
+      if (error.message.includes("Signature has expired")) {
+        await refreshAccessToken();
+      }
+      setIsValidatingToken(false); 
     },
   });
 

@@ -29,6 +29,7 @@ export interface UserConsumerProps {
   loading: boolean;
   authenticated: boolean;
   login: (credentials: { email: string; password: string }) => Promise<boolean>;
+  refreshAccessToken: () => Promise<string | null>
 }
 
 const AuthContext = createContext<UserConsumerProps | undefined>(undefined);
@@ -196,6 +197,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         authenticated,
         login,
+        refreshAccessToken
       }}
     >
       {children}

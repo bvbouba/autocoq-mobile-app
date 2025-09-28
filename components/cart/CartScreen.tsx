@@ -26,7 +26,7 @@ import analytics from '@/lib/analytics';
 
 const CartScreen = () => {
     const { checkout,checkoutToken, loading } = useCheckout();
-    const { authenticated, token } = useAuth();
+    const { authenticated, token,refreshAccessToken } = useAuth();
     const [updateShippingAddress] = useCheckoutShippingAddressUpdateMutation();
     const [updateBillingAddress] = useCheckoutBillingAddressUpdateMutation();
     const [,setLoading] = useState(false)
@@ -44,7 +44,9 @@ const CartScreen = () => {
             },
         },
         onError: async (error) => {
-            console.error("Cart query error:", error);
+            if (error.message.includes("Signature has expired")) {
+                await refreshAccessToken();
+              }        
         },
     });
 

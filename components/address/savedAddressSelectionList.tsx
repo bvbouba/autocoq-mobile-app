@@ -23,7 +23,7 @@ interface SavedAddressSelectionListProps {
 }
 
 const SavedAddressSelectionList = ({ updateAddressMutation }: SavedAddressSelectionListProps) => {
-    const {authenticated,token} = useAuth()
+    const {authenticated,token,refreshAccessToken} = useAuth()
     const [isValidatingToken, setIsValidatingToken] = useState(true);
     const router = useRouter()
     const { loading, error, data } = useCurrentUserAddressesQuery({
@@ -36,8 +36,10 @@ const SavedAddressSelectionList = ({ updateAddressMutation }: SavedAddressSelect
       onCompleted: () => {
           setIsValidatingToken(false);
       },
-      onError: (error) => {
-        console.error("Address query error:", error);
+      onError: async (error) => {
+        if (error.message.includes("Signature has expired")) {
+          await refreshAccessToken();
+        }        
         setIsValidatingToken(false);
       },
     });
