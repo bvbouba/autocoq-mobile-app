@@ -31,6 +31,11 @@ export default () => ({
       ITSAppUsesNonExemptEncryption: false,
     },
     googleServicesFile: "./GoogleService-Info.plist",
+    splash: {
+      image: "./assets/images/splash-ios.png",
+      resizeMode: "cover",
+      backgroundColor: "#ffffff",
+    },
   },
   android: {
     versionCode: 2,
