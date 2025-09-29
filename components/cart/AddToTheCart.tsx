@@ -63,8 +63,14 @@ const AddedToCart: React.FC = () => {
       </TouchableOpacity>
 
       {/* Lien Continuer vos achats */}
-      <TouchableOpacity onPress={() => closeModal("CartPreview")}>
-        <Text style={styles.continueShopping}>Continuer vos achats</Text>
+      <TouchableOpacity
+        style={styles.continueButton}
+        onPress={() => closeModal("CartPreview")}
+      >
+        <View style={styles.continueContent}>
+        <FontAwesome name="arrow-left" size={16} color={colors.secondary} />
+        <Text style={styles.continueText}>Continuer vos achats</Text>
+        </View>
       </TouchableOpacity>
     </PaddedView>
   );
@@ -128,5 +134,27 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 50,
     height: 50,
+  },
+  continueButton: {
+    marginTop: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: colors.secondary || "#3498db",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "transparent", // keeps it secondary
+  },
+  continueContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  continueText: {
+    color: colors.secondary || "#3498db",
+    fontSize: fonts.body,
+    fontWeight: "600",
   },
 });

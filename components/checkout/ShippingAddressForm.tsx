@@ -14,6 +14,7 @@ import { useModal } from "@/context/useModal";
 import { useCheckout } from "@/context/CheckoutProvider";
 import PhoneInput from "react-native-phone-number-input";
 import { parsePhone } from "@/utils/parsePhone";
+import { FontAwesome } from "@expo/vector-icons";
 
 interface Props {
   onSubmit: () => void;
@@ -362,9 +363,15 @@ const ShippingAddressForm: FC<Props> = () => {
           <SavedAddressSelectionList
             updateAddressMutation={(address: Form) => updateMutation(address)}
           />
-          <Button mode="text" onPress={() => setShowForm(true)}>
-            <Text>  + Ajouter une nouvelle adresse </Text>
-          </Button>
+          <TouchableOpacity
+              style={styles.addAddressButton}
+              onPress={() => setShowForm(true)}
+              activeOpacity={0.7}
+            >
+              <FontAwesome name="plus-circle" size={18} color={colors.primary} />
+              <Text style={styles.addAddressText}>Ajouter une nouvelle adresse</Text>
+            </TouchableOpacity>
+
         </>
       ) : (
         renderForm()
@@ -450,6 +457,25 @@ const styles = StyleSheet.create({
   zoneText: {
     fontSize: fonts.body,
     color: colors.textPrimary,
+  },
+  addAddressButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15, 
+    borderRadius: 8,
+    backgroundColor: colors.backgroundLight, 
+    borderWidth: 1,
+    borderColor: colors.primary,
+    alignSelf: "center", 
+  },
+  addAddressText: {
+    fontSize: fonts.body,
+    fontWeight: "bold",
+    color: colors.primary,
+    marginLeft: 8,
   },
 });
 

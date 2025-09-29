@@ -57,7 +57,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-paper": "^5.13.1",
     "react-native-phone-number-input": "^2.1.0",
-    "react-native-reanimated": "^4.1.0",
+    "react-native-reanimated": "~4.1.2",
     "react-native-reanimated-carousel": "^4.0.3",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^5.6.1",
@@ -127,6 +127,6 @@
   },
   "resolutions": {
     "expo-linear-gradient": "15.0.7",
-    "react-native-reanimated": "4.1.0"
+    "react-native-reanimated": "4.1.2"
   }
 }

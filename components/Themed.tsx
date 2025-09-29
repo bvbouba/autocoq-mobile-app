@@ -111,6 +111,7 @@ export const colors = {
   info: "#1976D2",
   border: "#E0E0E0",
   disabled: "#BDBDBD",
+  backgroundLight:"#FFEDE6"
 }
 
 export const fonts = {
