@@ -10703,6 +10703,11 @@ react-native-animated-dots-carousel@^2.0.0:
   resolved "https://registry.yarnpkg.com/react-native-animated-dots-carousel/-/react-native-animated-dots-carousel-2.0.1.tgz#e1228fc3f3cab9e692f68e3dfc15eb916b784545"
   integrity sha512-uHPqcDmrqkITeucI65U+cCS3kKORCyYrqapNiaWKI0Deu6PdOV7vsoZQv3FyFFyDhLaJ8HIA7LPwK6yHjGW2oA==
 
+react-native-confirmation-code-field@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-confirmation-code-field/-/react-native-confirmation-code-field-8.0.1.tgz#0c6b232497348d728c2f628e9833f7e6bfb8efd1"
+  integrity sha512-pwrhQtspFEp0y/gxZRp8hrra+UjAYfwAsW5Sn3yYtdUZVyRjAZPBnUb3rOc+z5L5o2ml03z5P3uvTK0yQwXsmA==
+
 react-native-country-picker-modal@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-country-picker-modal/-/react-native-country-picker-modal-2.0.0.tgz#005421303349a81fedf5975e465405bb4b7312d5"

@@ -1,61 +1,64 @@
-import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Linking,Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import {Text, View , Divider,colors, fonts, PaddedView } from "@/components/Themed"
+import { Text, View, Divider, colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
 import ListItem from '@/components/ListItem';
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/providers/authProvider';
 import { useModal } from '@/context/useModal';
 import Auth from '@/components/account/auth';
-// import { useLoading } from '@/context/LoadingContext';
+import { useLoading } from '@/context/LoadingContext';
 import { useMessage } from '@/context/MessageContext';
+import { getConfig } from '@/config';
 
 export default function AccountScreen() {
   const router = useRouter();
-  const { user, loading, logout,authenticated } = useAuth();
+  const { user, loading, logout, authenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const {openModal} = useModal()
-  // const {setLoading} = useLoading()
+  const { openModal } = useModal()
+  const { setLoading } = useLoading()
   const { showMessage } = useMessage();
 
-  // useEffect(()=>{
-  //   setLoading(loading)
-  // },[loading])
+  useEffect(() => {
+    setLoading(isLoading)
+  }, [isLoading])
 
   const handleSignOut = async () => {
-    setIsLoading(true); 
+    setIsLoading(true);
+
     try {
-      logout();
-      router.push('/account');
+      // do the actual logout (synchronous or async)
+      await logout();
+      await new Promise(resolve => setTimeout(resolve, 1500));
     } catch (error) {
-      showMessage("Erreur lors de la déconnexion")
+      // handle any errors
+      console.error(error);
+      showMessage("Erreur lors de la déconnexion");
     } finally {
-      setIsLoading(false); // Arrête le chargement
+      setIsLoading(false); // always stop spinner
     }
   };
-
-
   return (
     <View style={[styles.scrollContainer, {
     }]}>
       <ScrollView style={styles.scroll}>
         <PaddedView style={styles.header}>
-        <TouchableOpacity
-              style={{flexDirection:"row"}}
-              onPress={() => router.push('/account/profile')}
-              disabled={!authenticated}
-            >
-          <FontAwesome name="user-circle" size={20} color={colors.primary} />
-          <View style={{flexDirection:"column"}}>
-          <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Bienvenue</Text>
-          <Text style={styles.title}>{authenticated ? `,${user?.firstName}` : ""}</Text>
-          </View>
-          {authenticated && <View style={{}}>
-           <Text> Voir le Profil</Text>
-          </View>
-          }
-          </View>
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => router.push('/account/profile')}
+            disabled={!authenticated}
+          >
+            <FontAwesome name="user-circle" size={20} color={colors.primary} />
+            <View style={{ flexDirection: "column" }}>
+              <View style={styles.titleWrapper}>
+                <Text style={styles.title}>Bienvenue</Text>
+                <Text style={styles.title}>{authenticated ? `,${user?.firstName}` : ""}</Text>
+              </View>
+              {authenticated && <View style={{}}>
+                <Text> Voir le Profil</Text>
+              </View>
+              }
+            </View>
           </TouchableOpacity>
         </PaddedView>
         {/* {!user?.id && <View>
@@ -64,12 +67,12 @@ export default function AccountScreen() {
 
         <View style={styles.accountButtonContainer}>
           {!user?.id && (
-            <TouchableOpacity style={styles.signUpButton} onPress={()=>{
+            <TouchableOpacity style={styles.signUpButton} onPress={() => {
               openModal({
-                id:"Auth",
-                content:<Auth />,
-                height:"115%",
-                closeButtonVisible:true
+                id: "Auth",
+                content: <Auth />,
+                height: "115%",
+                closeButtonVisible: true
               })
             }}>
               <Text style={styles.signUpButtonText}>
@@ -80,18 +83,24 @@ export default function AccountScreen() {
         </View>
 
         <View style={styles.list}>
-          <ListItem name="Mes commandes" onPress={()=>router.push("/account/orders")} />
+          <ListItem name="Mes commandes" onPress={() => router.push("/account/orders")} />
           <Divider />
-          {user?.id && <><ListItem name="Mes adresses" onPress={()=>router.push("/account/addresses")} />
-                        <Divider />
-                        </>
+          {user?.id && <><ListItem name="Mes adresses" onPress={() => router.push("/account/addresses")} />
+            <Divider />
+          </>
           }
-          <ListItem name="FAQ" onPress={()=>router.push("/account/faq")} />
+          <ListItem name="FAQ" onPress={() => router.push("/account/faq")} />
           <Divider />
-          <ListItem name="Conditions générales" onPress={()=>router.push("/account/terms")} />
+          <ListItem name="Conditions générales" onPress={() => router.push("/account/terms")} />
+           
+          
+           
 
           {user?.id && (
-            <View style={{marginTop:50}}>
+            <>
+             <Divider />
+             <ListItem name="Supprimer mon compte" onPress={() => router.push("/account/deleteAccount")} />
+            <View style={{ marginTop: 50 }}>
               <TouchableOpacity
                 style={[styles.signUpButton, isLoading && styles.disabledButton]}
                 onPress={handleSignOut}
@@ -100,9 +109,12 @@ export default function AccountScreen() {
                 {loading ? <ActivityIndicator color="white" /> : <Text style={styles.signUpButtonText}>{'SE DÉCONNECTER'}</Text>}
               </TouchableOpacity>
 
-
+            
             </View>
+            </>
           )}
+
+          
         </View>
       </ScrollView>
     </View>
@@ -115,19 +127,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    paddingTop:50,
-    paddingHorizontal:15,
+    paddingTop: 50,
+    paddingHorizontal: 15,
   },
   scroll: {
     width: "100%",
   },
   titleWrapper: {
     marginLeft: 8,
-    flexDirection:"row",
+    flexDirection: "row",
     textAlign: "center",
   },
   title: {
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     fontWeight: "500",
     textTransform: "capitalize"
   },
@@ -162,7 +174,7 @@ const styles = StyleSheet.create({
   myAccountText: {
     color: "white",
     fontWeight: "bold",
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     marginLeft: 10,
   },
   menuItem: {
@@ -171,7 +183,7 @@ const styles = StyleSheet.create({
     marginLeft: 30,
   },
   menuText: {
-    fontSize:fonts.h2,
+    fontSize: fonts.h2,
     color: "#333",
   },
   signOutText: {

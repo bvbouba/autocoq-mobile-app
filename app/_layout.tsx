@@ -188,6 +188,12 @@ function RootLayoutNav() {
                               header: () => <SimpleBackHeader hasLogo={false} title="Mes commandes" />,
                             }}
                           />
+                           <Stack.Screen
+                            name="account/deleteAccount"
+                            options={{
+                              header: () => <SimpleBackHeader hasLogo={false} title="Supprimer mon compte" />,
+                            }}
+                          />
                         </Stack>
                       </NavigationProvider>
                   </CarFilterProvider>

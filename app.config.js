@@ -25,6 +25,7 @@ export default () => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
+    buildNumber: 3,
     supportsTablet: true,
     bundleIdentifier: "com.anonymous.exposhop",
     infoPlist: {
