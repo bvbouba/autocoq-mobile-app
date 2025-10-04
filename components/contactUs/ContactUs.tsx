@@ -10,7 +10,7 @@ const ContactUS = () => {
   const handlePress = () =>
     openModal({
       id: "Auth",
-      content: <PartRequestForm />,
+      content: <PartRequestForm title="Demande de pièce" />,
       height: "100%",
       marginTop: 500,
       closeButtonVisible: true,

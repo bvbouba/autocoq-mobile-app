@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Linking,Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Linking } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Text, View, Divider, colors, fonts, PaddedView } from "@/components/Themed"
 import { useRouter } from 'expo-router';
@@ -10,6 +10,9 @@ import Auth from '@/components/account/auth';
 import { useLoading } from '@/context/LoadingContext';
 import { useMessage } from '@/context/MessageContext';
 import { getConfig } from '@/config';
+import * as WebBrowser from "expo-web-browser";
+import Support from '@/components/contactUs/support';
+
 
 export default function AccountScreen() {
   const router = useRouter();
@@ -25,22 +28,20 @@ export default function AccountScreen() {
 
   const handleSignOut = async () => {
     setIsLoading(true);
-
     try {
-      // do the actual logout (synchronous or async)
       await logout();
       await new Promise(resolve => setTimeout(resolve, 1500));
     } catch (error) {
-      // handle any errors
       console.error(error);
       showMessage("Erreur lors de la déconnexion");
     } finally {
-      setIsLoading(false); // always stop spinner
+      setIsLoading(false);
     }
   };
+
+
   return (
-    <View style={[styles.scrollContainer, {
-    }]}>
+    <View style={styles.scrollContainer}>
       <ScrollView style={styles.scroll}>
         <PaddedView style={styles.header}>
           <TouchableOpacity
@@ -54,16 +55,10 @@ export default function AccountScreen() {
                 <Text style={styles.title}>Bienvenue</Text>
                 <Text style={styles.title}>{authenticated ? `,${user?.firstName}` : ""}</Text>
               </View>
-              {authenticated && <View style={{}}>
-                <Text> Voir le Profil</Text>
-              </View>
-              }
+              {authenticated && <View><Text> Voir le Profil</Text></View>}
             </View>
           </TouchableOpacity>
         </PaddedView>
-        {/* {!user?.id && <View>
-          <BannerAds slug="banner-pub-account" />
-        </View>} */}
 
         <View style={styles.accountButtonContainer}>
           {!user?.id && (
@@ -75,9 +70,7 @@ export default function AccountScreen() {
                 closeButtonVisible: true
               })
             }}>
-              <Text style={styles.signUpButtonText}>
-                SE CONNECTER OU CRÉER UN COMPTE
-              </Text>
+              <Text style={styles.signUpButtonText}>SE CONNECTER OU CRÉER UN COMPTE</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -85,36 +78,44 @@ export default function AccountScreen() {
         <View style={styles.list}>
           <ListItem name="Mes commandes" onPress={() => router.push("/account/orders")} />
           <Divider />
-          {user?.id && <><ListItem name="Mes adresses" onPress={() => router.push("/account/addresses")} />
-            <Divider />
-          </>
-          }
-          <ListItem name="FAQ" onPress={() => router.push("/account/faq")} />
-          <Divider />
-          <ListItem name="Conditions générales" onPress={() => router.push("/account/terms")} />
-           
-          
-           
-
           {user?.id && (
             <>
-             <Divider />
-             <ListItem name="Supprimer mon compte" onPress={() => router.push("/account/deleteAccount")} />
-            <View style={{ marginTop: 50 }}>
-              <TouchableOpacity
-                style={[styles.signUpButton, isLoading && styles.disabledButton]}
-                onPress={handleSignOut}
-                disabled={isLoading} // Désactiver le bouton pendant le chargement
-              >
-                {loading ? <ActivityIndicator color="white" /> : <Text style={styles.signUpButtonText}>{'SE DÉCONNECTER'}</Text>}
-              </TouchableOpacity>
-
-            
-            </View>
+              <ListItem name="Mes adresses" onPress={() => router.push("/account/addresses")} />
+              <Divider />
+            </>
+          )}
+          <ListItem name="FAQ" onPress={() => WebBrowser.openBrowserAsync(`https://www.autocoq.com/${getConfig().channel}/faq`)} />
+          <Divider />
+          <ListItem name="Conditions générales" onPress={() => WebBrowser.openBrowserAsync(`https://www.autocoq.com/${getConfig().channel}/pages/terms`)} />
+          {user?.id && (
+            <>
+              <Divider />
+              <ListItem name="Supprimer mon compte" onPress={() => router.push("/account/deleteAccount")} />
+              <View style={{ marginTop: 50 }}>
+                <TouchableOpacity
+                  style={[styles.signUpButton, isLoading && styles.disabledButton]}
+                  onPress={handleSignOut}
+                  disabled={isLoading}
+                >
+                  {loading ? <ActivityIndicator color="white" /> : <Text style={styles.signUpButtonText}>SE DÉCONNECTER</Text>}
+                </TouchableOpacity>
+              </View>
             </>
           )}
 
+          {/* ✅ Nouveau bloc Contact */}
+          <View style={{ marginTop: 40 }}>
           
+            <TouchableOpacity style={styles.contactButton} onPress={() => openModal({
+                id: "Support",
+                content: <Support />,
+                height: "115%",
+                closeButtonVisible: true
+              })}>
+              <FontAwesome name="phone" size={20} color={colors.secondary} style={{ marginRight: 8 }} />
+              <Text style={styles.contactButtonText}>Contactez Nous</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -195,5 +196,19 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 20,
+  },
+  contactButton: {
+    flexDirection: "column",
+    alignItems: "center",
+    backgroundColor: colors.background,
+    borderWidth:1,
+    borderColor:colors.border,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    
+  },
+  contactButtonText: {
+    color:colors.secondary,
+    fontSize: fonts.button,
   },
 });

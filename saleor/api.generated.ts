@@ -376,7 +376,7 @@ export type AccountRegisterInput = {
 };
 
 /**
- * Sends an email with the account removal link for the logged-in user.
+ * Request account deletion. Either sends notification or returns token.
  *
  * Requires one of the following permissions: AUTHENTICATED_USER.
  *
@@ -389,6 +389,8 @@ export type AccountRequestDeletion = {
   /** @deprecated This field will be removed in Saleor 4.0. Use `errors` field instead. */
   accountErrors: Array<AccountError>;
   errors: Array<AccountError>;
+  /** Account deletion token (if noNotification=true). */
+  token?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -11438,7 +11440,7 @@ export type Mutation = {
    */
   accountRegister?: Maybe<AccountRegister>;
   /**
-   * Sends an email with the account removal link for the logged-in user.
+   * Request account deletion. Either sends notification or returns token.
    *
    * Requires one of the following permissions: AUTHENTICATED_USER.
    *
@@ -13976,6 +13978,7 @@ export type MutationAccountRegisterArgs = {
 
 export type MutationAccountRequestDeletionArgs = {
   channel?: InputMaybe<Scalars['String']['input']>;
+  noNotification?: InputMaybe<Scalars['Boolean']['input']>;
   redirectUrl: Scalars['String']['input'];
 };
 
@@ -34547,12 +34550,12 @@ export type VerifyCodeMutationVariables = Exact<{
 
 export type VerifyCodeMutation = { __typename?: 'Mutation', verifyOtp?: { __typename?: 'VerifyOTPMutation', error?: string | null, message?: string | null } | null };
 
-export type UserRegisterMutationVariables = Exact<{
+export type UserRegistereMutationVariables = Exact<{
   input: AccountRegisterInput;
 }>;
 
 
-export type UserRegisterMutation = { __typename?: 'Mutation', accountRegister?: { __typename?: 'AccountRegister', errors: Array<{ __typename?: 'AccountError', message?: string | null, field?: string | null, code: AccountErrorCode }> } | null };
+export type UserRegistereMutation = { __typename?: 'Mutation', accountRegister?: { __typename?: 'AccountRegister', errors: Array<{ __typename?: 'AccountError', message?: string | null, field?: string | null, code: AccountErrorCode }> } | null };
 
 export type CreateTokenMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -35027,6 +35030,11 @@ export type CreateReviewMutationVariables = Exact<{
 
 
 export type CreateReviewMutation = { __typename?: 'Mutation', reviewCreate?: { __typename?: 'ReviewCreateMutation', errors: Array<{ __typename?: 'ReviewError', message?: string | null, code?: ReviewErrorCode | null, field?: string | null }> } | null };
+
+export type GetCompanyInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCompanyInfoQuery = { __typename?: 'Query', shop: { __typename?: 'Shop', name: string, companyAddress?: { __typename?: 'Address', companyName: string, streetAddress1: string, streetAddress2: string, phone?: string | null, city: string, postalCode: string, country: { __typename?: 'CountryDisplay', country: string } } | null } };
 
 export const UserDetailsFragmentDoc = gql`
     fragment UserDetails on User {
@@ -35936,8 +35944,8 @@ export function useVerifyCodeMutation(baseOptions?: Apollo.MutationHookOptions<V
 export type VerifyCodeMutationHookResult = ReturnType<typeof useVerifyCodeMutation>;
 export type VerifyCodeMutationResult = Apollo.MutationResult<VerifyCodeMutation>;
 export type VerifyCodeMutationOptions = Apollo.BaseMutationOptions<VerifyCodeMutation, VerifyCodeMutationVariables>;
-export const UserRegisterDocument = gql`
-    mutation userRegister($input: AccountRegisterInput!) {
+export const UserRegistereDocument = gql`
+    mutation userRegistere($input: AccountRegisterInput!) {
   accountRegister(input: $input) {
     errors {
       message
@@ -35947,32 +35955,32 @@ export const UserRegisterDocument = gql`
   }
 }
     `;
-export type UserRegisterMutationFn = Apollo.MutationFunction<UserRegisterMutation, UserRegisterMutationVariables>;
+export type UserRegistereMutationFn = Apollo.MutationFunction<UserRegistereMutation, UserRegistereMutationVariables>;
 
 /**
- * __useUserRegisterMutation__
+ * __useUserRegistereMutation__
  *
- * To run a mutation, you first call `useUserRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserRegisterMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUserRegistereMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserRegistereMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [userRegisterMutation, { data, loading, error }] = useUserRegisterMutation({
+ * const [userRegistereMutation, { data, loading, error }] = useUserRegistereMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUserRegisterMutation(baseOptions?: Apollo.MutationHookOptions<UserRegisterMutation, UserRegisterMutationVariables>) {
+export function useUserRegistereMutation(baseOptions?: Apollo.MutationHookOptions<UserRegistereMutation, UserRegistereMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserRegisterMutation, UserRegisterMutationVariables>(UserRegisterDocument, options);
+        return Apollo.useMutation<UserRegistereMutation, UserRegistereMutationVariables>(UserRegistereDocument, options);
       }
-export type UserRegisterMutationHookResult = ReturnType<typeof useUserRegisterMutation>;
-export type UserRegisterMutationResult = Apollo.MutationResult<UserRegisterMutation>;
-export type UserRegisterMutationOptions = Apollo.BaseMutationOptions<UserRegisterMutation, UserRegisterMutationVariables>;
+export type UserRegistereMutationHookResult = ReturnType<typeof useUserRegistereMutation>;
+export type UserRegistereMutationResult = Apollo.MutationResult<UserRegistereMutation>;
+export type UserRegistereMutationOptions = Apollo.BaseMutationOptions<UserRegistereMutation, UserRegistereMutationVariables>;
 export const CreateTokenDocument = gql`
     mutation CreateToken($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
@@ -38265,6 +38273,56 @@ export function useCreateReviewMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateReviewMutationHookResult = ReturnType<typeof useCreateReviewMutation>;
 export type CreateReviewMutationResult = Apollo.MutationResult<CreateReviewMutation>;
 export type CreateReviewMutationOptions = Apollo.BaseMutationOptions<CreateReviewMutation, CreateReviewMutationVariables>;
+export const GetCompanyInfoDocument = gql`
+    query getCompanyInfo {
+  shop {
+    name
+    companyAddress {
+      companyName
+      streetAddress1
+      streetAddress2
+      phone
+      city
+      postalCode
+      country {
+        country
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCompanyInfoQuery__
+ *
+ * To run a query within a React component, call `useGetCompanyInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompanyInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompanyInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCompanyInfoQuery(baseOptions?: Apollo.QueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
+      }
+export function useGetCompanyInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
+        }
+export function useGetCompanyInfoSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>(GetCompanyInfoDocument, options);
+        }
+export type GetCompanyInfoQueryHookResult = ReturnType<typeof useGetCompanyInfoQuery>;
+export type GetCompanyInfoLazyQueryHookResult = ReturnType<typeof useGetCompanyInfoLazyQuery>;
+export type GetCompanyInfoSuspenseQueryHookResult = ReturnType<typeof useGetCompanyInfoSuspenseQuery>;
+export type GetCompanyInfoQueryResult = Apollo.QueryResult<GetCompanyInfoQuery, GetCompanyInfoQueryVariables>;
 export type AccountAddressCreateKeySpecifier = ('accountErrors' | 'address' | 'errors' | 'user' | AccountAddressCreateKeySpecifier)[];
 export type AccountAddressCreateFieldPolicy = {
 	accountErrors?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -38380,10 +38438,11 @@ export type AccountRegisterFieldPolicy = {
 	requiresConfirmation?: FieldPolicy<any> | FieldReadFunction<any>,
 	user?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type AccountRequestDeletionKeySpecifier = ('accountErrors' | 'errors' | AccountRequestDeletionKeySpecifier)[];
+export type AccountRequestDeletionKeySpecifier = ('accountErrors' | 'errors' | 'token' | AccountRequestDeletionKeySpecifier)[];
 export type AccountRequestDeletionFieldPolicy = {
 	accountErrors?: FieldPolicy<any> | FieldReadFunction<any>,
-	errors?: FieldPolicy<any> | FieldReadFunction<any>
+	errors?: FieldPolicy<any> | FieldReadFunction<any>,
+	token?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type AccountSetDefaultAddressKeySpecifier = ('accountErrors' | 'errors' | 'user' | AccountSetDefaultAddressKeySpecifier)[];
 export type AccountSetDefaultAddressFieldPolicy = {

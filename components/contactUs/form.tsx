@@ -26,7 +26,8 @@ const validationSchema = Yup.object().shape({
   carDetails: Yup.string().required("Détails du véhicule requis"),
 });
 
-const PartRequestForm = () => {
+
+const PartRequestForm = ({title}:{title?:string}) => {
   const [addPartRequest] = useAddPartRequestMutation();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -73,8 +74,7 @@ const PartRequestForm = () => {
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View style={styles.container}>
-            <Text style={styles.title}>Demande de pièce</Text>
-
+            {title && <Text style={styles.title}>{title}</Text>}
             <TextInput
               placeholder="Nom"
               style={styles.input}
@@ -94,6 +94,19 @@ const PartRequestForm = () => {
             />
             {touched.contact && errors.contact && <Text style={styles.error}>{errors.contact}</Text>}
 
+          
+            <TextInput
+              placeholder="Détails du véhicule (Année, Marque, Modèle, Version)"
+              style={[styles.input, styles.textArea]}
+              multiline
+              numberOfLines={3}
+              onChangeText={handleChange("carDetails")}
+              onBlur={handleBlur("carDetails")}
+              value={values.carDetails}
+            />
+            {touched.carDetails && errors.carDetails && <Text style={styles.error}>{errors.carDetails}</Text>}
+            
+          
             <TextInput
               placeholder="Détails de la pièce"
               style={[styles.input, styles.textArea]}
@@ -105,16 +118,7 @@ const PartRequestForm = () => {
             />
             {touched.partDetails && errors.partDetails && <Text style={styles.error}>{errors.partDetails}</Text>}
 
-            <TextInput
-              placeholder="Détails du véhicule (Année, Marque, Modèle, Version)"
-              style={[styles.input, styles.textArea]}
-              multiline
-              numberOfLines={3}
-              onChangeText={handleChange("carDetails")}
-              onBlur={handleBlur("carDetails")}
-              value={values.carDetails}
-            />
-            {touched.carDetails && errors.carDetails && <Text style={styles.error}>{errors.carDetails}</Text>}
+          
 
             {/* Submit Button */}
             <TouchableOpacity

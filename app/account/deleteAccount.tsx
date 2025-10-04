@@ -1,6 +1,7 @@
 import { StyleSheet, ScrollView, TouchableOpacity, Alert, Linking } from 'react-native';
 import { colors, fonts, PaddedView, Text, View } from "@/components/Themed";
 import { getConfig } from '@/config';
+import * as WebBrowser from "expo-web-browser";
 
 export default function DeleteAccountScreen() {
   const handleDeleteRedirect = () => {
@@ -11,7 +12,7 @@ export default function DeleteAccountScreen() {
         { text: "Annuler", style: "cancel" },
         {
           text: "Continuer",
-          onPress: () => Linking.openURL(`https://www.autocoq.com/${getConfig().channel}/accountDeletion`),
+          onPress: () => WebBrowser.openBrowserAsync(`https://www.autocoq.com/${getConfig().channel}/accountDeletion`),
         },
       ]
     );

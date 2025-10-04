@@ -4,7 +4,7 @@ import { View, StyleSheet, ScrollView } from "react-native";
 
 type ModalId = "search" | "checkout" | "carFilter" | "productFilter" | "CartPreview" | "ImageExpand" | 
                 "Auth" | "shipping" | "ShippingMethod" | "PaymentMethod" | "AddVehicle" | "AddByCarInformation" | 
-                "AddByVIN" | "selectVehicle"| "SignUp" | "SignIn" | "PromoCode" | "ContactUs" | "Review"
+                "AddByVIN" | "selectVehicle"| "SignUp" | "SignIn" | "PromoCode" | "ContactUs" | "Review" | "Support"
 
 interface OpenModalParams {
   id: ModalId;
