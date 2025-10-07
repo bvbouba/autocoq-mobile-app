@@ -12,7 +12,7 @@ mutation verifyCode($phoneNumber: String!, $otp: String!) {
   }
 }
 
-mutation userRegistere($input: AccountRegisterInput!) {
+mutation userRegister($input: AccountRegisterInput!) {
 		accountRegister(input: $input) {
 			errors {
 				message

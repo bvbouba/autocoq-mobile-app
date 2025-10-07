@@ -12,7 +12,7 @@ export default function SupportContactInfo() {
   if(loading) return <></>
 
   const handleCall = () => {
-    Linking.openURL("tel:+2250702468253");
+    Linking.openURL(`tel:${companyAddress?.phone}`);
   };
 
   return (

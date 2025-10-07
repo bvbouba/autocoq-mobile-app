@@ -34550,12 +34550,12 @@ export type VerifyCodeMutationVariables = Exact<{
 
 export type VerifyCodeMutation = { __typename?: 'Mutation', verifyOtp?: { __typename?: 'VerifyOTPMutation', error?: string | null, message?: string | null } | null };
 
-export type UserRegistereMutationVariables = Exact<{
+export type UserRegisterMutationVariables = Exact<{
   input: AccountRegisterInput;
 }>;
 
 
-export type UserRegistereMutation = { __typename?: 'Mutation', accountRegister?: { __typename?: 'AccountRegister', errors: Array<{ __typename?: 'AccountError', message?: string | null, field?: string | null, code: AccountErrorCode }> } | null };
+export type UserRegisterMutation = { __typename?: 'Mutation', accountRegister?: { __typename?: 'AccountRegister', errors: Array<{ __typename?: 'AccountError', message?: string | null, field?: string | null, code: AccountErrorCode }> } | null };
 
 export type CreateTokenMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -35944,8 +35944,8 @@ export function useVerifyCodeMutation(baseOptions?: Apollo.MutationHookOptions<V
 export type VerifyCodeMutationHookResult = ReturnType<typeof useVerifyCodeMutation>;
 export type VerifyCodeMutationResult = Apollo.MutationResult<VerifyCodeMutation>;
 export type VerifyCodeMutationOptions = Apollo.BaseMutationOptions<VerifyCodeMutation, VerifyCodeMutationVariables>;
-export const UserRegistereDocument = gql`
-    mutation userRegistere($input: AccountRegisterInput!) {
+export const UserRegisterDocument = gql`
+    mutation userRegister($input: AccountRegisterInput!) {
   accountRegister(input: $input) {
     errors {
       message
@@ -35955,32 +35955,32 @@ export const UserRegistereDocument = gql`
   }
 }
     `;
-export type UserRegistereMutationFn = Apollo.MutationFunction<UserRegistereMutation, UserRegistereMutationVariables>;
+export type UserRegisterMutationFn = Apollo.MutationFunction<UserRegisterMutation, UserRegisterMutationVariables>;
 
 /**
- * __useUserRegistereMutation__
+ * __useUserRegisterMutation__
  *
- * To run a mutation, you first call `useUserRegistereMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserRegistereMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUserRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserRegisterMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [userRegistereMutation, { data, loading, error }] = useUserRegistereMutation({
+ * const [userRegisterMutation, { data, loading, error }] = useUserRegisterMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUserRegistereMutation(baseOptions?: Apollo.MutationHookOptions<UserRegistereMutation, UserRegistereMutationVariables>) {
+export function useUserRegisterMutation(baseOptions?: Apollo.MutationHookOptions<UserRegisterMutation, UserRegisterMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserRegistereMutation, UserRegistereMutationVariables>(UserRegistereDocument, options);
+        return Apollo.useMutation<UserRegisterMutation, UserRegisterMutationVariables>(UserRegisterDocument, options);
       }
-export type UserRegistereMutationHookResult = ReturnType<typeof useUserRegistereMutation>;
-export type UserRegistereMutationResult = Apollo.MutationResult<UserRegistereMutation>;
-export type UserRegistereMutationOptions = Apollo.BaseMutationOptions<UserRegistereMutation, UserRegistereMutationVariables>;
+export type UserRegisterMutationHookResult = ReturnType<typeof useUserRegisterMutation>;
+export type UserRegisterMutationResult = Apollo.MutationResult<UserRegisterMutation>;
+export type UserRegisterMutationOptions = Apollo.BaseMutationOptions<UserRegisterMutation, UserRegisterMutationVariables>;
 export const CreateTokenDocument = gql`
     mutation CreateToken($email: String!, $password: String!) {
   tokenCreate(email: $email, password: $password) {
