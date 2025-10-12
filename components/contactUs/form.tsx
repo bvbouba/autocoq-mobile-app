@@ -36,7 +36,7 @@ const PartRequestForm = ({title}:{title?:string}) => {
     try {
       setLoading(true);
       const { data } = await addPartRequest({ variables: values });
-
+      console.log(data)
       if (data?.partRequestAdd?.errors.length) {
         const errorMessages = data.partRequestAdd.errors.map((err: any) => err.message).join("\n");
         Alert.alert("Erreur", errorMessages);
@@ -44,6 +44,7 @@ const PartRequestForm = ({title}:{title?:string}) => {
         setSubmitted(true);
       }
     } catch (error) {
+      console.log(error)
       Alert.alert("Erreur", "Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setLoading(false);
